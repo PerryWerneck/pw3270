@@ -34,14 +34,11 @@
  #include <pw3270/settings.h>
  #include <pw3270/toolbar.h>
 
-
-//	gtk_window_set_title(GTK_WINDOW(dialog),action->label);
-
  static GtkWidget * factory(PW3270Action * action, GtkApplication *application) {
 
 	size_t ix;
 	GtkWindow * window = gtk_application_get_active_window(application);
-	GtkWidget * dialog = pw3270_settings_dialog_new(G_ACTION(action));
+	GtkWidget * dialog = pw3270_settings_dialog_new(G_ACTION(action),TRUE);
 
 	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_attached_to(GTK_WINDOW(dialog), GTK_WIDGET(window));
@@ -53,6 +50,16 @@
 
 	for(ix = 0; ix < G_N_ELEMENTS(pages); ix++) {
 		gtk_container_add(GTK_CONTAINER(dialog),pages[ix]);
+	}
+
+	pw3270_application_plugin_call(
+		G_APPLICATION(application),
+		"pw3270_plugin_set_application_preferences",
+		dialog
+	);
+
+	if(pw3270_application_get_ui_style(G_APPLICATION(application)) != PW3270_UI_STYLE_CLASSICAL){
+		gtk_container_add(GTK_CONTAINER(dialog),pw3270_header_settings_new());
 	}
 
 	gtk_widget_show_all(dialog);
@@ -68,6 +75,7 @@
  	action->name = "preferences";
  	action->label = _("Application preferences");
  	action->icon_name = "preferences-system";
+	action->tooltip = _("Change the application preferences");
 
 	return G_ACTION(action);
  }

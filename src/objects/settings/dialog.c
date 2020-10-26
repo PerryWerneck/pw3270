@@ -71,11 +71,6 @@ static void PW3270SettingsDialog_init(PW3270SettingsDialog *dialog)
 	// Get use of header bar.
 	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &dialog->has_subtitle, NULL);
 
-	// https://developer.gnome.org/hig/stable/visual-layout.html.en
-	//gtk_box_set_spacing(GTK_BOX(content_area),18);
-	//gtk_container_set_border_width(GTK_CONTAINER(content_area),18);
-
-//	gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
     gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
 
 	gtk_dialog_add_buttons(
@@ -102,7 +97,7 @@ static void PW3270SettingsDialog_init(PW3270SettingsDialog *dialog)
 
 }
 
-GtkWidget * pw3270_settings_dialog_new(GAction *action) {
+GtkWidget * pw3270_settings_dialog_new(GAction *action, gboolean has_subtitle) {
 
 #ifdef _WIN32
 
@@ -115,7 +110,7 @@ GtkWidget * pw3270_settings_dialog_new(GAction *action) {
 
 #elif GTK_CHECK_VERSION(3,12,0)
 
-	gboolean use_header;
+	gboolean use_header = FALSE;
 	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &use_header, NULL);
 
 	GtkWidget * dialog =
@@ -130,6 +125,8 @@ GtkWidget * pw3270_settings_dialog_new(GAction *action) {
 	GtkWidget * dialog = GTK_WIDGET(g_object_new(GTK_TYPE_PW3270_SETTINGS_DIALOG, NULL));
 
 #endif	// GTK 3.12
+
+	GTK_PW3270_SETTINGS_DIALOG(dialog)->has_subtitle = has_subtitle;
 
 	if(action) {
 
@@ -202,6 +199,7 @@ void add(GtkContainer *container, GtkWidget *widget) {
 		settings->load(widget,settings->settings);
 	}
 
+	gtk_widget_show(widget);
 	gtk_notebook_append_page(
 		GTK_PW3270_SETTINGS_DIALOG(container)->tabs,
 		widget,
@@ -216,20 +214,11 @@ void page_changed(GtkNotebook *notebook, GtkWidget G_GNUC_UNUSED(*child), guint 
 
 void switch_page(GtkNotebook *notebook, PW3270Settings *page, guint G_GNUC_UNUSED(page_num), PW3270SettingsDialog *dialog) {
 
-	if(gtk_notebook_get_n_pages(notebook) > 1) {
+	GtkWidget * header_bar = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
 
-		GtkWidget * header_bar = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
-
-		if(header_bar) {
-			gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header_bar),page->title);
-		}
-
-	} else if(page->title) {
-
-		gtk_window_set_title(GTK_WINDOW(dialog),page->title);
-
+	if(header_bar && dialog->has_subtitle) {
+		gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header_bar),page->title);
 	}
-
 
 }
 

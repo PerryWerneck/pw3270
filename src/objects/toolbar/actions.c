@@ -65,20 +65,34 @@
 
 		if(!action) {
 			const gchar *ptr = strchr(name,'.');
-
 			if(ptr) {
 				action = g_action_map_lookup_action(G_ACTION_MAP(window), ptr+1);
-				debug("action(%s)=%p",ptr+1,action);
 			}
+		}
 
+		if(!action) {
+			action = g_action_map_lookup_action(G_ACTION_MAP(g_application_get_default()),name);
+		}
+
+		if(!action) {
+			const gchar *ptr = strchr(name,'.');
+			if(ptr) {
+				action = g_action_map_lookup_action(G_ACTION_MAP(g_application_get_default()), ptr+1);
+			}
 		}
 
 		debug("%s(%s)=%p",__FUNCTION__,name,action);
 
-		if(action) {
-			debug("Creating button \"%s\" from action \"%s\"",name,g_action_get_name(G_ACTION(action)));
-			item = gtk_tool_button_new_from_action(action,GTK_ICON_SIZE_LARGE_TOOLBAR);
+		if(!action) {
+			g_warning("Can't find action \"%s\"",name);
+			return NULL;
 		}
+
+		item = gtk_tool_button_new_from_action(
+					action,
+					GTK_ICON_SIZE_LARGE_TOOLBAR,
+					pw3270_toolbar_get_icon_type(GTK_TOOLBAR(toolbar)) == 1
+				);
 
 		if(item) {
 

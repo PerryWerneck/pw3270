@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+	<id>br.com.bb.pw3270</id>
+	<name>3270 Terminal</name>
+	<name xml:lang="pt_BR">Terminal 3270</name>
+	<summary>IBM 3270 Terminal emulator</summary>
+	<summary xml:lang="pt_BR">Emulador de terminal IBM 3270</summary>
+	<developer_name>perry.werneck@gmail.com</developer_name>
+	<description>
+	<p>
+	GTK Based 3270 terminal emulator
+	pw3270 is a modern, GTK-based, completely free tn3270 emulator.
+
+	Created originally for Banco do Brasil, it's now an official Brazilian Government Public Software project, and is used worldwide.
+	</p>
+	</description>
+
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>LGPL-3.0</project_license>
+
+	<url type="bugtracker">https://github.com/PerryWerneck/pw3270/issues</url>
+	<url type="homepage">https://github.com/PerryWerneck/pw3270</url>
+	<project_group>GNOME</project_group>
+
+	<launchable type="desktop-id">@PRODUCT_NAME@.desktop</launchable>
+
+	<screenshots>
+		<screenshot type="default">
+			<caption>@PRODUCT_NAME@</caption>
+			<image height="600" width="600">https://raw.githubusercontent.com/PerryWerneck/pw3270/master/branding/pw3270-logo.svg</image>
+		</screenshot>
+	</screenshots>
+
+	<update_contact>perry.werneck@gmail.com</update_contact>
+
+	<provides>
+		<id>@PRODUCT_NAME@pw32.desktop</id>
+	</provides>
+</component>

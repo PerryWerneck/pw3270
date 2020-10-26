@@ -38,8 +38,9 @@ SOURCES= \
 	$(wildcard src/objects/terminal/*.c) \
 	$(wildcard src/objects/toolbar/*.c) \
 	$(wildcard src/objects/settings/*.c) \
-	$(wildcard src/objects/@OSNAME@/*.c) \
+	$(wildcard src/objects/os/@OSNAME@/*.c) \
 	$(wildcard src/main/*.c) \
+	$(wildcard src/tools/*.c) \
 	$(wildcard src/main/@OSNAME@/*.c) \
 	$(wildcard src/main/@OSNAME@/*.rc) \
 	$(wildcard src/objects/keypad/*.c)
@@ -63,6 +64,7 @@ WINDRES=@WINDRES@
 AR=@AR@
 VALGRIND=@VALGRIND@
 CONVERT=@CONVERT@
+STRIP=@STRIP@
 
 #---[ Paths ]----------------------------------------------------------------------------
 
@@ -127,6 +129,11 @@ $(OBJDBG)/%.o: \
 
 	@$(CC) \
 		$(CFLAGS) \
+		-DDEBUG=1 \
+		-MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
+
+	@$(CC) \
+		$(CFLAGS) \
 		-Wall -Wextra -fstack-check \
 		-DDEBUG=1 \
 		-o $@ -c $<
@@ -154,6 +161,12 @@ $(OBJRLS)/%.o: \
 
 	@echo $< ...
 	@$(MKDIR) $(dir $@)
+
+	@$(CC) \
+		$(CFLAGS) \
+		-DNDEBUG=1 \
+		-MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
+
 	@$(CC) \
 		$(CFLAGS) \
 		-DNDEBUG=1 \
@@ -179,6 +192,7 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 		--keyword=_ \
 		--keyword=N_ \
 		--keyword=MSG_:2 \
+		--keyword=NC_:1c,2 \
 		--output=$@ \
 		$<
 	@touch $@
@@ -258,6 +272,10 @@ $(BINRLS)/$(PACKAGE_NAME)@EXEEXT@: \
 		$^ \
 		$(LIBS)
 
+strip: \
+	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
+
+	@$(STRIP) --discard-all $(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
 
 #---[ Install Targets ]------------------------------------------------------------------
 
@@ -266,18 +284,11 @@ install: \
 	install-keypads
 
 install-application: \
-	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+	install-@OSNAME@-application \
 	install-locale \
 	install-schemas \
-	install-branding
-
-	@$(MKDIR) \
-		$(DESTDIR)/$(bindir)
-
-	@$(INSTALL_PROGRAM) \
-		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
-		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
-
+	install-branding \
+	install-icons
 
 	@$(MKDIR) \
 		$(DESTDIR)/$(libdir)/$(PRODUCT_NAME)-plugins
@@ -292,6 +303,28 @@ install-application: \
 	@$(MKDIR) \
 		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad
 
+install-linux-application: \
+	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
+
+	@$(MKDIR) \
+		$(DESTDIR)/$(bindir)
+
+	@$(INSTALL_PROGRAM) \
+		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
+
+
+install-windows-application: \
+	strip
+
+	@$(MKDIR) \
+		$(DESTDIR)/$(bindir)
+
+	@$(INSTALL_PROGRAM) \
+		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
+
+
 install-keypads:
 
 	@$(MKDIR) \
@@ -300,6 +333,15 @@ install-keypads:
 	@$(INSTALL_DATA) \
 		keypad/*.xml \
 		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad
+
+install-icons:
+
+	@$(MKDIR) \
+		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/icons
+
+	@$(INSTALL_DATA) \
+		icons/*.svg \
+		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/icons
 
 #---[ Misc Targets ]---------------------------------------------------------------------
 
@@ -333,6 +375,14 @@ run: \
 	gschemas.compiled
 
 	@G_DEBUG=fatal-warnings \
+		$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
+
+
+run-inspector: \
+	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@ \
+	gschemas.compiled
+
+	@GTK_DEBUG=interactive \
 		$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
 
 mem-check: \
@@ -382,4 +432,6 @@ clean: \
 	cleanDebug \
 	cleanRelease
 
+-include $(foreach SRC, $(basename $(SOURCES)), $(OBJDBG)/$(SRC).d)
+-include $(foreach SRC, $(basename $(SOURCES)), $(OBJRLS)/$(SRC).d)
 

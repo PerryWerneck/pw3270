@@ -27,35 +27,42 @@
  *
  */
 
-#ifndef PRIVATE_H_INCLUDED
+/**
+ * @brief Declares the v3270 keyfile object.
+ *
+ */
 
-	#define PRIVATE_H_INCLUDED
+#ifndef V3270_KEYFILE_H_INCLUDED
 
-	#include <config.h>
+	#define V3270_KEYFILE_H_INCLUDED
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+	#include <glib.h>
 
-	/* not really I18N-related, but also a string marker macro */
-	#define I_(string) g_intern_static_string (string)
+	G_BEGIN_DECLS
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+	typedef struct _V3270KeyFile V3270KeyFile;
 
-	#include <pw3270/toolbar.h>
-	#include <lib3270/log.h>
+	gchar			* v3270_keyfile_get_default_filename(void);
+	gchar			* v3270_key_file_get_default_path(GtkWidget *terminal);
 
-	G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new(GAction *action);
-	G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new_from_action_name(const gchar * action_name);
+	V3270KeyFile	* v3270_key_file_open(GtkWidget *terminal, const gchar *name, GError **error);
+	void			  v3270_key_file_close(GtkWidget *terminal);
 
-	GtkTreeModel					* pw3270_model_from_name(const gchar *name);
-	GtkWidget						* pw3270_menu_item_from_model(GtkWidget *widget, const gchar *model_name);
-	void							  pw3270_menu_item_set_value(GtkWidget *menu, guint value);
+	void			  v3270_key_file_save(GtkWidget *terminal, GError **error);
+	void			  v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename, GError **error);
 
-	G_GNUC_INTERNAL void			  pw3270_model_get_iter_from_value(GtkTreeModel * model, GtkTreeIter *iter, guint value);
-	G_GNUC_INTERNAL guint			  pw3270_model_get_value_from_iter(GtkTreeModel * model, GtkTreeIter *iter);
+	/// @brief Get current key filename
+	const gchar		* v3270_key_file_get_filename(GtkWidget *terminal);
 
+	/// @brief Build a writable key filename
+	gchar			* v3270_key_file_build_filename(GtkWidget *terminal);
 
-#endif // PRIVATE_H_INCLUDED
+	GKeyFile		* v3270_key_file_get(GtkWidget *terminal);
+
+	gboolean		  v3270_key_file_can_write(GtkWidget *widget);
+
+	void			  v3270_key_file_set_boolean(GtkWidget *terminal, const gchar *group_name, const gchar *key, gboolean value);
+
+	G_END_DECLS
+
+#endif // PW3270_H_INCLUDED

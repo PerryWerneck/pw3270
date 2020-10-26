@@ -45,9 +45,10 @@
  };
 
  struct ListElement {
- 	GAction		* action;
+// 	GAction		* action;
  	GdkPixbuf	* pixbuf;
- 	gchar		  name[1];
+ 	gchar		* action_name;
+ 	gchar		* action_label;
  };
 
  static void list_element_free(struct ListElement *element);
@@ -106,7 +107,7 @@
 	return view;
  }
 
- void pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, gint flags) {
+ void pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, PW3270ActionViewFlag flags) {
 
 	GtkListStore * store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(widget)));
 
@@ -118,67 +119,37 @@
 		COLUMN_PIXBUF,			pixbuf,
 		COLUMN_LABEL, 			label,
 		COLUMN_ACTION_NAME,		action_name,
-		COLUMN_FLAGS,			flags,
+		COLUMN_FLAGS,			(gint) flags,
 		-1
 	);
 
 
  }
 
+ void pw3270_action_view_order_by_label(GtkWidget *view) {
+
+	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(view),FALSE);
+
+	gtk_tree_sortable_set_sort_column_id(
+		GTK_TREE_SORTABLE(gtk_tree_view_get_model(GTK_TREE_VIEW(view))),
+		COLUMN_LABEL,
+		GTK_SORT_ASCENDING
+	);
+ }
+
  static void pw3270_action_view_append_element(GtkListStore * store, struct ListElement * element) {
-
-	size_t ix;
-
-	struct Properties {
-		const gchar * name;
-		GType g_type;
-		GValue value;
-	} properties[] = {
-		{
-			.name = "label",
-			.g_type = G_TYPE_STRING,
-			.value = G_VALUE_INIT
-		}
-	};
-
-	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
-
-		g_value_init(&properties[ix].value, properties[ix].g_type);
-		g_object_get_property(G_OBJECT(element->action), properties[ix].name, &properties[ix].value);
-
-	}
-
-	// Remove "_"
-	g_autofree gchar * label = g_strdup(g_value_get_string(&properties[0].value));
-
-	if(label) {
-
-		gchar *from, *to;
-
-		for(from=to=label;*from;from++) {
-			if(*from != '_') {
-				*(to++) = *from;
-			}
-		}
-		*to = 0;
-
-	}
 
 	GtkTreeIter iter;
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(
 		store,
 		&iter,
-		COLUMN_PIXBUF,	element->pixbuf,
-		COLUMN_LABEL, 	(label ? label : g_action_get_name(element->action)),
-		COLUMN_ACTION_NAME,	element->name,
-		COLUMN_FLAGS,	3,
+		COLUMN_PIXBUF,		element->pixbuf,
+		COLUMN_LABEL, 		element->action_label,
+		COLUMN_ACTION_NAME,	element->action_name,
+		COLUMN_FLAGS,		(gint) PW3270_ACTION_VIEW_ALLOW_MOVE,
 		-1
 	);
-
-	for(ix = 0; ix < G_N_ELEMENTS(properties); ix++) {
-		g_value_unset(&properties[ix].value);
-	}
 
  }
 
@@ -190,8 +161,7 @@
 	while(item) {
 
 		struct ListElement * element = (struct ListElement *) item->data;
-
-		if(!g_ascii_strcasecmp(action_name,element->name)) {
+		if(!g_ascii_strcasecmp(action_name,element->action_name)) {
 
 			pw3270_action_view_append_element(store, element);
 			list_element_free(element);
@@ -219,15 +189,10 @@
 
  }
 
- static GSList * append_action(GSList * list, const gchar *type, GAction *action) {
+ static GSList * append_action(GSList * list, const gchar *prefix, GAction *action) {
 
 	if(!action)
 		return list;
-
-	if(!g_object_class_find_property(G_OBJECT_GET_CLASS(action),"label")) {
-		debug("Action \"%s\": Doesn't have a label",g_action_get_name(action));
-		return list;
-	}
 
 	GdkPixbuf * pixbuf = g_action_get_pixbuf(action, GTK_ICON_SIZE_MENU, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 	if(!pixbuf) {
@@ -235,20 +200,27 @@
 		return list;
 	}
 
-	const gchar *name = g_action_get_name(action);
+	g_autofree gchar *action_name = g_strconcat(prefix,".",g_action_get_name(action),NULL);
 
-	struct ListElement * element = (struct ListElement *) g_malloc0(sizeof(struct ListElement) + strlen(type) + strlen(name));
+	GValue value = G_VALUE_INIT;
+	g_value_init(&value, G_TYPE_STRING);
+	g_object_get_property(G_OBJECT(action),"label",&value);
 
-	strcpy(element->name,type);
-	strcat(element->name,name);
+	const gchar * label = g_value_get_string(&value);
+	if(!(label && *label))
+		label = g_action_get_name(action);
 
-	element->action = action;
+	list = pw3270_action_list_append(
+				list,
+				label,
+				pixbuf,
+				action_name,
+				PW3270_ACTION_VIEW_ALLOW_MOVE
+			);
 
-	element->pixbuf = pixbuf;
-	g_object_ref_sink(G_OBJECT(element->pixbuf));
+	g_value_unset(&value);
 
-	return g_slist_prepend(list,element);
-
+	return list;
  }
 
  Pw3270ActionList * pw3270_action_list_new(GtkApplication *application) {
@@ -262,7 +234,7 @@
 
 	action_names = g_action_group_list_actions(G_ACTION_GROUP(application));
 	for(ix = 0; action_names[ix];ix++) {
-		list = append_action(list,"app.",g_action_map_lookup_action(G_ACTION_MAP(application),action_names[ix]));
+		list = append_action(list,"app",g_action_map_lookup_action(G_ACTION_MAP(application),action_names[ix]));
 	}
 	g_strfreev(action_names);
 
@@ -274,7 +246,7 @@
 		// Get window actions.
 		action_names = g_action_group_list_actions(G_ACTION_GROUP(window));
 		for(ix = 0; action_names[ix];ix++) {
-			list = append_action(list,"win.",g_action_map_lookup_action(G_ACTION_MAP(window),action_names[ix]));
+			list = append_action(list,"win",g_action_map_lookup_action(G_ACTION_MAP(window),action_names[ix]));
 		}
 		g_strfreev(action_names);
 
@@ -282,6 +254,32 @@
 
  	return (Pw3270ActionList *) list;
  }
+
+ Pw3270ActionList * pw3270_action_list_append(Pw3270ActionList *action_list, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags) {
+
+	struct ListElement * element = (struct ListElement *)
+										g_malloc0(
+											sizeof(struct ListElement)
+											+ strlen(action_name)
+											+ strlen(label)
+											+ 3
+										);
+
+	if(pixbuf) {
+		element->pixbuf = pixbuf;
+		g_object_ref_sink(G_OBJECT(element->pixbuf));
+	}
+
+	element->action_name = (char *) (element+1);
+	strcpy(element->action_name,action_name);
+
+	element->action_label = element->action_name + strlen(element->action_name) + 1;
+	strcpy(element->action_label,label);
+
+	return (Pw3270ActionList *) g_slist_prepend((GSList *) action_list, element);
+
+
+ };
 
  void list_element_free(struct ListElement *element) {
 
@@ -338,7 +336,7 @@
 				gint flags = g_value_get_int(&vFlags);
 				g_value_unset(&vFlags);
 
-				if(flags & 1) {
+				if(flags & PW3270_ACTION_VIEW_FLAG_ALLOW_ADD) {
 
 					// Add on target widget.
 					GValue pixbuf = G_VALUE_INIT;
@@ -369,7 +367,7 @@
 
 				}
 
-				if(flags & 2) {
+				if(flags & PW3270_ACTION_VIEW_ALLOW_REMOVE) {
 
 					// Remove from source widget.
 					gtk_list_store_remove(GTK_LIST_STORE(fromModel), &iter);
@@ -411,3 +409,70 @@
 	return g_string_free(str,FALSE);
  }
 
+ static void check_4_sensitive(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gboolean *sensitive) {
+
+	GValue value = { 0, };
+	gtk_tree_model_get_value(model,iter,COLUMN_FLAGS,&value);
+
+	if(!(g_value_get_int(&value) & PW3270_ACTION_VIEW_FLAG_ALLOW_ADD))
+		*sensitive = FALSE;
+
+	g_value_unset(&value);
+
+ }
+
+ static void selection_changed(GtkTreeSelection *selection, GtkWidget *button) {
+
+	if(!gtk_tree_selection_count_selected_rows(selection)) {
+		gtk_widget_set_sensitive(button,FALSE);
+		return;
+	}
+
+	gboolean sensitive = TRUE;
+
+	// Scan selected rows
+	gtk_tree_selection_selected_foreach(selection,(GtkTreeSelectionForeachFunc) check_4_sensitive,&sensitive);
+	gtk_widget_set_sensitive(button,sensitive);
+
+ }
+
+ struct MoveData {
+	GtkWidget *from;
+	GtkWidget *to;
+ };
+
+  static void move_clicked(GtkButton G_GNUC_UNUSED(*button), struct MoveData *args) {
+ 	pw3270_action_view_move_selected(args->from,args->to);
+ }
+
+ GtkWidget * pw3270_action_view_move_button_new(GtkWidget *from, GtkWidget *to, const gchar *icon_name) {
+
+	GtkWidget * button = gtk_button_new_from_icon_name(icon_name,GTK_ICON_SIZE_DND);
+
+	struct MoveData * data = g_new0(struct MoveData,1);
+	data->from	= from;
+	data->to 	= to;
+	g_object_set_data_full(G_OBJECT(button),"move-control-data",data,g_free);
+
+	gtk_widget_set_focus_on_click(button,FALSE);
+	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NONE);
+	gtk_widget_set_sensitive(button,FALSE);
+	gtk_widget_set_hexpand(button,FALSE);
+	gtk_widget_set_vexpand(button,FALSE);
+
+	g_signal_connect(
+		gtk_tree_view_get_selection(GTK_TREE_VIEW(from)),
+		"changed",
+		G_CALLBACK(selection_changed),
+		button
+	);
+
+	g_signal_connect(
+		button,
+		"clicked",
+		G_CALLBACK(move_clicked),
+		data
+	);
+
+	return button;
+ }

@@ -159,12 +159,12 @@
 
  }
 
- static void KeypadElement_init(KeypadElement *object) {
+ static void KeypadElement_init(KeypadElement G_GNUC_UNUSED(*object)) {
 
 
  }
 
- static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec) {
+ static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	KeypadElement * element = PW_KEYPAD_ELEMENT(object);
 
@@ -203,7 +203,7 @@
 
  }
 
- static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec) {
+ static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	KeypadElement * element = PW_KEYPAD_ELEMENT(object);
 

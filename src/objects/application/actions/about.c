@@ -33,22 +33,6 @@
 
  static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication G_GNUC_UNUSED(*application)) {
 
-	/*
-	static const gchar *license		=
-	N_( "This program is free software; you can redistribute it and/or "
-		"modify it under the terms of the GNU General Public License as "
- 		"published by the Free Software Foundation; either version 2 of the "
-		"License, or (at your option) any later version.\n\n"
-		"This program is distributed in the hope that it will be useful, "
-		"but WITHOUT ANY WARRANTY; without even the implied warranty of "
-		"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the "
-		"GNU General Public License for more details.\n\n"
-		"You should have received a copy of the GNU General Public License "
-		"along with this program; if not, write to the Free Software "
-		"Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02111-1307 "
-		"USA" );
-	*/
-
 	GtkAboutDialog	* dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 
 	// Get application logo
@@ -82,18 +66,37 @@
 
 	// Set version
 	{
+		g_autofree gchar * version = g_strdup_printf(
+											_("Version %s-%s"),
+											PACKAGE_VERSION,
 #ifdef PACKAGE_RELEASE
-		g_autofree gchar * version = g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,PACKAGE_RELEASE);
+											PACKAGE_RELEASE
 #else
-		g_autofree gchar * version = g_strdup_printf(_("Version %s-%s"),PACKAGE_VERSION,G_STRINGIFY(BUILD_DATE));
-#endif // PACKAGE_REVISION
+											G_STRINGIFY(BUILD_DATE)
+#endif // PACKAGE_RELEASE
+										);
 
 		gtk_about_dialog_set_version(dialog,version);
 	}
 
 	// Set comments
 	{
-		g_autofree gchar * comments = g_strdup_printf(_( "3270 terminal emulator for GTK %d.%d" ),GTK_MAJOR_VERSION,GTK_MINOR_VERSION);
+		g_autofree gchar * comments =
+
+		g_strdup_printf(
+				_( "3270 terminal emulator for %s." ),
+#if defined(__MINGW64__)
+				_( "64 bits Windows" )
+#elif defined(__MINGW32__)
+				_( "32 bits Windows" )
+#elif defined(linux) && defined(__i386__)
+				_( "32 bits Linux" )
+#elif defined(linux) && defined(__x86_64__)
+				_( "64 bits Linux" )
+#else
+				"GTK"
+#endif
+				);
 		gtk_about_dialog_set_comments(dialog, comments);
 	}
 
@@ -126,28 +129,52 @@
 		gtk_about_dialog_add_credit_section(dialog, _("Apple version"), apple);
 		gtk_about_dialog_add_credit_section (dialog, _("Contributors"), contributors);
 
-
 		gtk_about_dialog_add_credit_section(dialog, _("Based on X3270 from"), references);
 
 	}
 
 	gtk_about_dialog_set_copyright(dialog, "Copyright © 2008 Banco do Brasil S.A." );
 
-//	gtk_about_dialog_set_license(dialog, gettext( license ) );
-//	gtk_about_dialog_set_wrap_license(dialog,TRUE);
+#ifdef _WIN32
 
+	lib3270_autoptr(char) license = lib3270_build_data_filename(_("LICENSE"),NULL);
+
+	if(g_file_test(license, G_FILE_TEST_IS_REGULAR)) {
+
+		g_autofree gchar * text = NULL;
+
+		if(g_file_get_contents(license,&text,NULL,NULL)) {
+			gtk_about_dialog_set_license(dialog, text );
+			gtk_about_dialog_set_wrap_license(dialog,TRUE);
+		}
+
+	} else {
+		gtk_about_dialog_set_license_type(dialog,GTK_LICENSE_GPL_3_0);
+	}
+
+#else
 	gtk_about_dialog_set_license_type(dialog,GTK_LICENSE_GPL_3_0);
+#endif // _WIN32
 
-	gtk_about_dialog_set_website(dialog,"https://portal.softwarepublico.gov.br/social/pw3270/");
-	gtk_about_dialog_set_website_label(dialog,_( "Brazilian Public Software Portal" ));
+//	gtk_about_dialog_set_website(dialog,NC_("ProjectURL","https://portal.softwarepublico.gov.br/social/pw3270/"));
+//	gtk_about_dialog_set_website_label(dialog,NC_("ProjectURLLabel","Brazilian Public Software Portal" ));
 
-//	gtk_about_dialog_set_authors(dialog,authors);
+	gtk_about_dialog_set_website(dialog,_("https://github.com/PerryWerneck/pw3270"));
+	gtk_about_dialog_set_website_label(dialog,_("View this project on github"));
+
 	gtk_about_dialog_set_translator_credits(dialog,_("translator-credits"));
 
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
 
 	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
 	gtk_widget_show_all(GTK_WIDGET(dialog));
+
+	// Call plugins
+	pw3270_application_plugin_call(
+		g_application_get_default(),
+		"pw3270_plugin_set_about_dialog",
+		dialog
+	);
 
 	return GTK_WIDGET(dialog);
 

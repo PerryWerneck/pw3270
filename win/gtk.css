@@ -1,0 +1,10 @@
+/* Disable F10 */
+@binding-set NoKeyboardNavigation {
+     unbind "<shift>F10"
+     unbind "F10"
+}
+
+* {
+     -gtk-key-bindings: NoKeyboardNavigation
+}
+

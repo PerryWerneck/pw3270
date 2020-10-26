@@ -43,13 +43,18 @@
 		<Unit filename="Makefile.in" />
 		<Unit filename="configure.ac" />
 		<Unit filename="schemas/linux/application.gschema.xml.in" />
+		<Unit filename="schemas/linux/window.gschema.xml.in" />
+		<Unit filename="schemas/windows/application.gschema.xml.in" />
+		<Unit filename="schemas/windows/window.gschema.xml.in" />
 		<Unit filename="src/include/pw3270.h" />
 		<Unit filename="src/include/pw3270/actions.h" />
 		<Unit filename="src/include/pw3270/application.h" />
 		<Unit filename="src/include/pw3270/keypad.h" />
 		<Unit filename="src/include/pw3270/settings.h" />
 		<Unit filename="src/include/pw3270/toolbar.h" />
+		<Unit filename="src/include/pw3270/tools.h" />
 		<Unit filename="src/include/pw3270/window.h" />
+		<Unit filename="src/include/v3270/keyfile.h" />
 		<Unit filename="src/main/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -126,7 +131,13 @@
 		<Unit filename="src/objects/keypad/widget.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/linux/savedesktopicon.c">
+		<Unit filename="src/objects/os/linux/savedesktopicon.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/os/windows/savedesktopicon.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/settings/actionview.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/settings/dialog.c">
@@ -136,6 +147,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/toolbar/actions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/toolbar/models.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/toolbar/private.h" />
@@ -163,7 +177,13 @@
 		<Unit filename="src/objects/window/actions/setcolors.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/window/header-settings.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/window/header.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/window/keyfile.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/page.c">
@@ -179,7 +199,7 @@
 		<Unit filename="src/objects/window/window.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/windows/savedesktopicon.c">
+		<Unit filename="src/tools/entry.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="ui/application.xml" />

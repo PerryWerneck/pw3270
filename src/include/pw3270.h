@@ -68,13 +68,6 @@
 
 	void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser);
 
-	const gchar	* v3270_get_session_filename(GtkWidget *widget);
-	void		  v3270_set_session_filename(GtkWidget *widget, const gchar *filename);
-	GKeyFile	* v3270_get_session_keyfile(GtkWidget *widget);
-
-	/// @brief Check if the terminal has a customized session file.
-	gboolean	  v3270_allow_custom_settings(GtkWidget *widget);
-
 	G_END_DECLS
 
 #endif // PW3270_H_INCLUDED

@@ -73,6 +73,10 @@
 
 	// Plugins
 	void			  pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data);
+
+	/// @brief Call plugin method.
+	void			  pw3270_application_plugin_call(GApplication *app, const gchar *method, gpointer user_data);
+
 	GSList			* pw3270_application_get_plugins(GApplication *app);
 
 	// Tools
@@ -83,6 +87,10 @@
 	// Actions
 	void pw3270_application_print_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
 	void pw3270_application_save_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
+
+	// Settings
+	GtkWidget * pw3270_header_settings_new();
+
 
 	G_END_DECLS
 

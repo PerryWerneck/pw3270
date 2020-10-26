@@ -90,15 +90,26 @@
 	//
 	typedef GSList Pw3270ActionList;
 
-	GtkWidget 			* pw3270_action_view_new();
-	Pw3270ActionList	* pw3270_action_list_new(GtkApplication *application);
-	void				  pw3270_action_list_free(Pw3270ActionList *action_list);
-	void				  pw3270_action_view_set_actions(GtkWidget *view, Pw3270ActionList *list);
-	void				  pw3270_action_view_move_selected(GtkWidget *from, GtkWidget *to);
-	void				  pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, gint flags);
-	gchar				* pw3270_action_view_get_action_names(GtkWidget *widget);
+	typedef enum _pw3270ActionViewFlag {
+		PW3270_ACTION_VIEW_FLAG_FIXED 		= 0,	///< @brief Don't move to other views.
+		PW3270_ACTION_VIEW_FLAG_ALLOW_ADD	= 1,	///< @brief Allow add to target view.
+		PW3270_ACTION_VIEW_ALLOW_REMOVE		= 2,	///< @brief Allow remove from source view.
+		PW3270_ACTION_VIEW_ALLOW_MOVE		= 3		///< @brief Allow move from one view to another.
+	} PW3270ActionViewFlag;
 
+
+	GtkWidget 			* pw3270_action_view_new();
+	void				  pw3270_action_view_set_actions(GtkWidget *view, Pw3270ActionList *list);
+	void				  pw3270_action_view_order_by_label(GtkWidget *view);
+	void				  pw3270_action_view_move_selected(GtkWidget *from, GtkWidget *to);
+	void				  pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags);
+	gchar				* pw3270_action_view_get_action_names(GtkWidget *widget);
+	GtkWidget			* pw3270_action_view_move_button_new(GtkWidget *from, GtkWidget *to, const gchar *icon_name);
+
+	Pw3270ActionList	* pw3270_action_list_new(GtkApplication *application);
+	Pw3270ActionList	* pw3270_action_list_append(Pw3270ActionList *action_list, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags);
 	Pw3270ActionList	* pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view);
+	void				  pw3270_action_list_free(Pw3270ActionList *action_list);
 
 	//
 	// Tools
@@ -109,8 +120,8 @@
 
 	GdkPixbuf			* g_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags);
 
-	GtkWidget 			* gtk_button_new_from_action(GAction *action, GtkIconSize icon_size);
-	GtkToolItem			* gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size);
+	GtkWidget 			* gtk_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic);
+	GtkToolItem			* gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic);
 
 	G_END_DECLS
 

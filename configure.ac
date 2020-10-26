@@ -67,7 +67,7 @@ case "$host" in
 
 		CFLAGS="$CFLAGS -pthread -D_WIN32_WINNT=0x0600"
 		LDFLAGS="$LDFLAGS -pthread"
-		LIBS="$LIBS -lws2_32 -lwtsapi32 -lcomdlg32"
+		LIBS="$LIBS -lws2_32 -lwtsapi32 -lcomdlg32 -lole32 -luuid"
 
 		app_win32_revision=$(date +%-y.%-m.%-d.%-H)
 		AC_SUBST(WIN32_VERSION,$app_win32_revision)
@@ -140,6 +140,10 @@ AC_PATH_TOOL([MSGINIT], [msginit], [no])
 AC_PATH_TOOL([MSGMERGE], [msgmerge], [no])
 AC_PATH_TOOL([MSGFMT], [msgfmt], [no])
 AC_PATH_TOOL([VALGRIND], [valgrind], [no])
+
+AC_PATH_TOOL([SCOUR], [scour], [no])
+AC_PATH_TOOL([APPSTREAMCLI],[appstreamcli], [no])
+AC_PATH_TOOL([STRIP], [strip], [true])
 
 AC_PATH_TOOL([DESKTOP_INSTALL],[desktop-file-install],[no])
 
@@ -245,6 +249,7 @@ AC_CONFIG_FILES(locale/Makefile)
 AC_CONFIG_FILES(branding/Makefile)
 AC_CONFIG_FILES(branding/launcher.desktop)
 AC_CONFIG_FILES(branding/mime.xml)
+AC_CONFIG_FILES(branding/appdata.xml)
 
 dnl ---------------------------------------------------------------------------
 dnl Output the generated config.status script.

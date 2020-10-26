@@ -22,17 +22,17 @@
 
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
-Name:           pw3270
-Version:        5.3
-Release:        0
-Summary:        IBM 3270 Terminal emulator for GTK
-License:        GPL-2.0
-Group:          System/X11/Terminals
-Url:            https://portal.softwarepublico.gov.br/social/pw3270/
+Name:			pw3270
+Version:		5.3
+Release:		0
+Summary:		IBM 3270 Terminal emulator for GTK
+License:		GPL-2.0
+Group:			System/X11/Terminals
+Url:			https://github.com/PerryWerneck/pw3270
 
-Source:         pw3270-%{version}.tar.xz
+Source:			pw3270-%{version}.tar.xz
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRoot:		%{_tmppath}/%{name}-%{version}-build
 
 Requires:		shared-mime-info
 Requires:		%{name}-branding = %{version}
@@ -40,7 +40,6 @@ Requires:		%{name}-branding = %{version}
 BuildRequires:		update-desktop-files
 
 %glib2_gsettings_schema_requires
-
 
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
 # 
@@ -56,7 +55,7 @@ BuildRequires:		update-desktop-files
 BuildRequires:  gtk3-devel
 BuildRequires:  glib2-devel
 BuildRequires:  librsvg2-tools
-BuildRequires:  libv3270-devel >= %{version}
+BuildRequires:  libv3270-devel >= 5.3
 
 %endif
 
@@ -66,7 +65,7 @@ BuildRequires:  libv3270-devel >= %{version}
 
 BuildRequires:  gtk3-devel
 BuildRequires:  glib2-devel
-BuildRequires:  libv3270-devel
+BuildRequires:  libv3270-devel >= 5.3
 
 # Required for genmarshal
 BuildRequires:  python
@@ -79,7 +78,7 @@ BuildRequires:  python
 
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(libv3270) >= %{version}
+BuildRequires:  pkgconfig(libv3270) >= 5.3
 
 %endif
 
@@ -89,7 +88,7 @@ BuildRequires:  pkgconfig(libv3270) >= %{version}
 
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(libv3270) >= %{version}
+BuildRequires:  pkgconfig(libv3270) >= 5.3
 
 %endif
 
@@ -192,6 +191,7 @@ make all -j1
 %{_datadir}/%{_product}/*.png
 %{_datadir}/applications/*.desktop
 %{_datadir}/pixmaps/*.png
+%{_datadir}/mime/packages/*.xml
 
 %files keypads
 %{_datadir}/%{_product}/keypad/*

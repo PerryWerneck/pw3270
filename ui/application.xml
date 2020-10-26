@@ -155,12 +155,12 @@
 				<section>
 
 					<item>
-						<attribute name="label" translatable="yes">Desktop icon</attribute>
+						<attribute name="label" translatable="yes">Shortcut for this session</attribute>
 						<attribute name="action">win.save.launcher</attribute>
 					</item>
 
 					<item>
-						<attribute name="label" translatable="yes">Session properties</attribute>
+						<attribute name="label" translatable="yes">Session preferences</attribute>
 						<attribute name="action">win.save.session.as</attribute>
 					</item>
 

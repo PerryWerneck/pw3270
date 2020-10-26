@@ -33,6 +33,7 @@
  #include <v3270/settings.h>
  #include <v3270/dialogs.h>
  #include <v3270/colorscheme.h>
+ #include <pw3270/application.h>
 
  static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
 
@@ -42,7 +43,8 @@
 
 	action->name = "session.properties";
 	action->icon_name = "preferences-other";
-	action->label = _("Session properties");
+	action->label = _("Session preferences");
+	action->tooltip = _("Change the preferences for the active session");
 
 	return G_ACTION(action);
  }
@@ -52,7 +54,6 @@
  	size_t ix;
 
  	GtkWidget * dialog = v3270_settings_dialog_new();
-
 	gtk_window_set_title(GTK_WINDOW(dialog), action->label);
 
 	// Add settings pages.
@@ -67,6 +68,12 @@
 	for(ix = 0; ix < G_N_ELEMENTS(elements); ix++) {
 		gtk_container_add(GTK_CONTAINER(dialog), elements[ix]);
 	}
+
+	pw3270_application_plugin_call(
+		g_application_get_default(),
+		"pw3270_plugin_set_session_properties",
+		dialog
+	);
 
  	// Setup dialog box
 	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(terminal)));

@@ -90,13 +90,13 @@
 			<section>
 
 				<item>
-					<attribute name="label" translatable="yes">Desktop icon</attribute>
+					<attribute name="label" translatable="yes">Shortcut for this session</attribute>
 					<attribute name="action">win.save.launcher</attribute>
 				</item>
 
 				<item>
-					<attribute name="label" translatable="yes">Session properties</attribute>
-					<attribute name="action">win.save.session.as</attribute>
+					<attribute name="label" translatable="yes">Session preferences</attribute>
+					<attribute name="action">win.save.session.preferences</attribute>
 				</item>
 
 			</section>
@@ -162,6 +162,16 @@
 				<item>
 					<attribute name="label" translatable="yes">Copy as table</attribute>
 					<attribute name="action">win.copy-table</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Copy as HTML</attribute>
+					<attribute name="action">win.copy-html</attribute>
+				</item>
+
+				<item>
+					<attribute name="label" translatable="yes">Copy as image</attribute>
+					<attribute name="action">win.copy-pixbuff</attribute>
 				</item>
 
 				<item>
@@ -361,6 +371,11 @@
 					</item>
 
 					<item>
+						<attribute name="label" translatable="yes">Use +/- for field navigation</attribute>
+						<attribute name="action">win.kpalternative</attribute>
+					</item>
+
+					<item>
 						<attribute name="label" translatable="yes">Resize on alternate screen</attribute>
 						<attribute name="action">win.altscreen</attribute>
 					</item>
@@ -381,7 +396,7 @@
 				<attribute name="label" translatable="yes">Dynamic font spacing</attribute>
 				<attribute name="action">win.dynamic-font-spacing</attribute>
 			</item>
-				
+
 			<section>
 
 					<item>
@@ -426,6 +441,11 @@
 				<attribute name="action">win.menubar</attribute>
 			</item>
 
+			<item>
+				<attribute name="label" translatable="yes">Session Trace</attribute>
+				<attribute name="action">win.trace</attribute>
+			</item>
+
 		</submenu>
 
 		<section>
@@ -460,7 +480,7 @@
 			</item>
 
 		</section>
-	
+
 	</menu>
 
 	<menu id="popup-over-oia">
@@ -527,7 +547,7 @@
 
 		</submenu>
 
-		<submenu id="view-when-offline-placeholder"> 
+		<submenu id="view-when-offline-placeholder">
 
 			<attribute name='label' translatable='yes'>View</attribute>
 
@@ -541,6 +561,11 @@
 				<attribute name="action">win.menubar</attribute>
 			</item>
 
+			<item>
+				<attribute name="label" translatable="yes">Session Trace</attribute>
+				<attribute name="action">win.trace</attribute>
+			</item>
+
 		</submenu>
 
 		<section>
@@ -551,7 +576,7 @@
 			</item>
 
 			<item>
-				<attribute name="label" translatable="yes">Session properties</attribute>
+				<attribute name="label" translatable="yes">Session preferences</attribute>
 				<attribute name="action">win.session.properties</attribute>
 			</item>
 

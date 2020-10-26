@@ -29,22 +29,54 @@
 
  #include "private.h"
 
+ gchar * v3270_keyfile_find(const gchar *name) {
+	//
+	// It can be a session file, scans for it
+	//
+	const gchar * paths[] = {
+		g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS),
+		g_get_user_config_dir()
+	};
+
+	static const gchar *subdirs[] = {
+		"3270",
+		G_STRINGIFY(PRODUCT_NAME),
+		PACKAGE_NAME
+	};
+
+	size_t path, subdir;
+
+	g_autofree gchar * filename = g_strconcat(name,".3270",NULL);
+
+	for(path = 0; path < G_N_ELEMENTS(paths); path++) {
+
+		for(subdir = 0; subdir < G_N_ELEMENTS(subdirs); subdir++) {
+
+			gchar * fullpath = g_build_filename(paths[path],subdirs[subdir],filename,NULL);
+
+			debug("Searching for \"%s\"",fullpath);
+
+			if(g_file_test(fullpath,G_FILE_TEST_IS_REGULAR)) {
+				return fullpath;
+			}
+			g_free(fullpath);
+
+		}
+	}
+
+	return NULL;
+
+ }
+
  void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
 	GtkWidget * window = GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application)));
-
+	size_t path, subdir;
 	gint file;
 
 	for(file = 0; file < n_files; file++) {
 
 		g_autofree gchar *path = g_file_get_path(files[file]);
-		if(!window) {
-			debug("%s: Open in new window",__FUNCTION__);
-			window = pw3270_application_window_new(GTK_APPLICATION(application), path);
-		} else {
-			debug("%s: Open in new tab",__FUNCTION__);
-			window = pw3270_application_window_new_tab(window,path);
-		}
 
 		if(!path) {
 
@@ -61,6 +93,38 @@
 
 				v3270_set_url(pw3270_application_window_get_active_terminal(window),uri);
 
+			}
+
+			continue;
+
+		}
+
+		if(g_file_test(path,G_FILE_TEST_IS_REGULAR)) {
+
+			// The file exists, use it.
+
+			if(!window) {
+				window = pw3270_application_window_new(GTK_APPLICATION(application), path);
+			} else {
+				window = pw3270_application_window_new_tab(window,path);
+			}
+
+			continue;
+		}
+
+		{
+			g_autofree gchar * basename = g_file_get_basename(files[file]);
+			g_autofree gchar * filename = v3270_keyfile_find(basename);
+
+			if(filename) {
+
+				if(!window) {
+					window = pw3270_application_window_new(GTK_APPLICATION(application), filename);
+				} else {
+					window = pw3270_application_window_new_tab(window, filename);
+				}
+
+				continue;
 			}
 
 		}

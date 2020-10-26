@@ -173,12 +173,7 @@
 
  }
 
-
  static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
-
-	GApplication * app = g_application_get_default();
-
-	debug("********************* %p",app);
 
 	g_autoptr(GSettings) app_settings = pw3270_application_settings_new();
 	g_autoptr(GSettings) win_settings = pw3270_application_window_settings_new();
@@ -466,6 +461,33 @@
 
  }
 
+ void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data) {
+
+	g_return_if_fail(PW3270_IS_APPLICATION(app));
+
+   	GSList * item;
+ 	for(item = PW3270_APPLICATION(app)->plugins; item; item = g_slist_next(item)) {
+		func(item->data,user_data);
+  	}
+
+ }
+
+ void pw3270_application_plugin_call(GApplication *app, const gchar *method, gpointer user_data) {
+
+	g_return_if_fail(PW3270_IS_APPLICATION(app));
+
+ 	int (*call)(GtkWidget *);
+
+  	GSList * item;
+  	for(item = PW3270_APPLICATION(app)->plugins; item; item = g_slist_next(item)) {
+		if(g_module_symbol((GModule *) item->data, method, (gpointer *) &call)) {
+			call(user_data);
+       }
+  	}
+
+ }
+
+
  GSettings * pw3270_application_settings_new() {
 
 	GSettings *settings = NULL;
@@ -510,3 +532,4 @@
  	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
  	return PW3270_APPLICATION(app)->keypads;
  }
+

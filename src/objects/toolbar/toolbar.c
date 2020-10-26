@@ -38,71 +38,33 @@
  static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
  static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 
- const struct icon_size {
-	const gchar			* label;
-	GtkIconSize			  icon_size;
- } icon_sizes[] = {
-
-	{
-		.label = N_( "System default" ),
-		.icon_size = GTK_ICON_SIZE_INVALID
-
-	},
-
-	{
-		.label = N_( "Small" ),
-		.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR
-	},
-
-	{
-		.label = N_( "Large" ),
-		.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR
-	},
- };
-
- static const struct style {
-	const gchar * label;
-	GtkToolbarStyle style;
- } styles[] = {
-
-	{
-		.label = N_( "System default" ),
-		.style = GTK_TOOLBAR_DEFAULT_STYLE
-	},
-
-	{
-		.label = N_( "Icons only" ),
-		.style = GTK_TOOLBAR_ICONS
-	},
-
-	{
-		.label = N_( "Text only" ),
-		.style = GTK_TOOLBAR_TEXT
-	},
-
-	{
-		.label = N_( "Icons & text" ),
-		.style = GTK_TOOLBAR_BOTH
-	},
- };
-
  enum {
 	PROP_NONE,
 	PROP_ACTION_NAMES,
 	PROP_ICON_SIZE,
+	PROP_ICON_TYPE,
 	PROP_STYLE
+ };
+
+ enum {
+	TOOLBAR_MENU_STYLE,
+	TOOLBAR_MENU_ICON_SIZE,
+	TOOLBAR_MENU_ICON_TYPE
+ };
+
+ static const gchar * toolbar_menus[] = {
+	"toolbar-style",
+	"toolbar-icon-size",
+	"toolbar-icon-type"
  };
 
  struct _pw3270ToolBar {
  	GtkToolbar parent;
 	GtkToolbarStyle style;
+	int icon_type;
 
- 	/// @brief Popup Menu
- 	struct {
-		GtkWidget * menu;
-		GtkWidget * styles[G_N_ELEMENTS(styles)];
-		GtkWidget * icon_sizes[G_N_ELEMENTS(icon_sizes)];
- 	} popup;
+	GtkWidget *menu;
+ 	GtkWidget *submenu[G_N_ELEMENTS(toolbar_menus)];
 
  };
 
@@ -131,9 +93,9 @@
 		object_class,
 		PROP_ACTION_NAMES,
 		g_param_spec_string (
-			"action-names",
-			N_("Action Names"),
-			N_("The name of the actions in the toolbar"),
+			I_("action-names"),
+			"Action Names",
+			_("The name of the actions in the toolbar"),
 			NULL,
 			G_PARAM_READABLE|G_PARAM_WRITABLE)
 	);
@@ -142,8 +104,8 @@
 		object_class,
 		PROP_ICON_SIZE,
 		g_param_spec_int(
-			"icon-size",
-			"icon-size",
+			I_("icon-size"),
+			"icon size",
 			_("The toolbar icon size"),
 			INT_MIN,
 			INT_MAX,
@@ -155,11 +117,24 @@
 		object_class,
 		PROP_STYLE,
 		g_param_spec_int(
-			"style",
+			I_("style"),
 			"style",
 			_("The toolbar style"),
 			INT_MIN,
 			INT_MAX,
+			0,
+			G_PARAM_READABLE|G_PARAM_WRITABLE)
+	);
+
+	g_object_class_install_property(
+		object_class,
+		PROP_ICON_TYPE,
+		g_param_spec_int(
+			I_("icon-type"),
+			I_("icon-type"),
+			_("The toolbar icon type"),
+			0,
+			1,
 			0,
 			G_PARAM_READABLE|G_PARAM_WRITABLE)
 	);
@@ -179,6 +154,10 @@
 
 	case PROP_STYLE:
 		g_value_set_int(value,pw3270_toolbar_get_style(GTK_TOOLBAR(object)));
+		break;
+
+	case PROP_ICON_TYPE:
+		g_value_set_int(value,pw3270_toolbar_get_icon_type(GTK_TOOLBAR(object)));
 		break;
 
 	default:
@@ -203,42 +182,27 @@
 		pw3270_toolbar_set_style(GTK_TOOLBAR(object),(GtkToolbarStyle) g_value_get_int(value));
 		break;
 
+	case PROP_ICON_TYPE:
+		pw3270_toolbar_set_icon_type(GTK_TOOLBAR(object),(GtkToolbarStyle) g_value_get_int(value));
+		break;
+
 	default:
 		g_assert_not_reached ();
 	}
 
  }
 
-
  static void detacher(GtkWidget *attach_widget, GtkMenu G_GNUC_UNUSED(*menu)) {
 
  	pw3270ToolBar * toolbar = PW3270_TOOLBAR(attach_widget);
- 	toolbar->popup.menu = NULL;
+ 	toolbar->menu = NULL;
 
  }
 
- static void set_icon_size(GtkCheckMenuItem *menuitem, GtkWidget *toolbar) {
-
-	if(gtk_check_menu_item_get_active(menuitem)) {
-		const struct icon_size * size = g_object_get_data(G_OBJECT(menuitem),"icon_size");
-		pw3270_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), size->icon_size);
-	}
-
- }
-
- static void set_style(GtkCheckMenuItem *menuitem, GtkWidget *toolbar) {
-
-	if(gtk_check_menu_item_get_active(menuitem)) {
-		struct style * style = g_object_get_data(G_OBJECT(menuitem),"toolbar_style");
-		pw3270_toolbar_set_style(GTK_TOOLBAR(toolbar), style->style);
-	}
-
- }
-
- static void open_properties(GtkMenuItem G_GNUC_UNUSED(*menuitem), GtkWidget *toolbar) {
+ static void open_preferences(GtkMenuItem G_GNUC_UNUSED(*menuitem), GtkWidget *toolbar) {
 
 	GtkWidget * window = gtk_widget_get_toplevel(toolbar);
-	GtkWidget * dialog = pw3270_settings_dialog_new(NULL);
+	GtkWidget * dialog = pw3270_settings_dialog_new(NULL,FALSE);
 
 	gtk_container_add(GTK_CONTAINER(dialog),pw3270_toolbar_settings_new());
 
@@ -247,72 +211,36 @@
 	gtk_window_set_attached_to(GTK_WINDOW(dialog), window);
 	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(window));
 
+	gtk_window_set_title(GTK_WINDOW(dialog),_("Setup toolbar"));
+
 	gtk_widget_show_all(dialog);
 
  }
 
  static void pw3270ToolBar_init(pw3270ToolBar *widget) {
 
-	widget->popup.menu = gtk_menu_new();
+	size_t ix;
 
-	// Size options
+	widget->menu = gtk_menu_new();
+
+	// Create menus.
 	{
-		size_t ix;
-
-		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("Icon _size") );
-		gtk_menu_shell_append(GTK_MENU_SHELL(widget->popup.menu),item);
-
-		GtkWidget * submenu = gtk_menu_new();
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item),submenu);
-
-		for(ix = 0; ix < G_N_ELEMENTS(icon_sizes); ix++) {
-
-			widget->popup.icon_sizes[ix] = item = gtk_check_menu_item_new_with_mnemonic(gettext(icon_sizes[ix].label));
-			gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(item),TRUE);
-
-			g_object_set_data(G_OBJECT(item),"icon_size", (gpointer) &icon_sizes[ix]);
-			g_signal_connect(item, "toggled", G_CALLBACK(set_icon_size), widget);
-
-			gtk_menu_shell_append(GTK_MENU_SHELL(submenu),item);
-
+		for(ix = 0; ix < G_N_ELEMENTS(widget->submenu); ix++) {
+			widget->submenu[ix] = pw3270_menu_item_from_model(GTK_WIDGET(widget),toolbar_menus[ix]);
+			gtk_menu_shell_append(GTK_MENU_SHELL(widget->menu),widget->submenu[ix]);
 		}
-
 	}
 
-	// Style option
+	// Toolbar preferences.
 	{
-		size_t ix;
-
-		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("S_tyle") );
-		gtk_menu_shell_append(GTK_MENU_SHELL(widget->popup.menu),item);
-
-		GtkWidget * submenu = gtk_menu_new();
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item),submenu);
-
-		for(ix = 0; ix < G_N_ELEMENTS(styles); ix++) {
-
-			widget->popup.styles[ix] = item = gtk_check_menu_item_new_with_mnemonic(gettext(styles[ix].label));
-			gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(item),TRUE);
-
-			g_object_set_data(G_OBJECT(item),"toolbar_style", (gpointer) &styles[ix]);
-			g_signal_connect(item, "toggled", G_CALLBACK(set_style), widget);
-
-			gtk_menu_shell_append(GTK_MENU_SHELL(submenu),item);
-
-		}
-
+		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("_Preferences") );
+		gtk_menu_shell_append(GTK_MENU_SHELL(widget->menu),gtk_separator_menu_item_new());
+		gtk_menu_shell_append(GTK_MENU_SHELL(widget->menu),item);
+		g_signal_connect(item, "activate", G_CALLBACK(open_preferences), widget);
 	}
 
-	// Toolbar properties.
-	{
-		GtkWidget * item = gtk_menu_item_new_with_mnemonic( _("_Properties") );
-		gtk_menu_shell_append(GTK_MENU_SHELL(widget->popup.menu),item);
-		g_signal_connect(item, "activate", G_CALLBACK(open_properties), widget);
-	}
-
-	// gtk_container_set_border_width(GTK_CONTAINER(widget->popup_menu),6);
-	gtk_widget_show_all(widget->popup.menu);
-	gtk_menu_attach_to_widget(GTK_MENU(widget->popup.menu),GTK_WIDGET(widget),detacher);
+	gtk_widget_show_all(widget->menu);
+	gtk_menu_attach_to_widget(GTK_MENU(widget->menu),GTK_WIDGET(widget),detacher);
 
  }
 
@@ -332,11 +260,11 @@
 
 	debug("%s button_number=%d",__FUNCTION__,button_number);
 
-	if(toolbar->popup.menu) {
+	if(toolbar->menu) {
 #if GTK_CHECK_VERSION(3,22,0)
-		gtk_menu_popup_at_pointer(GTK_MENU(toolbar->popup.menu),NULL);
+		gtk_menu_popup_at_pointer(GTK_MENU(toolbar->menu),NULL);
 #else
-		gtk_menu_popup(GTK_MENU(toolbar->popup.menu), NULL, NULL, NULL, NULL, 0, 0);
+		gtk_menu_popup(GTK_MENU(toolbar->menu), NULL, NULL, NULL, NULL, 0, 0);
 #endif
 	}
 
@@ -355,28 +283,52 @@
 	else
 		gtk_toolbar_set_style(GTK_TOOLBAR(toolbar),style);
 
-	// Update menu
-	pw3270ToolBar * tb = PW3270_TOOLBAR(toolbar);
-	if(tb && tb->popup.menu) {
-		size_t ix;
-		for(ix = 0; ix < G_N_ELEMENTS(styles); ix++) {
-
-			gtk_check_menu_item_set_active(
-				GTK_CHECK_MENU_ITEM(tb->popup.styles[ix]),
-				styles[ix].style == style
-			);
-		}
-	}
-
-	// Store value
-//	pw3270_settings_set_int("toolbar-style",(int) style);
-
 	g_object_notify(G_OBJECT(toolbar), "style");
 
  }
 
  GtkToolbarStyle pw3270_toolbar_get_style(GtkToolbar *toolbar) {
 	return PW3270_TOOLBAR(toolbar)->style;
+ }
+
+ gint pw3270_toolbar_get_icon_type(GtkToolbar *toolbar) {
+ 	return PW3270_TOOLBAR(toolbar)->icon_type;
+ }
+
+ void pw3270_toolbar_set_icon_type(GtkToolbar *toolbar, gint icon_type) {
+
+ 	if(PW3270_TOOLBAR(toolbar)->icon_type == icon_type)
+		return;
+
+ 	PW3270_TOOLBAR(toolbar)->icon_type = icon_type;
+
+ 	// Redefine icon types
+ 	GList * children = gtk_container_get_children(GTK_CONTAINER(toolbar));
+ 	GList * item;
+
+ 	for(item = children;item;item = g_list_next(item)) {
+
+		if(GTK_IS_TOOL_BUTTON(item->data)) {
+
+			g_autofree gchar * icon_name = g_strdup(gtk_tool_button_get_icon_name(GTK_TOOL_BUTTON(item->data)));
+			if(g_str_has_suffix(icon_name,"-symbolic")) {
+				icon_name[strlen(icon_name)-9] = 0;
+			}
+
+			if(icon_type) {
+				g_autofree gchar * new_name = g_strconcat(icon_name,"-symbolic",NULL);
+				gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item->data),new_name);
+			} else {
+				gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item->data),icon_name);
+			}
+
+		}
+
+ 	}
+
+ 	g_list_free(children);
+	g_object_notify(G_OBJECT(toolbar), "icon-type");
+
  }
 
  void pw3270_toolbar_set_icon_size(GtkToolbar *toolbar, GtkIconSize icon_size) {
@@ -387,19 +339,6 @@
 		gtk_toolbar_unset_icon_size(GTK_TOOLBAR(toolbar));
 	else
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar),icon_size);
-
-	// Update menu
-	pw3270ToolBar * tb = PW3270_TOOLBAR(toolbar);
-	if(tb && tb->popup.menu) {
-		size_t ix;
-		for(ix = 0; ix < G_N_ELEMENTS(icon_sizes); ix++) {
-
-			gtk_check_menu_item_set_active(
-				GTK_CHECK_MENU_ITEM(tb->popup.icon_sizes[ix]),
-				icon_sizes[ix].icon_size == icon_size
-			);
-		}
-	}
 
 	// Store value
 	g_object_notify(G_OBJECT(toolbar), "icon-size");
@@ -424,16 +363,46 @@
 
  void pw3270_toolbar_set_actions(GtkWidget *toolbar, const gchar *action_names) {
 
- 	gchar ** actions = g_strsplit(action_names,",",-1);
- 	size_t ix;
+	size_t ix;
+	gint pos = 0;
+
+	gchar ** blocks = g_strsplit(action_names,":",-1);
 
  	gtk_container_remove_all(GTK_CONTAINER(toolbar));
 
-	for(ix = 0; actions[ix]; ix++) {
-		pw3270_toolbar_insert_action(toolbar,actions[ix],-1);
+	// Left block
+	{
+		gchar ** actions = g_strsplit(blocks[0],",",-1);
+
+		for(ix = 0; actions[ix]; ix++) {
+			pw3270_toolbar_insert_action(toolbar,actions[ix],pos++);
+		}
+
+		g_strfreev(actions);
+
 	}
 
- 	g_strfreev(actions);
+	// Right block
+	if(blocks[1]) {
+
+		GtkToolItem * item = gtk_separator_tool_item_new();
+
+		gtk_separator_tool_item_set_draw(GTK_SEPARATOR_TOOL_ITEM(item),FALSE);
+		gtk_tool_item_set_expand(item,TRUE);
+		gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item,pos++);
+
+		gchar ** actions = g_strsplit(blocks[1],",",-1);
+
+		for(ix = 0; actions[ix]; ix++) {
+			pw3270_toolbar_insert_action(toolbar,actions[ix],pos++);
+		}
+
+		g_strfreev(actions);
+
+	}
+
+	g_strfreev(blocks);
+
 
 	g_object_notify(G_OBJECT(toolbar), "action-names");
 
@@ -463,72 +432,4 @@
 
 	return g_string_free(str,FALSE);
  }
-
- GtkTreeModel * pw3270_toolbar_style_model_new() {
-
- 	size_t ix;
-	GtkTreeIter	  iter;
-	GtkListStore * model = gtk_list_store_new(2, G_TYPE_STRING,G_TYPE_UINT);
-
-	for(ix = 0; ix < G_N_ELEMENTS(icon_sizes); ix++) {
-		gtk_list_store_append(model,&iter);
-		gtk_list_store_set(	model,
-							&iter,
-							0, gettext(styles[ix].label),
-							1, (guint) styles[ix].style,
-							-1);
-
-	}
-
-	return GTK_TREE_MODEL(model);
-
- }
-
- GtkTreeModel * pw3270_toolbar_icon_size_model_new() {
-
-	size_t ix;
-	GtkTreeIter	  iter;
-	GtkListStore * model = gtk_list_store_new(2, G_TYPE_STRING,G_TYPE_UINT);
-
-	for(ix = 0; ix < G_N_ELEMENTS(icon_sizes); ix++) {
-		gtk_list_store_append(model,&iter);
-		gtk_list_store_set(	model,
-							&iter,
-							0, gettext(icon_sizes[ix].label),
-							1, (guint) icon_sizes[ix].icon_size,
-							-1);
-
-	}
-
-	return GTK_TREE_MODEL(model);
- }
-
- void pw3270_model_get_iter_from_value(GtkTreeModel * model, GtkTreeIter *iter, guint value) {
-
-	if(gtk_tree_model_get_iter_first(model,iter)) {
-
-		do {
-
-			GValue gVal = { 0, };
-			gtk_tree_model_get_value(model,iter,1,&gVal);
-			guint iVal = g_value_get_uint(&gVal);
-			g_value_unset(&gVal);
-
-			if(iVal == value) {
-				return;
-			}
-
-		} while(gtk_tree_model_iter_next(model,iter));
-
-	}
-
- }
-
- guint pw3270_model_get_value_from_iter(GtkTreeModel * model, GtkTreeIter *iter) {
-	GValue gVal = { 0, };
-	gtk_tree_model_get_value(model,iter,1,&gVal);
-	guint iVal = g_value_get_uint(&gVal);
-	g_value_unset(&gVal);
-	return iVal;
-}
 
