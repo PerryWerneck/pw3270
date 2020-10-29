@@ -42,8 +42,9 @@
 
 	g_autofree gchar * icon_name = g_action_get_icon_name(action);
 	if(icon_name) {
-		if(symbolic && !strstr(icon_name,"-symbolic")) {
-			g_autofree gchar * name = g_strconcat(icon_name,"-symbolic",NULL);
+
+		if(symbolic && !g_str_has_suffix(icon_name,"-symbolic")) {
+			g_autofree gchar * name = g_strconcat(icon_name + (g_str_has_prefix(icon_name,"gtk-") ? 4 : 0),"-symbolic",NULL);
 			return gtk_button_new_from_icon_name(name,icon_size);
 		}
 		return gtk_button_new_from_icon_name(icon_name,icon_size);

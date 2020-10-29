@@ -611,9 +611,11 @@
 #ifdef G_OS_UNIX
             style = PW3270_UI_STYLE_GNOME;
 			g_settings_set_boolean(settings,"menubar-visible",FALSE);
+			g_settings_set_int(settings,"header-icon-type",1);
 #else
             style = PW3270_UI_STYLE_CLASSICAL;
 			g_settings_set_boolean(settings,"menubar-visible",TRUE);
+			g_settings_set_int(settings,"header-icon-type",0);
 #endif // G_OS_UNIX
 
 			g_settings_set_boolean(settings,"toolbar-visible",TRUE);
@@ -621,6 +623,7 @@
 			pw3270_application_set_ui_style(G_APPLICATION(application),style);
 
 		}
+
 
 		if(style == PW3270_UI_STYLE_GNOME) {
 
