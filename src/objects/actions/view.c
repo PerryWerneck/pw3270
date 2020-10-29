@@ -255,7 +255,7 @@
  	return (Pw3270ActionList *) list;
  }
 
- Pw3270ActionList * pw3270_action_list_append(Pw3270ActionList *action_list, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags) {
+ Pw3270ActionList * pw3270_action_list_append(Pw3270ActionList *action_list, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag G_GNUC_UNUSED(flags)) {
 
 	struct ListElement * element = (struct ListElement *)
 										g_malloc0(

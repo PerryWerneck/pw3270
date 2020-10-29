@@ -600,19 +600,26 @@
 	{
 		g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
+#ifdef DEBUG
+		PW3270_UI_STYLE style = PW3270_UI_STYLE_AUTOMATIC;
+#else
 		PW3270_UI_STYLE style = pw3270_application_get_ui_style(G_APPLICATION(application));
+#endif // DEBUG
 
 		if(style == PW3270_UI_STYLE_AUTOMATIC) {
 
-			if(gtk_application_get_app_menu(application)) {
-				style = PW3270_UI_STYLE_GNOME;
-			} else {
-				style = PW3270_UI_STYLE_CLASSICAL;
-				g_settings_set_boolean(settings,"menubar-visible",TRUE);
-				g_settings_set_boolean(settings,"toolbar-visible",TRUE);
-			}
+#ifdef G_OS_UNIX
+            style = PW3270_UI_STYLE_GNOME;
+			g_settings_set_boolean(settings,"menubar-visible",FALSE);
+#else
+            style = PW3270_UI_STYLE_CLASSICAL;
+			g_settings_set_boolean(settings,"menubar-visible",TRUE);
+#endif // G_OS_UNIX
+
+			g_settings_set_boolean(settings,"toolbar-visible",TRUE);
 
 			pw3270_application_set_ui_style(G_APPLICATION(application),style);
+
 		}
 
 		if(style == PW3270_UI_STYLE_GNOME) {
