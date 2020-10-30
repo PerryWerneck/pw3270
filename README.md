@@ -9,7 +9,9 @@ See more details at https://softwarepublico.gov.br/social/pw3270/
 
 ## Installation
 
-### Linux
+[<img src="https://de.opensuse.org/images/1/10/Opensuse-geeko.png" alt="OpenSUSE Linux" height="80px">](https://software.opensuse.org/package/pw3270)
+
+### Linux (latest and unstable versions)
 
 For the supported distributions get the install repositories and instructions from https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270
 
