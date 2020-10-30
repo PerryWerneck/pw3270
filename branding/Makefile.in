@@ -42,47 +42,11 @@ INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 CONVERT=@CONVERT@
-OPTIPNG=@OPTIPNG@
 DESKTOP_INSTALL=@DESKTOP_INSTALL@
 SCOUR=@SCOUR@
 APPSTREAMCLI=@APPSTREAMCLI@
 
 #---[ Rules ]----------------------------------------------------------------------------
-
-$(BINDIR)/%.png: \
-	%.svg
-
-	@echo $@ ...
-	@$(MKDIR) `dirname $@`
-
-	@$(CONVERT) \
-		-strip \
-		-background transparent \
-		$< \
-		$@
-
-ifeq ($(OPTIPNG),no)
-	@chmod 644 $@
-else
-	@$(OPTIPNG) -o7 $@
-endif
-
-$(BINDIR)/%.png: \
-	$(PRODUCT_NAME).svg
-
-	@echo $@ ...
-	@$(MKDIR) `dirname $@`
-	@$(CONVERT) \
-		-strip \
-		-background transparent \
-		$< \
-		$@
-
-ifeq ($(OPTIPNG),no)
-	@chmod 644 $@
-else
-	@$(OPTIPNG) -o7 $@
-endif
 
 %.ico: \
 	$(PRODUCT_NAME).svg
@@ -91,23 +55,33 @@ endif
 	@$(MKDIR) `dirname $@`
 	@$(CONVERT) -density 384 -background transparent $< -define icon:auto-resize -colors 256 $@
 
-$(BINDIR)/%.png: \
-	%.png
+$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/%.svg: \
+	%.svg
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
-ifeq ($(OPTIPNG),no)
+
+ifeq ($(SCOUR),no)
 	@$(INSTALL_DATA) $< $@
 else
-	@$(OPTIPNG) -out $@ -o7 $<
+	@$(SCOUR) -i $< -o $@
 endif
 
-$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/%.png: \
-	$(BINDIR)/%.png
+	@chmod 644 $@
+
+$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.svg: \
+	$(PRODUCT_NAME).svg
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
+
+ifeq ($(SCOUR),no)
 	@$(INSTALL_DATA) $< $@
+else
+	@$(SCOUR) -i $< -o $@
+endif
+
+	@chmod 644 $@
 
 $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/%.svg: \
 	%.svg
@@ -123,13 +97,6 @@ endif
 
 	@chmod 644 $@
 
-$(DESTDIR)$(datarootdir)/pixmaps/%.png: \
-	$(BINDIR)/%.png
-
-	@echo $@ ...
-	@$(MKDIR) `dirname $@`
-	@$(INSTALL_DATA) $< $@
-
 validate:
 
 ifneq ($(SCOUR),no)
@@ -141,10 +108,8 @@ install: \
 	install-@OSNAME@
 
 install-linux: \
-	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/$(PRODUCT_NAME).svg \
-	$(DESTDIR)$(datarootdir)/pixmaps/$(PRODUCT_NAME).png \
-	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.png
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.svg
 
 	@$(INSTALL_DATA) \
 		launcher.desktop \
@@ -169,8 +134,8 @@ install-linux: \
 		$(DESTDIR)$(datarootdir)/appdata/$(PRODUCT_NAME).appdata.xml
 
 install-windows: \
-	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png \
-	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.png \
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.svg \
 	$(DESTDIR)$(bindir)/$(PRODUCT_NAME).ico
 
 

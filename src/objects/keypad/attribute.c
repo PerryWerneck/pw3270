@@ -41,7 +41,7 @@
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
 
- static void parse_error (GMarkupParseContext *context, GError *error, gpointer data) {
+ static void parse_error (GMarkupParseContext G_GNUC_UNUSED(*context), GError G_GNUC_UNUSED(*error), gpointer data) {
 	g_free(data);
  }
 
@@ -53,7 +53,7 @@
 
  	GParamSpec *spec = ((struct Attribute *) user_data)->spec;
 
-	debug("%s=\"%s\"",spec->name,text);
+//	debug("%s=\"%s\"",spec->name,text);
 
 	GValue value = G_VALUE_INIT;
 	g_value_init(&value,spec->value_type);

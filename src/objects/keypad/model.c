@@ -243,7 +243,7 @@
 
  static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, KeypadModel *keypad, GError **error) {
 
-	debug("%s(%s)",__FUNCTION__,element_name);
+//	debug("%s(%s)",__FUNCTION__,element_name);
 
 	if(!g_ascii_strcasecmp(element_name,"button")) {
 
@@ -304,7 +304,7 @@
 
  static void element_end(GMarkupParseContext *context, const gchar *element_name, KeypadModel *keypad, GError G_GNUC_UNUSED(**error)) {
 
-	debug("%s(%s)",__FUNCTION__,element_name);
+//	debug("%s(%s)",__FUNCTION__,element_name);
 
 	if(!g_ascii_strcasecmp(element_name,"button")) {
 		g_markup_parse_context_pop(context);
