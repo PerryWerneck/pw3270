@@ -106,7 +106,6 @@ BuildRequires:  gettext-tools
 BuildRequires:  m4
 BuildRequires:  pkgconfig
 BuildRequires:  sed
-BuildRequires:  optipng
 BuildRequires:  fdupes
 BuildRequires:  ImageMagick
 BuildRequires:  autoconf-archive
@@ -186,8 +185,8 @@ make all -j1
 # Configuration & Themes
 %{_datadir}/glib-2.0/schemas/*.xml
 %{_datadir}/%{_product}/icons/gtk-*.svg
-
-%{_datadir}/pixmaps/*.png
+%{_datadir}/%{_product}/icons/connect-*.svg
+%{_datadir}/%{_product}/icons/disconnect-*.svg
 
 %{_datadir}/applications/*.desktop
 %{_datadir}/appdata/%{_product}.appdata.xml
@@ -198,7 +197,7 @@ make all -j1
 %defattr(-,root,root)
 
 %{_datadir}/%{_product}/ui/*
-%{_datadir}/%{_product}/*.png
+%{_datadir}/%{_product}/*.svg
 %{_datadir}/%{_product}/icons/%{_product}.svg
 
 %files keypads
