@@ -30,14 +30,14 @@ License:		GPL-2.0
 Group:			System/X11/Terminals
 Url:			https://github.com/PerryWerneck/pw3270
 
-Source:			pw3270-%{version}.tar.xz
+Source:		pw3270-%{version}.tar.xz
 
 BuildRoot:		%{_tmppath}/%{name}-%{version}-build
 
 Requires:		shared-mime-info
 Requires:		%{name}-branding = %{version}
 
-BuildRequires:		update-desktop-files
+BuildRequires:	update-desktop-files
 
 %glib2_gsettings_schema_requires
 
@@ -122,9 +122,9 @@ Based on the original x3270 code, pw3270 was originally created for Banco do Bra
 %package branding
 Summary:        Default branding for %{name}
 Group:          System/X11/Terminals
-Requires:       %{name} = %{version}
 
-Requires(post):		desktop-file-utils
+Requires:       	%{name} = %{version}
+Requires(post):	desktop-file-utils
 Requires(postun):	desktop-file-utils
 
 %description branding
@@ -138,7 +138,6 @@ Group:		System/X11/Terminals
 Requires:	%{name} = %{version}
 BuildArch:	noarch
 
-Provides:	pw3270-keypads = %{version}
 Conflicts:	otherproviders(pw3270-keypads)
 Enhances:	%{name}
 
@@ -170,9 +169,8 @@ make all -j1
 
 %fdupes %{buildroot}/%{_prefix}
 
-#---[ Files ]---------------------------------------------------------------------------------------------------------
-
 %files -f langfiles
+%defattr(-,root,root)
 %license LICENSE
 %doc AUTHORS README.md
 
@@ -181,27 +179,35 @@ make all -j1
 %dir %{_datadir}/%{_product}/ui
 %dir %{_datadir}/%{_product}/keypad
 %dir %{_libdir}/%{_product}-plugins
+%dir %{_datadir}/%{_product}/icons
 
 %{_bindir}/%{_product}
 
+# Configuration & Themes
 %{_datadir}/glib-2.0/schemas/*.xml
+%{_datadir}/%{_product}/icons/gtk-*.svg
+
+%{_datadir}/pixmaps/*.png
+
+%{_datadir}/applications/*.desktop
+%{_datadir}/appdata/%{_product}.appdata.xml
+
+%{_datadir}/mime/packages/*.xml
 
 %files branding
+%defattr(-,root,root)
+
 %{_datadir}/%{_product}/ui/*
 %{_datadir}/%{_product}/*.png
-%{_datadir}/applications/*.desktop
-%{_datadir}/pixmaps/*.png
-%{_datadir}/mime/packages/*.xml
+%{_datadir}/%{_product}/icons/%{_product}.svg
 
 %files keypads
 %{_datadir}/%{_product}/keypad/*
 
-#---[ Scripts ]-------------------------------------------------------------------------------------------------------
-
-%post branding
+%posttrans
 /usr/bin/update-desktop-database
 
-%postun branding
+%postun
 /usr/bin/update-desktop-database
 
 %changelog
