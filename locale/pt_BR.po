@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-15 13:43-0300\n"
+"POT-Creation-Date: 2020-10-29 19:50-0300\n"
 "PO-Revision-Date: 2020-10-15 13:45-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "11) ? 2 : 3;\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: src/objects/application/application.c:206
+#: src/objects/application/application.c:203
 #, c-format
 msgid "\"%s\" is not a valid user interface name"
 msgstr "\"%s\" não é um nome válido para interface de usuário"
@@ -63,11 +63,11 @@ msgstr "Nome da ação"
 msgid "Action Names"
 msgstr "Nome das ações"
 
-#: ui/window.xml:379 ui/window.xml:494 ui/application.xml:509
+#: ui/window.xml:384 ui/window.xml:499 ui/application.xml:509
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: src/main/tools.c:99 src/tools/entry.c:88
+#: src/main/tools.c:99
 msgid "All files"
 msgstr "Todos os arquivos"
 
@@ -107,7 +107,7 @@ msgstr "Disponível"
 msgid "Based on X3270 from"
 msgstr "Baseado no X3270 por"
 
-#: ui/window.xml:408 ui/application.xml:474
+#: ui/window.xml:413 ui/application.xml:474
 msgid "Blank Fill"
 msgstr "Completar com espaços"
 
@@ -129,7 +129,6 @@ msgid "Can't use \"%s\""
 msgstr "Não posso usar %s"
 
 #: src/objects/application/actions/open.c:49 src/objects/window/page.c:265
-#: src/tools/entry.c:71
 msgid "Cancel"
 msgstr "_Cancelar"
 
@@ -166,8 +165,8 @@ msgstr "Fecha todas as janelas e encerra a aplicação"
 msgid "Close the window"
 msgstr "Fechar a janela"
 
-#: src/objects/window/actions/close.c:60 ui/window.xml:280 ui/window.xml:473
-#: ui/window.xml:580 ui/application.xml:216
+#: src/objects/window/actions/close.c:60 ui/window.xml:280 ui/window.xml:478
+#: ui/window.xml:585 ui/application.xml:216
 msgid "Close window"
 msgstr "Fechar janela"
 
@@ -191,13 +190,9 @@ msgstr "Conectar ao iniciar"
 msgid "Connect to host"
 msgstr "Conectar ao servidor"
 
-#: src/objects/window/window.c:753 src/objects/window/page.c:218
+#: src/objects/window/window.c:772 src/objects/window/page.c:218
 msgid "Connected to host"
 msgstr "Conectado no servidor"
-
-#: src/tools/entry.c:131
-msgid "Continue"
-msgstr "Continuar"
 
 #: src/objects/application/actions/about.c:130
 msgid "Contributors"
@@ -251,16 +246,16 @@ msgstr "Recortar"
 msgid "Delete Field"
 msgstr "Apagar campo"
 
-#: ui/window.xml:275 ui/window.xml:468
+#: ui/window.xml:275 ui/window.xml:473
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: src/objects/window/window.c:753 src/objects/window/window.c:780
+#: src/objects/window/window.c:772 src/objects/window/window.c:799
 #: src/objects/window/page.c:207
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: ui/window.xml:391 ui/window.xml:507 ui/application.xml:524
+#: ui/window.xml:396 ui/window.xml:512 ui/application.xml:524
 msgid "Dynamic font spacing"
 msgstr "Espaçamento dinâmico"
 
@@ -302,13 +297,13 @@ msgstr "Apagar até o final da linha"
 
 #: ui/application.xml:352
 msgid "Field attributes"
-msgstr "Mostra atributos de campo"
+msgstr "Atributos de campo"
 
 #: ui/application.xml:454
 msgid "Full Screen"
 msgstr "Tela cheia"
 
-#: ui/window.xml:246 ui/window.xml:417 ui/window.xml:512
+#: ui/window.xml:246 ui/window.xml:422 ui/window.xml:517
 msgid "Full screen"
 msgstr "Tela cheia"
 
@@ -328,7 +323,7 @@ msgstr "Ajuda"
 msgid "Host properties"
 msgstr "Propriedades do Servidor"
 
-#: src/objects/window/window.c:552 src/objects/os/linux/savedesktopicon.c:102
+#: src/objects/window/window.c:561 src/objects/os/linux/savedesktopicon.c:102
 msgid "IBM 3270 Terminal emulator"
 msgstr "Emulador 3270"
 
@@ -368,7 +363,7 @@ msgstr "Apenas ícones"
 msgid "If the action can be activated"
 msgstr "Se a ação pode ser ativada"
 
-#: ui/window.xml:484
+#: ui/window.xml:489
 msgid "Insert"
 msgstr "Inserção"
 
@@ -440,7 +435,7 @@ msgstr "Menu principal"
 msgid "Main Toolbar"
 msgstr "Barra de ferramentas"
 
-#: ui/window.xml:555
+#: ui/window.xml:560
 msgid "Main menu"
 msgstr "Menu principal"
 
@@ -452,23 +447,23 @@ msgstr "Mantenedores"
 msgid "Menu"
 msgstr "Menu"
 
-#: ui/window.xml:521 ui/application.xml:403
+#: ui/window.xml:526 ui/application.xml:403
 msgid "Model 2 - 80x24"
 msgstr "Modelo 2 - 80x24"
 
-#: ui/window.xml:526 ui/application.xml:408
+#: ui/window.xml:531 ui/application.xml:408
 msgid "Model 3 - 80x32"
 msgstr "Modelo 3 - 80x32"
 
-#: ui/window.xml:531 ui/application.xml:413
+#: ui/window.xml:536 ui/application.xml:413
 msgid "Model 4 - 80x43"
 msgstr "Modelo 4 - 80x43"
 
-#: ui/window.xml:536 ui/application.xml:418
+#: ui/window.xml:541 ui/application.xml:418
 msgid "Model 5 - 132x27"
 msgstr "Modelo 5 - 132x27"
 
-#: ui/window.xml:386 ui/application.xml:444
+#: ui/window.xml:391 ui/application.xml:444
 msgid "Monocase"
 msgstr "Só Maiúsculas"
 
@@ -524,7 +519,7 @@ msgstr "Abrir sessão em nova aba"
 msgid "Open session in New window"
 msgstr "Abrir sessão em nova janela"
 
-#: ui/window.xml:222 ui/window.xml:364 ui/window.xml:504 ui/application.xml:431
+#: ui/window.xml:222 ui/window.xml:364 ui/window.xml:509 ui/application.xml:431
 msgid "Options"
 msgstr "Opções"
 
@@ -544,7 +539,7 @@ msgstr "Colar de um arquivo texto"
 msgid "Paste next"
 msgstr "Colar próximo"
 
-#: ui/window.xml:403 ui/application.xml:469
+#: ui/window.xml:408 ui/application.xml:469
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
@@ -560,7 +555,7 @@ msgstr "Preferências"
 msgid "Print"
 msgstr "Imprimir"
 
-#: ui/window.xml:454
+#: ui/window.xml:459
 msgid "Print screen"
 msgstr "Imrpimir o conteúdo da tela"
 
@@ -585,7 +580,7 @@ msgstr "Renomear sessão"
 msgid "Reselect"
 msgstr "Reselecionar"
 
-#: ui/window.xml:374 ui/application.xml:464
+#: ui/window.xml:379 ui/application.xml:464
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
 
@@ -601,7 +596,7 @@ msgstr "Salvar"
 msgid "Save current session preferences to file"
 msgstr "Salvar preferências da sessão para arquivo"
 
-#: ui/window.xml:449
+#: ui/window.xml:454
 msgid "Save screen"
 msgstr "Salvar tela"
 
@@ -625,7 +620,7 @@ msgstr "Salvar para arquivo de sessão"
 msgid "Save to shortcut file"
 msgstr "Salvar para atalho"
 
-#: ui/window.xml:518 ui/application.xml:400
+#: ui/window.xml:523 ui/application.xml:400
 msgid "Screen size"
 msgstr "Tamanho da tela"
 
@@ -658,7 +653,7 @@ msgstr "Área selecionada"
 msgid "Send/Receive"
 msgstr "Enviar/Receber"
 
-#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:459
+#: src/objects/window/actions/filetransfer.c:46 ui/window.xml:464
 #: ui/application.xml:195
 msgid "Send/Receive files"
 msgstr "Enviar/Receber arquivos"
@@ -671,7 +666,7 @@ msgstr "Separador"
 msgid "Session"
 msgstr "Sessão"
 
-#: ui/window.xml:440 ui/window.xml:560 ui/application.xml:76
+#: ui/window.xml:445 ui/window.xml:565 ui/application.xml:76
 msgid "Session Trace"
 msgstr "Trace da sessão"
 
@@ -692,11 +687,11 @@ msgid "Session name"
 msgstr "Nome da sessão"
 
 #: src/objects/window/actions/sessionproperties.c:46 ui/window.xml:98
-#: ui/window.xml:574 ui/application.xml:163
+#: ui/window.xml:579 ui/application.xml:163
 msgid "Session preferences"
 msgstr "Preferências da sessão"
 
-#: src/objects/application/application.c:219
+#: src/objects/application/application.c:216
 msgid "Set the user-interface type"
 msgstr "Define o tipo de interface do usuário"
 
@@ -744,7 +739,7 @@ msgstr "Mostrar barra de ferramentas"
 msgid "Small"
 msgstr "Pequeno"
 
-#: ui/window.xml:398 ui/application.xml:504
+#: ui/window.xml:403 ui/application.xml:504
 msgid "Smart paste"
 msgstr "Colar inteligente"
 
@@ -891,7 +886,7 @@ msgstr "Barra de título"
 msgid "Title bar actions"
 msgstr "Ações da barra de título"
 
-#: src/objects/toolbar/settings.c:87 ui/window.xml:430 ui/window.xml:550
+#: src/objects/toolbar/settings.c:87 ui/window.xml:435 ui/window.xml:555
 #: ui/application.xml:342
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
@@ -904,7 +899,7 @@ msgstr "Estilo da barra de ferramentas"
 msgid "Toolbar s_tyle"
 msgstr "Est_ilo da barra de ferramentas"
 
-#: ui/window.xml:435
+#: ui/window.xml:440
 msgid "Top menu"
 msgstr "Menu principal"
 
@@ -912,7 +907,7 @@ msgstr "Menu principal"
 msgid "Trace"
 msgstr "Trace"
 
-#: ui/window.xml:489 ui/application.xml:449
+#: ui/window.xml:494 ui/application.xml:449
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
@@ -924,7 +919,7 @@ msgstr "Interface de usuário"
 msgid "Unselect"
 msgstr "Remover seleção"
 
-#: ui/application.xml:514
+#: ui/window.xml:374 ui/application.xml:514
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
@@ -933,7 +928,7 @@ msgstr "Usar teclas +/- para navegar por campos"
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
 
-#: src/objects/window/header.c:66 ui/window.xml:427 ui/window.xml:547
+#: src/objects/window/header.c:66 ui/window.xml:432 ui/window.xml:552
 #: ui/application.xml:63
 msgid "View"
 msgstr "Exibir"
@@ -959,7 +954,7 @@ msgstr "_Cancelar"
 msgid "_Close session"
 msgstr "_Fechar sessão"
 
-#: ui/window.xml:569 ui/application.xml:368
+#: ui/window.xml:574 ui/application.xml:368
 msgid "_Connect"
 msgstr "_Conectar"
 
@@ -1680,6 +1675,9 @@ msgstr "translator-credits"
 
 #~ msgid "Connection state"
 #~ msgstr "Estado da conexão"
+
+#~ msgid "Continue"
+#~ msgstr "Continuar"
 
 #~ msgid "Copiar tudo"
 #~ msgstr "Copiar tudo"

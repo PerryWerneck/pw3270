@@ -297,6 +297,7 @@
 	gtk_notebook_set_show_border(widget->notebook, FALSE);
 	gtk_notebook_set_group_name(widget->notebook,PACKAGE_NAME ":Terminals");
 
+	/*
 	{
 		// Create new tab action widget
 		GtkWidget * new_tab = gtk_button_new_from_icon_name("tab-new-symbolic",GTK_ICON_SIZE_LARGE_TOOLBAR);
@@ -312,6 +313,7 @@
 		gtk_widget_show_all(new_tab);
 		gtk_notebook_set_action_widget(widget->notebook,new_tab,GTK_PACK_START);
 	}
+	*/
 
 	// Create boxes
 	GtkBox * hBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0));
@@ -611,9 +613,11 @@
 #ifdef G_OS_UNIX
             style = PW3270_UI_STYLE_GNOME;
 			g_settings_set_boolean(settings,"menubar-visible",FALSE);
+			g_settings_set_int(settings,"header-icon-type",1);
 #else
             style = PW3270_UI_STYLE_CLASSICAL;
 			g_settings_set_boolean(settings,"menubar-visible",TRUE);
+			g_settings_set_int(settings,"header-icon-type",0);
 #endif // G_OS_UNIX
 
 			g_settings_set_boolean(settings,"toolbar-visible",TRUE);
@@ -621,6 +625,7 @@
 			pw3270_application_set_ui_style(G_APPLICATION(application),style);
 
 		}
+
 
 		if(style == PW3270_UI_STYLE_GNOME) {
 

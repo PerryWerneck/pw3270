@@ -37,8 +37,42 @@
 
 	// Get application logo
 	{
-		lib3270_autoptr(char) logo = lib3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) "-logo.png",NULL);
+#ifdef DEBUG
+		static const char * logo = "./branding/" G_STRINGIFY(PRODUCT_NAME) "-logo.svg";
+		static const char * icon = "./branding/" G_STRINGIFY(PRODUCT_NAME) ".svg";
+#else
+		lib3270_autoptr(char) logo = lib3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) "-logo.svg",NULL);
+		lib3270_autoptr(char) icon = lib3270_build_data_filename("icons", G_STRINGIFY(PRODUCT_NAME) ".svg",NULL);
+#endif // DEBUG
 
+		const char * imgs[] = {
+			logo,
+			icon
+		};
+
+		size_t ix;
+
+		for(ix = 0; ix < G_N_ELEMENTS(imgs);ix++) {
+
+			if(!g_file_test(imgs[ix],G_FILE_TEST_IS_REGULAR))
+				continue;
+
+			GError * error	= NULL;
+			g_autoptr(GdkPixbuf) pix = gdk_pixbuf_new_from_file_at_size(imgs[ix],-1,150,&error);
+			if(error) {
+				g_warning("Can't load \"%s\": %s",imgs[ix],error->message);
+				g_error_free(error);
+				continue;
+			}
+
+			if(pix) {
+				gtk_about_dialog_set_logo(dialog,pix);
+				break;
+			}
+
+		}
+
+		/*
 		if(g_file_test(logo,G_FILE_TEST_EXISTS)) {
 			GError 		* error	= NULL;
 			GdkPixbuf	* pix	= gdk_pixbuf_new_from_file(logo,&error);
@@ -61,6 +95,7 @@
 			g_message("%s: %s",logo,strerror(ENOENT));
 
 		}
+		*/
 
 	}
 
