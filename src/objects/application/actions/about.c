@@ -31,9 +31,17 @@
  #include <pw3270/actions.h>
  #include <pw3270/application.h>
 
- static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication G_GNUC_UNUSED(*application)) {
+ static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication *application) {
 
 	GtkAboutDialog	* dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
+
+	if(GTK_IS_APPLICATION(application)) {
+
+		gtk_window_set_transient_for(GTK_WINDOW(dialog),gtk_application_get_active_window(GTK_APPLICATION(application)));
+		gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog),TRUE);
+		gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
+
+	}
 
 	// Get application logo
 	{
