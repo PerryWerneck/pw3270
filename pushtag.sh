@@ -20,8 +20,6 @@ fi
 git push
 
 git fetch origin
-git checkout master
-git merge origin/master
 
 git tag -f ${1}
 git push -f --tags
