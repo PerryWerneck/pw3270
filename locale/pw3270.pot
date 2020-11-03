@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-29 19:50-0300\n"
+"POT-Creation-Date: 2020-11-03 15:50-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "\"%s\" is not a valid user interface name"
 msgstr ""
 
-#: src/objects/application/actions/about.c:93
+#: src/objects/application/actions/about.c:136
 msgid "32 bits Linux"
 msgstr ""
 
-#: src/objects/application/actions/about.c:91
+#: src/objects/application/actions/about.c:134
 msgid "32 bits Windows"
 msgstr ""
 
@@ -34,20 +34,20 @@ msgstr ""
 msgid "3270 session files"
 msgstr ""
 
-#: src/objects/application/actions/about.c:87
+#: src/objects/application/actions/about.c:130
 #, c-format
 msgid "3270 terminal emulator for %s."
 msgstr ""
 
-#: src/objects/application/actions/about.c:95
+#: src/objects/application/actions/about.c:138
 msgid "64 bits Linux"
 msgstr ""
 
-#: src/objects/application/actions/about.c:89
+#: src/objects/application/actions/about.c:132
 msgid "64 bits Windows"
 msgstr ""
 
-#: src/objects/application/actions/about.c:188 ui/application.xml:39
+#: src/objects/application/actions/about.c:231 ui/application.xml:39
 #: ui/application.xml:537
 msgid "About PW3270"
 msgstr ""
@@ -72,7 +72,7 @@ msgstr ""
 msgid "Append to copy"
 msgstr ""
 
-#: src/objects/application/actions/about.c:129
+#: src/objects/application/actions/about.c:172
 msgid "Apple version"
 msgstr ""
 
@@ -100,7 +100,7 @@ msgstr ""
 msgid "Available"
 msgstr ""
 
-#: src/objects/application/actions/about.c:132
+#: src/objects/application/actions/about.c:175
 msgid "Based on X3270 from"
 msgstr ""
 
@@ -191,7 +191,7 @@ msgstr ""
 msgid "Connected to host"
 msgstr ""
 
-#: src/objects/application/actions/about.c:130
+#: src/objects/application/actions/about.c:173
 msgid "Contributors"
 msgstr ""
 
@@ -404,7 +404,7 @@ msgstr ""
 msgid "Keypads"
 msgstr ""
 
-#: src/objects/application/actions/about.c:140
+#: src/objects/application/actions/about.c:183
 msgid "LICENSE"
 msgstr ""
 
@@ -436,7 +436,7 @@ msgstr ""
 msgid "Main menu"
 msgstr ""
 
-#: src/objects/application/actions/about.c:128
+#: src/objects/application/actions/about.c:171
 msgid "Maintainers"
 msgstr ""
 
@@ -918,7 +918,7 @@ msgstr ""
 msgid "Use +/- for field navigation"
 msgstr ""
 
-#: src/objects/application/actions/about.c:70
+#: src/objects/application/actions/about.c:113
 #, c-format
 msgid "Version %s-%s"
 msgstr ""
@@ -928,7 +928,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:163
+#: src/objects/application/actions/about.c:206
 msgid "View this project on github"
 msgstr ""
 
@@ -993,10 +993,10 @@ msgstr ""
 msgid "_View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:162
+#: src/objects/application/actions/about.c:205
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr ""
 
-#: src/objects/application/actions/about.c:165
+#: src/objects/application/actions/about.c:208
 msgid "translator-credits"
 msgstr ""
