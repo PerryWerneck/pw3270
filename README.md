@@ -7,6 +7,8 @@ Created originally for Banco do Brasil, it's now an official Brazilian Governmen
 
 See more details at https://softwarepublico.gov.br/social/pw3270/
 
+![CodeQL](https://github.com/PerryWerneck/libv3270/workflows/CodeQL/badge.svg?branch=master)
+
 ## Installation
 
 [<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/opensuse.svg" alt="OpenSUSE Linux" height="80px">](https://software.opensuse.org/package/pw3270)
