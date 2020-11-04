@@ -23,7 +23,7 @@
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
 Name:			pw3270
-Version:		5.3
+Version:		5.4
 Release:		0
 Summary:		IBM 3270 Terminal emulator for GTK
 License:		GPL-2.0
@@ -37,7 +37,7 @@ BuildRoot:		%{_tmppath}/%{name}-%{version}-build
 Requires:		shared-mime-info
 Requires:		%{name}-branding = %{version}
 
-BuildRequires:	update-desktop-files
+BuildRequires:		update-desktop-files
 
 %glib2_gsettings_schema_requires
 
@@ -54,7 +54,6 @@ BuildRequires:	update-desktop-files
 
 BuildRequires:  gtk3-devel
 BuildRequires:  glib2-devel
-BuildRequires:  librsvg2-tools
 BuildRequires:  libv3270-devel >= 5.3
 
 %endif
@@ -107,8 +106,8 @@ BuildRequires:  m4
 BuildRequires:  pkgconfig
 BuildRequires:  sed
 BuildRequires:  fdupes
-BuildRequires:  ImageMagick
 BuildRequires:  autoconf-archive
+
 %glib2_gsettings_schema_requires
 
 %description
