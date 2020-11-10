@@ -122,6 +122,8 @@ Summary:        Default branding for %{name}
 Group:          System/X11/Terminals
 
 Requires:       	%{name} = %{version}
+BuildArch:		noarch
+
 Requires(post):	desktop-file-utils
 Requires(postun):	desktop-file-utils
 
