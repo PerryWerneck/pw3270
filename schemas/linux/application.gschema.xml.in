@@ -38,6 +38,12 @@
       <description>The ID of the current user interface style</description>
     </key>
 
+    <key name="allow-host-settings" type="b">
+      <default>true</default>
+      <summary>Allow host settings</summary>
+      <description>Allow changing of host session properties</description>
+    </key>
+
   </schema>
 
 </schemalist>
