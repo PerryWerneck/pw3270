@@ -81,7 +81,7 @@
 			}
 		}
 
-		debug("%s(%s)=%p",__FUNCTION__,name,action);
+//		debug("%s(%s)=%p",__FUNCTION__,name,action);
 
 		if(!action) {
 			g_warning("Can't find action \"%s\"",name);

@@ -843,7 +843,7 @@
 
  	// Get settings
 	g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(), "/window/",NULL);
-	debug("path=%s",path);
+//	debug("path=%s",path);
 
 #ifdef DEBUG
 
@@ -864,7 +864,7 @@
 			"br.com.bb." PACKAGE_NAME ".window",
 			TRUE);
 
-	debug("schema %s=%p path=%s","br.com.bb." PACKAGE_NAME ".window",schema,path);
+//	debug("schema %s=%p path=%s","br.com.bb." PACKAGE_NAME ".window",schema,path);
 
 	GSettings * settings = g_settings_new_full(schema, NULL, path);
 

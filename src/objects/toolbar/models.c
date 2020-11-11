@@ -190,7 +190,7 @@
 		const struct _contents *model = (const struct _contents *) g_object_get_data(menuitem, I_("pw3270_model_data"));
 		const char *name = (const char *) g_object_get_data(menuitem, I_("pw3270_property_name"));
 
-		debug("%s(%s,%d)",__FUNCTION__,name,model->value);
+//		debug("%s(%s,%d)",__FUNCTION__,name,model->value);
 		g_object_set(widget,name,model->value,NULL);
 
 	}
@@ -210,7 +210,7 @@
 	const gchar * name = g_object_get_data(G_OBJECT(menu), I_("pw3270_property_name"));
 	g_object_get(widget,name,&value,NULL);
 
-	debug("%s(%p,%s)=%d",__FUNCTION__,widget,name,value);
+//	debug("%s(%p,%s)=%d",__FUNCTION__,widget,name,value);
 
 	gtk_container_foreach(menu,(GtkCallback) set_toggle_menu_item,&value);
 
