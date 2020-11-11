@@ -53,17 +53,22 @@
 
  	size_t ix;
 
+ 	g_autoptr(GSettings) settings = pw3270_application_get_settings(g_application_get_default());
+
  	GtkWidget * dialog = v3270_settings_dialog_new();
 	gtk_window_set_title(GTK_WINDOW(dialog), action->label);
 
 	// Add settings pages.
 	GtkWidget * elements[] = {
-		v3270_host_settings_new(),
 		v3270_color_settings_new(),
 		v3270_font_settings_new(),
 		v3270_accelerator_settings_new(),
 		v3270_clipboard_settings_new()
 	};
+
+	if(g_settings_get_boolean(settings,"allow-host-settings")) {
+		gtk_container_add(GTK_CONTAINER(dialog), v3270_host_settings_new());
+	}
 
 	for(ix = 0; ix < G_N_ELEMENTS(elements); ix++) {
 		gtk_container_add(GTK_CONTAINER(dialog), elements[ix]);
