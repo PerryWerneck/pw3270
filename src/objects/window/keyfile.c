@@ -90,6 +90,7 @@
 
 	strcpy(new_session->filename,filename);
 	new_session->key_file = g_key_file_new();
+	g_object_set_data_full(G_OBJECT(terminal),"session-descriptor",new_session,(GDestroyNotify) close_keyfile);
 
 	// Load file
 	if(g_file_test(new_session->filename,G_FILE_TEST_IS_REGULAR)) {
@@ -120,46 +121,40 @@
 #endif // DEBUG
 		}
 
-		new_session->changed = TRUE;
-
 	}
 
-	g_object_set_data_full(G_OBJECT(terminal),"session-descriptor",new_session,(GDestroyNotify) close_keyfile);
-	if(new_session->changed) {
-		v3270_key_file_save(terminal,error);
+	if(*error) {
+		g_warning("Error '%s' loading keyfile", (*error)->message);
+		return new_session;
 	}
 
-	if(!*error) {
+	// Got key file, load it.
+	v3270_load_key_file(terminal,new_session->key_file,NULL);
+	v3270_accelerator_map_load_key_file(terminal,new_session->key_file,NULL);
 
-		// Got key file, load it.
-		v3270_load_key_file(terminal,new_session->key_file,NULL);
-		v3270_accelerator_map_load_key_file(terminal,new_session->key_file,NULL);
+	if(g_key_file_has_group(new_session->key_file,"environment")) {
 
-		if(g_key_file_has_group(new_session->key_file,"environment")) {
+		// Has environment group, set values.
+		gchar **keys = g_key_file_get_keys(new_session->key_file,"environment",NULL,NULL);
 
-			// Has environment group, set values.
-			gchar **keys = g_key_file_get_keys(new_session->key_file,"environment",NULL,NULL);
-
-			if(keys) {
-				size_t ix;
-				for(ix=0;keys[ix];ix++) {
-					g_autofree gchar * value = g_key_file_get_string(new_session->key_file,"environment",keys[ix],NULL);
-					if(value) {
+		if(keys) {
+			size_t ix;
+			for(ix=0;keys[ix];ix++) {
+				g_autofree gchar * value = g_key_file_get_string(new_session->key_file,"environment",keys[ix],NULL);
+				if(value) {
 #ifdef _WIN32
-						g_autofree gchar * env = g_strconcat(keys[ix],"=",value,NULL);
-						putenv(env);
+					g_autofree gchar * env = g_strconcat(keys[ix],"=",value,NULL);
+					putenv(env);
 #else
-						if(setenv(keys[ix],value,1)) {
-							g_warning("Can't set \"%s\" to \"%s\"",keys[ix],value);
-						}
-#endif // _WIN32
+					if(setenv(keys[ix],value,1)) {
+						g_warning("Can't set \"%s\" to \"%s\"",keys[ix],value);
 					}
+#endif // _WIN32
 				}
-
-				g_strfreev(keys);
 			}
-		}
 
+			g_strfreev(keys);
+		}
 	}
 
 	return new_session;
