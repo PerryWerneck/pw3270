@@ -363,6 +363,13 @@
 
  void pw3270_toolbar_set_actions(GtkWidget *toolbar, const gchar *action_names) {
 
+	// The action search requires a toplevel window.
+	if(!gtk_widget_get_parent(toolbar)) {
+		g_warning("Can't set actions on an orphan toolbar");
+		return;
+	}
+
+	// Split action names
 	size_t ix;
 	gint pos = 0;
 
