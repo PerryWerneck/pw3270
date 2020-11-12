@@ -79,8 +79,6 @@
 
  GtkWidget * pw3270_header_settings_new() {
 
- 	size_t ix;
-
 	// Create page widget.
 	PW3270Settings 	* settings = pw3270_settings_new();
 	settings->label = _("Title bar");
@@ -104,7 +102,7 @@
 	return GTK_WIDGET(settings);
  }
 
- void load(GtkWidget *widget, PW3270SettingsPrivate *page) {
+ void load(GtkWidget G_GNUC_UNUSED(*widget), PW3270SettingsPrivate *page) {
 
  	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
@@ -140,7 +138,7 @@
 									);
 
 			if(error) {
-				g_warning(error->message);
+				g_warning("%s",error->message);
 				g_error_free(error);
 				error = NULL;
 			}
@@ -164,7 +162,7 @@
 	pw3270_action_list_free(action_list);
  }
 
- void apply(GtkWidget *widget, PW3270SettingsPrivate *page) {
+ void apply(GtkWidget G_GNUC_UNUSED(*widget), PW3270SettingsPrivate *page) {
 
  	g_autofree gchar * action_names = pw3270_settings_action_get(page->editor);
 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
