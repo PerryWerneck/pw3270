@@ -183,23 +183,21 @@ make all -j1
 
 %{_bindir}/%{_product}
 
-# Configuration & Themes
-%{_datadir}/glib-2.0/schemas/*.xml
-%{_datadir}/%{_product}/icons/gtk-*.svg
-%{_datadir}/%{_product}/icons/connect-*.svg
-%{_datadir}/%{_product}/icons/disconnect-*.svg
-
+# Desktop files
 %{_datadir}/applications/*.desktop
 %{_datadir}/appdata/%{_product}.appdata.xml
 
+# Icons
+%{_datadir}/%{_product}/icons/*.svg
+
+# Configuration & Themes
+%{_datadir}/glib-2.0/schemas/*.xml
 %{_datadir}/mime/packages/*.xml
 
 %files branding
 %defattr(-,root,root)
-
 %{_datadir}/%{_product}/ui/*
 %{_datadir}/%{_product}/*.svg
-%{_datadir}/%{_product}/icons/%{_product}.svg
 
 %files keypads
 %{_datadir}/%{_product}/keypad/*
