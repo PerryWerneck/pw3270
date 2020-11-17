@@ -492,9 +492,6 @@
 
 	GSettings *settings = NULL;
 
-	g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(),"/",NULL);
-	debug("path=%s",path);
-
 #ifdef DEBUG
 	GError * error = NULL;
 	GSettingsSchemaSource * source =
@@ -510,18 +507,18 @@
 	GSettingsSchema * schema =
 		g_settings_schema_source_lookup(
 			source,
-			"br.com.bb." PACKAGE_NAME,
+			"br.com.bb." G_STRINGIFY(PRODUCT_NAME),
 			TRUE);
 
 	debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);
 
-	settings = g_settings_new_full(schema, NULL, path);
+	settings = g_settings_new_full(schema, NULL, NULL);
 
 	g_settings_schema_source_unref(source);
 
 #else
 
-	settings = g_settings_new_with_path("br.com.bb." PACKAGE_NAME, path);
+	settings = g_settings_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME));
 
 #endif // DEBUG
 

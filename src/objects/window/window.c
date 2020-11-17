@@ -841,10 +841,6 @@
 
  GSettings *pw3270_application_window_settings_new() {
 
- 	// Get settings
-	g_autofree gchar * path = g_strconcat("/apps/" PACKAGE_NAME "/", g_get_application_name(), "/window/",NULL);
-	debug("path=%s",path);
-
 #ifdef DEBUG
 
 	GError * error = NULL;
@@ -861,18 +857,16 @@
 	GSettingsSchema * schema =
 		g_settings_schema_source_lookup(
 			source,
-			"br.com.bb." PACKAGE_NAME ".window",
+			"br.com.bb." G_STRINGIFY(PRODUCT_NAME) ".window",
 			TRUE);
 
-	debug("schema %s=%p path=%s","br.com.bb." PACKAGE_NAME ".window",schema,path);
-
-	GSettings * settings = g_settings_new_full(schema, NULL, path);
+	GSettings * settings = g_settings_new_full(schema, NULL, NULL);
 
 	g_settings_schema_source_unref(source);
 
 #else
 
-	GSettings * settings = g_settings_new_with_path("br.com.bb." PACKAGE_NAME ".window", path);
+	GSettings * settings = g_settings_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME) ".window");
 
 #endif // DEBUG
 
