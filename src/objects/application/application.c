@@ -352,18 +352,51 @@
 
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
 
+	g_autoptr(GSettings) settings = pw3270_application_get_settings(application);
+
+	//
+	// Common actions
+	//
 	GAction * actions[] = {
 		pw3270_about_action_new(),
 		pw3270_preferences_action_new(),
-		pw3270_new_tab_action_new(),
-		pw3270_new_window_action_new(),
-		pw3270_quit_action_new(),
-		pw3270_open_window_action_new(),
-		pw3270_open_tab_action_new()
+		pw3270_quit_action_new()
 	};
 
 	for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
 		g_action_map_add_action(G_ACTION_MAP(application),actions[ix]);
+	}
+
+	//
+	// New tab actions
+	//
+	if(g_settings_get_boolean(settings,"allow-new-tab-actions")) {
+
+		GAction * new_tab_actions[] = {
+			pw3270_open_tab_action_new(),
+			pw3270_new_tab_action_new()
+		};
+
+		for(ix = 0; ix < G_N_ELEMENTS(new_tab_actions); ix++) {
+			g_action_map_add_action(G_ACTION_MAP(application),new_tab_actions[ix]);
+		}
+
+	}
+
+	//
+	// New window actions
+	//
+	if(g_settings_get_boolean(settings,"allow-new-window-actions")) {
+
+		GAction * new_window_actions[] = {
+			pw3270_open_window_action_new(),
+			pw3270_new_window_action_new()
+		};
+
+		for(ix = 0; ix < G_N_ELEMENTS(new_window_actions); ix++) {
+			g_action_map_add_action(G_ACTION_MAP(application),new_window_actions[ix]);
+		}
+
 	}
 
 	//

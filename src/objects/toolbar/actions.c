@@ -58,7 +58,7 @@
 
 	GtkWidget * window = gtk_widget_get_toplevel(toolbar);
 
-	if(window) {
+	if(window && G_IS_ACTION_MAP(window)) {
 
 		GtkToolItem * item = NULL;
 		GAction *action = g_action_map_lookup_action(G_ACTION_MAP(window), name);
@@ -81,7 +81,7 @@
 			}
 		}
 
-		debug("%s(%s)=%p",__FUNCTION__,name,action);
+//		debug("%s(%s)=%p",__FUNCTION__,name,action);
 
 		if(!action) {
 			g_warning("Can't find action \"%s\"",name);

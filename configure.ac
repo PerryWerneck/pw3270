@@ -32,7 +32,7 @@ AC_PREREQ(2.61)
 
 dnl Initialise automake with the package name, version and
 dnl bug-reporting address.
-AC_INIT([pw3270], [5.3], [perry.werneck@gmail.com])
+AC_INIT([pw3270], [5.4], [perry.werneck@gmail.com])
 
 dnl Place auxilliary scripts here.
 AC_CONFIG_AUX_DIR([scripts])
