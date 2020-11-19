@@ -53,7 +53,7 @@
 
  	size_t ix;
 
- 	g_autoptr(GSettings) settings = pw3270_application_get_settings(g_application_get_default());
+ 	GSettings *settings = pw3270_application_get_settings(g_application_get_default());
 
  	GtkWidget * dialog = v3270_settings_dialog_new();
 	gtk_window_set_title(GTK_WINDOW(dialog), action->label);
