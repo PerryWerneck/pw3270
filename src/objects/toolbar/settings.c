@@ -66,6 +66,13 @@
 		.top = 1,
 		.name = "toolbar-style",
 		.label = N_("Toolbar Style")
+	},
+
+	{
+		.left = 3,
+		.top = 1,
+		.name = "toolbar-position",
+		.label = N_("Toolbar position")
 	}
 
  };
@@ -173,7 +180,7 @@
 
 		gtk_grid_attach(
 			GTK_GRID(settings),
-			v3270_dialog_section_new(_("Layout"), _("Setup the toolbar layout"), GTK_WIDGET(grid)),
+			v3270_dialog_section_new(_("Style &amp; Position"), _("Setup the toolbar style and position"), GTK_WIDGET(grid)),
 			0,5,4,1
 		);
 
@@ -201,6 +208,13 @@
 
 			gtk_grid_attach(grid,page->combos[ix],comboboxes[ix].left+1,comboboxes[ix].top,2,1);
 
+		}
+
+		{
+			GtkWidget * label = gtk_label_new("");
+			gtk_label_set_markup(GTK_LABEL(label),_("<small><b>The toolbar position only takes effect after restart</b></small>"));
+			g_object_set(G_OBJECT(label),"margin-top",12,NULL);
+			gtk_grid_attach(grid,label,0,3,6,1);
 		}
 
 	}

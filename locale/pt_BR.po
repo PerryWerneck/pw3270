@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-03 15:48-0300\n"
-"PO-Revision-Date: 2020-10-15 13:45-0300\n"
+"POT-Creation-Date: 2020-11-19 12:35-0300\n"
+"PO-Revision-Date: 2020-11-19 12:40-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -16,8 +16,7 @@ msgstr ""
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=4; plural= (n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
-"11) ? 2 : 3;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
 #: src/objects/application/application.c:203
@@ -49,6 +48,13 @@ msgstr "Linux 64 bits"
 #: src/objects/application/actions/about.c:132
 msgid "64 bits Windows"
 msgstr "Windows 64 bits"
+
+#: src/objects/toolbar/settings.c:215
+msgid ""
+"<small><b>The toolbar position only takes effect after restart</b></small>"
+msgstr ""
+"<small><b>Alterações na posição da barra de ferramentas só tem efeito apos "
+"reinício da aplicação</b></small>"
 
 #: src/objects/application/actions/about.c:231 ui/application.xml:39
 #: ui/application.xml:537
@@ -83,7 +89,7 @@ msgstr "Versão Apple"
 msgid "Application"
 msgstr "Aplicação"
 
-#: src/objects/window/header-settings.c:123
+#: src/objects/window/header-settings.c:121
 msgid "Application menu"
 msgstr "Menu da aplicação"
 
@@ -99,7 +105,7 @@ msgstr "Aplicar"
 msgid "Auto-Reconnect"
 msgstr "Reconectar automaticamente"
 
-#: src/objects/toolbar/settings.c:112 src/objects/settings/actionview.c:73
+#: src/objects/toolbar/settings.c:119 src/objects/settings/actionview.c:73
 msgid "Available"
 msgstr "Disponível"
 
@@ -118,6 +124,10 @@ msgstr "Cursor piscante"
 #: ui/application.xml:489
 msgid "Bold"
 msgstr "Negrito"
+
+#: src/objects/toolbar/models.c:139
+msgid "Bottom"
+msgstr "Em baixo"
 
 #: src/objects/window/terminal.c:165
 msgid "Can't load session file"
@@ -140,7 +150,7 @@ msgstr "Mudar cores do terminal"
 msgid "Change the application preferences"
 msgstr "Modificar preferências da aplicação"
 
-#: src/objects/window/header-settings.c:98
+#: src/objects/window/header-settings.c:96
 msgid "Change the position of the title bar icons"
 msgstr "Modificar posição dos ícones da barra de título"
 
@@ -347,7 +357,7 @@ msgstr "Estilo do ícone"
 msgid "Icon _size"
 msgstr "_Tamanho do ícone"
 
-#: src/objects/toolbar/models.c:108
+#: src/objects/toolbar/models.c:109
 msgid "Icon type"
 msgstr "Tipo do ícone"
 
@@ -379,7 +389,7 @@ msgstr "Itens empacotados do final para o início"
 msgid "Items packed from the start to the end"
 msgstr "Itens empacotados do início para o final"
 
-#: src/objects/toolbar/settings.c:106
+#: src/objects/toolbar/settings.c:113
 msgid "Itens"
 msgstr "Itens"
 
@@ -419,9 +429,9 @@ msgstr "Etiqueta"
 msgid "Large"
 msgstr "Grande"
 
-#: src/objects/toolbar/settings.c:176
-msgid "Layout"
-msgstr "Formato"
+#: src/objects/toolbar/models.c:135
+msgid "Left"
+msgstr "Esquerda"
 
 #: src/objects/settings/actionview.c:74
 msgid "List of the available and unpacked actions"
@@ -547,6 +557,10 @@ msgstr "Colar com margem esquerda"
 msgid "Path for the new shortcut"
 msgstr "Caminho para o novo atalho"
 
+#: src/objects/toolbar/models.c:128
+msgid "Position"
+msgstr "Posição"
+
 #: ui/window.xml:129
 msgid "Preferences"
 msgstr "Preferências"
@@ -583,6 +597,10 @@ msgstr "Reselecionar"
 #: ui/window.xml:379 ui/application.xml:464
 msgid "Resize on alternate screen"
 msgstr "Mudar tamanho do terminal em tela alternativa"
+
+#: src/objects/toolbar/models.c:143
+msgid "Right"
+msgstr "Direita"
 
 #: keypad/00-right.xml:34
 msgid "Right keypad"
@@ -636,11 +654,11 @@ msgstr "Selecionar tudo"
 msgid "Select by rectangles"
 msgstr "Seleção retangular"
 
-#: src/objects/toolbar/settings.c:106
+#: src/objects/toolbar/settings.c:113
 msgid "Select the toolbar itens"
 msgstr "Selecione itens da barra de ferramentas"
 
-#: src/objects/toolbar/settings.c:111
+#: src/objects/toolbar/settings.c:118
 msgid "Selected"
 msgstr "Selecionado"
 
@@ -658,7 +676,7 @@ msgstr "Enviar/Receber"
 msgid "Send/Receive files"
 msgstr "Enviar/Receber arquivos"
 
-#: src/objects/toolbar/settings.c:234 src/objects/toolbar/settings.c:244
+#: src/objects/toolbar/settings.c:248 src/objects/toolbar/settings.c:258
 msgid "Separator"
 msgstr "Separador"
 
@@ -699,15 +717,15 @@ msgstr "Define o tipo de interface do usuário"
 msgid "Settings"
 msgstr "Configurações"
 
-#: src/objects/toolbar/settings.c:176
-msgid "Setup the toolbar layout"
-msgstr "Configura formato da barra de ferramentas"
+#: src/objects/toolbar/settings.c:183
+msgid "Setup the toolbar style and position"
+msgstr "Configura estilo e posição da barra de ferramentas"
 
-#: src/objects/window/header-settings.c:87
+#: src/objects/window/header-settings.c:85
 msgid "Setup title bar"
 msgstr "Configurar barra de título"
 
-#: src/objects/toolbar/toolbar.c:214 src/objects/toolbar/settings.c:88
+#: src/objects/toolbar/toolbar.c:214 src/objects/toolbar/settings.c:95
 msgid "Setup toolbar"
 msgstr "Configurar barra de ferramentas"
 
@@ -759,12 +777,16 @@ msgstr "Estado"
 msgid "State Type"
 msgstr "Tipo do estado"
 
-#: src/objects/toolbar/models.c:115
+#: src/objects/toolbar/settings.c:183
+msgid "Style &amp; Position"
+msgstr "Estilo &amp; Posição"
+
+#: src/objects/toolbar/models.c:116
 msgid "Symbolic"
 msgstr "Simbólico"
 
 #: src/objects/toolbar/models.c:55 src/objects/toolbar/models.c:82
-#: src/objects/toolbar/models.c:111
+#: src/objects/toolbar/models.c:112
 msgid "System default"
 msgstr "Padrão do sistema"
 
@@ -878,15 +900,15 @@ msgstr "The type of GVariant passed to activate()"
 msgid "The type of the state kept by the action"
 msgstr "O tipo do estado mantido pela ação"
 
-#: src/objects/window/header-settings.c:86
+#: src/objects/window/header-settings.c:84
 msgid "Title bar"
 msgstr "Barra de título"
 
-#: src/objects/window/header-settings.c:98
+#: src/objects/window/header-settings.c:96
 msgid "Title bar actions"
 msgstr "Ações da barra de título"
 
-#: src/objects/toolbar/settings.c:87 ui/window.xml:435 ui/window.xml:555
+#: src/objects/toolbar/settings.c:94 ui/window.xml:435 ui/window.xml:555
 #: ui/application.xml:342
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
@@ -895,9 +917,17 @@ msgstr "Barra de ferramentas"
 msgid "Toolbar Style"
 msgstr "Estilo da barra de ferramentas"
 
+#: src/objects/toolbar/settings.c:75
+msgid "Toolbar position"
+msgstr "Posição da barra de ferramentas"
+
 #: src/objects/toolbar/models.c:79
 msgid "Toolbar s_tyle"
 msgstr "Est_ilo da barra de ferramentas"
+
+#: src/objects/toolbar/models.c:131
+msgid "Top (system default)"
+msgstr "Em cima (padrão do sistema)"
 
 #: ui/window.xml:440
 msgid "Top menu"
@@ -1767,9 +1797,6 @@ msgstr "translator-credits"
 #~ msgid "Default host URL"
 #~ msgstr "URL parão para acesso ao host"
 
-#~ msgid "Description"
-#~ msgstr "Descrição"
-
 #~ msgid "Description of the current security state"
 #~ msgstr "Descrição do estado de segurança atual"
 
@@ -2298,8 +2325,8 @@ msgstr "translator-credits"
 #~ msgid "Launcher name"
 #~ msgstr "Nome do lançador"
 
-#~ msgid "Left"
-#~ msgstr "Esquerda"
+#~ msgid "Layout"
+#~ msgstr "Formato"
 
 #~ msgid "Load"
 #~ msgstr "Load"
@@ -2807,9 +2834,6 @@ msgstr "translator-credits"
 
 #~ msgid "Revocation list"
 #~ msgstr "Lista de revogados"
-
-#~ msgid "Right"
-#~ msgstr "Direita"
 
 #~ msgid "SOCKS4 Proxy: client is not reachable"
 #~ msgstr "SOCKS4 Proxy: client is not reachable"

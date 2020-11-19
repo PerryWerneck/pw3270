@@ -102,6 +102,7 @@
 			}
 		}
 	},
+
 	{
 		"toolbar-icon-type",
 		"icon-type",
@@ -119,8 +120,34 @@
 				.label = NULL
 			}
 		}
-	}
+	},
 
+	{
+		"toolbar-position",
+		"position",
+		N_("Position"),
+		(const struct _contents[]) {
+			{
+				.label = N_( "Top (system default)" ),
+				.value = 0
+			},
+			{
+				.label = N_( "Left" ),
+				.value = 3
+			},
+			{
+				.label = N_( "Bottom" ),
+				.value = 1
+			},
+			{
+				.label = N_( "Right" ),
+				.value = 2
+			},
+			{
+				.label = NULL
+			}
+		}
+	}
  };
 
   GtkTreeModel * pw3270_model_from_name(const gchar *name) {
