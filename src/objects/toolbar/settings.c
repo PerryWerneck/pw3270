@@ -180,7 +180,7 @@
 
 		gtk_grid_attach(
 			GTK_GRID(settings),
-			v3270_dialog_section_new(_("Style &amp; Position"), _("Setup the toolbar style and position"), GTK_WIDGET(grid)),
+			v3270_dialog_section_new(_("Style & Position"), _("Setup the toolbar style and position"), GTK_WIDGET(grid)),
 			0,5,4,1
 		);
 

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-19 12:35-0300\n"
-"PO-Revision-Date: 2020-11-19 12:40-0300\n"
+"PO-Revision-Date: 2020-11-19 23:07-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -778,8 +778,8 @@ msgid "State Type"
 msgstr "Tipo do estado"
 
 #: src/objects/toolbar/settings.c:183
-msgid "Style &amp; Position"
-msgstr "Estilo &amp; Posição"
+msgid "Style & Position"
+msgstr "Estilo & Posição"
 
 #: src/objects/toolbar/models.c:116
 msgid "Symbolic"
