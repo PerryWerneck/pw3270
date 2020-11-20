@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application>
+<component type="desktop">
 
-	<id type="desktop">@PRODUCT_NAME@.desktop</id>
+	<id>@APPLICATION_ID@.desktop</id>
 
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>LGPL-3.0</project_license>
+
+	<name>@PRODUCT_NAME@</name>
+	<name xml:lang="pt_BR">@PRODUCT_NAME@</name>
 
 	<summary>IBM 3270 Terminal emulator</summary>
 	<summary xml:lang="pt_BR">Emulador de terminal IBM 3270</summary>
@@ -17,8 +20,8 @@
 		<p>Created originally for Banco do Brasil, it's now an official Brazilian Government Public Software project, and is used worldwide.</p>
 	</description>
 
-	<url type="bugtracker">https://github.com/PerryWerneck/pw3270/issues</url>
 	<url type="homepage">https://github.com/PerryWerneck/pw3270</url>
+	<url type="bugtracker">https://github.com/PerryWerneck/pw3270/issues</url>
 
 	<screenshots>
 		<screenshot type="default">
@@ -29,9 +32,12 @@
 
 	<update_contact>perry.werneck@gmail.com</update_contact>
 
+	<project_group>GNOME</project_group>
+
 	<provides>
 		<binary>@PRODUCT_NAME@</binary>
 	</provides>
 
+	<translation type="gettext">@PRODUCT_NAME@</translation>
 
-</application>
+</component>

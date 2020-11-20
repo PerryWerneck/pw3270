@@ -106,7 +106,7 @@ int main (int argc, char **argv) {
 
 	// Setup and start application.
 	g_set_application_name(G_STRINGIFY(PRODUCT_NAME));
-	app = pw3270_application_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME),G_APPLICATION_HANDLES_OPEN);
+	app = pw3270_application_new(G_STRINGIFY(APPLICATION_ID),G_APPLICATION_HANDLES_OPEN);
 
 #ifdef G_OS_UNIX
 	g_unix_signal_add(SIGTERM, (GSourceFunc) quit_signal, app);

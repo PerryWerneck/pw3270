@@ -194,6 +194,10 @@ AC_ARG_WITH([library-name], [AS_HELP_STRING([--with-library-name], [Set protocol
 AC_DEFINE_UNQUOTED(LIBRARY_NAME, $app_cv_library)
 AC_SUBST(LIBRARY_NAME,$app_cv_library)
 
+app_cv_application_id="br.com.bb.$app_cv_product"
+AC_DEFINE_UNQUOTED(APPLICATION_ID, $app_cv_application_id)
+AC_SUBST(APPLICATION_ID,$app_cv_application_id)
+
 dnl ---------------------------------------------------------------------------
 dnl Check for GTK
 dnl ---------------------------------------------------------------------------
