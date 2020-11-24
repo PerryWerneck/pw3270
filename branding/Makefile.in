@@ -134,6 +134,12 @@ install-linux: \
 		appdata.xml \
 		$(DESTDIR)$(datarootdir)/appdata/$(APPLICATION_ID).appdata.xml
 
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps
+
+	@$(INSTALL_DATA) \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/$(PRODUCT_NAME).svg \
+		$(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps/$(APPLICATION_ID).svg
+
 install-windows: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.svg \
