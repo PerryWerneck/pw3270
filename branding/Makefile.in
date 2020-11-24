@@ -132,7 +132,7 @@ install-linux: \
 
 	@$(INSTALL_DATA) \
 		appdata.xml \
-		$(DESTDIR)$(datarootdir)/appdata/$(PRODUCT_NAME).appdata.xml
+		$(DESTDIR)$(datarootdir)/appdata/$(APPLICATION_ID).appdata.xml
 
 install-windows: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \

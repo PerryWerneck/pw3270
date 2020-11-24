@@ -6,7 +6,7 @@
 
 -->
 
-<component type="desktop-application">
+<component type="desktop">
 
 	<id>@APPLICATION_ID@</id>
 
