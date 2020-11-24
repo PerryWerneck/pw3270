@@ -6,6 +6,7 @@
 
 		https://www.freedesktop.org/software/appstream/docs/chap-Quickstart.html#sect-Quickstart-DesktopApps
 		https://people.freedesktop.org/~hughsient/temp/AppData_WhitePaper.pdf
+		https://docs.fedoraproject.org/en-US/packaging-guidelines/AppData/
 
 -->
 
@@ -22,7 +23,7 @@
 	<summary>IBM 3270 Terminal emulator</summary>
 	<summary xml:lang="pt_BR">Emulador de terminal IBM 3270</summary>
 
-	<developer_name>perry.werneck@gmail.com</developer_name>
+	<developer_name>Perry Werneck</developer_name>
 
 	<description>
 		<p>GTK Based 3270 terminal emulator</p>
