@@ -63,3 +63,6 @@ appdata.xml
 *.3270
 macos/**/*.app
 mime.xml
+*.patch
+*.orig
+*.rej

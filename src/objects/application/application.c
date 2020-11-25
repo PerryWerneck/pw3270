@@ -352,7 +352,7 @@
 
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
 
-	g_autoptr(GSettings) settings = pw3270_application_get_settings(application);
+	GSettings *settings = pw3270_application_get_settings(application);
 
 	//
 	// Common actions

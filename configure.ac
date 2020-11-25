@@ -178,6 +178,19 @@ AC_SUBST(PACKAGE_MAJOR_RELEASE,$app_rls_major)
 AC_SUBST(PACKAGE_MINOR_RELEASE,$app_rls_minor)
 
 dnl ---------------------------------------------------------------------------
+dnl Set application id & product name
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_WITH([product-name], [AS_HELP_STRING([--with-product-name], [Set product name])], [ app_cv_product="$withval" ],[ app_cv_product=`pkg-config --variable=product_name lib3270` ])
+AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product)
+AC_SUBST(PRODUCT_NAME,$app_cv_product)
+
+AC_ARG_WITH([application-id], [AS_HELP_STRING([--application-id], [Set the application ID])], [ app_cv_application_id="$withval" ],[ app_cv_application_id="br.com.bb.$app_cv_product" ])
+
+AC_DEFINE_UNQUOTED(APPLICATION_ID, $app_cv_application_id)
+AC_SUBST(APPLICATION_ID,$app_cv_application_id)
+
+dnl ---------------------------------------------------------------------------
 dnl Check for LIBV3270
 dnl ---------------------------------------------------------------------------
 
@@ -185,10 +198,6 @@ PKG_CHECK_MODULES( [LIBV3270], [libv3270], AC_DEFINE(HAVE_LIBV3270), AC_MSG_ERRO
 
 AC_SUBST(LIBV3270_LIBS)
 AC_SUBST(LIBV3270_CFLAGS)
-
-AC_ARG_WITH([product-name], [AS_HELP_STRING([--with-product-name], [Set product name])], [ app_cv_product="$withval" ],[ app_cv_product=`pkg-config --variable=product_name lib3270` ])
-AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product)
-AC_SUBST(PRODUCT_NAME,$app_cv_product)
 
 AC_ARG_WITH([library-name], [AS_HELP_STRING([--with-library-name], [Set protocol library name])], [ app_cv_library="$withval" ],[ app_cv_library=`pkg-config --variable=library_name lib3270` ])
 AC_DEFINE_UNQUOTED(LIBRARY_NAME, $app_cv_library)

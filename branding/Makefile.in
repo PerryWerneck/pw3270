@@ -28,6 +28,7 @@ PACKAGE_NAME=@PACKAGE_NAME@
 PACKAGE_VERSION=@PACKAGE_VERSION@
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
 PRODUCT_NAME=@PRODUCT_NAME@
+APPLICATION_ID=@APPLICATION_ID@
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -113,13 +114,13 @@ install-linux: \
 
 	@$(INSTALL_DATA) \
 		launcher.desktop \
-		$(PRODUCT_NAME).desktop
+		$(APPLICATION_ID).desktop
 
 	@$(DESKTOP_INSTALL) \
 		--mode 644 \
 		--delete-original \
 		--dir $(DESTDIR)$(datarootdir)/applications \
-		$(PRODUCT_NAME).desktop
+		$(APPLICATION_ID).desktop
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/mime/packages
 
@@ -131,7 +132,13 @@ install-linux: \
 
 	@$(INSTALL_DATA) \
 		appdata.xml \
-		$(DESTDIR)$(datarootdir)/appdata/$(PRODUCT_NAME).appdata.xml
+		$(DESTDIR)$(datarootdir)/appdata/$(APPLICATION_ID).appdata.xml
+
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps
+
+	@$(INSTALL_DATA) \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/$(PRODUCT_NAME).svg \
+		$(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps/$(APPLICATION_ID).svg
 
 install-windows: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \
