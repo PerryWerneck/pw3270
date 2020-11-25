@@ -30,16 +30,12 @@ License:		GPL-2.0
 Group:			System/X11/Terminals
 Url:			https://github.com/PerryWerneck/pw3270
 
-Source:		pw3270-%{version}.tar.xz
+Source:			pw3270-%{version}.tar.xz
 
 BuildRoot:		%{_tmppath}/%{name}-%{version}-build
 
 Requires:		shared-mime-info
 Requires:		%{name}-branding = %{version}
-
-BuildRequires:		update-desktop-files
-
-%glib2_gsettings_schema_requires
 
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
 # 
@@ -48,26 +44,14 @@ BuildRequires:		update-desktop-files
 # https://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto#Detect_a_distribution_flavor_for_special_code
 #
 
-#--[ Red HAT ]--------------------------------------------------------------------------------------------------------
-
-%if 0%{?rhel_version}
-
-BuildRequires:  gtk3-devel
-BuildRequires:  glib2-devel
-BuildRequires:  libv3270-devel >= 5.3
-
-%endif
-
 #--[ CentOS ]---------------------------------------------------------------------------------------------------------
 
 %if 0%{?centos_version}
 
-BuildRequires:  gtk3-devel
-BuildRequires:  glib2-devel
-BuildRequires:  libv3270-devel >= 5.3
-
-# Required for genmarshal
-BuildRequires:  python
+BuildRequires:	gtk3-devel
+BuildRequires:	glib2-devel
+BuildRequires:	libv3270-devel >= 5.3
+BuildRequires:	libappstream-glib
 
 %endif
 
@@ -75,9 +59,10 @@ BuildRequires:  python
 
 %if 0%{?fedora}
 
-BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(libv3270) >= 5.3
+BuildRequires:	pkgconfig(gtk+-3.0)
+BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(libv3270) >= 5.3
+BuildRequires:	libappstream-glib
 
 %endif
 
@@ -85,30 +70,31 @@ BuildRequires:  pkgconfig(libv3270) >= 5.3
 
 %if 0%{?suse_version}
 
-BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(libv3270) >= 5.3
+BuildRequires:	update-desktop-files
+BuildRequires:	pkgconfig(gtk+-3.0)
+BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(libv3270) >= 5.3
+BuildRequires:	appstream-glib
+
+%glib2_gsettings_schema_requires
 
 %endif
 
 #---------------------------------------------------------------------------------------------------------------------
 
-BuildRequires:  autoconf >= 2.61
-BuildRequires:  automake
-BuildRequires:  binutils
-BuildRequires:  coreutils
-BuildRequires:  desktop-file-utils
-BuildRequires:  findutils
-BuildRequires:  gcc-c++
-BuildRequires:  gettext-devel
-BuildRequires:  gettext-tools
-BuildRequires:  m4
-BuildRequires:  pkgconfig
-BuildRequires:  sed
-BuildRequires:  fdupes
-BuildRequires:  autoconf-archive
-
-%glib2_gsettings_schema_requires
+BuildRequires:	autoconf >= 2.61
+BuildRequires:	automake
+BuildRequires:	binutils
+BuildRequires:	coreutils
+BuildRequires:	desktop-file-utils
+BuildRequires:	findutils
+BuildRequires:	gcc-c++
+BuildRequires:	gettext-devel
+BuildRequires:	m4
+BuildRequires:	pkgconfig
+BuildRequires:	sed
+BuildRequires:	fdupes
+BuildRequires:	autoconf-archive
 
 %description
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -118,13 +104,13 @@ Based on the original x3270 code, pw3270 was originally created for Banco do Bra
 #--[ Configuration & Branding ]---------------------------------------------------------------------------------------
 
 %package branding
-Summary:        Default branding for %{name}
-Group:          System/X11/Terminals
+Summary:			Default branding for %{name}
+Group:				System/X11/Terminals
 
-Requires:       	%{name} = %{version}
-BuildArch:		noarch
+Requires:			%{name} = %{version}
+BuildArch:			noarch
 
-Requires(post):	desktop-file-utils
+Requires(post):		desktop-file-utils
 Requires(postun):	desktop-file-utils
 
 %description branding
@@ -133,13 +119,13 @@ GTK-based IBM 3270 terminal emulator with many advanced features. It can be used
 This package contains the default branding for %{name}.
 
 %package keypads
-Summary:	Keypads for %{name}
-Group:		System/X11/Terminals
-Requires:	%{name} = %{version}
-BuildArch:	noarch
+Summary:			Keypads for %{name}
+Group:				System/X11/Terminals
+Requires:			%{name} = %{version}
+BuildArch:			noarch
 
-Conflicts:	otherproviders(pw3270-keypads)
-Enhances:	%{name}
+Conflicts:			otherproviders(pw3270-keypads)
+Enhances:			%{name}
 
 %description keypads
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -167,6 +153,8 @@ make all -j1
 
 %find_lang pw3270 langfiles
 
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.xml
+
 %fdupes %{buildroot}/%{_prefix}
 
 %files -f langfiles
@@ -185,7 +173,8 @@ make all -j1
 
 # Desktop files
 %{_datadir}/applications/*.desktop
-%{_datadir}/appdata/%{_product}.appdata.xml
+%{_datadir}/appdata/*.appdata.xml
+%{_datadir}/icons/hicolor/scalable/apps/*.svg
 
 # Icons
 %{_datadir}/%{_product}/icons/*.svg
