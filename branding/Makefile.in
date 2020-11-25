@@ -135,12 +135,12 @@ install-linux: \
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps
 	@$(INSTALL_DATA) \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/$(PRODUCT_NAME).svg \
-		$(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps/$(PRODUCT_NAME).svg
+		$(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps/$(APPLICATION_ID).svg
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/icons
 	@$(INSTALL_DATA) \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/$(PRODUCT_NAME).svg \
-		$(DESTDIR)$(datarootdir)/icons/$(PRODUCT_NAME).svg
+		$(DESTDIR)$(datarootdir)/icons/$(APPLICATION_ID).svg
 
 install-windows: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \
