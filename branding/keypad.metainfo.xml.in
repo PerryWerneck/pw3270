@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+	References: 
+
+		https://www.freedesktop.org/software/appstream/docs/chap-Quickstart.html#sect-Quickstart-DesktopApps
+		https://people.freedesktop.org/~hughsient/temp/AppData_WhitePaper.pdf
+		https://docs.fedoraproject.org/en-US/packaging-guidelines/AppData/
+
+-->
+
+<component type="addon">
+
+	<id>@PRODUCT_NAME@-keypads</id>
+	<extends>@APPLICATION_ID@.desktop</extends>
+
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>LGPL-3.0</project_license>
+
+	<name>@PRODUCT_NAME@ - keypads</name>
+	<name xml:lang="pt_BR">@PRODUCT_NAME@ - Keypads</name>
+
+	<summary>Keypads for @PRODUCT_NAME@</summary>
+	<summary xml:lang="pt_BR">Keypads para @PRODUCT_NAME@</summary>
+
+	<developer_name>Perry Werneck</developer_name>
+
+	<url type="homepage">https://github.com/PerryWerneck/pw3270</url>
+	<url type="bugtracker">https://github.com/PerryWerneck/pw3270/issues</url>
+
+	<update_contact>perry.werneck@gmail.com</update_contact>
+
+	<project_group>GNOME</project_group>
+
+</component>

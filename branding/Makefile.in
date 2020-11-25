@@ -134,6 +134,10 @@ install-linux: \
 		appdata.xml \
 		$(DESTDIR)$(datarootdir)/appdata/$(APPLICATION_ID).appdata.xml
 
+	@$(INSTALL_DATA) \
+		keypad.metainfo.xml \
+		$(DESTDIR)$(datarootdir)/appdata/$(APPLICATION_ID)-keypad.metainfo.xml
+
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps
 
 	@$(INSTALL_DATA) \
