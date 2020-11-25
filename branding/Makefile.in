@@ -123,26 +123,24 @@ install-linux: \
 		$(APPLICATION_ID).desktop
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/mime/packages
-
 	@$(INSTALL_DATA) \
 		mime.xml \
 		$(DESTDIR)$(datarootdir)/mime/packages/$(PRODUCT_NAME).xml
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/appdata
-
 	@$(INSTALL_DATA) \
 		appdata.xml \
 		$(DESTDIR)$(datarootdir)/appdata/$(APPLICATION_ID).appdata.xml
 
-#	@$(INSTALL_DATA) \
-#		keypad.metainfo.xml \
-#		$(DESTDIR)$(datarootdir)/appdata/$(APPLICATION_ID)-keypad.metainfo.xml
-
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps
-
 	@$(INSTALL_DATA) \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/$(PRODUCT_NAME).svg \
-		$(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps/$(APPLICATION_ID).svg
+		$(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps/$(PRODUCT_NAME).svg
+
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/icons
+	@$(INSTALL_DATA) \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/$(PRODUCT_NAME).svg \
+		$(DESTDIR)$(datarootdir)/icons/$(PRODUCT_NAME).svg
 
 install-windows: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \
