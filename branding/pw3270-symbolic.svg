@@ -22,7 +22,7 @@
    version="1.1">
   <defs
      id="defs2687">
-     <inkscape:perspective
+    <inkscape:perspective
        sodipodi:type="inkscape:persp3d"
        inkscape:vp_x="0 : 32 : 1"
        inkscape:vp_y="0 : 1000 : 0"
@@ -38,8 +38,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.97227183"
-     inkscape:cx="73.336669"
-     inkscape:cy="32"
+     inkscape:cx="-113.33952"
+     inkscape:cy="27.885924"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:document-units="px"
@@ -67,7 +67,7 @@
      transform="translate(0,192)">
     <path
        inkscape:connector-curvature="0"
-       style="fill:none;stroke:#000000;stroke-width:20.012;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;stroke:#000000;stroke-width:20.012;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
        d="m 215.73349,-178.39423 c -63.65448,7.56185 -128.080618,8.12669 -191.369345,18.74807 6.002278,47.43867 5.074431,117.445356 8.451632,152.5836602 C 92.671335,-14.675161 172.82395,-20.217278 231.63583,-34.156208 231.44928,-79.065631 226.31064,-131.08087 215.73349,-178.39423 Z"
        id="path3877"
        sodipodi:nodetypes="ccccc"
