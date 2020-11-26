@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="256"
+   height="256"
+   id="svg2685"
+   sodipodi:version="0.32"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   sodipodi:docname="pw3270-symbolic.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/home/perry/Project/3270/v4/image/icon.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   version="1.1">
+  <defs
+     id="defs2687">
+    <linearGradient
+       id="linearGradient3687">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3689" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="1"
+         id="stop3691" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 32 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="64 : 32 : 1"
+       inkscape:persp3d-origin="32 : 21.333333 : 1"
+       id="perspective2693" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.97227183"
+     inkscape:cx="-29.000967"
+     inkscape:cy="32"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:document-units="px"
+     inkscape:grid-bbox="true"
+     inkscape:window-width="1366"
+     inkscape:window-height="715"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata2690">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(0,192)">
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:11.39068413;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 215.65767,-178.30467 c -63.59947,7.73552 -127.969931,8.31333 -191.203964,19.17865 5.997091,48.52819 5.070045,120.142715 8.444328,156.0880361 C 92.701866,-10.825484 172.78521,-16.494886 231.54627,-30.75395 c -0.18639,-45.940853 -5.32059,-99.15072 -15.8886,-147.55072 z"
+       id="path3877"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/perry/Desktop/path4684.png"
+       inkscape:export-xdpi="750"
+       inkscape:export-ydpi="750" />
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5.17758322"
+       d="m 148.09124,-4.1583611 c -19.63148,0.533757 -39.5877,0.5791127 -58.544024,6.6234753 C 78.51156,5.8828888 68.600371,14.069166 65.161575,25.368051 c -0.500672,5.786985 3.935015,11.330727 7.582933,15.654527 11.667736,11.893893 29.281562,14.640704 45.228212,14.977247 22.9149,0.03107 45.91641,-4.3792 67.13679,-13.047665 8.02655,-4.564662 17.29292,-10.673174 18.48206,-20.677198 C 200.49874,10.57875 188.72802,4.090047 177.88171,0.96216529 168.30504,-1.8800173 158.04488,-3.9876562 148.09124,-4.1583611 Z m 0.23092,7.2578328 c 14.43194,0.5011901 29.80046,1.1084689 42.01857,9.4996233 4.55581,3.023967 10.11446,9.199374 5.99078,14.70299 -3.9608,5.954739 -10.62347,9.329954 -16.6887,12.735716 -16.75264,8.135693 -36.05405,8.355792 -54.11465,5.507551 -47.266885,-2.099717 -23.84764,-34.410374 5.52174,-40.3896548 5.68814,-1.3175914 11.37898,-2.1007009 17.27226,-2.0562255 z"
+       id="path3879"
+       sodipodi:nodetypes="cccccccccccccccc"
+       inkscape:export-filename="/home/perry/Desktop/path4684.png"
+       inkscape:export-xdpi="750"
+       inkscape:export-ydpi="750" />
+  </g>
+</svg>
