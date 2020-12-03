@@ -1,6 +1,6 @@
 Format: 1.0
 Source: pw3270
-Version: 5.3-0
+Version: 5.4-0
 Binary: pw3270
 Maintainer: Perry Werneck <perry.werneck@gmail.com>
 Architecture: any
