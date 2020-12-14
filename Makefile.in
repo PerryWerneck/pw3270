@@ -280,8 +280,7 @@ strip: \
 #---[ Install Targets ]------------------------------------------------------------------
 
 install: \
-	install-application \
-	install-keypads
+	install-application
 
 install-application: \
 	install-@OSNAME@-application \
@@ -324,16 +323,6 @@ install-windows-application: \
 		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
 		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
-
-install-keypads:
-
-	@$(MKDIR) \
-		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad
-
-	@$(INSTALL_DATA) \
-		keypad/*.xml \
-		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad
-
 install-icons:
 
 	@$(MKDIR) \
@@ -347,8 +336,7 @@ install-icons:
 
 locale/$(PACKAGE_NAME).pot: \
 	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) \
-	$(foreach SRC, $(basename $(wildcard ui/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) \
-	$(foreach SRC, $(basename $(wildcard keypad/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) 
+	$(foreach SRC, $(basename $(wildcard ui/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot)
 
 	@rm -f $@
 	@$(MKDIR) $(@D)

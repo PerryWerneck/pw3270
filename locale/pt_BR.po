@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-19 12:35-0300\n"
+"POT-Creation-Date: 2020-12-14 18:10-0300\n"
 "PO-Revision-Date: 2020-11-19 23:07-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -317,10 +317,6 @@ msgstr "Tela cheia"
 msgid "Full screen"
 msgstr "Tela cheia"
 
-#: keypad/10-bottom.xml:34
-msgid "Function bar"
-msgstr "Barra de funções"
-
 #: src/objects/os/linux/savedesktopicon.c:94
 msgid "Generic name"
 msgstr "Nome genérico"
@@ -601,10 +597,6 @@ msgstr "Mudar tamanho do terminal em tela alternativa"
 #: src/objects/toolbar/models.c:143
 msgid "Right"
 msgstr "Direita"
-
-#: keypad/00-right.xml:34
-msgid "Right keypad"
-msgstr "Painel direito"
 
 #: ui/window.xml:69 ui/application.xml:134
 msgid "Save"
@@ -2016,6 +2008,9 @@ msgstr "translator-credits"
 #~ msgid "Full path of remote file"
 #~ msgstr "Caminho completo do arquivo remoto"
 
+#~ msgid "Function bar"
+#~ msgstr "Barra de funções"
+
 #~ msgid "GTK Version mismatch"
 #~ msgstr "Divergência de versão GTK"
 
@@ -2834,6 +2829,9 @@ msgstr "translator-credits"
 
 #~ msgid "Revocation list"
 #~ msgstr "Lista de revogados"
+
+#~ msgid "Right keypad"
+#~ msgstr "Painel direito"
 
 #~ msgid "SOCKS4 Proxy: client is not reachable"
 #~ msgstr "SOCKS4 Proxy: client is not reachable"
