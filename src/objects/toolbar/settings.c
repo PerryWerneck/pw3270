@@ -35,8 +35,8 @@
  #include <pw3270/window.h>
  #include <v3270/dialogs.h>
 
- static void load(GtkWidget *widget, PW3270SettingsPrivate *settings);
- static void apply(GtkWidget *widget, PW3270SettingsPrivate *settings);
+ static void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+ static void apply(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
 
  /*--[ Constants ]------------------------------------------------------------------------------------*/
 
@@ -77,7 +77,7 @@
 
  };
 
- struct _PW3270SettingsPrivate {
+ struct _PW3270SettingsPage {
 	GtkWidget * views[2];
 //	GtkTreeModel * models[G_N_ELEMENTS(comboboxes)];
 	GtkWidget * combos[G_N_ELEMENTS(comboboxes)];
@@ -97,7 +97,7 @@
 	settings->load = load;
 
 	// Create private data.
-	PW3270SettingsPrivate * page = settings->settings = g_new0(PW3270SettingsPrivate,1);
+	PW3270SettingsPage * page = settings->settings = g_new0(PW3270SettingsPage,1);
 
 	//
 	// Create views
@@ -222,10 +222,9 @@
 	return GTK_WIDGET(settings);
  }
 
- void load(GtkWidget G_GNUC_UNUSED(*widget), PW3270SettingsPrivate *page) {
+ void load(GtkWidget G_GNUC_UNUSED(*widget), GSettings *settings, PW3270SettingsPage *page) {
 
  	size_t ix;
-	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
  	// Populate views
 	Pw3270ActionList * action_list = pw3270_action_list_new(GTK_APPLICATION(g_application_get_default()));
@@ -274,10 +273,9 @@
 
  }
 
- void apply(GtkWidget G_GNUC_UNUSED(*widget), PW3270SettingsPrivate *page) {
+ void apply(GtkWidget G_GNUC_UNUSED(*widget), GSettings *settings, PW3270SettingsPage *page) {
 
 	size_t ix;
-	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
  	g_autofree gchar * action_names = pw3270_action_view_get_action_names(page->views[0]);
 	g_settings_set_string(settings,"toolbar-action-names",action_names);

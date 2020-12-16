@@ -35,6 +35,7 @@
  #include <pw3270.h>
  #include <pw3270/settings.h>
  #include <pw3270/actions.h>
+ #include <pw3270/window.h>
  #include <lib3270.h>
  #include <lib3270/log.h>
 
@@ -144,18 +145,18 @@ void dialog_close(GtkDialog *dialog) {
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
-static void apply(GtkWidget *widget, GtkWidget G_GNUC_UNUSED(*dialog)) {
+static void apply(GtkWidget *widget, GSettings *settings) {
 
 	if(GTK_IS_PW3270_SETTINGS(widget)) {
-		GTK_PW3270_SETTINGS(widget)->apply(widget,GTK_PW3270_SETTINGS(widget)->settings);
+		GTK_PW3270_SETTINGS(widget)->apply(widget,settings,GTK_PW3270_SETTINGS(widget)->settings);
 	}
 
 }
 
-static void revert(GtkWidget *widget, GtkWidget G_GNUC_UNUSED(*dialog)) {
+static void revert(GtkWidget *widget, GSettings *settings, GtkWidget G_GNUC_UNUSED(*dialog)) {
 
 	if(GTK_IS_PW3270_SETTINGS(widget)) {
-		GTK_PW3270_SETTINGS(widget)->revert(widget,GTK_PW3270_SETTINGS(widget)->settings);
+		GTK_PW3270_SETTINGS(widget)->revert(widget,settings,GTK_PW3270_SETTINGS(widget)->settings);
 	}
 
 }
@@ -164,12 +165,15 @@ void response(GtkDialog *dialog, gint response_id) {
 
 	debug("%s(%d)",__FUNCTION__,response_id);
 
+	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
+	g_settings_delay(settings);
+
 	switch(response_id) {
 	case GTK_RESPONSE_APPLY:
 		gtk_container_foreach(
 			GTK_CONTAINER(GTK_PW3270_SETTINGS_DIALOG(dialog)->tabs),
 			(GtkCallback) apply,
-			dialog
+			settings
 		);
 		break;
 
@@ -177,13 +181,15 @@ void response(GtkDialog *dialog, gint response_id) {
 		gtk_container_foreach(
 			GTK_CONTAINER(GTK_PW3270_SETTINGS_DIALOG(dialog)->tabs),
 			(GtkCallback) revert,
-			dialog
+			settings
 		);
 		break;
 
 	}
 
+	g_settings_apply(settings);
 	gtk_widget_destroy(GTK_WIDGET(dialog));
+
 }
 
 void add(GtkContainer *container, GtkWidget *widget) {
@@ -196,7 +202,9 @@ void add(GtkContainer *container, GtkWidget *widget) {
 	if(GTK_IS_PW3270_SETTINGS(widget)) {
 		PW3270Settings * settings = GTK_PW3270_SETTINGS(widget);
 		label = gtk_label_new(settings->label);
-		settings->load(widget,settings->settings);
+
+		g_autoptr(GSettings) gs = pw3270_application_window_settings_new();
+		settings->load(widget,gs,settings->settings);
 	}
 
 	gtk_widget_show(widget);
@@ -212,7 +220,7 @@ void page_changed(GtkNotebook *notebook, GtkWidget G_GNUC_UNUSED(*child), guint 
  	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
 }
 
-void switch_page(GtkNotebook *notebook, PW3270Settings *page, guint G_GNUC_UNUSED(page_num), PW3270SettingsDialog *dialog) {
+void switch_page(GtkNotebook G_GNUC_UNUSED(*notebook), PW3270Settings *page, guint G_GNUC_UNUSED(page_num), PW3270SettingsDialog *dialog) {
 
 	GtkWidget * header_bar = gtk_dialog_get_header_bar(GTK_DIALOG(dialog));
 
