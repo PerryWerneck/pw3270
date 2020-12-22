@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 17:41-0300\n"
-"PO-Revision-Date: 2020-12-22 17:08-0300\n"
+"PO-Revision-Date: 2020-12-22 18:46-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt_BR\n"
@@ -336,7 +336,7 @@ msgstr "Propriedades do Servidor"
 #: src/objects/application/actions/about.c:111 src/objects/window/window.c:561
 #: src/objects/os/linux/savedesktopicon.c:102
 msgid "IBM 3270 Terminal emulator"
-msgstr "Emulador de terminam IBM 3270"
+msgstr "Emulador de terminal IBM 3270"
 
 #: src/objects/actions/view.c:90
 msgid "Icon"
