@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-22 16:55-0300\n"
+"POT-Creation-Date: 2020-12-22 17:41-0300\n"
 "PO-Revision-Date: 2020-12-22 17:08-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <>\n"
@@ -56,7 +56,7 @@ msgstr ""
 "<small><b>Alterações na posição da barra de ferramentas só tem efeito apos "
 "reinício da aplicação</b></small>"
 
-#: src/objects/application/actions/about.c:212 ui/application.xml:39
+#: src/objects/application/actions/about.c:210 ui/application.xml:39
 #: ui/application.xml:537
 msgid "About PW3270"
 msgstr "Sobre o PW3270"
@@ -227,6 +227,10 @@ msgstr "Copiar como tabela"
 #: ui/window.xml:158 ui/application.xml:241
 msgid "Copy as text"
 msgstr "Copiar como texto"
+
+#: src/objects/application/actions/about.c:160
+msgid "Copyright © 2008 Banco do Brasil S.A."
+msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:114
 msgid "Create shortcut for the current session"
@@ -961,7 +965,7 @@ msgstr "Versão %s-%s"
 msgid "View"
 msgstr "Exibir"
 
-#: src/objects/application/actions/about.c:187
+#: src/objects/application/actions/about.c:184
 msgid "View this project on github"
 msgstr "Portal do Software Público Brasileiro"
 
@@ -1026,11 +1030,11 @@ msgstr "_Salvar"
 msgid "_View"
 msgstr "_Exibir"
 
-#: src/objects/application/actions/about.c:186
+#: src/objects/application/actions/about.c:183
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr "https://portal.softwarepublico.gov.br/social/pw3270/"
 
-#: src/objects/application/actions/about.c:189
+#: src/objects/application/actions/about.c:186
 msgid "translator-credits"
 msgstr "translator-credits"
 

@@ -189,6 +189,7 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 	@$(MKDIR) $(@D)
 	@$(XGETTEXT) \
 		--language=C \
+		--from-code=UTF-8 \
 		--keyword=_ \
 		--keyword=N_ \
 		--keyword=MSG_:2 \
