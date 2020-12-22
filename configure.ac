@@ -191,6 +191,27 @@ AC_DEFINE_UNQUOTED(APPLICATION_ID, $app_cv_application_id)
 AC_SUBST(APPLICATION_ID,$app_cv_application_id)
 
 dnl ---------------------------------------------------------------------------
+dnl Check for unstable version
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE([unstable],
+	[AS_HELP_STRING([--enable-unstable], [enable unstable features])],
+[
+	app_cv_unstable="$enableval"
+],[
+
+	app_cv_unstable="no"
+
+])
+
+if test "$app_cv_unstable" == "yes"; then
+	AC_DEFINE(ENABLE_UNSTABLE_FEATURES)
+	AC_MSG_NOTICE([Enabling unstable features])
+else
+	AC_MSG_NOTICE([Using only stable features])
+fi
+
+
+dnl ---------------------------------------------------------------------------
 dnl Check for LIBV3270
 dnl ---------------------------------------------------------------------------
 
