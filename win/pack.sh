@@ -422,6 +422,12 @@ buildApplication()
 			fi
 		done
 
+		if [ "${BUILD_UNSTABLE}" == "1" ]; then
+			APP_OPTIONS="--enable-unstable"
+		else
+			APP_OPTIONS=""
+		fi
+
 		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
 
 			host="${host}" \
@@ -443,7 +449,8 @@ buildApplication()
 				--includedir=${WORKDIR}/build/${ARCH}/include \
 				--sysconfdir=${WORKDIR}/build/${ARCH}/etc \
 				--datadir=${WORKDIR}/build/${ARCH}/share \
-				--datarootdir=${WORKDIR}/build/${ARCH}/share
+				--datarootdir=${WORKDIR}/build/${ARCH}/share \
+				${APP_OPTIONS}
 
 		fi
 
