@@ -8,6 +8,7 @@ Created originally for Banco do Brasil, it's now an official Brazilian Governmen
 See more details at https://softwarepublico.gov.br/social/pw3270/
 
 ![CodeQL](https://github.com/PerryWerneck/libv3270/workflows/CodeQL/badge.svg?branch=master)
+![Downloads](https://img.shields.io/github/downloads/PerryWerneck/pw3270/total.svg)
 
 ## Installation
 
