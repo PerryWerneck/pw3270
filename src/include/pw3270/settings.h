@@ -51,19 +51,19 @@
 
  GType PW3270Settings_get_type(void);
 
- typedef struct _PW3270SettingsPrivate PW3270SettingsPrivate;
+ typedef struct _PW3270SettingsPage PW3270SettingsPage;
 
  typedef struct _PW3270Settings {
 
 	GtkGrid parent;
 
-	PW3270SettingsPrivate	* settings;											///< @brief Private Data.
-	const gchar				* label;											///< @brief Page lagel.
-	const gchar				* title;											///< @brief Page title.
+	PW3270SettingsPage	* settings;										///< @brief Page Data.
+	const gchar			* label;										///< @brief Page lagel.
+	const gchar			* title;										///< @brief Page title.
 
- 	void (*load)(GtkWidget *widget, PW3270SettingsPrivate *settings);			///< @brief Method to load the properties from terminal widget
- 	void (*apply)(GtkWidget *widget, PW3270SettingsPrivate *settings);			///< @brief Method for GTK_RESPONSE_APPLY
- 	void (*revert)(GtkWidget *widget, PW3270SettingsPrivate *settings);			///< @brief Method for GTK_RESPONSE_CANCEL
+ 	void (*load)(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);			///< @brief Method to load the properties from terminal widget
+ 	void (*apply)(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);		///< @brief Method for GTK_RESPONSE_APPLY
+ 	void (*revert)(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);		///< @brief Method for GTK_RESPONSE_CANCEL
 
  } PW3270Settings;
 
@@ -73,7 +73,9 @@
 
  } PW3270SettingsClass;
 
+ /// @brief Create a new pw3270 settings.
  PW3270Settings * pw3270_settings_new();
+
 
 /*--[ PW3270 Settings Dialog ]-----------------------------------------------------------------------*/
 

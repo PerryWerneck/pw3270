@@ -409,7 +409,7 @@
 	return g_string_free(str,FALSE);
  }
 
- static void check_4_sensitive(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gboolean *sensitive) {
+ static void check_4_sensitive(GtkTreeModel *model, GtkTreePath G_GNUC_UNUSED(*path), GtkTreeIter *iter, gboolean *sensitive) {
 
 	GValue value = { 0, };
 	gtk_tree_model_get_value(model,iter,COLUMN_FLAGS,&value);

@@ -108,10 +108,19 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		# Register file association
 
+		# icons & logos
+		CreateDirectory "$INSTDIR\icons"
+		file "/oname=$INSTDIR\icons\gtk-connect-symbolic.svg"			"share\@PRODUCT_NAME@\icons\gtk-connect-symbolic.svg"
+		file "/oname=$INSTDIR\icons\gtk-disconnect-symbolic.svg"		"share\@PRODUCT_NAME@\icons\gtk-disconnect-symbolic.svg"
+		file "/oname=$INSTDIR\icons\connect-symbolic.svg"				"share\@PRODUCT_NAME@\icons\connect-symbolic.svg"
+		file "/oname=$INSTDIR\icons\disconnect-symbolic.svg"			"share\@PRODUCT_NAME@\icons\disconnect-symbolic.svg"
+		file "/oname=$INSTDIR\icons\@PRODUCT_NAME@.svg"					"share\@PRODUCT_NAME@\@PRODUCT_NAME@.svg"
+
+		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.svg"					"share\@PRODUCT_NAME@\@PRODUCT_NAME@-logo.svg"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.svg"						"share\@PRODUCT_NAME@\@PRODUCT_NAME@.svg"
+
 		# Configuration files
-		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.png"			"share\@PRODUCT_NAME@\@PRODUCT_NAME@-logo.png"
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.png"			"share\@PRODUCT_NAME@\@PRODUCT_NAME@.png"
-		file "/oname=$INSTDIR\colors.conf"				"share\@PRODUCT_NAME@\colors.conf"
+		file "/oname=$INSTDIR\colors.conf"						"share\@PRODUCT_NAME@\colors.conf"
 
 		# Documentation files
 		file "/oname=$INSTDIR\AUTHORS"					"AUTHORS"
@@ -136,11 +145,6 @@ SubSection "@PRODUCT_NAME@" SecMain
 		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE_NAME@.mo"	"share\locale\pt_BR\LC_MESSAGES\@PACKAGE_NAME@.mo"
 		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"	"share\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"
 		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270.mo"		"share\locale\pt_BR\LC_MESSAGES\libv3270.mo"
-
-		# Customized icons
-		CreateDirectory "$INSTDIR\icons"
-		file "/oname=$INSTDIR\icons\gtk-connect-symbolic.svg"			"share\@PRODUCT_NAME@\icons\gtk-connect-symbolic.svg"
-		file "/oname=$INSTDIR\icons\gtk-disconnect-symbolic.svg"		"share\@PRODUCT_NAME@\icons\gtk-disconnect-symbolic.svg"
 
 		# define uninstaller name
 		SetRegView 32
