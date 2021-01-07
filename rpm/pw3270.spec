@@ -37,6 +37,8 @@ BuildRoot:		%{_tmppath}/%{name}-%{version}-build
 Requires:		shared-mime-info
 Requires:		%{name}-branding = %{version}
 
+Recommends:		libv3270-config
+
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
 # 
 # References:
@@ -118,20 +120,6 @@ GTK-based IBM 3270 terminal emulator with many advanced features. It can be used
 
 This package contains the default branding for %{name}.
 
-%package keypads
-Summary:			Keypads for %{name}
-Group:				System/X11/Terminals
-Requires:			%{name} = %{version}
-BuildArch:			noarch
-
-Conflicts:			otherproviders(pw3270-keypads)
-Enhances:			%{name}
-
-%description keypads
-GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
-
-This package contains the keypads for %{name}.
-
 #---[ Build & Install ]-----------------------------------------------------------------------------------------------
 
 %prep
@@ -174,10 +162,12 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.
 # Desktop files
 %{_datadir}/applications/*.desktop
 %{_datadir}/appdata/*.appdata.xml
-%{_datadir}/icons/hicolor/scalable/apps/*.svg
 
 # Icons
 %{_datadir}/%{_product}/icons/*.svg
+%{_datadir}/icons/*.svg
+%{_datadir}/icons/hicolor/scalable/apps/*.svg
+%{_datadir}/icons/hicolor/symbolic/apps/*.svg
 
 # Configuration & Themes
 %{_datadir}/glib-2.0/schemas/*.xml
@@ -187,9 +177,6 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.
 %defattr(-,root,root)
 %{_datadir}/%{_product}/ui/*
 %{_datadir}/%{_product}/*.svg
-
-%files keypads
-%{_datadir}/%{_product}/keypad/*
 
 %posttrans
 /usr/bin/update-desktop-database

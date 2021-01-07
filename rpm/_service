@@ -13,10 +13,10 @@
 	</service>
 
 	<!-- https://github.com/openSUSE/obs-service-extract_file -->
-	<service name="extract_file">
+	<!-- service name="extract_file">
 		<param name="archive">*.tar</param>
 		<param name="files">*/rpm/pw3270.spec</param>
-	</service>
+	</service -->
 
 	<service name="extract_file">
 		<param name="archive">*.tar</param>
@@ -47,11 +47,11 @@
 		<param name="outfilename">debian.compat</param>
 	</service>
 
-	<service name="extract_file">
+	<!-- service name="extract_file">
 		<param name="archive">*.tar</param>
 		<param name="files">*/debian/shlibs</param>
 		<param name="outfilename">debian.shlibs</param>
-	</service>
+	</service -->
 
   	<service name="extract_file">
 		<param name="archive">*.tar</param>
