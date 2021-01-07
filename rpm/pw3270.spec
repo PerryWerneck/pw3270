@@ -86,6 +86,7 @@ BuildRequires:	appstream-glib
 
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake
+BuildRequires:	libtool
 BuildRequires:	binutils
 BuildRequires:	coreutils
 BuildRequires:	desktop-file-utils
