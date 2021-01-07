@@ -417,20 +417,20 @@
 	// Load keypad models
 	//
 	{
-#ifdef DEBUG
-		const gchar * keypad_path = "keypad";
-#else
 		lib3270_autoptr(char) keypad_path = lib3270_build_data_filename("keypad",NULL);
-#endif // DEBUG
 
 		g_autoptr(GError) error = NULL;
 		g_autoptr(GDir) dir = g_dir_open(keypad_path,0,&error);
 
-		const gchar *name = g_dir_read_name(dir);
-		while(!error && name) {
-			g_autofree gchar * path = g_build_filename(keypad_path,name,NULL);
-			app->keypads = pw3270_keypad_model_new_from_xml(app->keypads,path);
-			name = g_dir_read_name(dir);
+		if(dir) {
+
+			const gchar *name = g_dir_read_name(dir);
+			while(!error && name) {
+				g_autofree gchar * path = g_build_filename(keypad_path,name,NULL);
+				app->keypads = pw3270_keypad_model_new_from_xml(app->keypads,path);
+				name = g_dir_read_name(dir);
+			}
+
 		}
 
 		if(error) {

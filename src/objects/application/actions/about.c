@@ -27,6 +27,7 @@
  *
  */
 
+ #include <config.h>
  #include "../private.h"
  #include <pw3270/actions.h>
  #include <pw3270/application.h>
@@ -80,37 +81,16 @@
 
 		}
 
-		/*
-		if(g_file_test(logo,G_FILE_TEST_EXISTS)) {
-			GError 		* error	= NULL;
-			GdkPixbuf	* pix	= gdk_pixbuf_new_from_file(logo,&error);
-
-			gtk_about_dialog_set_logo(dialog,pix);
-
-			if(pix) {
-
-				g_object_unref(pix);
-
-			} else {
-
-				g_warning("Can't load %s: %s",logo,error->message);
-				g_error_free(error);
-
-			}
-
-		} else {
-
-			g_message("%s: %s",logo,strerror(ENOENT));
-
-		}
-		*/
-
 	}
 
 	// Set version
 	{
 		g_autofree gchar * version = g_strdup_printf(
+#ifdef ENABLE_UNSTABLE_FEATURES
+											_("Unstable version %s-%s"),
+#else
 											_("Version %s-%s"),
+#endif // ENABLE_UNSTABLE_FEATURES
 											PACKAGE_VERSION,
 #ifdef PACKAGE_RELEASE
 											PACKAGE_RELEASE
@@ -127,7 +107,8 @@
 		g_autofree gchar * comments =
 
 		g_strdup_printf(
-				_( "3270 terminal emulator for %s." ),
+				_( "%s for %s." ),
+				_( "IBM 3270 Terminal emulator" ),
 #if defined(__MINGW64__)
 				_( "64 bits Windows" )
 #elif defined(__MINGW32__)
@@ -176,7 +157,7 @@
 
 	}
 
-	gtk_about_dialog_set_copyright(dialog, "Copyright © 2008 Banco do Brasil S.A." );
+	gtk_about_dialog_set_copyright(dialog, _("Copyright © 2008 Banco do Brasil S.A.") );
 
 #ifdef _WIN32
 
@@ -199,9 +180,6 @@
 	gtk_about_dialog_set_license_type(dialog,GTK_LICENSE_GPL_3_0);
 #endif // _WIN32
 
-//	gtk_about_dialog_set_website(dialog,NC_("ProjectURL","https://portal.softwarepublico.gov.br/social/pw3270/"));
-//	gtk_about_dialog_set_website_label(dialog,NC_("ProjectURLLabel","Brazilian Public Software Portal" ));
-
 	gtk_about_dialog_set_website(dialog,_("https://github.com/PerryWerneck/pw3270"));
 	gtk_about_dialog_set_website_label(dialog,_("View this project on github"));
 
@@ -210,7 +188,6 @@
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
 
 	g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
-	gtk_widget_show_all(GTK_WIDGET(dialog));
 
 	// Call plugins
 	pw3270_application_plugin_call(
@@ -218,6 +195,8 @@
 		"pw3270_plugin_set_about_dialog",
 		dialog
 	);
+
+	gtk_widget_show_all(GTK_WIDGET(dialog));
 
 	return GTK_WIDGET(dialog);
 

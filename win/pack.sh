@@ -30,7 +30,7 @@ PRODUCT_NAME="pw3270"
 LIBRARY_NAME="lib3270"
 CORE_LIBRARIES="lib3270 libv3270 libipc3270"
 PACKAGE_PLUGINS=""
-PACKAGE_EXTRAS="libhllapi"
+PACKAGE_EXTRAS="libhllapi pw3270-keypads"
 
 #TARGET_ARCHS="x86_64 x86_32"
 TARGET_ARCHS="x86_64"
@@ -422,6 +422,12 @@ buildApplication()
 			fi
 		done
 
+		if [ "${BUILD_UNSTABLE}" == "1" ]; then
+			APP_OPTIONS="--enable-unstable"
+		else
+			APP_OPTIONS=""
+		fi
+
 		if [ -x ${PROJECTDIR}/win/configure.${1} ]; then
 
 			host="${host}" \
@@ -443,7 +449,8 @@ buildApplication()
 				--includedir=${WORKDIR}/build/${ARCH}/include \
 				--sysconfdir=${WORKDIR}/build/${ARCH}/etc \
 				--datadir=${WORKDIR}/build/${ARCH}/share \
-				--datarootdir=${WORKDIR}/build/${ARCH}/share
+				--datarootdir=${WORKDIR}/build/${ARCH}/share \
+				${APP_OPTIONS}
 
 		fi
 

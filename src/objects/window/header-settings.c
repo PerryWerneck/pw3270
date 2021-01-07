@@ -34,12 +34,12 @@
  #include <pw3270/application.h>
  #include <v3270/dialogs.h>
 
- static void load(GtkWidget *widget, PW3270SettingsPrivate *settings);
- static void apply(GtkWidget *widget, PW3270SettingsPrivate *settings);
+ static void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+ static void apply(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
 
 /*--[ Constants ]------------------------------------------------------------------------------------*/
 
-  struct _PW3270SettingsPrivate {
+  struct _PW3270SettingsPage {
   	GtkWidget * editor;
   	/*
 	GtkWidget * views[3];
@@ -87,7 +87,7 @@
 	settings->load = load;
 
 	// Create private data.
-	PW3270SettingsPrivate * page = settings->settings = g_new0(PW3270SettingsPrivate,1);
+	PW3270SettingsPage * page = settings->settings = g_new0(PW3270SettingsPage,1);
 
 	page->editor = pw3270_settings_actions_new();
 
@@ -102,9 +102,7 @@
 	return GTK_WIDGET(settings);
  }
 
- void load(GtkWidget G_GNUC_UNUSED(*widget), PW3270SettingsPrivate *page) {
-
- 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
+ void load(GtkWidget G_GNUC_UNUSED(*widget), GSettings *settings, PW3270SettingsPage *page) {
 
  	// Get avaliable actions.
  	Pw3270ActionList * action_list = pw3270_action_list_new(GTK_APPLICATION(g_application_get_default()));
@@ -162,10 +160,9 @@
 	pw3270_action_list_free(action_list);
  }
 
- void apply(GtkWidget G_GNUC_UNUSED(*widget), PW3270SettingsPrivate *page) {
+ void apply(GtkWidget G_GNUC_UNUSED(*widget), GSettings *settings, PW3270SettingsPage *page) {
 
  	g_autofree gchar * action_names = pw3270_settings_action_get(page->editor);
-	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 	g_settings_set_string(settings,"header-action-names",action_names);
 
  }

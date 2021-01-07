@@ -39,9 +39,9 @@
 
  G_DEFINE_TYPE(PW3270Settings, PW3270Settings, GTK_TYPE_GRID);
 
- static void load(GtkWidget *widget, PW3270SettingsPrivate *settings);
- static void apply(GtkWidget *widget, PW3270SettingsPrivate *settings);
- static void revert(GtkWidget *widget, PW3270SettingsPrivate *settings);
+ static void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+ static void apply(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+ static void revert(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
  static void finalize(GObject *object);
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
@@ -78,12 +78,12 @@
 
 }
 
- void load(GtkWidget G_GNUC_UNUSED(*widget), PW3270SettingsPrivate G_GNUC_UNUSED(*settings)) {
+ void load(GtkWidget G_GNUC_UNUSED(*widget), GSettings G_GNUC_UNUSED(*settings), PW3270SettingsPage G_GNUC_UNUSED(*page)) {
  }
 
- void apply(GtkWidget G_GNUC_UNUSED(*widget), PW3270SettingsPrivate G_GNUC_UNUSED(*settings)) {
+ void apply(GtkWidget G_GNUC_UNUSED(*widget), GSettings G_GNUC_UNUSED(*settings), PW3270SettingsPage G_GNUC_UNUSED(*page)) {
  }
 
- void revert(GtkWidget G_GNUC_UNUSED(*widget), PW3270SettingsPrivate G_GNUC_UNUSED(*settings)) {
+ void revert(GtkWidget G_GNUC_UNUSED(*widget), GSettings G_GNUC_UNUSED(*settings), PW3270SettingsPage G_GNUC_UNUSED(*page)) {
  }
 
