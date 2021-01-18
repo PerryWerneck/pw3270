@@ -42,8 +42,9 @@
 
 	<screenshots>
 		<screenshot type="default">
-			<caption>@PRODUCT_NAME@</caption>
-			<image height="600" width="600">https://raw.githubusercontent.com/PerryWerneck/pw3270/master/branding/pw3270.svg</image>
+			<caption>Acessing MVS with @PRODUCT_NAME@</caption>
+			<caption xml:lang="pt_BR">@PRODUCT_NAME@ acessando MVS</caption>
+			<image>https://raw.githubusercontent.com/PerryWerneck/PerryWerneck/master/screenshots/mvs-tk4.png</image>
 		</screenshot>
 	</screenshots>
 
