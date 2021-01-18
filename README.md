@@ -1,6 +1,8 @@
 
 ## GTK Based 3270 terminal emulator
 
+<img src="https://raw.githubusercontent.com/PerryWerneck/PerryWerneck/master/screenshots/mvs-tk4.png" alt="Screenshot">
+
 pw3270 is a modern, GTK-based, completely free tn3270 emulator. 
 
 Created originally for Banco do Brasil, it's now an official Brazilian Government Public Software project, and is used worldwide. 
@@ -30,7 +32,7 @@ For the supported distributions get the install repositories and instructions fr
 
 ## Building for Linux
 
-	```
+	```shell
 	$ git clone https://github.com/PerryWerneck/pw3270.git
 	$ cd pw3270
 	$ ./autogen.sh
