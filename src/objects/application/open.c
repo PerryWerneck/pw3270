@@ -71,8 +71,9 @@
  void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
 	GtkWidget * window = GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application)));
-	size_t path, subdir;
 	gint file;
+
+	debug("%s files=%d",__FUNCTION__,n_files);
 
 	for(file = 0; file < n_files; file++) {
 
@@ -102,11 +103,14 @@
 		if(g_file_test(path,G_FILE_TEST_IS_REGULAR)) {
 
 			// The file exists, use it.
+			debug("%s: Loading '%s'",__FUNCTION__,path);
 
 			if(!window) {
+				debug("%s: Creating new window",__FUNCTION__);
 				window = pw3270_application_window_new(GTK_APPLICATION(application), path);
 			} else {
-				window = pw3270_application_window_new_tab(window,path);
+				debug("%s: Creating new tab",__FUNCTION__);
+				pw3270_application_window_new_tab(window,path);
 			}
 
 			continue;
@@ -119,9 +123,11 @@
 			if(filename) {
 
 				if(!window) {
+					debug("%s: Creating new window",__FUNCTION__);
 					window = pw3270_application_window_new(GTK_APPLICATION(application), filename);
 				} else {
-					window = pw3270_application_window_new_tab(window, filename);
+					debug("%s: Creating new tab",__FUNCTION__);
+					pw3270_application_window_new_tab(window, filename);
 				}
 
 				continue;
