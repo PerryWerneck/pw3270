@@ -143,6 +143,16 @@
 
 	}
 
+	// Load current session name
+	{
+		g_autofree gchar * session_name = g_strdup(v3270_get_session_name(terminal));
+		gchar *ptr = strrchr(session_name,':');
+		if(ptr)
+			*ptr = 0;
+		gtk_entry_set_text(GTK_ENTRY(inputs[0]),session_name);
+	}
+
+	// Load current file name
 	{
 		g_autofree gchar * session_filename = v3270_key_file_build_filename(terminal);
 		gtk_entry_set_text(GTK_ENTRY(inputs[1]),session_filename);
