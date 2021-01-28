@@ -175,8 +175,17 @@
 
  static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
 
-	g_autoptr(GSettings) app_settings = pw3270_application_settings_new();
+ 	g_autoptr(GSettings) app_settings = pw3270_application_settings_new();
+	if(!app_settings) {
+		g_warning("Can't get application settings");
+		return FALSE;
+	}
+
 	g_autoptr(GSettings) win_settings = pw3270_application_window_settings_new();
+	if(!win_settings) {
+		g_warning("Can't get window settings");
+		return FALSE;
+	}
 
 	if(!g_ascii_strcasecmp(value,"gnome")) {
 

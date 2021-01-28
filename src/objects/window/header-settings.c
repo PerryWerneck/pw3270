@@ -102,7 +102,13 @@
 	return GTK_WIDGET(settings);
  }
 
- void load(GtkWidget G_GNUC_UNUSED(*widget), GSettings *settings, PW3270SettingsPage *page) {
+ void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page) {
+
+	if(!G_IS_SETTINGS(settings)) {
+		g_warning("The settings object is not valid, disabling dialog to avoid segfaults");
+		gtk_widget_set_sensitive(widget,FALSE);
+		return;
+    }
 
  	// Get avaliable actions.
  	Pw3270ActionList * action_list = pw3270_action_list_new(GTK_APPLICATION(g_application_get_default()));
