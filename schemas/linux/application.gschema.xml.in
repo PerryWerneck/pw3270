@@ -56,6 +56,12 @@
       <description>Enable new window actions</description>
     </key>
 
+    <key name="default-session-file" type="s">
+      <default>'~/.config/default.3270'</default>
+      <summary>Path of the default session file</summary>
+      <description></description>
+    </key>
+
   </schema>
 
 </schemalist>

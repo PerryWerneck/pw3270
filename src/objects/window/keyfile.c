@@ -42,6 +42,7 @@
  #include <lib3270/properties.h>
  #include <string.h>
  #include <stdlib.h>
+ #include <pw3270/application.h>
 
  struct _V3270KeyFile
  {
@@ -276,11 +277,32 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
  gchar * v3270_keyfile_get_default_filename(void) {
 
+ 	GSettings *settings = pw3270_application_get_settings(g_application_get_default());
+	if(settings) {
+
+		g_autofree gchar * def_key_file = g_settings_get_string(settings,"default-session-file");
+
+		if(def_key_file && *def_key_file) {
+
+			if(g_file_test(def_key_file,G_FILE_TEST_IS_REGULAR))
+				return g_strdup(def_key_file);
+
+			g_autofree gchar * def_key_full = g_build_filename(g_get_user_config_dir(),def_key_file,NULL);
+
+			if(g_file_test(def_key_full,G_FILE_TEST_IS_REGULAR))
+				return g_strdup(def_key_full);
+		}
+
+	}
+
+	// No default key file, use the old scheme.
+
 	gchar * filename = g_build_filename(g_get_user_config_dir(),"default.3270",NULL);
 
 	g_autofree gchar * compatible = g_build_filename(g_get_user_config_dir(),G_STRINGIFY(PRODUCT_NAME) ".conf",NULL);
 	if(g_file_test(compatible,G_FILE_TEST_IS_REGULAR))
 		g_rename(compatible,filename);
+
 
 	return filename;
  }

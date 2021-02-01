@@ -116,6 +116,12 @@
       <description></description>
     </key>
 
+    <key name="default-session-file" type="s">
+      <default>''</default>
+      <summary>Path of the default session file</summary>
+      <description></description>
+    </key>
+
   </schema>
 
 </schemalist>

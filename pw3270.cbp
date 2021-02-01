@@ -52,7 +52,6 @@
 		<Unit filename="src/include/pw3270/keypad.h" />
 		<Unit filename="src/include/pw3270/settings.h" />
 		<Unit filename="src/include/pw3270/toolbar.h" />
-		<Unit filename="src/include/pw3270/tools.h" />
 		<Unit filename="src/include/pw3270/window.h" />
 		<Unit filename="src/include/v3270/keyfile.h" />
 		<Unit filename="src/main/main.c">
