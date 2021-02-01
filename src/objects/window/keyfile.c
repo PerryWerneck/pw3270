@@ -158,6 +158,22 @@
 		}
 	}
 
+	if(!*error) {
+
+		GSettings * settings = pw3270_application_get_settings(g_application_get_default());
+
+		if(settings && g_settings_get_boolean(settings,"update-default-session-file")) {
+
+			g_message("Updating default session file to '%s'",filename);
+			g_settings_set_string(settings,"default-session-file",filename);
+
+		}
+
+		gtk_recent_manager_add_item(gtk_recent_manager_get_default(),filename);
+
+	}
+
+
 	return new_session;
 }
 

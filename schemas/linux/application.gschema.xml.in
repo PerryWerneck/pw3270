@@ -69,7 +69,7 @@
       <description></description>
     </key>
 
-    <key name="update-session-file" type="b">
+    <key name="update-default-session-file" type="b">
       <default>true</default>
       <summary>Update default session time from command line</summary>
       <description></description>

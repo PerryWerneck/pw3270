@@ -69,21 +69,6 @@
 
  }
 
- static void save_open_file(GApplication *application, const gchar *path) {
-
-	GSettings * settings = pw3270_application_get_settings(application);
-
-	if(g_settings_get_boolean(settings,"update-session-file")) {
-
-		g_message("Updating default session file to '%s'",path);
-		g_settings_set_string(settings,"default-session-file",path);
-
-	}
-
-	gtk_recent_manager_add_item(gtk_recent_manager_get_default(),path);
-
- }
-
  void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
 	GtkWidget * window = GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application)));
@@ -130,8 +115,6 @@
 				pw3270_application_window_new_tab(window,path);
 			}
 
-			save_open_file(application,path);
-
 			continue;
 		}
 
@@ -148,8 +131,6 @@
 					debug("%s: Creating new tab",__FUNCTION__);
 					pw3270_application_window_new_tab(window, filename);
 				}
-
-				save_open_file(application,filename);
 
 				continue;
 			}
