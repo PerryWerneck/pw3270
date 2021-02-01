@@ -240,6 +240,7 @@
 
 	// Bind properties
 	if(app->settings) {
+
 		g_object_ref_sink(G_OBJECT(app->settings));
 
 #ifdef _WIN32
@@ -296,8 +297,6 @@
 
 					}
 
-
-
 				}
 
 				g_dir_close(dir);
@@ -309,7 +308,6 @@
 				g_error_free(err);
 
 			}
-
 
 		}
 

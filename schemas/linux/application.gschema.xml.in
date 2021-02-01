@@ -38,6 +38,7 @@
       <description>The ID of the current user interface style</description>
     </key>
 
+
     <key name="allow-host-settings" type="b">
       <default>true</default>
       <summary>Allow host settings</summary>
@@ -59,6 +60,12 @@
     <key name="default-session-file" type="s">
       <default>'~/.config/default.3270'</default>
       <summary>Path of the default session file</summary>
+      <description></description>
+    </key>
+
+    <key name="update-session-file" type="b">
+      <default>true</default>
+      <summary>Update default session time from command line</summary>
       <description></description>
     </key>
 

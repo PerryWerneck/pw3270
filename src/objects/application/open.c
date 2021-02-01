@@ -28,6 +28,7 @@
  */
 
  #include "private.h"
+ #include <pw3270/application.h>
 
  gchar * v3270_keyfile_find(const gchar *name) {
 	//
@@ -71,6 +72,8 @@
  void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
 	GtkWidget * window = GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application)));
+	GSettings * settings = pw3270_application_get_settings(application);
+
 	gint file;
 
 	debug("%s files=%d",__FUNCTION__,n_files);
@@ -113,6 +116,13 @@
 				pw3270_application_window_new_tab(window,path);
 			}
 
+			if(g_settings_get_boolean(settings,"update-session-file")) {
+
+				g_message("Updating default session file to '%s'",path);
+				g_settings_set_string(settings,"default-session-file",path);
+
+			}
+
 			continue;
 		}
 
@@ -128,6 +138,13 @@
 				} else {
 					debug("%s: Creating new tab",__FUNCTION__);
 					pw3270_application_window_new_tab(window, filename);
+				}
+
+				if(g_settings_get_boolean(settings,"update-session-file")) {
+
+					g_message("Updating default session file to '%s'",filename);
+					g_settings_set_string(settings,"default-session-file",filename);
+
 				}
 
 				continue;
