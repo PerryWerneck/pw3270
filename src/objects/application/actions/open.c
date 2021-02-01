@@ -37,6 +37,7 @@
  #include <pw3270.h>
  #include <pw3270/application.h>
  #include <pw3270/actions.h>
+ #include <v3270/keyfile.h>
 
  static GtkWidget * session_dialog_new(PW3270Action *action, GtkApplication *application) {
 
@@ -74,6 +75,57 @@
 
  }
 
+ static void open_session(GtkWidget *dialog, gint response_id, GtkApplication *application) {
+
+ 	if(response_id == GTK_RESPONSE_OK) {
+
+		g_autofree gchar * file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+		if(file_name) {
+			GError * error = NULL;
+			GtkWidget * window = GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application)));
+			GtkWidget * terminal = pw3270_application_window_get_active_terminal(window);
+
+			v3270_disconnect(terminal);
+			v3270_key_file_open(terminal,file_name,&error);
+
+			if(error) {
+
+				GtkWidget * dialog = gtk_message_dialog_new_with_markup(
+												GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
+												GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+												GTK_MESSAGE_ERROR,
+												GTK_BUTTONS_OK,
+												_("Can't use \"%s\""), file_name
+											);
+
+				gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",error->message);
+
+				gtk_window_set_title(GTK_WINDOW(dialog),_("Can't load session file"));
+
+				gtk_widget_show_all(dialog);
+
+				g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+				g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
+
+				g_error_free(error);
+
+			} else {
+
+				gtk_window_present(GTK_WINDOW(window));
+
+			}
+
+
+		}
+
+ 	}
+
+ 	gtk_widget_destroy(dialog);
+
+ }
+
+
  static void open_tab(GtkWidget *dialog, gint response_id, GtkApplication *application) {
 
  	if(response_id == GTK_RESPONSE_OK) {
@@ -100,11 +152,32 @@
 
  }
 
+ static GtkWidget * open_session_factory(PW3270Action *action, GtkApplication *application) {
+
+	GtkWidget * dialog = session_dialog_new(action,application);
+	g_signal_connect(dialog,"response",G_CALLBACK(open_session),application);
+	return dialog;
+
+ }
+
  static GtkWidget * open_tab_factory(PW3270Action *action, GtkApplication *application) {
 
 	GtkWidget * dialog = session_dialog_new(action,application);
 	g_signal_connect(dialog,"response",G_CALLBACK(open_tab),application);
 	return dialog;
+
+ }
+
+ GAction * pw3270_open_session_action_new() {
+
+	PW3270Action * action = pw3270_dialog_action_new(open_session_factory);
+
+ 	action->name = "open.session";
+	action->label = _( "Open session" );
+	action->tooltip = _( "Open session on the active terminal" );
+	action->icon_name = "document-open";
+
+	return G_ACTION(action);
 
  }
 

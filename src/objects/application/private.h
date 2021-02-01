@@ -57,6 +57,7 @@
 	G_GNUC_INTERNAL GAction * pw3270_new_window_action_new();
 	G_GNUC_INTERNAL GAction * pw3270_quit_action_new();
 
+	G_GNUC_INTERNAL GAction * pw3270_open_session_action_new();
 	G_GNUC_INTERNAL GAction * pw3270_open_window_action_new();
 	G_GNUC_INTERNAL GAction * pw3270_open_tab_action_new();
 

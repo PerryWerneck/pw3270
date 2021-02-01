@@ -375,6 +375,13 @@
 	}
 
 	//
+	// Open session actions.
+	//
+	if(g_settings_get_boolean(settings,"allow-open-session-actions")) {
+		g_action_map_add_action(G_ACTION_MAP(application),pw3270_open_session_action_new());
+	}
+
+	//
 	// New tab actions
 	//
 	if(g_settings_get_boolean(settings,"allow-new-tab-actions")) {

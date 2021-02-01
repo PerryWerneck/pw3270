@@ -57,6 +57,12 @@
       <description>Allow changing of host session properties</description>
     </key>
 
+    <key name="allow-open-session-actions" type="b">
+      <default>true</default>
+      <summary>Enable open session actions actions</summary>
+      <description>Enable open session actions</description>
+    </key>
+
     <key name="allow-new-tab-actions" type="b">
       <default>true</default>
       <summary>Enable new tab actions</summary>
