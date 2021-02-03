@@ -28,6 +28,14 @@
  */
 
  #include <config.h>
+
+ #ifndef GETTEXT_PACKAGE
+	#define GETTEXT_PACKAGE PACKAGE_NAME
+ #endif
+
+ #include <libintl.h>
+ #include <glib/gi18n.h>
+
  #include <glib.h>
  #include <glib/gstdio.h>
  #include <fcntl.h>
@@ -169,8 +177,28 @@
 
 		}
 
-		gtk_recent_manager_add_item(gtk_recent_manager_get_default(),filename);
+		if(settings && g_settings_get_boolean(settings,"add-session-to-recent-manager")) {
 
+			// new_session->key_file
+			g_autofree gchar * display_name = g_key_file_get_string(new_session->key_file,"terminal","session-name",NULL);
+
+			GtkRecentData recent_data = {
+
+				.display_name = display_name,
+				.app_name = G_STRINGIFY(PRODUCT_NAME),
+				.description = _("TN3270 Session description"),
+				.mime_type = "application/x-pw3270",
+				.app_exec = G_STRINGIFY(PRODUCT_NAME) " %f",
+
+			};
+
+			gtk_recent_manager_add_full(
+				gtk_recent_manager_get_default(),
+				filename,
+				&recent_data
+			);
+
+		}
 	}
 
 

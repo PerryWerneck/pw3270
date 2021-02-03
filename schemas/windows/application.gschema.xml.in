@@ -87,6 +87,13 @@
       <description></description>
     </key>
 
+    <key name="add-session-to-recent-manager" type="b">
+      <default>true</default>
+      <summary>Add session file to recent file list</summary>
+      <description></description>
+    </key>
+
   </schema>
 
 </schemalist>
+
