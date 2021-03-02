@@ -11,13 +11,17 @@ Icon=@APPLICATION_ID@
 Terminal=false
 Type=Application
 StartupNotify=true
+Encoding=UTF-8
+
+Keywords=3270;telnet;
+Keywords[pt_BR]=3270;telnet;@PRODUCT_NAME@;
 
 MimeType=x-scheme-handler/tn3270s;x-scheme-handler/tn3270;application/x-@PRODUCT_NAME@;
 
 Actions=gnomeui;classicalui
 
 # https://specifications.freedesktop.org/menu-spec/menu-spec-1.0.html
-Categories=System;TerminalEmulator;
+Categories=GNOME;GTK;System;TerminalEmulator;X-GNOME-Utilities;
 
 [Desktop Action gnomeui]
 Name=New window using modern user interface
