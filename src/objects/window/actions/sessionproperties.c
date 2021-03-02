@@ -27,17 +27,17 @@
  *
  */
 
- #include "../private.h"
- #include <pw3270/window.h>
- #include <pw3270/actions.h>
- #include <v3270/settings.h>
- #include <v3270/dialogs.h>
- #include <v3270/colorscheme.h>
- #include <pw3270/application.h>
+#include "../private.h"
+#include <pw3270/window.h>
+#include <pw3270/actions.h>
+#include <v3270/settings.h>
+#include <v3270/dialogs.h>
+#include <v3270/colorscheme.h>
+#include <pw3270/application.h>
 
- static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
+static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
 
- GAction * pw3270_action_session_properties_new(void) {
+GAction * pw3270_action_session_properties_new(void) {
 
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
@@ -47,15 +47,15 @@
 	action->tooltip = _("Change the preferences for the active session");
 
 	return G_ACTION(action);
- }
+}
 
- GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
+GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 
- 	size_t ix;
+	size_t ix;
 
- 	GSettings *settings = pw3270_application_get_settings(g_application_get_default());
+	GSettings *settings = pw3270_application_get_settings(g_application_get_default());
 
- 	GtkWidget * dialog = v3270_settings_dialog_new();
+	GtkWidget * dialog = v3270_settings_dialog_new();
 	gtk_window_set_title(GTK_WINDOW(dialog), action->label);
 
 	// Add settings pages.
@@ -75,12 +75,12 @@
 	}
 
 	pw3270_application_plugin_call(
-		g_application_get_default(),
-		"pw3270_plugin_set_session_properties",
-		dialog
+	    g_application_get_default(),
+	    "pw3270_plugin_set_session_properties",
+	    dialog
 	);
 
- 	// Setup dialog box
+	// Setup dialog box
 	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(terminal)));
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
 
@@ -92,4 +92,4 @@
 	gtk_widget_show_all(dialog);
 	return dialog;
 
- }
+}

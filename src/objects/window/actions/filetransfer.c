@@ -27,14 +27,14 @@
  *
  */
 
- #include "../private.h"
- #include <pw3270/window.h>
- #include <pw3270/actions.h>
- #include <v3270/filetransfer.h>
+#include "../private.h"
+#include <pw3270/window.h>
+#include <pw3270/actions.h>
+#include <v3270/filetransfer.h>
 
- static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal);
+static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal);
 
- GAction * pw3270_file_transfer_action_new(void) {
+GAction * pw3270_file_transfer_action_new(void) {
 
 	V3270SimpleAction * action = v3270_simple_action_new();
 
@@ -47,9 +47,9 @@
 
 	return G_ACTION(action);
 
- }
+}
 
- void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
 	debug("%s","Activating file transfer dialog");
 
@@ -81,5 +81,5 @@
 
 	gtk_widget_destroy(dialog);
 
- }
+}
 

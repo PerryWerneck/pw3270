@@ -28,20 +28,20 @@
  *
  */
 
- /**
-  * @brief PW3270 Placeholders management.
-  *
-  */
+/**
+ * @brief PW3270 Placeholders management.
+ *
+ */
 
- #include "private.h"
- #include <pw3270/application.h>
- #include <pw3270/keypad.h>
- #include <lib3270.h>
- #include <lib3270/log.h>
+#include "private.h"
+#include <pw3270/application.h>
+#include <pw3270/keypad.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
- static GMenu * get_keypad_menu(GApplication *application) {
+static GMenu * get_keypad_menu(GApplication *application) {
 
 	GList * keypads = pw3270_application_get_keypad_models(application);
 
@@ -52,7 +52,7 @@
 
 	// Create keypad items.
 	GList *item;
-	for(item = keypads;item;item = g_list_next(item)) {
+	for(item = keypads; item; item = g_list_next(item)) {
 		GObject * model = G_OBJECT(item->data);
 		g_autofree gchar * action_name = g_strconcat("win.keypad.",pw3270_keypad_model_get_name(model),NULL);
 		g_menu_append(menu,pw3270_keypad_model_get_label(model),action_name);
@@ -60,9 +60,9 @@
 
 	return menu;
 
- }
+}
 
- void pw3270_load_placeholders(GApplication *application, GtkBuilder * builder) {
+void pw3270_load_placeholders(GApplication *application, GtkBuilder * builder) {
 
 	GObject * placeholder;
 	size_t ix;
@@ -80,8 +80,7 @@
 		PangoFontFamily **families;
 		pango_context_list_families(gdk_pango_context_get_for_screen(gdk_screen_get_default()),&families, &n_families);
 
-		for(ix=0; ix < (size_t) n_families; ix++)
-		{
+		for(ix=0; ix < (size_t) n_families; ix++) {
 			if(!pango_font_family_is_monospace(families[ix]))
 				continue;
 
@@ -119,4 +118,4 @@
 		g_object_unref(keypad_menu);
 	}
 
- }
+}

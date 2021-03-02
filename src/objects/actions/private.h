@@ -29,32 +29,32 @@
 
 #ifndef PRIVATE_H_INCLUDED
 
-	#define PRIVATE_H_INCLUDED
+#define PRIVATE_H_INCLUDED
 
-	#include <config.h>
+#include <config.h>
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+#ifndef GETTEXT_PACKAGE
+#define GETTEXT_PACKAGE PACKAGE_NAME
+#endif
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+#include <libintl.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
-	#include <pw3270/actions.h>
+#include <pw3270/actions.h>
 
-	#include <lib3270/actions.h>
-	#include <lib3270/toggle.h>
+#include <lib3270/actions.h>
+#include <lib3270/toggle.h>
 
-	#include <lib3270/log.h>
+#include <lib3270/log.h>
 
-	/* not really I18N-related, but also a string marker macro */
-	#define I_(string) g_intern_static_string (string)
+/* not really I18N-related, but also a string marker macro */
+#define I_(string) g_intern_static_string (string)
 
-	G_GNUC_INTERNAL void pw3270_action_set_name(GAction *object, const gchar *name);
+G_GNUC_INTERNAL void pw3270_action_set_name(GAction *object, const gchar *name);
 
-	G_GNUC_INTERNAL void pw3270_action_notify_enabled(GAction *action);
-	G_GNUC_INTERNAL void pw3270_action_notify_state(GAction *object);
+G_GNUC_INTERNAL void pw3270_action_notify_enabled(GAction *action);
+G_GNUC_INTERNAL void pw3270_action_notify_state(GAction *object);
 
 
 #endif // PRIVATE_H_INCLUDED

@@ -27,11 +27,11 @@
  *
  */
 
- #include "private.h"
+#include "private.h"
 
 /*---[ Globals & Object definition ]----------------------------------------------------------------*/
 
- enum {
+enum {
 	PROP_NONE,
 	PROP_LABEL,
 	PROP_ACTION,
@@ -40,16 +40,16 @@
 	PROP_COL,
 	PROP_WIDTH,
 	PROP_HEIGHT,
- };
+};
 
- static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
- static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
+static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
+static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 
- G_DEFINE_TYPE(KeypadElement, KeypadElement, G_TYPE_OBJECT)
+G_DEFINE_TYPE(KeypadElement, KeypadElement, G_TYPE_OBJECT)
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
- static void finalize(GObject *object) {
+static void finalize(GObject *object) {
 
 	KeypadElement * element = PW_KEYPAD_ELEMENT(object);
 
@@ -68,9 +68,9 @@
 		element->action = NULL;
 	}
 
- }
+}
 
- static void KeypadElement_class_init(KeypadElementClass *klass) {
+static void KeypadElement_class_init(KeypadElementClass *klass) {
 
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
@@ -80,91 +80,91 @@
 
 	// Install properties
 	g_object_class_install_property(object_class, PROP_ICON_NAME,
-		g_param_spec_string (
-			I_("icon-name"),
-			I_("icon-name"),
-			N_("The name of the icon"),
-			NULL,
-			G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
-		)
-	);
+	                                g_param_spec_string (
+	                                    I_("icon-name"),
+	                                    I_("icon-name"),
+	                                    N_("The name of the icon"),
+	                                    NULL,
+	                                    G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
+	                                )
+	                               );
 
 	g_object_class_install_property(object_class, PROP_ACTION,
-		g_param_spec_string (
-			I_("action"),
-			I_("action"),
-			N_("The name of associated action"),
-			NULL,
-			G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
-		)
-	);
+	                                g_param_spec_string (
+	                                    I_("action"),
+	                                    I_("action"),
+	                                    N_("The name of associated action"),
+	                                    NULL,
+	                                    G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
+	                                )
+	                               );
 
 	g_object_class_install_property(object_class, PROP_LABEL,
-		g_param_spec_string (
-			I_("label"),
-			I_("label"),
-			N_("The Label of the keypad"),
-			NULL,
-			G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
-		)
-	);
+	                                g_param_spec_string (
+	                                    I_("label"),
+	                                    I_("label"),
+	                                    N_("The Label of the keypad"),
+	                                    NULL,
+	                                    G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
+	                                )
+	                               );
 
 	g_object_class_install_property(object_class, PROP_WIDTH,
-		 g_param_spec_uint(
-					I_("row"),
-					I_("width"),
-					_("Element row"),
-					1,
-					10,
-					3,
-					G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
-			)
-		);
+	                                g_param_spec_uint(
+	                                    I_("row"),
+	                                    I_("width"),
+	                                    _("Element row"),
+	                                    1,
+	                                    10,
+	                                    3,
+	                                    G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
+	                                )
+	                               );
 
 	g_object_class_install_property(object_class, PROP_WIDTH,
-		 g_param_spec_uint(
-					I_("col"),
-					I_("width"),
-					_("Element col"),
-					1,
-					10,
-					3,
-					G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
-			)
-		);
+	                                g_param_spec_uint(
+	                                    I_("col"),
+	                                    I_("width"),
+	                                    _("Element col"),
+	                                    1,
+	                                    10,
+	                                    3,
+	                                    G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
+	                                )
+	                               );
 
 	g_object_class_install_property(object_class, PROP_WIDTH,
-		 g_param_spec_uint(
-					I_("width"),
-					I_("width"),
-					_("Element width in columns"),
-					1,
-					10,
-					3,
-					G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
-			)
-		);
+	                                g_param_spec_uint(
+	                                    I_("width"),
+	                                    I_("width"),
+	                                    _("Element width in columns"),
+	                                    1,
+	                                    10,
+	                                    3,
+	                                    G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
+	                                )
+	                               );
 
 	g_object_class_install_property(object_class, PROP_HEIGHT,
-		 g_param_spec_uint(
-					I_("height"),
-					I_("height"),
-					_("Element height in rows"),
-					0,
-					100,
-					0,
-					G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
-			)
-		);
+	                                g_param_spec_uint(
+	                                    I_("height"),
+	                                    I_("height"),
+	                                    _("Element height in rows"),
+	                                    0,
+	                                    100,
+	                                    0,
+	                                    G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE
+	                                )
+	                               );
 
- }
+}
 
- static void KeypadElement_init(KeypadElement G_GNUC_UNUSED(*object)) {
+static void KeypadElement_init(KeypadElement G_GNUC_UNUSED(*object)) {
 
 
- }
+}
 
- static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
+static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	KeypadElement * element = PW_KEYPAD_ELEMENT(object);
 
@@ -201,9 +201,9 @@
 		g_assert_not_reached ();
 	}
 
- }
+}
 
- static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
+static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	KeypadElement * element = PW_KEYPAD_ELEMENT(object);
 
@@ -251,9 +251,9 @@
 	default:
 		g_assert_not_reached();
 	}
- }
+}
 
- static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, GObject *element, GError **error) {
+static void element_start(GMarkupParseContext *context, const gchar *element_name, const gchar **names,const gchar **values, GObject *element, GError **error) {
 
 	if(!g_ascii_strcasecmp(element_name,"attribute")) {
 		attribute_element_start(context,names,values,element,error);
@@ -262,9 +262,9 @@
 
 	debug("%s(%s)",__FUNCTION__,element_name);
 
- }
+}
 
- static void element_end(GMarkupParseContext *context, const gchar *element_name, GObject *element, GError **error) {
+static void element_end(GMarkupParseContext *context, const gchar *element_name, GObject *element, GError **error) {
 
 	if(!g_ascii_strcasecmp(element_name,"attribute")) {
 		attribute_element_end(context,element,error);
@@ -273,21 +273,21 @@
 
 	debug("%s(%s)",__FUNCTION__,element_name);
 
- }
+}
 
- void keypad_model_element_parse_context(GObject *element, GMarkupParseContext *context) {
+void keypad_model_element_parse_context(GObject *element, GMarkupParseContext *context) {
 
-   static const GMarkupParser parser = {
+	static const GMarkupParser parser = {
 		(void (*)(GMarkupParseContext *, const gchar *, const gchar **, const gchar **, gpointer, GError **))
 		element_start,
 
-	(void (*)(GMarkupParseContext *, const gchar *, gpointer, GError **))
-			element_end,
-			NULL,
-			NULL,
-			NULL
+		(void (*)(GMarkupParseContext *, const gchar *, gpointer, GError **))
+		element_end,
+		NULL,
+		NULL,
+		NULL
 	};
 
 	g_markup_parse_context_push(context, &parser, element);
 
- }
+}

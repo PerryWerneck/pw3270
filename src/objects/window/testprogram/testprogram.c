@@ -28,14 +28,14 @@
  *
  */
 
- #include <config.h>
- #include <pw3270/application.h>
- #include <pw3270/toolbar.h>
- #include <v3270.h>
- #include <v3270/trace.h>
- #include <lib3270/log.h>
+#include <config.h>
+#include <pw3270/application.h>
+#include <pw3270/toolbar.h>
+#include <v3270.h>
+#include <v3270/trace.h>
+#include <lib3270/log.h>
 
- /*---[ Implement ]----------------------------------------------------------------------------------*/
+/*---[ Implement ]----------------------------------------------------------------------------------*/
 
 GtkWidget * pw3270_toolbar_new(void) {
 
@@ -77,14 +77,14 @@ GtkWidget * pw3270_toolbar_new(void) {
 
 int main (int argc, char **argv) {
 
-  GtkApplication *app;
-  int status;
+	GtkApplication *app;
+	int status;
 
-  app = pw3270_application_new("br.com.bb.pw3270",G_APPLICATION_HANDLES_OPEN);
-  status = g_application_run (G_APPLICATION (app), argc, argv);
-  g_object_unref (app);
+	app = pw3270_application_new("br.com.bb.pw3270",G_APPLICATION_HANDLES_OPEN);
+	status = g_application_run (G_APPLICATION (app), argc, argv);
+	g_object_unref (app);
 
-  return status;
+	return status;
 
 }
 

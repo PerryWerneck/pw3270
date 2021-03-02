@@ -34,95 +34,95 @@
 
 #ifndef PW3270_ACTIONS_H_INCLUDED
 
-	#define PW3270_ACTIONS_H_INCLUDED
+#define PW3270_ACTIONS_H_INCLUDED
 
-	#include <gio/gio.h>
-	#include <gtk/gtk.h>
-	#include <lib3270.h>
-	#include <lib3270/actions.h>
-	#include <v3270/actions.h>
+#include <gio/gio.h>
+#include <gtk/gtk.h>
+#include <lib3270.h>
+#include <lib3270/actions.h>
+#include <v3270/actions.h>
 
-	G_BEGIN_DECLS
+G_BEGIN_DECLS
 
-	//
-	// Abstract action
-	//
-	#define PW3270_TYPE_ACTION				(PW3270Action_get_type())
-	#define PW3270_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_ACTION, PW3270Action))
-	#define PW3270_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_ACTION, PW3270ActionClass))
-	#define PW3270_IS_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_ACTION))
-	#define PW3270_IS_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_ACTION))
-	#define PW3270_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_ACTION, PW3270ActionClass))
+//
+// Abstract action
+//
+#define PW3270_TYPE_ACTION				(PW3270Action_get_type())
+#define PW3270_ACTION(inst)				(G_TYPE_CHECK_INSTANCE_CAST ((inst), PW3270_TYPE_ACTION, PW3270Action))
+#define PW3270_ACTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_ACTION, PW3270ActionClass))
+#define PW3270_IS_ACTION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), PW3270_TYPE_ACTION))
+#define PW3270_IS_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_ACTION))
+#define PW3270_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_ACTION, PW3270ActionClass))
 
-	typedef struct _PW3270Action {
+typedef struct _PW3270Action {
 
-		GObject parent;
+	GObject parent;
 
-		const gchar * name;
-		const gchar * icon_name;
-		const gchar	* label;
-		const gchar	* tooltip;
+	const gchar * name;
+	const gchar * icon_name;
+	const gchar	* label;
+	const gchar	* tooltip;
 
-		/// @brief Activation method.
-		void (*activate)(GAction *action, GVariant *parameter, GtkApplication *application);
+	/// @brief Activation method.
+	void (*activate)(GAction *action, GVariant *parameter, GtkApplication *application);
 
-	} PW3270Action;
+} PW3270Action;
 
-	typedef struct _PW3270ActionClass {
+typedef struct _PW3270ActionClass {
 
-		GObjectClass parent_class;
+	GObjectClass parent_class;
 
-		gboolean (*get_enabled)(GAction *action);
+	gboolean (*get_enabled)(GAction *action);
 
-		struct {
-			GParamSpec * state;
-			GParamSpec * enabled;
-		} properties;
+	struct {
+		GParamSpec * state;
+		GParamSpec * enabled;
+	} properties;
 
-	} PW3270ActionClass;
+} PW3270ActionClass;
 
-	GType			  PW3270Action_get_type(void) G_GNUC_CONST;
-	PW3270Action	* pw3270_action_new();
-	PW3270Action	* pw3270_dialog_action_new(GtkWidget * (*factory)(PW3270Action *action, GtkApplication *application));
+GType			  PW3270Action_get_type(void) G_GNUC_CONST;
+PW3270Action	* pw3270_action_new();
+PW3270Action	* pw3270_dialog_action_new(GtkWidget * (*factory)(PW3270Action *action, GtkApplication *application));
 
-	//
-	// Action view
-	//
-	typedef GSList Pw3270ActionList;
+//
+// Action view
+//
+typedef GSList Pw3270ActionList;
 
-	typedef enum _pw3270ActionViewFlag {
-		PW3270_ACTION_VIEW_FLAG_FIXED 		= 0,	///< @brief Don't move to other views.
-		PW3270_ACTION_VIEW_FLAG_ALLOW_ADD	= 1,	///< @brief Allow add to target view.
-		PW3270_ACTION_VIEW_ALLOW_REMOVE		= 2,	///< @brief Allow remove from source view.
-		PW3270_ACTION_VIEW_ALLOW_MOVE		= 3		///< @brief Allow move from one view to another.
-	} PW3270ActionViewFlag;
+typedef enum _pw3270ActionViewFlag {
+	PW3270_ACTION_VIEW_FLAG_FIXED 		= 0,	///< @brief Don't move to other views.
+	PW3270_ACTION_VIEW_FLAG_ALLOW_ADD	= 1,	///< @brief Allow add to target view.
+	PW3270_ACTION_VIEW_ALLOW_REMOVE		= 2,	///< @brief Allow remove from source view.
+	PW3270_ACTION_VIEW_ALLOW_MOVE		= 3		///< @brief Allow move from one view to another.
+} PW3270ActionViewFlag;
 
 
-	GtkWidget 			* pw3270_action_view_new();
-	void				  pw3270_action_view_set_actions(GtkWidget *view, Pw3270ActionList *list);
-	void				  pw3270_action_view_order_by_label(GtkWidget *view);
-	void				  pw3270_action_view_move_selected(GtkWidget *from, GtkWidget *to);
-	void				  pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags);
-	gchar				* pw3270_action_view_get_action_names(GtkWidget *widget);
-	GtkWidget			* pw3270_action_view_move_button_new(GtkWidget *from, GtkWidget *to, const gchar *icon_name);
+GtkWidget 			* pw3270_action_view_new();
+void				  pw3270_action_view_set_actions(GtkWidget *view, Pw3270ActionList *list);
+void				  pw3270_action_view_order_by_label(GtkWidget *view);
+void				  pw3270_action_view_move_selected(GtkWidget *from, GtkWidget *to);
+void				  pw3270_action_view_append(GtkWidget *widget, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags);
+gchar				* pw3270_action_view_get_action_names(GtkWidget *widget);
+GtkWidget			* pw3270_action_view_move_button_new(GtkWidget *from, GtkWidget *to, const gchar *icon_name);
 
-	Pw3270ActionList	* pw3270_action_list_new(GtkApplication *application);
-	Pw3270ActionList	* pw3270_action_list_append(Pw3270ActionList *action_list, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags);
-	Pw3270ActionList	* pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view);
-	void				  pw3270_action_list_free(Pw3270ActionList *action_list);
+Pw3270ActionList	* pw3270_action_list_new(GtkApplication *application);
+Pw3270ActionList	* pw3270_action_list_append(Pw3270ActionList *action_list, const gchar *label, GdkPixbuf *pixbuf, const gchar *action_name, const PW3270ActionViewFlag flags);
+Pw3270ActionList	* pw3270_action_list_move_action(Pw3270ActionList *action_list, const gchar *action_name, GtkWidget *view);
+void				  pw3270_action_list_free(Pw3270ActionList *action_list);
 
-	//
-	// Tools
-	//
-	gchar				* g_action_get_icon_name(GAction *action);
-	gchar 				* g_action_get_tooltip(GAction *action);
-	gchar				* g_action_get_label(GAction *action);
+//
+// Tools
+//
+gchar				* g_action_get_icon_name(GAction *action);
+gchar 				* g_action_get_tooltip(GAction *action);
+gchar				* g_action_get_label(GAction *action);
 
-	GdkPixbuf			* g_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags);
+GdkPixbuf			* g_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags);
 
-	GtkWidget 			* gtk_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic);
-	GtkToolItem			* gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic);
+GtkWidget 			* gtk_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic);
+GtkToolItem			* gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic);
 
-	G_END_DECLS
+G_END_DECLS
 
 #endif // PW3270_ACTIONS_H_INCLUDED

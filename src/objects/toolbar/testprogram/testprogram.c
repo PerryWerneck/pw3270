@@ -28,15 +28,15 @@
  *
  */
 
- #include <config.h>
- #include <pw3270/toolbar.h>
- #include <v3270.h>
- #include <v3270/trace.h>
- #include <lib3270/log.h>
+#include <config.h>
+#include <pw3270/toolbar.h>
+#include <v3270.h>
+#include <v3270/trace.h>
+#include <lib3270/log.h>
 
- /*---[ Implement ]----------------------------------------------------------------------------------*/
+/*---[ Implement ]----------------------------------------------------------------------------------*/
 
- static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
+static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
 
 	GtkWidget	* window	= gtk_application_window_new(app);
 	GtkWidget	* terminal	= v3270_new();
@@ -53,11 +53,11 @@
 			"unselect"
 		};
 
-        size_t ix;
+		size_t ix;
 
-        for(ix = 0; ix < G_N_ELEMENTS(action_names); ix++) {
+		for(ix = 0; ix < G_N_ELEMENTS(action_names); ix++) {
 			pw3270_toolbar_insert_lib3270_action(toolbar, lib3270_action_get_by_name(action_names[ix]), -1);
-        }
+		}
 
 	}
 
@@ -91,19 +91,19 @@
 
 int main (int argc, char **argv) {
 
-  GtkApplication *app;
-  int status;
+	GtkApplication *app;
+	int status;
 
-  app = gtk_application_new ("br.com.bb.pw3270",G_APPLICATION_FLAGS_NONE);
+	app = gtk_application_new ("br.com.bb.pw3270",G_APPLICATION_FLAGS_NONE);
 
-  g_signal_connect (app, "activate", G_CALLBACK(activate), NULL);
+	g_signal_connect (app, "activate", G_CALLBACK(activate), NULL);
 
-  status = g_application_run (G_APPLICATION (app), argc, argv);
-  g_object_unref (app);
+	status = g_application_run (G_APPLICATION (app), argc, argv);
+	g_object_unref (app);
 
-  g_message("rc=%d",status);
+	g_message("rc=%d",status);
 
-  return 0;
+	return 0;
 
 }
 

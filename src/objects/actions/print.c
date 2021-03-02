@@ -27,12 +27,12 @@
  *
  */
 
- /**
-  * @brief Implement PW3270 print actions.
-  *
-  */
+/**
+ * @brief Implement PW3270 print actions.
+ *
+ */
 
- #include "private.h"
- #include <v3270.h>
- #include <pw3270/application.h>
+#include "private.h"
+#include <v3270.h>
+#include <pw3270/application.h>
 

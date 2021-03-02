@@ -27,10 +27,10 @@
  *
  */
 
- #include "private.h"
- #include <pw3270/application.h>
+#include "private.h"
+#include <pw3270/application.h>
 
- gchar * v3270_keyfile_find(const gchar *name) {
+gchar * v3270_keyfile_find(const gchar *name) {
 	//
 	// It can be a session file, scans for it
 	//
@@ -67,9 +67,9 @@
 
 	return NULL;
 
- }
+}
 
- void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
+void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
 	GtkWidget * window = GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application)));
 
@@ -142,5 +142,5 @@
 	if(window)
 		gtk_window_present(GTK_WINDOW(window));
 
- }
+}
 

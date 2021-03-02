@@ -27,10 +27,10 @@
  *
  */
 
- #include "private.h"
- #include <pw3270/actions.h>
+#include "private.h"
+#include <pw3270/actions.h>
 
- GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, const gchar *name, gint pos) {
+GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, const gchar *name, gint pos) {
 
 	g_return_val_if_fail(PW3270_IS_TOOLBAR(toolbar),NULL);
 
@@ -89,10 +89,10 @@
 		}
 
 		item = gtk_tool_button_new_from_action(
-					action,
-					GTK_ICON_SIZE_LARGE_TOOLBAR,
-					pw3270_toolbar_get_icon_type(GTK_TOOLBAR(toolbar)) == 1
-				);
+		           action,
+		           GTK_ICON_SIZE_LARGE_TOOLBAR,
+		           pw3270_toolbar_get_icon_type(GTK_TOOLBAR(toolbar)) == 1
+		       );
 
 		if(item) {
 
@@ -117,5 +117,5 @@
 	}
 
 	return NULL;
- }
+}
 

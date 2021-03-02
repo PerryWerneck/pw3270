@@ -27,15 +27,15 @@
  *
  */
 
- /**
-  * @brief Implement PW3270 action button.
-  *
-  */
+/**
+ * @brief Implement PW3270 action button.
+ *
+ */
 
- #include "private.h"
- #include <pw3270/actions.h>
+#include "private.h"
+#include <pw3270/actions.h>
 
- GtkWidget * gtk_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic) {
+GtkWidget * gtk_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic) {
 
 	if(!action)
 		return NULL;
@@ -66,9 +66,9 @@
 
 
 	return NULL;
- }
+}
 
- GtkToolItem * gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic) {
+GtkToolItem * gtk_tool_button_new_from_action(GAction *action, GtkIconSize icon_size, gboolean symbolic) {
 
 	if(!action)
 		return NULL;
@@ -121,5 +121,5 @@
 
 	return NULL;
 
- }
+}
 

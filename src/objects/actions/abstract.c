@@ -27,40 +27,40 @@
  *
  */
 
- #include "private.h"
- #include <pw3270/actions.h>
+#include "private.h"
+#include <pw3270/actions.h>
 
- static void				  PW3270_action_iface_init(GActionInterface *iface);
- static void				  PW3270Action_class_init(PW3270ActionClass *klass);
- static void				  PW3270Action_init(PW3270Action *action);
+static void				  PW3270_action_iface_init(GActionInterface *iface);
+static void				  PW3270Action_class_init(PW3270ActionClass *klass);
+static void				  PW3270Action_init(PW3270Action *action);
 
- static void				  get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
- static void				  set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
+static void				  get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
+static void				  set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 
- static const gchar			* get_icon_name(GAction *action);
- static const gchar			* get_label(GAction *action);
- static const gchar			* get_tooltip(GAction *action);
- static const gchar			* get_name(GAction *action);
- static const GVariantType	* get_state_type(GAction *action);
- static	const GVariantType	* get_parameter_type(GAction *object);
+static const gchar			* get_icon_name(GAction *action);
+static const gchar			* get_label(GAction *action);
+static const gchar			* get_tooltip(GAction *action);
+static const gchar			* get_name(GAction *action);
+static const GVariantType	* get_state_type(GAction *action);
+static	const GVariantType	* get_parameter_type(GAction *object);
 
- static void				  finalize(GObject *object);
+static void				  finalize(GObject *object);
 
- static gboolean			  get_enabled(GAction *action);
- static void 				  activate(GAction *action, GVariant *parameter, GtkApplication *application);
- static	GVariant 			* get_state(GAction *action);
+static gboolean			  get_enabled(GAction *action);
+static void 				  activate(GAction *action, GVariant *parameter, GtkApplication *application);
+static	GVariant 			* get_state(GAction *action);
 
- static const gchar			* iface_get_name(GAction *action);
- static	const GVariantType	* iface_get_parameter_type(GAction *action);
- static GVariant			* iface_get_state_hint(GAction *action);
- static	const GVariantType	* iface_get_state_type(GAction *action);
- static	GVariant			* iface_get_state(GAction *action);
- static gboolean			  iface_get_enabled(GAction *action);
- static GVariant			* iface_get_state(GAction *object);
- static void				  iface_change_state(GAction *object, GVariant *value);
- static void				  iface_activate(GAction *object, GVariant *parameter);
+static const gchar			* iface_get_name(GAction *action);
+static	const GVariantType	* iface_get_parameter_type(GAction *action);
+static GVariant			* iface_get_state_hint(GAction *action);
+static	const GVariantType	* iface_get_state_type(GAction *action);
+static	GVariant			* iface_get_state(GAction *action);
+static gboolean			  iface_get_enabled(GAction *action);
+static GVariant			* iface_get_state(GAction *object);
+static void				  iface_change_state(GAction *object, GVariant *value);
+static void				  iface_activate(GAction *object, GVariant *parameter);
 
- enum {
+enum {
 	PROP_NONE,
 	PROP_NAME,
 	PROP_PARAMETER_TYPE,
@@ -70,11 +70,11 @@
 	PROP_ICON_NAME,
 	PROP_LABEL,
 	PROP_TOOLTIP
- };
+};
 
- G_DEFINE_TYPE_WITH_CODE(PW3270Action, PW3270Action, G_TYPE_OBJECT, G_IMPLEMENT_INTERFACE(G_TYPE_ACTION, PW3270_action_iface_init))
+G_DEFINE_TYPE_WITH_CODE(PW3270Action, PW3270Action, G_TYPE_OBJECT, G_IMPLEMENT_INTERFACE(G_TYPE_ACTION, PW3270_action_iface_init))
 
- void PW3270Action_class_init(PW3270ActionClass *klass) {
+void PW3270Action_class_init(PW3270ActionClass *klass) {
 
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
@@ -82,101 +82,101 @@
 
 	klass->get_enabled 			= get_enabled;
 
- 	object_class->finalize		= finalize;
+	object_class->finalize		= finalize;
 	object_class->get_property	= get_property;
 	object_class->set_property	= set_property;
 
 	// Install properties
 	g_object_class_install_property(object_class, PROP_NAME,
-		g_param_spec_string (
-			"name",
-			N_("Action Name"),
-			N_("The name used to invoke the action"),
-			NULL,
-			G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+	                                g_param_spec_string (
+	                                    "name",
+	                                    N_("Action Name"),
+	                                    N_("The name used to invoke the action"),
+	                                    NULL,
+	                                    G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property(object_class, PROP_ICON_NAME,
-		g_param_spec_string (
-			"icon-name",
-			N_("Icon Name"),
-			N_("The name of the icon associated with the action"),
-			NULL,
-			G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+	                                g_param_spec_string (
+	                                    "icon-name",
+	                                    N_("Icon Name"),
+	                                    N_("The name of the icon associated with the action"),
+	                                    NULL,
+	                                    G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property(object_class, PROP_LABEL,
-		g_param_spec_string (
-			"label",
-			N_("The action label"),
-			N_("The label for the action"),
-			NULL,
-			G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+	                                g_param_spec_string (
+	                                    "label",
+	                                    N_("The action label"),
+	                                    N_("The label for the action"),
+	                                    NULL,
+	                                    G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property(object_class, PROP_TOOLTIP,
-		g_param_spec_string (
-			"tooltip",
-			N_("The action tooltip"),
-			N_("The tooltip for the action"),
-			NULL,
-			G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+	                                g_param_spec_string (
+	                                    "tooltip",
+	                                    N_("The action tooltip"),
+	                                    N_("The tooltip for the action"),
+	                                    NULL,
+	                                    G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class, PROP_PARAMETER_TYPE,
-		g_param_spec_boxed ("parameter-type",
-			N_("Parameter Type"),
-			N_("The type of GVariant passed to activate()"),
-			G_TYPE_VARIANT_TYPE,
-			G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+	                                 g_param_spec_boxed ("parameter-type",
+	                                         N_("Parameter Type"),
+	                                         N_("The type of GVariant passed to activate()"),
+	                                         G_TYPE_VARIANT_TYPE,
+	                                         G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class, PROP_STATE_TYPE,
-		g_param_spec_boxed ("state-type",
-			N_("State Type"),
-			N_("The type of the state kept by the action"),
-			G_TYPE_VARIANT_TYPE,
-			G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+	                                 g_param_spec_boxed ("state-type",
+	                                         N_("State Type"),
+	                                         N_("The type of the state kept by the action"),
+	                                         G_TYPE_VARIANT_TYPE,
+	                                         G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
 	// Enabled property
 	klass->properties.enabled =
-			g_param_spec_boolean(
-				"enabled",
-				N_("Enabled"),
-				N_("If the action can be activated"),
-				TRUE,
-				G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
-			);
+	    g_param_spec_boolean(
+	        "enabled",
+	        N_("Enabled"),
+	        N_("If the action can be activated"),
+	        TRUE,
+	        G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+	    );
 
 	g_object_class_install_property(object_class, PROP_ENABLED, klass->properties.enabled);
 
 	// State property
 	klass->properties.state =
-		g_param_spec_variant(
-			"state",
-			N_("State"),
-			N_("The state the action is in"),
-			G_VARIANT_TYPE_ANY,
-			NULL,
-			G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS
-		);
+	    g_param_spec_variant(
+	        "state",
+	        N_("State"),
+	        N_("The state the action is in"),
+	        G_VARIANT_TYPE_ANY,
+	        NULL,
+	        G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS
+	    );
 
 	g_object_class_install_property (object_class, PROP_STATE, klass->properties.state);
 
- }
+}
 
- void PW3270Action_init(PW3270Action *action) {
+void PW3270Action_init(PW3270Action *action) {
 	action->activate = activate;
- }
+}
 
- void finalize(GObject *object) {
+void finalize(GObject *object) {
 
 	// PW3270Action * action = PW3270_ACTION(object);
 	G_OBJECT_CLASS(PW3270Action_parent_class)->finalize(object);
 
- }
+}
 
- void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
+void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	GAction *action = G_ACTION(object);
 
 	switch (prop_id) {
-    case PROP_NAME:
+	case PROP_NAME:
 		g_value_set_string(value, g_action_get_name(action));
 		break;
 
@@ -212,48 +212,48 @@
 		g_assert_not_reached ();
 	}
 
- }
+}
 
- void set_property(GObject G_GNUC_UNUSED(*object), guint G_GNUC_UNUSED(prop_id), const GValue G_GNUC_UNUSED(*value), GParamSpec G_GNUC_UNUSED(*pspec)) {
+void set_property(GObject G_GNUC_UNUSED(*object), guint G_GNUC_UNUSED(prop_id), const GValue G_GNUC_UNUSED(*value), GParamSpec G_GNUC_UNUSED(*pspec)) {
 // 	g_message("Action %s property %s is read-only",g_action_get_name(G_ACTION(object)),pspec->name);
- }
+}
 
- static gboolean bg_notify_enabled(GObject *action) {
- 	debug("%s(%s,%s)",__FUNCTION__,g_action_get_name(G_ACTION(action)),(g_action_get_enabled(G_ACTION(action)) ? "enabled" : "disabled"));
+static gboolean bg_notify_enabled(GObject *action) {
+	debug("%s(%s,%s)",__FUNCTION__,g_action_get_name(G_ACTION(action)),(g_action_get_enabled(G_ACTION(action)) ? "enabled" : "disabled"));
 	g_object_notify(action, "enabled");
 	return FALSE;
- }
+}
 
- static gboolean bg_notify_state(GObject *action) {
+static gboolean bg_notify_state(GObject *action) {
 	g_object_notify(action, "state");
 	return FALSE;
- }
+}
 
- void pw3270_action_notify_enabled(GAction *action) {
+void pw3270_action_notify_enabled(GAction *action) {
 	g_idle_add((GSourceFunc) bg_notify_enabled, G_OBJECT(action));
- }
+}
 
- void pw3270_action_notify_state(GAction *action) {
- 	if(g_action_get_state_type(action))
+void pw3270_action_notify_state(GAction *action) {
+	if(g_action_get_state_type(action))
 		g_idle_add((GSourceFunc) bg_notify_state, G_OBJECT(action));
- }
+}
 
- gboolean get_enabled(GAction G_GNUC_UNUSED(*object)) {
- 	return TRUE;
- }
+gboolean get_enabled(GAction G_GNUC_UNUSED(*object)) {
+	return TRUE;
+}
 
- void activate(GAction *action, GVariant G_GNUC_UNUSED(*parameter), GtkApplication G_GNUC_UNUSED(*application)) {
+void activate(GAction *action, GVariant G_GNUC_UNUSED(*parameter), GtkApplication G_GNUC_UNUSED(*application)) {
 	g_message("Action %s can't be activated",g_action_get_name(action));
- }
+}
 
- //
- // Action methods.
- //
- PW3270Action * pw3270_action_new() {
+//
+// Action methods.
+//
+PW3270Action * pw3270_action_new() {
 	return PW3270_ACTION(g_object_new(PW3270_TYPE_ACTION, NULL));
- }
+}
 
- GdkPixbuf * pw3270_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags) {
+GdkPixbuf * pw3270_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags) {
 
 	const gchar * icon_name = v3270_action_get_icon_name(action);
 
@@ -261,26 +261,26 @@
 		return NULL;
 
 	return gtk_icon_theme_load_icon(
-					gtk_icon_theme_get_default(),
-					icon_name,
-					icon_size,
-					flags,
-					NULL
-			);
+	           gtk_icon_theme_get_default(),
+	           icon_name,
+	           icon_size,
+	           flags,
+	           NULL
+	       );
 
- }
+}
 
 //
 // Default methods.
 //
- GVariant * get_state(GAction G_GNUC_UNUSED(*object)) {
+GVariant * get_state(GAction G_GNUC_UNUSED(*object)) {
 	return g_variant_new_boolean(TRUE);
- }
+}
 
 //
 // Interface Methods.
 //
- void PW3270_action_iface_init(GActionInterface *iface) {
+void PW3270_action_iface_init(GActionInterface *iface) {
 	iface->get_name				= iface_get_name;
 	iface->get_parameter_type	= iface_get_parameter_type;
 	iface->get_state_type		= iface_get_state_type;
@@ -289,73 +289,73 @@
 	iface->get_state			= iface_get_state;
 	iface->change_state			= iface_change_state;
 	iface->activate				= iface_activate;
- }
+}
 
- const gchar * iface_get_name(GAction *action) {
- 	return get_name(action);
- }
+const gchar * iface_get_name(GAction *action) {
+	return get_name(action);
+}
 
- GVariant * iface_get_state(GAction *object) {
+GVariant * iface_get_state(GAction *object) {
 
- 	GVariant * state = NULL;
+	GVariant * state = NULL;
 
- 	if(g_action_get_state_type(object)) {
+	if(g_action_get_state_type(object)) {
 
 		state = get_state(object);
 
 		if(state)
 			g_variant_ref(state);
 
- 	}
+	}
 
 	return state;
 
- }
+}
 
- const GVariantType * iface_get_parameter_type(GAction *object) {
+const GVariantType * iface_get_parameter_type(GAction *object) {
 	return get_parameter_type(object);
- }
+}
 
- const GVariantType * iface_get_state_type(GAction *object) {
+const GVariantType * iface_get_state_type(GAction *object) {
 	return get_state_type(object);
- }
+}
 
- GVariant * iface_get_state_hint(GAction G_GNUC_UNUSED(*object)) {
+GVariant * iface_get_state_hint(GAction G_GNUC_UNUSED(*object)) {
 	return NULL;
- }
+}
 
- void iface_change_state(GAction G_GNUC_UNUSED(*object), GVariant G_GNUC_UNUSED(*value)) {
- 	debug("%s",__FUNCTION__);
- }
+void iface_change_state(GAction G_GNUC_UNUSED(*object), GVariant G_GNUC_UNUSED(*value)) {
+	debug("%s",__FUNCTION__);
+}
 
- gboolean iface_get_enabled(GAction *object) {
+gboolean iface_get_enabled(GAction *object) {
 	return PW3270_ACTION_GET_CLASS(object)->get_enabled(object);
- }
+}
 
- void iface_activate(GAction *object, GVariant *parameter) {
+void iface_activate(GAction *object, GVariant *parameter) {
 	PW3270_ACTION(object)->activate(object,parameter,GTK_APPLICATION(g_application_get_default()));
- }
+}
 
- const gchar * get_icon_name(GAction *action) {
- 	return PW3270_ACTION(action)->icon_name;
- }
+const gchar * get_icon_name(GAction *action) {
+	return PW3270_ACTION(action)->icon_name;
+}
 
- const gchar * get_label(GAction *action) {
- 	return PW3270_ACTION(action)->label;
- }
+const gchar * get_label(GAction *action) {
+	return PW3270_ACTION(action)->label;
+}
 
- const gchar * get_tooltip(GAction *action) {
- 	return PW3270_ACTION(action)->tooltip;
- }
+const gchar * get_tooltip(GAction *action) {
+	return PW3270_ACTION(action)->tooltip;
+}
 
- const gchar * get_name(GAction *action) {
-  	return PW3270_ACTION(action)->name;
- }
+const gchar * get_name(GAction *action) {
+	return PW3270_ACTION(action)->name;
+}
 
- const GVariantType	* get_state_type(GAction G_GNUC_UNUSED(*object)) {
- 	return NULL;
- }
+const GVariantType	* get_state_type(GAction G_GNUC_UNUSED(*object)) {
+	return NULL;
+}
 
- const GVariantType	* get_parameter_type(GAction G_GNUC_UNUSED(*object)) {
- 	return NULL;
- }
+const GVariantType	* get_parameter_type(GAction G_GNUC_UNUSED(*object)) {
+	return NULL;
+}

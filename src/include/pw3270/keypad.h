@@ -34,38 +34,38 @@
 
 #ifndef PW3270_KEYPAD_H_INCLUDED
 
-	#define PW3270_KEYPAD_H_INCLUDED
+#define PW3270_KEYPAD_H_INCLUDED
 
-	#include <gtk/gtk.h>
+#include <gtk/gtk.h>
 
-	G_BEGIN_DECLS
+G_BEGIN_DECLS
 
-	#define PW_TYPE_KEYPAD_MODEL			(KeypadModel_get_type())
-	#define PW_KEYPAD_MODEL(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW_TYPE_KEYPAD_MODEL, KeypadModel))
-	#define PW_KEYPAD_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), PW_TYPE_KEYPAD_MODEL, KeypadModelClass))
-	#define PW_IS_KEYPAD_MODEL(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW_TYPE_KEYPAD_MODEL))
-	#define PW_IS_KEYPAD_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW_TYPE_KEYPAD_MODEL))
-	#define PW_KEYPAD_MODEL_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW_TYPE_KEYPAD_MODEL, KeypadModelClass))
+#define PW_TYPE_KEYPAD_MODEL			(KeypadModel_get_type())
+#define PW_KEYPAD_MODEL(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW_TYPE_KEYPAD_MODEL, KeypadModel))
+#define PW_KEYPAD_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), PW_TYPE_KEYPAD_MODEL, KeypadModelClass))
+#define PW_IS_KEYPAD_MODEL(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW_TYPE_KEYPAD_MODEL))
+#define PW_IS_KEYPAD_MODEL_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW_TYPE_KEYPAD_MODEL))
+#define PW_KEYPAD_MODEL_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW_TYPE_KEYPAD_MODEL, KeypadModelClass))
 
-	typedef struct _KeypadModel			KeypadModel;
-	typedef struct _KeypadModelClass	KeypadModelClass;
+typedef struct _KeypadModel			KeypadModel;
+typedef struct _KeypadModelClass	KeypadModelClass;
 
-	GType KeypadModel_get_type(void) G_GNUC_CONST;
+GType KeypadModel_get_type(void) G_GNUC_CONST;
 
-	GList		* pw3270_keypad_model_new_from_xml(GList *keypads, const gchar *filename);
-	GtkWidget	* pw3270_keypad_get_from_model(GObject *model);
-	const gchar	* pw3270_keypad_model_get_name(GObject *model);
-	const gchar * pw3270_keypad_model_get_label(GObject *model);
+GList		* pw3270_keypad_model_new_from_xml(GList *keypads, const gchar *filename);
+GtkWidget	* pw3270_keypad_get_from_model(GObject *model);
+const gchar	* pw3270_keypad_model_get_name(GObject *model);
+const gchar * pw3270_keypad_model_get_label(GObject *model);
 
-	typedef enum _keypad_position {
-        KEYPAD_POSITION_TOP,
-        KEYPAD_POSITION_LEFT,
-        KEYPAD_POSITION_BOTTOM,
-        KEYPAD_POSITION_RIGHT
-	} 	KEYPAD_POSITION;
+typedef enum _keypad_position {
+	KEYPAD_POSITION_TOP,
+	KEYPAD_POSITION_LEFT,
+	KEYPAD_POSITION_BOTTOM,
+	KEYPAD_POSITION_RIGHT
+} 	KEYPAD_POSITION;
 
-	KEYPAD_POSITION pw3270_keypad_get_position(GObject *model);
+KEYPAD_POSITION pw3270_keypad_get_position(GObject *model);
 
-	G_END_DECLS
+G_END_DECLS
 
 #endif // PW3270_KEYPAD_H_INCLUDED

@@ -28,21 +28,21 @@
  *
  */
 
- /**
-  * @brief PW3270 main aplication Entry point
-  *
-  */
+/**
+ * @brief PW3270 main aplication Entry point
+ *
+ */
 
- #include "private.h"
- #include <pw3270/application.h>
- #include <lib3270.h>
- #include <lib3270/log.h>
- #include <locale.h>
- #include <stdlib.h>
+#include "private.h"
+#include <pw3270/application.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
+#include <locale.h>
+#include <stdlib.h>
 
- #ifdef G_OS_UNIX
-	#include <glib-unix.h>
- #endif // G_OS_UNIX
+#ifdef G_OS_UNIX
+#include <glib-unix.h>
+#endif // G_OS_UNIX
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 

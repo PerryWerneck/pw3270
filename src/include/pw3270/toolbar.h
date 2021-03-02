@@ -34,44 +34,44 @@
 
 #ifndef PW3270_TOOLBAR_H_INCLUDED
 
-	#define PW3270_TOOLBAR_H_INCLUDED
+#define PW3270_TOOLBAR_H_INCLUDED
 
-	#include <gtk/gtk.h>
-	#include <lib3270.h>
-	#include <lib3270/actions.h>
+#include <gtk/gtk.h>
+#include <lib3270.h>
+#include <lib3270/actions.h>
 
-	G_BEGIN_DECLS
+G_BEGIN_DECLS
 
-	#define PW3270_TYPE_TOOLBAR				(pw3270ToolBar_get_type())
-	#define PW3270_TOOLBAR(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW3270_TYPE_TOOLBAR, pw3270ToolBar))
-	#define PW3270_TOOLBAR_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_TOOLBAR, pw3270ToolBarClass))
-	#define PW3270_IS_TOOLBAR(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW3270_TYPE_TOOLBAR))
-	#define PW3270_IS_TOOLBAR_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_TOOLBAR))
-	#define PW3270_TOOLBAR_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_TOOLBAR, pw3270ToolBarClass))
+#define PW3270_TYPE_TOOLBAR				(pw3270ToolBar_get_type())
+#define PW3270_TOOLBAR(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW3270_TYPE_TOOLBAR, pw3270ToolBar))
+#define PW3270_TOOLBAR_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW3270_TYPE_TOOLBAR, pw3270ToolBarClass))
+#define PW3270_IS_TOOLBAR(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW3270_TYPE_TOOLBAR))
+#define PW3270_IS_TOOLBAR_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW3270_TYPE_TOOLBAR))
+#define PW3270_TOOLBAR_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW3270_TYPE_TOOLBAR, pw3270ToolBarClass))
 
-	typedef struct _pw3270ToolBar			pw3270ToolBar;
-	typedef struct _pw3270ToolBarClass		pw3270ToolBarClass;
+typedef struct _pw3270ToolBar			pw3270ToolBar;
+typedef struct _pw3270ToolBarClass		pw3270ToolBarClass;
 
-	GType pw3270ToolBar_get_type(void) G_GNUC_CONST;
+GType pw3270ToolBar_get_type(void) G_GNUC_CONST;
 
-	GtkWidget * pw3270_toolbar_new(void);
-	GtkWidget * pw3270_toolbar_settings_new(void);
+GtkWidget * pw3270_toolbar_new(void);
+GtkWidget * pw3270_toolbar_settings_new(void);
 
 //	GtkWidget * pw3270_toolbar_insert_lib3270_action(GtkWidget *toolbar, const LIB3270_ACTION *action, gint pos);
-	GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, const gchar *name, gint pos);
+GtkWidget * pw3270_toolbar_insert_action(GtkWidget *toolbar, const gchar *name, gint pos);
 
-	void pw3270_toolbar_set_actions(GtkWidget *toolbar, const gchar *action_names);
-	gchar * pw3270_toolbar_get_actions(GtkWidget *toolbar);
+void pw3270_toolbar_set_actions(GtkWidget *toolbar, const gchar *action_names);
+gchar * pw3270_toolbar_get_actions(GtkWidget *toolbar);
 
 
-	void pw3270_toolbar_set_style(GtkToolbar *toolbar, GtkToolbarStyle style);
-	void pw3270_toolbar_set_icon_size(GtkToolbar *toolbar, GtkIconSize icon_size);
-	void pw3270_toolbar_set_icon_type(GtkToolbar *toolbar, gint icon_type);
+void pw3270_toolbar_set_style(GtkToolbar *toolbar, GtkToolbarStyle style);
+void pw3270_toolbar_set_icon_size(GtkToolbar *toolbar, GtkIconSize icon_size);
+void pw3270_toolbar_set_icon_type(GtkToolbar *toolbar, gint icon_type);
 
-	GtkToolbarStyle pw3270_toolbar_get_style(GtkToolbar *toolbar);
-	GtkIconSize pw3270_toolbar_get_icon_size(GtkToolbar *toolbar);
-	gint pw3270_toolbar_get_icon_type(GtkToolbar *toolbar);
+GtkToolbarStyle pw3270_toolbar_get_style(GtkToolbar *toolbar);
+GtkIconSize pw3270_toolbar_get_icon_size(GtkToolbar *toolbar);
+gint pw3270_toolbar_get_icon_type(GtkToolbar *toolbar);
 
-	G_END_DECLS
+G_END_DECLS
 
 #endif // PW3270_TOOLBAR_H_INCLUDED

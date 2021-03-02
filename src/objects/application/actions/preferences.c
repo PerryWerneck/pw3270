@@ -27,14 +27,14 @@
  *
  */
 
- #include "../private.h"
- #include <pw3270.h>
- #include <pw3270/application.h>
- #include <pw3270/actions.h>
- #include <pw3270/settings.h>
- #include <pw3270/toolbar.h>
+#include "../private.h"
+#include <pw3270.h>
+#include <pw3270/application.h>
+#include <pw3270/actions.h>
+#include <pw3270/settings.h>
+#include <pw3270/toolbar.h>
 
- static GtkWidget * factory(PW3270Action * action, GtkApplication *application) {
+static GtkWidget * factory(PW3270Action * action, GtkApplication *application) {
 
 	size_t ix;
 	GtkWindow * window = gtk_application_get_active_window(application);
@@ -53,12 +53,12 @@
 	}
 
 	pw3270_application_plugin_call(
-		G_APPLICATION(application),
-		"pw3270_plugin_set_application_preferences",
-		dialog
+	    G_APPLICATION(application),
+	    "pw3270_plugin_set_application_preferences",
+	    dialog
 	);
 
-	if(pw3270_application_get_ui_style(G_APPLICATION(application)) != PW3270_UI_STYLE_CLASSICAL){
+	if(pw3270_application_get_ui_style(G_APPLICATION(application)) != PW3270_UI_STYLE_CLASSICAL) {
 		gtk_container_add(GTK_CONTAINER(dialog),pw3270_header_settings_new());
 	}
 
@@ -66,17 +66,17 @@
 
 	return dialog;
 
- }
+}
 
- GAction * pw3270_preferences_action_new() {
+GAction * pw3270_preferences_action_new() {
 
- 	PW3270Action * action = pw3270_dialog_action_new(factory);
+	PW3270Action * action = pw3270_dialog_action_new(factory);
 
- 	action->name = "preferences";
- 	action->label = _("Application preferences");
- 	action->icon_name = "preferences-system";
+	action->name = "preferences";
+	action->label = _("Application preferences");
+	action->icon_name = "preferences-system";
 	action->tooltip = _("Change the application preferences");
 
 	return G_ACTION(action);
- }
+}
 

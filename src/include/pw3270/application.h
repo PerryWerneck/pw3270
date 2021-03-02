@@ -34,68 +34,68 @@
 
 #ifndef PW3270_APPLICATION_H_INCLUDED
 
-	#define PW3270_APPLICATION_H_INCLUDED
+#define PW3270_APPLICATION_H_INCLUDED
 
-	#include <gtk/gtk.h>
+#include <gtk/gtk.h>
 
-	G_BEGIN_DECLS
+G_BEGIN_DECLS
 
-	#define PW3270_TYPE_APPLICATION				(pw3270Application_get_type ())
-	#define PW3270_APPLICATION(inst)			(G_TYPE_CHECK_INSTANCE_CAST ((inst), \
+#define PW3270_TYPE_APPLICATION				(pw3270Application_get_type ())
+#define PW3270_APPLICATION(inst)			(G_TYPE_CHECK_INSTANCE_CAST ((inst), \
 													PW3270_TYPE_APPLICATION, pw3270Application))
-	#define PW3270_APPLICATION_CLASS(class)		(G_TYPE_CHECK_CLASS_CAST ((class),   \
+#define PW3270_APPLICATION_CLASS(class)		(G_TYPE_CHECK_CLASS_CAST ((class),   \
 													PW3270_TYPE_APPLICATION, pw3270ApplicationClass))
-	#define PW3270_IS_APPLICATION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
+#define PW3270_IS_APPLICATION(inst)			(G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
 													PW3270_TYPE_APPLICATION))
-	#define PW3270_IS_APPLICATION_CLASS(class)	(G_TYPE_CHECK_CLASS_TYPE ((class),   \
+#define PW3270_IS_APPLICATION_CLASS(class)	(G_TYPE_CHECK_CLASS_TYPE ((class),   \
 													PW3270_TYPE_APPLICATION))
-	#define PW3270_APPLICATION_GET_CLASS(inst)	(G_TYPE_INSTANCE_GET_CLASS ((inst),  \
+#define PW3270_APPLICATION_GET_CLASS(inst)	(G_TYPE_INSTANCE_GET_CLASS ((inst),  \
 												GTK_TYPE_APPLICATION, pw3270ApplicationClass))
 
-	typedef enum _pw3270_ui_style {
-		PW3270_UI_STYLE_CLASSICAL,		///< @brief Interface "classica", com menu e toolbar.
-		PW3270_UI_STYLE_GNOME,			///< @brief Interface padrão gnome.
-		PW3270_UI_STYLE_AUTOMATIC,		///< @brief Auto defined UI-Style
-	} PW3270_UI_STYLE;
+typedef enum _pw3270_ui_style {
+	PW3270_UI_STYLE_CLASSICAL,		///< @brief Interface "classica", com menu e toolbar.
+	PW3270_UI_STYLE_GNOME,			///< @brief Interface padrão gnome.
+	PW3270_UI_STYLE_AUTOMATIC,		///< @brief Auto defined UI-Style
+} PW3270_UI_STYLE;
 
 
-	typedef struct _pw3270ApplicationClass   pw3270ApplicationClass;
-	typedef struct _pw3270Application        pw3270Application;
+typedef struct _pw3270ApplicationClass   pw3270ApplicationClass;
+typedef struct _pw3270Application        pw3270Application;
 
-	GType			  pw3270Application_get_type();
-	GtkApplication	* pw3270_application_new(const gchar *application_id, GApplicationFlags flags);
+GType			  pw3270Application_get_type();
+GtkApplication	* pw3270_application_new(const gchar *application_id, GApplicationFlags flags);
 
-	/// @brief Get application settings.
-	/// @param app	The pw3270 application object.
-	/// @return The internal settings object (Do not unref it).
-	GSettings		* pw3270_application_get_settings(GApplication *app);
-	GList			* pw3270_application_get_keypad_models(GApplication *app);
+/// @brief Get application settings.
+/// @param app	The pw3270 application object.
+/// @return The internal settings object (Do not unref it).
+GSettings		* pw3270_application_get_settings(GApplication *app);
+GList			* pw3270_application_get_keypad_models(GApplication *app);
 
-	void			  pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type);
-	PW3270_UI_STYLE	  pw3270_application_get_ui_style(GApplication *app);
+void			  pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type);
+PW3270_UI_STYLE	  pw3270_application_get_ui_style(GApplication *app);
 
-	// Plugins
-	void			  pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data);
+// Plugins
+void			  pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data);
 
-	/// @brief Call plugin method.
-	void			  pw3270_application_plugin_call(GApplication *app, const gchar *method, gpointer user_data);
+/// @brief Call plugin method.
+void			  pw3270_application_plugin_call(GApplication *app, const gchar *method, gpointer user_data);
 
-	GSList			* pw3270_application_get_plugins(GApplication *app);
+GSList			* pw3270_application_get_plugins(GApplication *app);
 
-	// Tools
-	GtkBuilder		* pw3270_application_get_builder(const gchar *name);
+// Tools
+GtkBuilder		* pw3270_application_get_builder(const gchar *name);
 
-	void			  gtk_container_remove_all(GtkContainer *container);
+void			  gtk_container_remove_all(GtkContainer *container);
 
-	// Actions
-	void pw3270_application_print_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
-	void pw3270_application_save_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
+// Actions
+void pw3270_application_print_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
+void pw3270_application_save_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
 
-	// Settings
-	GtkWidget * pw3270_header_settings_new();
+// Settings
+GtkWidget * pw3270_header_settings_new();
 
 
-	G_END_DECLS
+G_END_DECLS
 
 
 #endif // PW3270_WINDOW_H_INCLUDED

@@ -28,27 +28,27 @@
  *
  */
 
- #include <config.h>
- #include <v3270.h>
- #include <v3270/trace.h>
- #include <lib3270/log.h>
- #include <lib3270/toggle.h>
- #include <pw3270/actions.h>
- #include "../private.h"
+#include <config.h>
+#include <v3270.h>
+#include <v3270/trace.h>
+#include <lib3270/log.h>
+#include <lib3270/toggle.h>
+#include <pw3270/actions.h>
+#include "../private.h"
 
- /*---[ Implement ]----------------------------------------------------------------------------------*/
+/*---[ Implement ]----------------------------------------------------------------------------------*/
 
- GtkWidget * pw3270_window_get_terminal_widget(GtkWidget *window) {
- 	return g_object_get_data(G_OBJECT(window), "v3270_terminal");
- }
+GtkWidget * pw3270_window_get_terminal_widget(GtkWidget *window) {
+	return g_object_get_data(G_OBJECT(window), "v3270_terminal");
+}
 
- /*
- H3270 * pw3270_window_get_session_handle(GtkWidget *window) {
- 	return v3270_get_session(pw3270_window_get_terminal_widget(window));
- }
- */
+/*
+H3270 * pw3270_window_get_session_handle(GtkWidget *window) {
+	return v3270_get_session(pw3270_window_get_terminal_widget(window));
+}
+*/
 
- static gboolean handle_command(GtkWidget *trace, const gchar *cmd, const gchar *args, GtkWidget *window) {
+static gboolean handle_command(GtkWidget *trace, const gchar *cmd, const gchar *args, GtkWidget *window) {
 
 	if(!g_ascii_strcasecmp(cmd,"activate")) {
 
@@ -67,9 +67,9 @@
 	}
 
 	return FALSE;
- }
+}
 
- static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
+static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
 
 	GtkWidget	* window	= gtk_application_window_new(app);
 	GtkWidget	* terminal	= v3270_new();
@@ -114,19 +114,19 @@
 
 int main (int argc, char **argv) {
 
-  GtkApplication *app;
-  int status;
+	GtkApplication *app;
+	int status;
 
-  app = gtk_application_new ("br.com.bb.pw3270",G_APPLICATION_FLAGS_NONE);
+	app = gtk_application_new ("br.com.bb.pw3270",G_APPLICATION_FLAGS_NONE);
 
-  g_signal_connect (app, "activate", G_CALLBACK(activate), NULL);
+	g_signal_connect (app, "activate", G_CALLBACK(activate), NULL);
 
-  status = g_application_run (G_APPLICATION (app), argc, argv);
-  g_object_unref (app);
+	status = g_application_run (G_APPLICATION (app), argc, argv);
+	g_object_unref (app);
 
-  g_message("rc=%d",status);
+	g_message("rc=%d",status);
 
-  return 0;
+	return 0;
 
 }
 

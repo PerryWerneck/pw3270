@@ -27,13 +27,13 @@
  *
  */
 
- /**
-  * @brief Integrate pw3270 actions with the application window.
-  *
-  */
+/**
+ * @brief Integrate pw3270 actions with the application window.
+ *
+ */
 
- #include "private.h"
- #include <lib3270/actions.h>
- #include <v3270/actions.h>
- #include <pw3270/window.h>
+#include "private.h"
+#include <lib3270/actions.h>
+#include <v3270/actions.h>
+#include <pw3270/window.h>
 

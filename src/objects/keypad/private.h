@@ -29,91 +29,91 @@
 
 #ifndef PRIVATE_H_INCLUDED
 
-	#define PRIVATE_H_INCLUDED
+#define PRIVATE_H_INCLUDED
 
-	#include <config.h>
+#include <config.h>
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+#ifndef GETTEXT_PACKAGE
+#define GETTEXT_PACKAGE PACKAGE_NAME
+#endif
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+#include <libintl.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
-	#include <lib3270.h>
-	#include <lib3270/log.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
 
-	#include <pw3270/keypad.h>
+#include <pw3270/keypad.h>
 
-	G_BEGIN_DECLS
+G_BEGIN_DECLS
 
-	#define I_(string) g_intern_static_string (string)
+#define I_(string) g_intern_static_string (string)
 
-	#define PW_TYPE_KEYPAD_ELEMENT				(KeypadElement_get_type())
-	#define PW_KEYPAD_ELEMENT(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW_TYPE_KEYPAD_ELEMENT, KeypadElement))
-	#define PW_KEYPAD_ELEMENT_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW_TYPE_KEYPAD_ELEMENT, KeypadModelClass))
-	#define PW_IS_KEYPAD_ELEMENT(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW_TYPE_KEYPAD_ELEMENT))
-	#define PW_IS_KEYPAD_ELEMENT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW_TYPE_KEYPAD_ELEMENT))
-	#define PW_KEYPAD_ELEMENT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW_TYPE_KEYPAD_ELEMENT, KeypadElementClass))
+#define PW_TYPE_KEYPAD_ELEMENT				(KeypadElement_get_type())
+#define PW_KEYPAD_ELEMENT(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), PW_TYPE_KEYPAD_ELEMENT, KeypadElement))
+#define PW_KEYPAD_ELEMENT_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), PW_TYPE_KEYPAD_ELEMENT, KeypadModelClass))
+#define PW_IS_KEYPAD_ELEMENT(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), PW_TYPE_KEYPAD_ELEMENT))
+#define PW_IS_KEYPAD_ELEMENT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), PW_TYPE_KEYPAD_ELEMENT))
+#define PW_KEYPAD_ELEMENT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), PW_TYPE_KEYPAD_ELEMENT, KeypadElementClass))
 
-	typedef struct _KeypadElement {
-		GObject parent;
+typedef struct _KeypadElement {
+	GObject parent;
 
+	unsigned short row;
+	unsigned short col;
+	unsigned short width;
+	unsigned short height;
+
+	gchar * icon_name;
+	gchar * label;
+	gchar * action;
+
+} KeypadElement;
+
+typedef struct _KeypadElementClass {
+	GObjectClass parent;
+
+} KeypadElementClass;
+
+GType KeypadElement_get_type(void) G_GNUC_CONST;
+
+struct _KeypadModel {
+	GObject parent;
+
+	unsigned short width;
+	unsigned short height;
+	unsigned short position;
+
+	struct {
 		unsigned short row;
 		unsigned short col;
-		unsigned short width;
-		unsigned short height;
+	} current;
 
-		gchar * icon_name;
-		gchar * label;
-		gchar * action;
+	gchar *name;
+	gchar *label;
 
-	} KeypadElement;
+	GList *elements;
+	GList *widgets;
 
-	typedef struct _KeypadElementClass {
-		GObjectClass parent;
+};
 
-	} KeypadElementClass;
+struct _KeypadModelClass {
+	GObjectClass parent;
+	GQuark domain;
 
-	GType KeypadElement_get_type(void) G_GNUC_CONST;
+};
 
-	struct _KeypadModel {
-		GObject parent;
+G_GNUC_INTERNAL void keypad_model_set_position(GObject *model, const gchar *position);
+G_GNUC_INTERNAL void keypad_model_parse_context(GObject *model, GMarkupParseContext *context);
 
-		unsigned short width;
-		unsigned short height;
-		unsigned short position;
+G_GNUC_INTERNAL const gchar * keypad_model_get_position(GObject *mode);
 
-		struct {
-			unsigned short row;
-			unsigned short col;
-		} current;
+G_GNUC_INTERNAL void keypad_model_element_parse_context(GObject *element, GMarkupParseContext *context);
 
-		gchar *name;
-		gchar *label;
+G_GNUC_INTERNAL void attribute_element_start(GMarkupParseContext *context,const gchar **names,const gchar **values, GObject *parent, GError **error);
+G_GNUC_INTERNAL void attribute_element_end(GMarkupParseContext *context, GObject *parent, GError **error);
 
-		GList *elements;
-		GList *widgets;
-
-	};
-
-	struct _KeypadModelClass {
-		GObjectClass parent;
-		GQuark domain;
-
-	};
-
-	G_GNUC_INTERNAL void keypad_model_set_position(GObject *model, const gchar *position);
-	G_GNUC_INTERNAL void keypad_model_parse_context(GObject *model, GMarkupParseContext *context);
-
-	G_GNUC_INTERNAL const gchar * keypad_model_get_position(GObject *mode);
-
-	G_GNUC_INTERNAL void keypad_model_element_parse_context(GObject *element, GMarkupParseContext *context);
-
-	G_GNUC_INTERNAL void attribute_element_start(GMarkupParseContext *context,const gchar **names,const gchar **values, GObject *parent, GError **error);
-	G_GNUC_INTERNAL void attribute_element_end(GMarkupParseContext *context, GObject *parent, GError **error);
-
-	G_END_DECLS
+G_END_DECLS
 
 #endif // PRIVATE_H_INCLUDED

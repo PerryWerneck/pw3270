@@ -34,35 +34,35 @@
 
 #ifndef V3270_KEYFILE_H_INCLUDED
 
-	#define V3270_KEYFILE_H_INCLUDED
+#define V3270_KEYFILE_H_INCLUDED
 
-	#include <glib.h>
+#include <glib.h>
 
-	G_BEGIN_DECLS
+G_BEGIN_DECLS
 
-	typedef struct _V3270KeyFile V3270KeyFile;
+typedef struct _V3270KeyFile V3270KeyFile;
 
-	gchar			* v3270_keyfile_get_default_filename(void);
-	gchar			* v3270_key_file_get_default_path(GtkWidget *terminal);
+gchar			* v3270_keyfile_get_default_filename(void);
+gchar			* v3270_key_file_get_default_path(GtkWidget *terminal);
 
-	V3270KeyFile	* v3270_key_file_open(GtkWidget *terminal, const gchar *name, GError **error);
-	void			  v3270_key_file_close(GtkWidget *terminal);
+V3270KeyFile	* v3270_key_file_open(GtkWidget *terminal, const gchar *name, GError **error);
+void			  v3270_key_file_close(GtkWidget *terminal);
 
-	void			  v3270_key_file_save(GtkWidget *terminal, GError **error);
-	void			  v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename, GError **error);
+void			  v3270_key_file_save(GtkWidget *terminal, GError **error);
+void			  v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename, GError **error);
 
-	/// @brief Get current key filename
-	const gchar		* v3270_key_file_get_filename(GtkWidget *terminal);
+/// @brief Get current key filename
+const gchar		* v3270_key_file_get_filename(GtkWidget *terminal);
 
-	/// @brief Build a writable key filename
-	gchar			* v3270_key_file_build_filename(GtkWidget *terminal);
+/// @brief Build a writable key filename
+gchar			* v3270_key_file_build_filename(GtkWidget *terminal);
 
-	GKeyFile		* v3270_key_file_get(GtkWidget *terminal);
+GKeyFile		* v3270_key_file_get(GtkWidget *terminal);
 
-	gboolean		  v3270_key_file_can_write(GtkWidget *widget);
+gboolean		  v3270_key_file_can_write(GtkWidget *widget);
 
-	void			  v3270_key_file_set_boolean(GtkWidget *terminal, const gchar *group_name, const gchar *key, gboolean value);
+void			  v3270_key_file_set_boolean(GtkWidget *terminal, const gchar *group_name, const gchar *key, gboolean value);
 
-	G_END_DECLS
+G_END_DECLS
 
 #endif // PW3270_H_INCLUDED

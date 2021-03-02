@@ -27,10 +27,10 @@
  *
  */
 
- /**
-  * @brief Implement PW3270 clipboard actions.
-  *
-  */
+/**
+ * @brief Implement PW3270 clipboard actions.
+ *
+ */
 
- #include "private.h"
- #include <v3270.h>
+#include "private.h"
+#include <v3270.h>

@@ -27,57 +27,57 @@
  *
  */
 
- #include "private.h"
- #include <pw3270.h>
- #include <pw3270/actions.h>
- #include <pw3270/settings.h>
- #include <pw3270/application.h>
- #include <v3270/dialogs.h>
+#include "private.h"
+#include <pw3270.h>
+#include <pw3270/actions.h>
+#include <pw3270/settings.h>
+#include <pw3270/application.h>
+#include <v3270/dialogs.h>
 
- static void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
- static void apply(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+static void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+static void apply(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
 
 /*--[ Constants ]------------------------------------------------------------------------------------*/
 
-  struct _PW3270SettingsPage {
-  	GtkWidget * editor;
-  	/*
+struct _PW3270SettingsPage {
+	GtkWidget * editor;
+	/*
 	GtkWidget * views[3];
 	GtkTreeModel * model;
 	*/
- };
+};
 
- /*
- static const struct _views {
-	const char * label;
-	gint left;
-	gint top;
-	gint height;
- } views[] = {
-	{
-		.label = N_("Left"),
-		.left = 0,
-		.top = 0,
-		.height = 4
-	},
-	{
-		.label = N_("Right"),
-		.left = 0,
-		.top = 6,
-		.height = 4
-	},
-	{
-		.label = N_("Available"),
-		.left = 2,
-		.top = 0,
-		.height = 10
-	}
- };
- */
+/*
+static const struct _views {
+const char * label;
+gint left;
+gint top;
+gint height;
+} views[] = {
+{
+	.label = N_("Left"),
+	.left = 0,
+	.top = 0,
+	.height = 4
+},
+{
+	.label = N_("Right"),
+	.left = 0,
+	.top = 6,
+	.height = 4
+},
+{
+	.label = N_("Available"),
+	.left = 2,
+	.top = 0,
+	.height = 10
+}
+};
+*/
 
- /*--[ Implement ]------------------------------------------------------------------------------------*/
+/*--[ Implement ]------------------------------------------------------------------------------------*/
 
- GtkWidget * pw3270_header_settings_new() {
+GtkWidget * pw3270_header_settings_new() {
 
 	// Create page widget.
 	PW3270Settings 	* settings = pw3270_settings_new();
@@ -92,26 +92,26 @@
 	page->editor = pw3270_settings_actions_new();
 
 	gtk_grid_attach(
-		GTK_GRID(settings),
-		v3270_dialog_section_new(_("Title bar actions"), _("Change the position of the title bar icons"), page->editor),
-		0,0,4,3
+	    GTK_GRID(settings),
+	    v3270_dialog_section_new(_("Title bar actions"), _("Change the position of the title bar icons"), page->editor),
+	    0,0,4,3
 	);
 
 
 	gtk_widget_show_all(GTK_WIDGET(settings));
 	return GTK_WIDGET(settings);
- }
+}
 
- void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page) {
+void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page) {
 
 	if(!G_IS_SETTINGS(settings)) {
 		g_warning("The settings object is not valid, disabling dialog to avoid segfaults");
 		gtk_widget_set_sensitive(widget,FALSE);
 		return;
-    }
+	}
 
- 	// Get avaliable actions.
- 	Pw3270ActionList * action_list = pw3270_action_list_new(GTK_APPLICATION(g_application_get_default()));
+	// Get avaliable actions.
+	Pw3270ActionList * action_list = pw3270_action_list_new(GTK_APPLICATION(g_application_get_default()));
 
 	// Add standard menus
 	{
@@ -134,12 +134,12 @@
 			GError *error = NULL;
 
 			GdkPixbuf * pixbuf = gtk_icon_theme_load_icon(
-										gtk_icon_theme_get_default(),
-										menus[ix].icon_name,
-										GTK_ICON_SIZE_MENU,
-										GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-										&error
-									);
+			                         gtk_icon_theme_get_default(),
+			                         menus[ix].icon_name,
+			                         GTK_ICON_SIZE_MENU,
+			                         GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+			                         &error
+			                     );
 
 			if(error) {
 				g_warning("%s",error->message);
@@ -148,28 +148,28 @@
 			}
 
 			action_list = pw3270_action_list_append(
-								action_list,
-								gettext(menus[ix].label),
-								pixbuf,
-								menus[ix].action_name,
-								PW3270_ACTION_VIEW_ALLOW_MOVE
-							);
+			                  action_list,
+			                  gettext(menus[ix].label),
+			                  pixbuf,
+			                  menus[ix].action_name,
+			                  PW3270_ACTION_VIEW_ALLOW_MOVE
+			              );
 		}
 
 	}
 
 	// Load settings
-    g_autofree gchar * action_names = g_settings_get_string(settings,"header-action-names");
+	g_autofree gchar * action_names = g_settings_get_string(settings,"header-action-names");
 
 	action_list = pw3270_settings_action_set(page->editor, action_list, action_names);
 
 	pw3270_action_list_free(action_list);
- }
+}
 
- void apply(GtkWidget G_GNUC_UNUSED(*widget), GSettings *settings, PW3270SettingsPage *page) {
+void apply(GtkWidget G_GNUC_UNUSED(*widget), GSettings *settings, PW3270SettingsPage *page) {
 
- 	g_autofree gchar * action_names = pw3270_settings_action_get(page->editor);
+	g_autofree gchar * action_names = pw3270_settings_action_get(page->editor);
 	g_settings_set_string(settings,"header-action-names",action_names);
 
- }
+}
 

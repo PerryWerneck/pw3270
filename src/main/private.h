@@ -29,12 +29,12 @@
 
 #ifndef PRIVATE_H_INCLUDED
 
-	#define PRIVATE_H_INCLUDED
+#define PRIVATE_H_INCLUDED
 
-	#include <pw3270.h>
+#include <pw3270.h>
 
-	#include <lib3270.h>
-	#include <lib3270/log.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
 
 
 #endif // PRIVATE_H_INCLUDED

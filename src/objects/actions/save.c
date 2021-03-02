@@ -27,31 +27,31 @@
  *
  */
 
- /**
-  * @brief Implement PW3270 save actions.
-  *
-  */
+/**
+ * @brief Implement PW3270 save actions.
+ *
+ */
 
- #include "private.h"
- #include <v3270.h>
- #include <v3270/keyfile.h>
- #include <pw3270.h>
- #include <pw3270/application.h>
- #include <v3270/tools.h>
- #include <v3270/settings.h>
+#include "private.h"
+#include <v3270.h>
+#include <v3270/keyfile.h>
+#include <pw3270.h>
+#include <pw3270/application.h>
+#include <v3270/tools.h>
+#include <v3270/settings.h>
 
- static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
- static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
+static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
+static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
 
- static const struct Entry {
+static const struct Entry {
 
 	const gchar *label;
 	const gchar *tooltip;
 	const gint width;
 
- } entries[] = {
+} entries[] = {
 
- 	// 0 = Session name
+	// 0 = Session name
 	{
 		.label = N_("Session name"),
 		.tooltip = N_("The session name used in the window/tab title (empty for default)"),
@@ -65,9 +65,9 @@
 		.width = 40,
 	}
 
- };
+};
 
- GAction * pw3270_action_save_session_preferences_new(void) {
+GAction * pw3270_action_save_session_preferences_new(void) {
 
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
@@ -78,30 +78,30 @@
 
 	return G_ACTION(action);
 
- }
+}
 
- GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
+GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 
 	// Create dialog
 	gboolean use_header;
 	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &use_header, NULL);
 
 	GtkWidget *	dialog =
-		GTK_WIDGET(g_object_new(
-			GTK_TYPE_DIALOG,
-			"use-header-bar", (use_header ? 1 : 0),
-			NULL
-		));
+	    GTK_WIDGET(g_object_new(
+	                   GTK_TYPE_DIALOG,
+	                   "use-header-bar", (use_header ? 1 : 0),
+	                   NULL
+	               ));
 
 
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
 	gtk_window_set_title(GTK_WINDOW(dialog),action->label);
 
 	gtk_dialog_add_buttons(
-		GTK_DIALOG(dialog),
-		_("_Cancel"), GTK_RESPONSE_CANCEL,
-		_("_Save"), GTK_RESPONSE_APPLY,
-		NULL
+	    GTK_DIALOG(dialog),
+	    _("_Cancel"), GTK_RESPONSE_CANCEL,
+	    _("_Save"), GTK_RESPONSE_APPLY,
+	    NULL
 	);
 
 
@@ -116,8 +116,8 @@
 
 	// https://developer.gnome.org/hig/stable/visual-layout.html.en
 	gtk_container_set_border_width(GTK_CONTAINER(grid),18);
- 	gtk_grid_set_row_spacing(GTK_GRID(grid),6);
- 	gtk_grid_set_column_spacing(GTK_GRID(grid),12);
+	gtk_grid_set_row_spacing(GTK_GRID(grid),6);
+	gtk_grid_set_column_spacing(GTK_GRID(grid),12);
 
 	// https://developer.gnome.org/hig/stable/visual-layout.html.en
 	// gtk_box_set_spacing(GTK_BOX(content_area),18);
@@ -158,12 +158,12 @@
 		gtk_entry_set_text(GTK_ENTRY(inputs[1]),session_filename);
 
 		gtk_entry_bind_to_filechooser(
-			inputs[1],
-			GTK_FILE_CHOOSER_ACTION_SAVE,
-			_("Save session preferences"),
-			NULL,
-			"*.3270",
-			_("3270 session files")
+		    inputs[1],
+		    GTK_FILE_CHOOSER_ACTION_SAVE,
+		    _("Save session preferences"),
+		    NULL,
+		    "*.3270",
+		    _("3270 session files")
 		);
 
 	}
@@ -173,9 +173,9 @@
 	gtk_widget_show_all(GTK_WIDGET(grid));
 	return dialog;
 
- }
+}
 
- void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal) {
+void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal) {
 
 	if(response_id == GTK_RESPONSE_APPLY) {
 
@@ -184,9 +184,9 @@
 
 		GError * error = NULL;
 		v3270_key_file_save_to_file(
-			terminal,
-			gtk_entry_get_text(GTK_ENTRY(inputs[1])),
-			&error
+		    terminal,
+		    gtk_entry_get_text(GTK_ENTRY(inputs[1])),
+		    &error
 		);
 
 		if(error) {
@@ -207,4 +207,4 @@
 
 	gtk_widget_destroy(dialog);
 
- }
+}

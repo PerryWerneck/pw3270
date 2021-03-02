@@ -27,39 +27,39 @@
  *
  */
 
- /**
-  * @brief Implement PW3270 "open" actions.
-  *
-  */
+/**
+ * @brief Implement PW3270 "open" actions.
+ *
+ */
 
- #include "../private.h"
- #include <v3270.h>
- #include <pw3270.h>
- #include <pw3270/application.h>
- #include <pw3270/actions.h>
- #include <v3270/keyfile.h>
+#include "../private.h"
+#include <v3270.h>
+#include <pw3270.h>
+#include <pw3270/application.h>
+#include <pw3270/actions.h>
+#include <v3270/keyfile.h>
 
- static GtkWidget * session_dialog_new(PW3270Action *action, GtkApplication *application) {
+static GtkWidget * session_dialog_new(PW3270Action *action, GtkApplication *application) {
 
 	GtkWidget *	dialog =
-		gtk_file_chooser_dialog_new(
-				action->label,
-				gtk_application_get_active_window(application),
-				GTK_FILE_CHOOSER_ACTION_OPEN,
-				_("Open Session"), GTK_RESPONSE_OK,
-				_("Cancel"),GTK_RESPONSE_CANCEL,
-				NULL
-		);
+	    gtk_file_chooser_dialog_new(
+	        action->label,
+	        gtk_application_get_active_window(application),
+	        GTK_FILE_CHOOSER_ACTION_OPEN,
+	        _("Open Session"), GTK_RESPONSE_OK,
+	        _("Cancel"),GTK_RESPONSE_CANCEL,
+	        NULL
+	    );
 
 	gtk_file_chooser_set_pw3270_filters(GTK_FILE_CHOOSER(dialog));
 	gtk_widget_show_all(dialog);
 
 	return dialog;
- }
+}
 
- static void open_window(GtkWidget *dialog, gint response_id, GtkApplication *application) {
+static void open_window(GtkWidget *dialog, gint response_id, GtkApplication *application) {
 
- 	if(response_id == GTK_RESPONSE_OK) {
+	if(response_id == GTK_RESPONSE_OK) {
 
 		g_autofree gchar * file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
@@ -69,15 +69,15 @@
 			gtk_window_present(GTK_WINDOW(window));
 		}
 
- 	}
+	}
 
- 	gtk_widget_destroy(dialog);
+	gtk_widget_destroy(dialog);
 
- }
+}
 
- static void open_session(GtkWidget *dialog, gint response_id, GtkApplication *application) {
+static void open_session(GtkWidget *dialog, gint response_id, GtkApplication *application) {
 
- 	if(response_id == GTK_RESPONSE_OK) {
+	if(response_id == GTK_RESPONSE_OK) {
 
 		g_autofree gchar * file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
@@ -92,12 +92,12 @@
 			if(error) {
 
 				GtkWidget * dialog = gtk_message_dialog_new_with_markup(
-												GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
-												GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-												GTK_MESSAGE_ERROR,
-												GTK_BUTTONS_OK,
-												_("Can't use \"%s\""), file_name
-											);
+				                         GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
+				                         GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+				                         GTK_MESSAGE_ERROR,
+				                         GTK_BUTTONS_OK,
+				                         _("Can't use \"%s\""), file_name
+				                     );
 
 				gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",error->message);
 
@@ -119,16 +119,16 @@
 
 		}
 
- 	}
+	}
 
- 	gtk_widget_destroy(dialog);
+	gtk_widget_destroy(dialog);
 
- }
+}
 
 
- static void open_tab(GtkWidget *dialog, gint response_id, GtkApplication *application) {
+static void open_tab(GtkWidget *dialog, gint response_id, GtkApplication *application) {
 
- 	if(response_id == GTK_RESPONSE_OK) {
+	if(response_id == GTK_RESPONSE_OK) {
 
 		g_autofree gchar * file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
@@ -138,70 +138,70 @@
 
 		}
 
- 	}
+	}
 
- 	gtk_widget_destroy(dialog);
+	gtk_widget_destroy(dialog);
 
- }
+}
 
- static GtkWidget * open_window_factory(PW3270Action *action, GtkApplication *application) {
+static GtkWidget * open_window_factory(PW3270Action *action, GtkApplication *application) {
 
 	GtkWidget * dialog = session_dialog_new(action,application);
 	g_signal_connect(dialog,"response",G_CALLBACK(open_window),application);
 	return dialog;
 
- }
+}
 
- static GtkWidget * open_session_factory(PW3270Action *action, GtkApplication *application) {
+static GtkWidget * open_session_factory(PW3270Action *action, GtkApplication *application) {
 
 	GtkWidget * dialog = session_dialog_new(action,application);
 	g_signal_connect(dialog,"response",G_CALLBACK(open_session),application);
 	return dialog;
 
- }
+}
 
- static GtkWidget * open_tab_factory(PW3270Action *action, GtkApplication *application) {
+static GtkWidget * open_tab_factory(PW3270Action *action, GtkApplication *application) {
 
 	GtkWidget * dialog = session_dialog_new(action,application);
 	g_signal_connect(dialog,"response",G_CALLBACK(open_tab),application);
 	return dialog;
 
- }
+}
 
- GAction * pw3270_open_session_action_new() {
+GAction * pw3270_open_session_action_new() {
 
 	PW3270Action * action = pw3270_dialog_action_new(open_session_factory);
 
- 	action->name = "open.session";
+	action->name = "open.session";
 	action->label = _( "Open session" );
 	action->tooltip = _( "Open session on the active terminal" );
 	action->icon_name = "document-open";
 
 	return G_ACTION(action);
 
- }
+}
 
- GAction * pw3270_open_window_action_new() {
+GAction * pw3270_open_window_action_new() {
 
 	PW3270Action * action = pw3270_dialog_action_new(open_window_factory);
 
- 	action->name = "open.session.window";
+	action->name = "open.session.window";
 	action->label = _( "Open in new window" );
 	action->tooltip = _( "Open session in New window" );
 	action->icon_name = "window-new";
 
 	return G_ACTION(action);
- }
+}
 
- GAction * pw3270_open_tab_action_new() {
+GAction * pw3270_open_tab_action_new() {
 
 	PW3270Action * action = pw3270_dialog_action_new(open_tab_factory);
 
- 	action->name = "open.session.tab";
+	action->name = "open.session.tab";
 	action->label = _( "Open in new tab" );
 	action->tooltip = _( "Open session in New Tab" );
 	action->icon_name = "tab-new";
 
 	return G_ACTION(action);
- }
+}
 

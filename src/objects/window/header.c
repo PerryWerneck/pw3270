@@ -27,13 +27,13 @@
  *
  */
 
- #include "private.h"
- #include <pw3270.h>
- #include <pw3270/toolbar.h>
- #include <pw3270/application.h>
- #include <pw3270/actions.h>
+#include "private.h"
+#include <pw3270.h>
+#include <pw3270/toolbar.h>
+#include <pw3270/application.h>
+#include <pw3270/actions.h>
 
- void pw3270_window_set_header_action_names(GtkWidget *window, const gchar *action_names) {
+void pw3270_window_set_header_action_names(GtkWidget *window, const gchar *action_names) {
 
 	GtkWidget * header = gtk_window_get_titlebar(GTK_WINDOW(window));
 
@@ -56,15 +56,15 @@
 			g_autoptr(GtkBuilder) app_builder = pw3270_application_get_builder("application.xml");
 
 			g_menu_append_section(
-				G_MENU(gtk_builder_get_object(builder,"open-menu")),
-				NULL,
-				G_MENU_MODEL(gtk_builder_get_object(app_builder,"help-menu-placeholder"))
+			    G_MENU(gtk_builder_get_object(builder,"open-menu")),
+			    NULL,
+			    G_MENU_MODEL(gtk_builder_get_object(app_builder,"help-menu-placeholder"))
 			);
 
 			g_menu_append_submenu(
-				G_MENU(gtk_builder_get_object(builder,"preferences-menu")),
-				_("View"),
-				G_MENU_MODEL(gtk_builder_get_object(app_builder,"view-menu-placeholder"))
+			    G_MENU(gtk_builder_get_object(builder,"preferences-menu")),
+			    _("View"),
+			    G_MENU_MODEL(gtk_builder_get_object(app_builder,"view-menu-placeholder"))
 			);
 
 		}
@@ -76,7 +76,7 @@
 
 			// First the left side actions.
 			elements = g_strsplit(header_blocks[0],",",-1);
-			for(ix=0;elements[ix];ix++) {
+			for(ix=0; elements[ix]; ix++) {
 				button = pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]);
 				if(button) {
 					g_object_set_data(G_OBJECT(button),"header-position-id",GINT_TO_POINTER(0));
@@ -87,7 +87,7 @@
 
 			// And then, the right side actions;
 			elements = g_strsplit(header_blocks[1],",",-1);
-			for(ix=0;elements[ix];ix++) {
+			for(ix=0; elements[ix]; ix++) {
 				button = pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]);
 				if(button) {
 					g_object_set_data(G_OBJECT(button),"header-position-id",GINT_TO_POINTER(1));
@@ -102,26 +102,26 @@
 
 	}
 
- }
+}
 
- static void on_sensitive(GtkWidget G_GNUC_UNUSED(*button), GParamSpec G_GNUC_UNUSED(*spec), GtkWidget G_GNUC_UNUSED(*widget)) {
+static void on_sensitive(GtkWidget G_GNUC_UNUSED(*button), GParamSpec G_GNUC_UNUSED(*spec), GtkWidget G_GNUC_UNUSED(*widget)) {
 
 	gboolean sensitive;
 	g_object_get(button, "sensitive", &sensitive, NULL);
 	gtk_widget_set_visible(button,sensitive);
 
- }
+}
 
- static GAction * get_action_from_name(GtkWidget *widget, const gchar *action_name) {
+static GAction * get_action_from_name(GtkWidget *widget, const gchar *action_name) {
 
 	if(g_str_has_prefix(action_name,"app.")) {
 		return g_action_map_lookup_action(G_ACTION_MAP(g_application_get_default()),action_name+4);
 	}
 
 	return g_action_map_lookup_action(G_ACTION_MAP(widget),action_name+4);
- }
+}
 
- GtkWidget * pw3270_header_button_new_from_builder(GtkWidget *widget, GtkBuilder * builder, const gchar *action_name) {
+GtkWidget * pw3270_header_button_new_from_builder(GtkWidget *widget, GtkBuilder * builder, const gchar *action_name) {
 
 	GtkWidget * button = NULL;
 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
@@ -166,9 +166,9 @@
 	gtk_widget_set_name(button,action_name);
 
 	return button;
- }
+}
 
- gchar * pw3270_window_get_action_names(GtkWidget *window) {
+gchar * pw3270_window_get_action_names(GtkWidget *window) {
 
 	GtkWidget * header = gtk_window_get_titlebar(GTK_WINDOW(window));
 
@@ -177,15 +177,15 @@
 
 	GString * str = g_string_new("");
 
- 	GList * children = gtk_container_get_children(GTK_CONTAINER(header));
- 	GList * item;
+	GList * children = gtk_container_get_children(GTK_CONTAINER(header));
+	GList * item;
 
 	int id;
- 	for(id = 0; id < 2; id++) {
+	for(id = 0; id < 2; id++) {
 
 		gboolean sep = FALSE;
 
- 		for(item = children;item;item = g_list_next(item)) {
+		for(item = children; item; item = g_list_next(item)) {
 
 			if(GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item->data),"header-position-id")) != id)
 				continue;
@@ -205,9 +205,9 @@
 		if(!id)
 			g_string_append(str,":");
 
- 	}
+	}
 
- 	g_list_free(children);
+	g_list_free(children);
 
 	return g_string_free(str,FALSE);
- }
+}
