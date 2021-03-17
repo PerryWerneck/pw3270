@@ -2,7 +2,7 @@
 
 <!--
 
-	References: 
+	References:
 
 		https://www.freedesktop.org/software/appstream/docs/chap-Quickstart.html#sect-Quickstart-DesktopApps
 		https://people.freedesktop.org/~hughsient/temp/AppData_WhitePaper.pdf
@@ -10,12 +10,13 @@
 
 -->
 
-<component type="desktop">
+<component type="desktop-application">
 
-	<id>@APPLICATION_ID@.desktop</id>
+	<id>@APPLICATION_ID@</id>
 
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>LGPL-3.0</project_license>
+	<content_rating type="oars-1.1" />
 
 	<name>@PRODUCT_NAME@</name>
 	<name xml:lang="pt_BR">@PRODUCT_NAME@</name>
@@ -40,6 +41,8 @@
 	<url type="homepage">https://github.com/PerryWerneck/pw3270</url>
 	<url type="bugtracker">https://github.com/PerryWerneck/pw3270/issues</url>
 
+	<launchable type="desktop-id">@APPLICATION_ID@.desktop</launchable>
+
 	<screenshots>
 		<screenshot type="default">
 			<caption>Acessing MVS with @PRODUCT_NAME@</caption>
@@ -50,12 +53,13 @@
 
 	<update_contact>perry.werneck@gmail.com</update_contact>
 
-	<project_group>GNOME</project_group>
-
 	<provides>
 		<binary>@PRODUCT_NAME@</binary>
 	</provides>
 
 	<translation type="gettext">@PRODUCT_NAME@</translation>
 
+	<releases>
+		<release version="@VERSION@"/>
+	</releases>
 </component>

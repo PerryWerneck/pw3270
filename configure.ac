@@ -279,7 +279,7 @@ AC_CONFIG_FILES(locale/Makefile)
 AC_CONFIG_FILES(branding/Makefile)
 AC_CONFIG_FILES(branding/launcher.desktop)
 AC_CONFIG_FILES(branding/mime.xml)
-AC_CONFIG_FILES(branding/appdata.xml)
+AC_CONFIG_FILES(branding/metainfo.xml)
 dnl AC_CONFIG_FILES(branding/keypad.metainfo.xml)
 
 dnl ---------------------------------------------------------------------------
