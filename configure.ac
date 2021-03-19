@@ -72,7 +72,6 @@ case "$host" in
 		app_win32_revision=$(date +%-y.%-m.%-d.%-H)
 		AC_SUBST(WIN32_VERSION,$app_win32_revision)
 
-
 		app_win32_file_version=$(date +%-y,%-m,%-d,%-H)
 		AC_SUBST(WIN32_FILE_VERSION,$app_win32_file_version)
 
@@ -115,6 +114,8 @@ case "$host" in
 
 esac
 
+app_release_date=$(date +%Y-%m-%d)
+AC_SUBST(RELEASE_DATE,$app_release_date)
 AC_SUBST(OSNAME,$app_cv_osname)
 AC_SUBST(RLS_LDFLAGS,$app_rls_ldflags)
 AC_SUBST(LIBS)
