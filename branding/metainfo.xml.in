@@ -60,6 +60,6 @@
 	<translation type="gettext">@PRODUCT_NAME@</translation>
 
 	<releases>
-		<release version="@VERSION@"/>
+		<release version="@VERSION@" date="@RELEASE_DATE@"/>
 	</releases>
 </component>
