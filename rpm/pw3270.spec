@@ -142,7 +142,7 @@ make all -j1
 
 %find_lang pw3270 langfiles
 
-appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.xml
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainfo.xml
 
 %fdupes %{buildroot}/%{_prefix}
 
@@ -162,7 +162,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.
 
 # Desktop files
 %{_datadir}/applications/*.desktop
-%{_datadir}/appdata/*.appdata.xml
+%{_datadir}/metainfo/*.metainfo.xml
 
 # Icons
 %{_datadir}/%{_product}/icons/*.svg

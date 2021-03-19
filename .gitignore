@@ -57,7 +57,7 @@ src/include/lib3270
 vgcore.*
 gschemas.compiled
 *.gschema.xml
-appdata.xml
+metainfo.xml
 *.metainfo.xml
 
 *.[0-9]

@@ -101,7 +101,7 @@ endif
 validate:
 
 ifneq ($(SCOUR),no)
-	@$(APPSTREAMCLI) validate appdata.xml
+	@$(APPSTREAMCLI) validate metainfo.xml
 endif
 
 
@@ -128,10 +128,10 @@ install-linux: \
 		mime.xml \
 		$(DESTDIR)$(datarootdir)/mime/packages/$(PRODUCT_NAME).xml
 
-	@$(MKDIR) $(DESTDIR)$(datarootdir)/appdata
+	@$(MKDIR) $(DESTDIR)$(datarootdir)/metainfo
 	@$(INSTALL_DATA) \
-		appdata.xml \
-		$(DESTDIR)$(datarootdir)/appdata/$(APPLICATION_ID).appdata.xml
+		metainfo.xml \
+		$(DESTDIR)$(datarootdir)/metainfo/$(APPLICATION_ID).metainfo.xml
 
 	@$(MKDIR) $(DESTDIR)$(datarootdir)/icons/hicolor/scalable/apps
 	@$(INSTALL_DATA) \
