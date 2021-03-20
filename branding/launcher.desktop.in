@@ -14,7 +14,7 @@ StartupNotify=true
 
 MimeType=x-scheme-handler/tn3270s;x-scheme-handler/tn3270;application/x-@PRODUCT_NAME@;
 
-Actions=gnomeui;classicalui
+Actions=gnomeui;classicalui;
 
 # https://specifications.freedesktop.org/menu-spec/menu-spec-1.0.html
 Categories=System;TerminalEmulator;
