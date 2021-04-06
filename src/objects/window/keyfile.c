@@ -83,6 +83,69 @@ static void close_keyfile(V3270KeyFile * session) {
 	g_free(session);
 }
 
+static void search_for_defaults(V3270KeyFile *session) {
+
+	GError *error = NULL;
+ 	size_t ix;
+
+ 	// Search for user defaults.
+ 	static const gchar *usernames[] = {
+ 		"defaults.3270",
+ 		"default.3270",
+ 	};
+
+ 	for(ix = 0; ix < G_N_ELEMENTS(usernames);ix++) {
+
+		g_autofree gchar * default_settings = g_build_filename(g_get_user_config_dir(),usernames[ix],NULL);
+
+#ifdef DEBUG
+		g_message("Searching for %s", default_settings);
+#endif // DEBUG
+
+		if(g_file_test(default_settings,G_FILE_TEST_IS_REGULAR)) {
+			if(!g_key_file_load_from_file(session->key_file,default_settings,G_KEY_FILE_NONE,&error)) {
+				g_warning("Can't load \"%s\": %s",default_settings,error->message);
+				g_error_free(error);
+			} else {
+				g_message("Loading session preferences from %s",default_settings);
+				return;
+			}
+		}
+
+ 	}
+
+ 	// Search for system defaults.
+ 	static const gchar *sysnames[] = {
+ 		"defaults.3270",
+ 		"default.3270",
+ 		"defaults.conf",
+ 		"default.conf",
+ 	};
+
+ 	for(ix = 0; ix < G_N_ELEMENTS(sysnames);ix++) {
+
+		lib3270_autoptr(char) default_settings = lib3270_build_data_filename(sysnames[ix],NULL);
+
+#ifdef DEBUG
+		g_message("Searching for %s", default_settings);
+#endif // DEBUG
+
+		if(g_file_test(default_settings,G_FILE_TEST_IS_REGULAR)) {
+			if(!g_key_file_load_from_file(session->key_file,default_settings,G_KEY_FILE_NONE,&error)) {
+				g_warning("Can't load \"%s\": %s",default_settings,error->message);
+				g_error_free(error);
+			} else {
+				g_message("Loading session preferences from %s",default_settings);
+				return;
+			}
+		}
+
+ 	}
+
+ 	g_message("Can't find default session file");
+
+}
+
 V3270KeyFile * v3270_key_file_open(GtkWidget *terminal, const gchar *filename, GError **error) {
 
 	g_return_val_if_fail(GTK_IS_V3270(terminal),FALSE);
@@ -113,21 +176,7 @@ V3270KeyFile * v3270_key_file_open(GtkWidget *terminal, const gchar *filename, G
 	} else {
 
 		// No session file, load the defaults (if available) and save file
-		lib3270_autoptr(char) default_settings = lib3270_build_data_filename("defaults.conf",NULL);
-
-		if(g_file_test(default_settings,G_FILE_TEST_IS_REGULAR)) {
-			if(!g_key_file_load_from_file(new_session->key_file,default_settings,G_KEY_FILE_NONE,error)) {
-				g_warning("Can't load \"%s\"",default_settings);
-			} else {
-				g_message("Loading session preferences from %s",default_settings);
-			}
-		} else {
-#ifdef DEBUG
-			g_message("Can't find default settings file \"%s\"",default_settings);
-#else
-			g_warning("Can't find default settings file \"%s\"",default_settings);
-#endif // DEBUG
-		}
+		search_for_defaults(new_session);
 
 	}
 
@@ -421,6 +470,5 @@ gboolean v3270_key_file_can_write(GtkWidget *widget) {
 #endif // DEBUG
 
 }
-
 
 
