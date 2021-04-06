@@ -91,6 +91,14 @@
 				if(sz > 0 && uri[sz-1] == '/')
 					uri[sz-1] = 0;
 
+				if(!window) {
+					debug("%s: Creating new window",__FUNCTION__);
+					window = pw3270_application_window_new(GTK_APPLICATION(application), NULL);
+				} else {
+					debug("%s: Creating new tab",__FUNCTION__);
+					window = pw3270_application_window_new_tab(window, NULL);
+				}
+
 				v3270_set_url(pw3270_application_window_get_active_terminal(window),uri);
 
 			}
