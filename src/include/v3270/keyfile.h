@@ -42,6 +42,7 @@ G_BEGIN_DECLS
 
 typedef struct _V3270KeyFile V3270KeyFile;
 
+void			  v3270_set_default_session(GtkWidget *terminal);
 gchar			* v3270_keyfile_get_default_filename(void);
 gchar			* v3270_key_file_get_default_path(GtkWidget *terminal);
 

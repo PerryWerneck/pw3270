@@ -63,8 +63,8 @@ struct _pw3270Application {
 
 };
 
-static void 		startup(GApplication * application);
-static void 		activate(GApplication * application);
+static void 	startup(GApplication * application);
+static void 	activate(GApplication * application);
 static void		finalize(GObject *object);
 
 G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);

@@ -120,6 +120,37 @@ static gboolean save_popup_response(GtkWidget *widget, const gchar *popup_name, 
 	return TRUE;
 }
 
+void v3270_set_default_session(GtkWidget *terminal) {
+
+	GError				* error = NULL;
+	g_autofree gchar	* filename = v3270_keyfile_get_default_filename();
+
+	v3270_key_file_open(terminal,filename,&error);
+
+	if(error) {
+
+		GtkWidget * dialog = gtk_message_dialog_new_with_markup(
+		                         GTK_WINDOW(gtk_widget_get_toplevel(terminal)),
+		                         GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+		                         GTK_MESSAGE_ERROR,
+		                         GTK_BUTTONS_CANCEL,
+		                         _("Can't use default session file")
+		                     );
+
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),"%s",error->message);
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_("Can't load session file"));
+
+		gtk_widget_show_all(dialog);
+
+		g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+		g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
+
+		g_error_free(error);
+
+	}
+}
+
 GtkWidget * pw3270_terminal_new(const gchar *session_file) {
 
 	GtkWidget	* terminal = v3270_new();

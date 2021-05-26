@@ -29,6 +29,7 @@
 
 #include "private.h"
 #include <pw3270/application.h>
+#include <v3270/keyfile.h>
 
 gchar * v3270_keyfile_find(const gchar *name) {
 	//
@@ -88,6 +89,8 @@ void pw3270_application_open(GApplication *application, GFile **files, gint n_fi
 
 			if(!(g_ascii_strcasecmp(scheme,"tn3270") && g_ascii_strcasecmp(scheme,"tn3270s"))) {
 
+				// It's an URL, load it in the default session.
+
 				g_autofree gchar * uri = g_file_get_uri(files[file]);
 				size_t sz = strlen(uri);
 
@@ -102,7 +105,11 @@ void pw3270_application_open(GApplication *application, GFile **files, gint n_fi
 					window = pw3270_application_window_new_tab(window, NULL);
 				}
 
-				v3270_set_url(pw3270_application_window_get_active_terminal(window),uri);
+				// Load default
+				GtkWidget * terminal = pw3270_application_window_get_active_terminal(window);
+
+				v3270_set_default_session(terminal);
+				v3270_set_url(terminal,uri);
 
 			}
 

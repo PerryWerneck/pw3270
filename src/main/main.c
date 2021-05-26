@@ -51,22 +51,9 @@ static gboolean	quit_signal(GtkApplication *app) {
 
 	debug("%s",__FUNCTION__);
 	g_message("Terminating by signal");
-
-	/*
-	GList *list = gtk_application_get_windows(GTK_APPLICATION(application));
-
-	while(list) {
-
-		GtkWidget * window = GTK_WIDGET(list->data);
-		list = list->next;
-
-		gtk_widget_destroy(window);
-
-	}
-	*/
-
 	g_application_quit(G_APPLICATION(app));
 	return FALSE;
+
 }
 #endif // G_OS_UNIX
 
