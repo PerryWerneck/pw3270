@@ -47,7 +47,7 @@ Requires:		mingw64-lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
 
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	rsvg-view
+BuildRequires:	inkscape
 BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel
 BuildRequires:	pkgconfig(gtk+-3.0)
