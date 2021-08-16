@@ -156,10 +156,8 @@ configure()
 			| cut -d'>' -f1 \
 			| grep -v 3270 \
 			| sort --unique \
-			| xargs sudo zypper --non-interactive --verbose in --allow-vendor-change
+			| xargs sudo zypper --non-interactive --verbose in
 
-		/bin/bash
-		
 	fi
 
 	echo -e "\e]2;Creating configuration\a"
