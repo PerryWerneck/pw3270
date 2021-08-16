@@ -238,6 +238,7 @@ copy_schemes() {
 	fi
 
 	glib-compile-schemas \
+		--targetdir="${TARGET}/share/glib-2.0/schemas" \
 		"${TARGET}/share/glib-2.0/schemas"
 
 	if [ "$?" != "0" ]; then
