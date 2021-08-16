@@ -103,8 +103,8 @@ SubSection "@PRODUCT_NAME@" SecMain
 		# Binary files
 		file "/oname=$INSTDIR\@PRODUCT_NAME@.exe"			"bin\@PRODUCT_NAME@.exe"
 		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"bin\@PRODUCT_NAME@.ico"
-		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"			"bin\lib@LIBRARY_NAME@.dll"
-		file "/oname=$INSTDIR\libv3270.dll"				"bin\libv3270.dll"
+		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"		"bin\lib@LIBRARY_NAME@.dll"
+		file "/oname=$INSTDIR\libv3270.dll"					"bin\libv3270.dll"
 
 		# Register file association
 
@@ -122,7 +122,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 		# Schema
 		CreateDirectory "$INSTDIR\schemas"
 		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-application.gschema.xml"	"share\glib-2.0\schemas\pw3270-application.gschema.xml"
-		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-window.gschema.xml"		"share\glib-2.0\schemas\pw3270-window.gschema.xml"
+		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-window.gmasma.xml"			"share\glib-2.0\schemas\pw3270-window.gschema.xml"
 
 		# Configuration files
 		file "/oname=$INSTDIR\colors.conf"								"share\@PRODUCT_NAME@\colors.conf"

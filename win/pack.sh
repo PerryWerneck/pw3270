@@ -541,29 +541,21 @@ makeRuntime()
 		echo -e "\e]2;Building runtime for ${ARCH}\a"
 		echo "Building runtime for ${ARCH}"
 
-		rm -fr ${WORKDIR}/build/${ARCH}/runtime
-		mkdir -p ${WORKDIR}/build/${ARCH}/runtime
-		mkdir -p ${WORKDIR}/build/${ARCH}/runtime//share/glib-2.0/schemas
-
-		cp \
-			${WORKDIR}/build/${ARCH}/share/glib-2.0/schemas/*.gschema.xml \
-			${WORKDIR}/build/${ARCH}/runtime/share/glib-2.0/schemas
-			
-		if [ "$?" != "0" ]; then
-			failed "Error on schema copy"
-		fi
-
+		mkdir -p "${WORKDIR}/build/${ARCH}/runtime"
+		
 		for SCRIPT in ${WORKDIR}/build/${ARCH}/*-makeruntime.sh
 		do
 			chmod +x ${SCRIPT}
 
 			cd ${WORKDIR}/build/${ARCH}
-			${SCRIPT} --output-dir="${WORKDIR}/build/${ARCH}/runtime" --bindir="${WORKDIR}/build/${ARCH}"
+			${SCRIPT} \
+				--output-dir="${WORKDIR}/build/${ARCH}/runtime" \
+				--bindir="${WORKDIR}/build/${ARCH}"
 			if [ "$?" != "0" ]; then
 				failed "Error on ${SCRIPT}"
 			fi
 		done
-
+		
 	done
 	
 }
