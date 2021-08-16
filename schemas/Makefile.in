@@ -41,6 +41,7 @@ sysconfdir=@sysconfdir@
 schemadir=@gsettingsschemadir@
 
 BASEDIR=@BASEDIR@
+BINDIR=$(BASEDIR)/.bin
 
 #---[ Tools ]----------------------------------------------------------------------------
 
@@ -50,12 +51,20 @@ INSTALL_DATA=@INSTALL_DATA@
 
 #---[ Install Targets ]------------------------------------------------------------------
 
-install: 
+all:
+	# Compile schemas to check if they're valid
+	@glib-compile-schemas \
+		--targetdir=$(BINDIR) \
+		$(BASEDIR)/schemas/@OSNAME@
+
+install: \
+	all
 
 	@$(MKDIR) $(DESTDIR)/$(schemadir)
 	@$(INSTALL_DATA) \
 		$(BASEDIR)/schemas/@OSNAME@/application.gschema.xml \
 		$(DESTDIR)/$(schemadir)/$(PRODUCT_NAME)-application.gschema.xml
+		
 
 	@$(INSTALL_DATA) \
 		$(BASEDIR)/schemas/@OSNAME@/window.gschema.xml \
