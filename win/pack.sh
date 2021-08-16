@@ -720,8 +720,6 @@ makeInstaller()
 
 		fi
 
-		/bin/bash
-		
 		for NSI in *.nsi
 		do
 			makensis ${NSIS_ARGS} ${NSI}
