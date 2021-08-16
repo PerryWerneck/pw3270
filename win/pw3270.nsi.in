@@ -119,12 +119,17 @@ SubSection "@PRODUCT_NAME@" SecMain
 		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.svg"					"share\@PRODUCT_NAME@\@PRODUCT_NAME@-logo.svg"
 		file "/oname=$INSTDIR\@PRODUCT_NAME@.svg"						"share\@PRODUCT_NAME@\@PRODUCT_NAME@.svg"
 
+		# Schema
+		CreateDirectory "$INSTDIR\schemas"
+		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-application.gschema.xml"	"share\glib-2.0\schemas\pw3270-application.gschema.xml"
+		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-window.gschema.xml"		"share\glib-2.0\schemas\pw3270-window.gschema.xml"
+
 		# Configuration files
-		file "/oname=$INSTDIR\colors.conf"						"share\@PRODUCT_NAME@\colors.conf"
+		file "/oname=$INSTDIR\colors.conf"								"share\@PRODUCT_NAME@\colors.conf"
 
 		# Documentation files
-		file "/oname=$INSTDIR\AUTHORS"					"AUTHORS"
-		file "/oname=$INSTDIR\LICENSE"					"LICENSE"
+		file "/oname=$INSTDIR\AUTHORS"									"AUTHORS"
+		file "/oname=$INSTDIR\LICENSE"									"LICENSE"
 
 		# Misc folders
 		CreateDirectory "$INSTDIR\certs"
@@ -176,7 +181,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 				 "PackageVersion"	"@PACKAGE_VERSION@"
 
 		# Required for IPC Library.
-		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"			"InstallLocation"	"$INSTDIR"
+		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"				"InstallLocation"	"$INSTDIR"
 
 		# Customized options
 		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoconnect"		0x00000001
@@ -207,8 +212,8 @@ SubSection "@PRODUCT_NAME@" SecMain
 		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"nettrace"              0x00000000
 		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"ssltrace"              0x00000000
 
-		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"			"font-family"		"Lucida Console"
-		WriteRegStr	HKLM	"Software\@PRODUCT_NAME@"			"colors"		"rgb(24,24,24);rgb(79,156,254);rgb(237,74,70);rgb(235,110,183);rgb(131,199,70);rgb(86,216,201);rgb(239,197,65);rgb(222,222,222);rgb(59,59,59);rgb(54,142,171);rgb(250,145,83);rgb(165,128,226);rgb(112,180,51);rgb(65,199,185);rgb(219,179,45);rgb(119,119,119);rgb(131,199,70);rgb(237,74,70);rgb(65,199,185);rgb(250,145,83);rgb(37,37,37);rgb(222,222,222);rgb(222,222,222);rgb(24,24,24);rgb(222,222,222);rgb(79,156,254);rgb(131,199,70);rgb(239,197,65);rgb(239,197,65)"
+		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"				"font-family"			"Lucida Console"
+		WriteRegStr		HKLM	"Software\@PRODUCT_NAME@"				"colors"				"rgb(24,24,24);rgb(79,156,254);rgb(237,74,70);rgb(235,110,183);rgb(131,199,70);rgb(86,216,201);rgb(239,197,65);rgb(222,222,222);rgb(59,59,59);rgb(54,142,171);rgb(250,145,83);rgb(165,128,226);rgb(112,180,51);rgb(65,199,185);rgb(219,179,45);rgb(119,119,119);rgb(131,199,70);rgb(237,74,70);rgb(65,199,185);rgb(250,145,83);rgb(37,37,37);rgb(222,222,222);rgb(222,222,222);rgb(24,24,24);rgb(222,222,222);rgb(79,156,254);rgb(131,199,70);rgb(239,197,65);rgb(239,197,65)"
 
 	sectionEnd
 
@@ -350,7 +355,6 @@ Section "Uninstall"
 	RMDir /r "$INSTDIR\plugins"
 	RMDir /r "$INSTDIR\sdk"
 	RMDir /r "$INSTDIR\gtk2-runtime"
-
 
 	# Delete all files
 	delete "$INSTDIR\*.dll"

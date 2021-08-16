@@ -456,7 +456,6 @@ buildApplication()
 
 		fi
 
-
 		if [ "$?" != "0" ]; then
 			failed "Can't configure ${1}"
 		fi
@@ -488,7 +487,10 @@ buildApplication()
 				failed "Can't copy ${NSI}"
 			fi
 		done
-
+		
+		#
+		# Make runtime
+		#
 		if [ -e ./win/makeruntime.sh ]; then
 			cp "./win/makeruntime.sh" "${WORKDIR}/build/${ARCH}/${1}-makeruntime.sh"
 			if [ "$?" != "0" ]; then
@@ -499,14 +501,12 @@ buildApplication()
 		if [ -e branding/${PRODUCT_NAME}.svg ]; then
 			convert -density 384 -background transparent branding/${PRODUCT_NAME}.svg -define icon:auto-resize -colors 256 ${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}.ico
 			if [ "$?" != "0" ]; then
-				cleanup
-				exit -1
+				failed "Can't convert ${PRODUCT_NAME}.svg to icon"
 			fi
 		elif [ -e branding/${1}.svg ]; then
 			convert -density 384 -background transparent branding/${1}.svg -define icon:auto-resize -colors 256 ${WORKDIR}/build/${ARCH}/${PRODUCT_NAME}.ico
 			if [ "$?" != "0" ]; then
-				cleanup
-				exit -1
+				failed "Can't convert ${1}.svg to icon"
 			fi
 		fi
 
@@ -543,6 +543,15 @@ makeRuntime()
 
 		rm -fr ${WORKDIR}/build/${ARCH}/runtime
 		mkdir -p ${WORKDIR}/build/${ARCH}/runtime
+		mkdir -p ${WORKDIR}/build/${ARCH}/runtime//share/glib-2.0/schemas
+
+		cp \
+			${WORKDIR}/build/${ARCH}/share/glib-2.0/schemas/*.gschema.xml \
+			${WORKDIR}/build/${ARCH}/runtime/share/glib-2.0/schemas
+			
+		if [ "$?" != "0" ]; then
+			failed "Error on schema copy"
+		fi
 
 		for SCRIPT in ${WORKDIR}/build/${ARCH}/*-makeruntime.sh
 		do
@@ -556,7 +565,7 @@ makeRuntime()
 		done
 
 	done
-
+	
 }
 
 #
@@ -711,6 +720,8 @@ makeInstaller()
 
 		fi
 
+		/bin/bash
+		
 		for NSI in *.nsi
 		do
 			makensis ${NSIS_ARGS} ${NSI}
