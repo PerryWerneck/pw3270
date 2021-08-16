@@ -49,7 +49,7 @@ BuildRequires:	automake
 
 BuildRequires:	gettext-tools
 
-BuildRequires:	rsvg-view
+BuildRequires:	inkscape
 BuildRequires:	glib2-devel
 BuildRequires:	pkgconfig(gtk+-3.0)
 
