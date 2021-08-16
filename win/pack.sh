@@ -863,12 +863,17 @@ do
 
 			echo "  --product-name	Set the product name (current is ${PRODUCT_NAME})"
 			echo "  --project-path	Set the path for the customization data"
+			echo "  --unstable		Build unstable version"
+
 			echo "  --target-archs	Set the target architectures (current are ${TARGET_ARCHS})"
 			echo "  --sources-from	Base URL of the git server with the sources (current is ${GIT_URL})"
+	
 			echo "  --no-pre-reqs		Don't try to install required packages"
 			echo "  --pre-reqs		Install required packages"
+
+			echo "  --extra-packages	Set extra packages (current are ${PACKAGE_EXTRAS})"
+
 			echo "  --shell-on-error	Open a shell when the build process failed"
-			echo "  --unstable		Build unstable version"
 			
 			if [ "${MAKE_ZIP}" == "1" ]; then
 				echo "  --no-zip		Don't create zip file"
