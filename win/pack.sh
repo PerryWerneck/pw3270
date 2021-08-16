@@ -90,8 +90,8 @@ clone()
 	if [ "${BUILD_UNSTABLE}" == "1" ]; then
 		BRANCH="develop"
 	else
-		TEMPVAR=${1}_branch
-		BRANCH=${!TEMPVAR}
+		TEMPVAR=$(echo ${1}_branch | sed -e "s@-@@g")
+		BRANCH=${!TEMPVAR}		
 	fi
 
 	echo "Cloning ${1} ${BRANCH}"
