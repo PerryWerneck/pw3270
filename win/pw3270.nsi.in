@@ -142,9 +142,9 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		# Locale files
 		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE_NAME@.mo"	"share\locale\pt_BR\LC_MESSAGES\@PACKAGE_NAME@.mo"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"	"share\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@.mo"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270.mo"		"share\locale\pt_BR\LC_MESSAGES\libv3270.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE_NAME@.mo"														"share\locale\pt_BR\LC_MESSAGES\@PACKAGE_NAME@.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"	"share\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"
+		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"				"share\locale\pt_BR\LC_MESSAGES\libv3270-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"
 
 		# define uninstaller name
 		SetRegView 32
@@ -231,7 +231,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 			file "/oname=$INSTDIR\plugins\ipcserver.dll"			"lib\@PRODUCT_NAME@-plugins\ipcserver.dll"
 
 			CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-			file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libipc3270.mo"	"share\locale\pt_BR\LC_MESSAGES\libipc3270.mo"
+			file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libipc3270-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"	"share\locale\pt_BR\LC_MESSAGES\libipc3270-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"
 
 			${@NSISREDIR@}
 			file "/oname=$SYSDIR\libipc3270.dll"				"bin\libipc3270.dll"
@@ -253,6 +253,9 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 			# Install with "lib" prefix for compatibility.
 			file "/oname=$SYSDIR\libhllapi.dll"		"bin\libhllapi.dll"
+
+			CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
+			file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libhllapi-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"	"share\locale\pt_BR\LC_MESSAGES\libhllapi-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"
 
 		SectionEnd
 !endif
