@@ -28,20 +28,20 @@
  *
  */
 
- /**
-  * @brief PW3270 Keypad module test program.
-  *
-  */
+/**
+ * @brief PW3270 Keypad module test program.
+ *
+ */
 
- #include <config.h>
- #include <lib3270/properties.h>
- #include <pw3270/keypad.h>
- #include <v3270.h>
- #include <v3270/trace.h>
+#include <config.h>
+#include <lib3270/properties.h>
+#include <pw3270/keypad.h>
+#include <v3270.h>
+#include <v3270/trace.h>
 
- /*---[ Implement ]----------------------------------------------------------------------------------*/
+/*---[ Implement ]----------------------------------------------------------------------------------*/
 
- static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
+static void activate(GtkApplication* app, G_GNUC_UNUSED gpointer user_data) {
 
 	GtkWidget * window = gtk_application_window_new(app);
 

@@ -216,7 +216,6 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 	@$(MKDIR) $(@D)
 	@touch $@
 
-
 $(OBJDIR)/schemas/%.xml:\
 	schemas/@OSNAME@/%.xml
 

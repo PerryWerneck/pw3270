@@ -28,21 +28,21 @@
  *
  */
 
- /**
-  * @brief PW3270 main aplication Entry point
-  *
-  */
+/**
+ * @brief PW3270 main aplication Entry point
+ *
+ */
 
- #include "private.h"
- #include <pw3270/application.h>
- #include <lib3270.h>
- #include <lib3270/log.h>
- #include <locale.h>
- #include <stdlib.h>
+#include "private.h"
+#include <pw3270/application.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
+#include <locale.h>
+#include <stdlib.h>
 
- #ifdef G_OS_UNIX
-	#include <glib-unix.h>
- #endif // G_OS_UNIX
+#ifdef G_OS_UNIX
+#include <glib-unix.h>
+#endif // G_OS_UNIX
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
@@ -51,22 +51,9 @@ static gboolean	quit_signal(GtkApplication *app) {
 
 	debug("%s",__FUNCTION__);
 	g_message("Terminating by signal");
-
-	/*
-	GList *list = gtk_application_get_windows(GTK_APPLICATION(application));
-
-	while(list) {
-
-		GtkWidget * window = GTK_WIDGET(list->data);
-		list = list->next;
-
-		gtk_widget_destroy(window);
-
-	}
-	*/
-
 	g_application_quit(G_APPLICATION(app));
 	return FALSE;
+
 }
 #endif // G_OS_UNIX
 

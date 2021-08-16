@@ -38,10 +38,17 @@
       <description>The ID of the current user interface style</description>
     </key>
 
+
     <key name="allow-host-settings" type="b">
       <default>true</default>
       <summary>Allow host settings</summary>
       <description>Allow changing of host session properties</description>
+    </key>
+
+    <key name="allow-open-session-actions" type="b">
+      <default>true</default>
+      <summary>Enable open session actions actions</summary>
+      <description>Enable open session actions</description>
     </key>
 
     <key name="allow-new-tab-actions" type="b">
@@ -56,6 +63,25 @@
       <description>Enable new window actions</description>
     </key>
 
+    <key name="default-session-file" type="s">
+      <default>'~/.config/default.3270'</default>
+      <summary>Path of the default session file</summary>
+      <description></description>
+    </key>
+
+    <key name="update-default-session-file" type="b">
+      <default>true</default>
+      <summary>Update default session time from command line</summary>
+      <description></description>
+    </key>
+
+    <key name="add-session-to-recent-manager" type="b">
+      <default>true</default>
+      <summary>Add session file to recent file list</summary>
+      <description></description>
+    </key>
+
   </schema>
 
 </schemalist>
+

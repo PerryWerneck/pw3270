@@ -27,10 +27,10 @@
  *
  */
 
- #include "private.h"
- #include <v3270.h>
+#include "private.h"
+#include <v3270.h>
 
- gchar * g_action_get_text(GAction *action, const gchar * property_name) {
+gchar * g_action_get_text(GAction *action, const gchar * property_name) {
 	gchar *rc = NULL;
 
 	GValue value = G_VALUE_INIT;
@@ -43,23 +43,23 @@
 
 	g_value_unset(&value);
 
- 	return rc;
+	return rc;
 
- }
+}
 
- gchar * g_action_get_tooltip(GAction *action) {
+gchar * g_action_get_tooltip(GAction *action) {
 	return g_action_get_text(action, "tooltip");
- }
+}
 
- gchar * g_action_get_label(GAction *action) {
+gchar * g_action_get_label(GAction *action) {
 	return g_action_get_text(action, "label");
- }
+}
 
- gchar * g_action_get_icon_name(GAction *action) {
+gchar * g_action_get_icon_name(GAction *action) {
 	return g_action_get_text(action, "icon-name");
- }
+}
 
- static GdkPixbuf * pixbuf_from_icon_name(GValue *value, gint width, gint G_GNUC_UNUSED(height), GtkIconLookupFlags flags) {
+static GdkPixbuf * pixbuf_from_icon_name(GValue *value, gint width, gint G_GNUC_UNUSED(height), GtkIconLookupFlags flags) {
 
 	const gchar * icon_name = g_value_get_string(value);
 
@@ -67,16 +67,16 @@
 		return NULL;
 
 	return gtk_icon_theme_load_icon(
-					gtk_icon_theme_get_default(),
-					icon_name,
-					width,
-					flags, // GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-					NULL
-			);
+	           gtk_icon_theme_get_default(),
+	           icon_name,
+	           width,
+	           flags, // GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+	           NULL
+	       );
 
- }
+}
 
- GdkPixbuf * g_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags) {
+GdkPixbuf * g_action_get_pixbuf(GAction *action, GtkIconSize icon_size, GtkIconLookupFlags flags) {
 
 	struct Properties {
 		const gchar * name;
@@ -115,4 +115,4 @@
 	}
 
 	return pixbuf;
- }
+}

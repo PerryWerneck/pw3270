@@ -27,30 +27,30 @@
  *
  */
 
- #include "../private.h"
- #include <pw3270.h>
- #include <pw3270/actions.h>
- #include <lib3270.h>
- #include <lib3270/log.h>
+#include "../private.h"
+#include <pw3270.h>
+#include <pw3270/actions.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
 
- /*
- void pw3270_window_close_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer window) {
+/*
+void pw3270_window_close_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer window) {
 
-	debug("%s(%p)",__FUNCTION__,window);
-	gtk_window_close(GTK_WINDOW(window));
+debug("%s(%p)",__FUNCTION__,window);
+gtk_window_close(GTK_WINDOW(window));
 
- }
- */
+}
+*/
 
- static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
- 	debug("%s","Window close action was activated");
+	debug("%s","Window close action was activated");
 	gtk_window_close(GTK_WINDOW(gtk_widget_get_toplevel(terminal)));
 
- }
+}
 
 
- GAction * pw3270_action_window_close_new(void) {
+GAction * pw3270_action_window_close_new(void) {
 
 	V3270SimpleAction * action = v3270_simple_action_new();
 
@@ -62,6 +62,6 @@
 
 	return G_ACTION(action);
 
- }
+}
 
 

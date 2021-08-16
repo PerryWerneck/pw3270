@@ -27,16 +27,16 @@
  *
  */
 
- #include "../private.h"
- #include <pw3270/window.h>
- #include <pw3270/actions.h>
- #include <v3270/settings.h>
- #include <v3270/dialogs.h>
- #include <v3270/colorscheme.h>
+#include "../private.h"
+#include <pw3270/window.h>
+#include <pw3270/actions.h>
+#include <v3270/settings.h>
+#include <v3270/dialogs.h>
+#include <v3270/colorscheme.h>
 
- static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
+static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
 
- GAction * pw3270_set_color_action_new(void) {
+GAction * pw3270_set_color_action_new(void) {
 
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
@@ -47,12 +47,12 @@
 
 	return G_ACTION(action);
 
- }
+}
 
- GtkWidget * factory(V3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
+GtkWidget * factory(V3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
 
 	GtkWidget *dialog = v3270_settings_get_edit_dialog(v3270_color_settings_new(),terminal,FALSE);
 	gtk_widget_show_all(dialog);
 	return dialog;
- }
+}
 

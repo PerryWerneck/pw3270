@@ -27,25 +27,25 @@
  *
  */
 
- #include "private.h"
- #include <pw3270.h>
- #include <pw3270/settings.h>
- #include <pw3270/toolbar.h>
- #include <pw3270/actions.h>
- #include <pw3270/window.h>
- #include <v3270/dialogs.h>
+#include "private.h"
+#include <pw3270.h>
+#include <pw3270/settings.h>
+#include <pw3270/toolbar.h>
+#include <pw3270/actions.h>
+#include <pw3270/window.h>
+#include <v3270/dialogs.h>
 
- static void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
- static void apply(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+static void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+static void apply(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
 
- /*--[ Constants ]------------------------------------------------------------------------------------*/
+/*--[ Constants ]------------------------------------------------------------------------------------*/
 
- static const struct _comboboxes {
- 	const gchar * name;			///< @brief The gsettings name.
- 	const gchar * label;		///< @brief The combo name.
- 	guint left;
- 	guint top;
- } comboboxes[] = {
+static const struct _comboboxes {
+	const gchar * name;			///< @brief The gsettings name.
+	const gchar * label;		///< @brief The combo name.
+	guint left;
+	guint top;
+} comboboxes[] = {
 
 	{
 		.left = 0,
@@ -75,19 +75,19 @@
 		.label = N_("Toolbar position")
 	}
 
- };
+};
 
- struct _PW3270SettingsPage {
+struct _PW3270SettingsPage {
 	GtkWidget * views[2];
 //	GtkTreeModel * models[G_N_ELEMENTS(comboboxes)];
 	GtkWidget * combos[G_N_ELEMENTS(comboboxes)];
- };
+};
 
- /*--[ Implement ]------------------------------------------------------------------------------------*/
+/*--[ Implement ]------------------------------------------------------------------------------------*/
 
- GtkWidget * pw3270_toolbar_settings_new() {
+GtkWidget * pw3270_toolbar_settings_new() {
 
- 	size_t ix;
+	size_t ix;
 
 	// Create page widget.
 	PW3270Settings 	* settings = pw3270_settings_new();
@@ -109,9 +109,9 @@
 		gtk_grid_set_row_homogeneous(grid,FALSE);
 
 		gtk_grid_attach(
-			GTK_GRID(settings),
-			v3270_dialog_section_new(_("Itens"), _("Select the toolbar itens"), GTK_WIDGET(grid)),
-			0,0,4,3
+		    GTK_GRID(settings),
+		    v3270_dialog_section_new(_("Itens"), _("Select the toolbar itens"), GTK_WIDGET(grid)),
+		    0,0,4,3
 		);
 
 		static const gchar *labels[G_N_ELEMENTS(page->views)] = {
@@ -130,9 +130,9 @@
 			gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 
 			gtk_grid_attach(
-				grid,
-				label,
-				ix * 3,0,2,1
+			    grid,
+			    label,
+			    ix * 3,0,2,1
 			);
 
 			GtkWidget * box = gtk_scrolled_window_new(NULL,NULL);
@@ -141,9 +141,9 @@
 			gtk_container_add(GTK_CONTAINER(box),page->views[ix]);
 
 			gtk_grid_attach(
-				grid,
-				box,
-				ix * 3,1,2,4
+			    grid,
+			    box,
+			    ix * 3,1,2,4
 			);
 
 		}
@@ -165,9 +165,9 @@
 		gtk_box_pack_end(GTK_BOX(box),buttons[1],FALSE,FALSE,0);
 
 		gtk_grid_attach(
-			grid,
-			box,
-			2,2,1,1
+		    grid,
+		    box,
+		    2,2,1,1
 		);
 
 	}
@@ -179,9 +179,9 @@
 		GtkGrid * grid = GTK_GRID(gtk_grid_new());
 
 		gtk_grid_attach(
-			GTK_GRID(settings),
-			v3270_dialog_section_new(_("Style & Position"), _("Setup the toolbar style and position"), GTK_WIDGET(grid)),
-			0,5,4,1
+		    GTK_GRID(settings),
+		    v3270_dialog_section_new(_("Style & Position"), _("Setup the toolbar style and position"), GTK_WIDGET(grid)),
+		    0,5,4,1
 		);
 
 		// https://developer.gnome.org/hig/stable/visual-layout.html.en
@@ -220,19 +220,25 @@
 	}
 
 	return GTK_WIDGET(settings);
- }
+}
 
- void load(GtkWidget G_GNUC_UNUSED(*widget), GSettings *settings, PW3270SettingsPage *page) {
+void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page) {
 
- 	size_t ix;
+	size_t ix;
 
- 	// Populate views
+	if(!G_IS_SETTINGS(settings)) {
+		g_warning("The settings object is not valid, disabling dialog to avoid segfaults");
+		gtk_widget_set_sensitive(widget,FALSE);
+		return;
+	}
+
+	// Populate views
 	Pw3270ActionList * action_list = pw3270_action_list_new(GTK_APPLICATION(g_application_get_default()));
 
-    // Load current values.
-    g_autofree gchar * action_names = g_settings_get_string(settings,"toolbar-action-names");
+	// Load current values.
+	g_autofree gchar * action_names = g_settings_get_string(settings,"toolbar-action-names");
 
- 	gchar ** actions = g_strsplit(action_names,",",-1);
+	gchar ** actions = g_strsplit(action_names,",",-1);
 
 	for(ix = 0; actions[ix]; ix++) {
 
@@ -262,22 +268,22 @@
 	for(ix = 0; ix < G_N_ELEMENTS(page->combos); ix++) {
 
 		pw3270_model_get_iter_from_value(
-			gtk_combo_box_get_model(GTK_COMBO_BOX(page->combos[ix])),
-			&iter,
-			(guint) g_settings_get_int(settings,comboboxes[ix].name)
+		    gtk_combo_box_get_model(GTK_COMBO_BOX(page->combos[ix])),
+		    &iter,
+		    (guint) g_settings_get_int(settings,comboboxes[ix].name)
 		);
 
 		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(page->combos[ix]),&iter);
 
 	}
 
- }
+}
 
- void apply(GtkWidget G_GNUC_UNUSED(*widget), GSettings *settings, PW3270SettingsPage *page) {
+void apply(GtkWidget G_GNUC_UNUSED(*widget), GSettings *settings, PW3270SettingsPage *page) {
 
 	size_t ix;
 
- 	g_autofree gchar * action_names = pw3270_action_view_get_action_names(page->views[0]);
+	g_autofree gchar * action_names = pw3270_action_view_get_action_names(page->views[0]);
 	g_settings_set_string(settings,"toolbar-action-names",action_names);
 
 	GtkTreeIter	iter;
@@ -286,14 +292,14 @@
 		if(gtk_combo_box_get_active_iter(GTK_COMBO_BOX(page->combos[ix]),&iter)) {
 
 			g_settings_set_int(
-					settings,
-					comboboxes[ix].name,
-					(gint) pw3270_model_get_value_from_iter(gtk_combo_box_get_model(GTK_COMBO_BOX(page->combos[ix])),&iter)
+			    settings,
+			    comboboxes[ix].name,
+			    (gint) pw3270_model_get_value_from_iter(gtk_combo_box_get_model(GTK_COMBO_BOX(page->combos[ix])),&iter)
 			);
 
 		}
 
 	}
 
- }
+}
 

@@ -27,12 +27,12 @@
  *
  */
 
- #include <config.h>
- #include "../private.h"
- #include <pw3270/actions.h>
- #include <pw3270/application.h>
+#include <config.h>
+#include "../private.h"
+#include <pw3270/actions.h>
+#include <pw3270/application.h>
 
- static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication *application) {
+static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication *application) {
 
 	GtkAboutDialog	* dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 
@@ -61,7 +61,7 @@
 
 		size_t ix;
 
-		for(ix = 0; ix < G_N_ELEMENTS(imgs);ix++) {
+		for(ix = 0; ix < G_N_ELEMENTS(imgs); ix++) {
 
 			if(!g_file_test(imgs[ix],G_FILE_TEST_IS_REGULAR))
 				continue;
@@ -87,17 +87,17 @@
 	{
 		g_autofree gchar * version = g_strdup_printf(
 #ifdef ENABLE_UNSTABLE_FEATURES
-											_("Unstable version %s-%s"),
+		                                 _("Unstable version %s-%s"),
 #else
-											_("Version %s-%s"),
+		                                 _("Version %s-%s"),
 #endif // ENABLE_UNSTABLE_FEATURES
-											PACKAGE_VERSION,
+		                                 PACKAGE_VERSION,
 #ifdef PACKAGE_RELEASE
-											PACKAGE_RELEASE
+		                                 PACKAGE_RELEASE
 #else
-											G_STRINGIFY(BUILD_DATE)
+		                                 G_STRINGIFY(BUILD_DATE)
 #endif // PACKAGE_RELEASE
-										);
+		                             );
 
 		gtk_about_dialog_set_version(dialog,version);
 	}
@@ -106,21 +106,21 @@
 	{
 		g_autofree gchar * comments =
 
-		g_strdup_printf(
-				_( "%s for %s." ),
-				_( "IBM 3270 Terminal emulator" ),
+		    g_strdup_printf(
+		        _( "%s for %s." ),
+		        _( "IBM 3270 Terminal emulator" ),
 #if defined(__MINGW64__)
-				_( "64 bits Windows" )
+		        _( "64 bits Windows" )
 #elif defined(__MINGW32__)
-				_( "32 bits Windows" )
+		        _( "32 bits Windows" )
 #elif defined(linux) && defined(__i386__)
-				_( "32 bits Linux" )
+		        _( "32 bits Linux" )
 #elif defined(linux) && defined(__x86_64__)
-				_( "64 bits Linux" )
+		        _( "64 bits Linux" )
 #else
-				"GTK"
+		        "GTK"
 #endif
-				);
+		    );
 		gtk_about_dialog_set_comments(dialog, comments);
 	}
 
@@ -136,8 +136,7 @@
 			NULL
 		};
 
-		static const gchar *references[]	=
-		{
+		static const gchar *references[]	= {
 			"Paul Mattes <Paul.Mattes@usa.net>",
 			"Georgia Tech Research Corporation (GTRC)",
 			"and others",
@@ -191,24 +190,24 @@
 
 	// Call plugins
 	pw3270_application_plugin_call(
-		g_application_get_default(),
-		"pw3270_plugin_set_about_dialog",
-		dialog
+	    g_application_get_default(),
+	    "pw3270_plugin_set_about_dialog",
+	    dialog
 	);
 
 	gtk_widget_show_all(GTK_WIDGET(dialog));
 
 	return GTK_WIDGET(dialog);
 
- }
+}
 
- GAction * pw3270_about_action_new() {
+GAction * pw3270_about_action_new() {
 
- 	PW3270Action * action = pw3270_dialog_action_new(factory);
+	PW3270Action * action = pw3270_dialog_action_new(factory);
 
- 	action->name = "about";
- 	action->label = _("About PW3270");
- 	action->icon_name = "help-about";
+	action->name = "about";
+	action->label = _("About PW3270");
+	action->icon_name = "help-about";
 
 	return G_ACTION(action);
- }
+}

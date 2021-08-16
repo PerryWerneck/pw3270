@@ -27,26 +27,26 @@
  *
  */
 
- #include "private.h"
- #include <pw3270.h>
- #include <pw3270/toolbar.h>
- #include <pw3270/application.h>
- #include <pw3270/actions.h>
- #include <pw3270/keypad.h>
- #include <v3270/settings.h>
- #include <v3270/keyfile.h>
+#include "private.h"
+#include <pw3270.h>
+#include <pw3270/toolbar.h>
+#include <pw3270/application.h>
+#include <pw3270/actions.h>
+#include <pw3270/keypad.h>
+#include <v3270/settings.h>
+#include <v3270/keyfile.h>
 
- static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
- static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
+static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
+static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 
- G_DEFINE_TYPE(pw3270ApplicationWindow, pw3270ApplicationWindow, GTK_TYPE_APPLICATION_WINDOW);
+G_DEFINE_TYPE(pw3270ApplicationWindow, pw3270ApplicationWindow, GTK_TYPE_APPLICATION_WINDOW);
 
- enum {
+enum {
 	PROP_NONE,
 	PROP_ACTION_NAMES,
- };
+};
 
- static void destroy(GtkWidget *widget) {
+static void destroy(GtkWidget *widget) {
 
 	size_t ix;
 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
@@ -79,11 +79,11 @@
 
 	GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->destroy(widget);
 
- }
+}
 
- static void size_allocate(GtkWidget *widget, GtkAllocation *allocation) {
+static void size_allocate(GtkWidget *widget, GtkAllocation *allocation) {
 
- 	// https://developer.gnome.org/SaveWindowState/
+	// https://developer.gnome.org/SaveWindowState/
 	GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->size_allocate(widget, allocation);
 
 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
@@ -92,32 +92,32 @@
 		gtk_window_get_size(GTK_WINDOW (widget), &window->state.width, &window->state.height);
 	}
 
- }
+}
 
- static gboolean window_state_event(GtkWidget *widget, GdkEventWindowState *event) {
+static gboolean window_state_event(GtkWidget *widget, GdkEventWindowState *event) {
 
-  	// https://developer.gnome.org/SaveWindowState/
-  	gboolean res = GDK_EVENT_PROPAGATE;
+	// https://developer.gnome.org/SaveWindowState/
+	gboolean res = GDK_EVENT_PROPAGATE;
 
-  	if(GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->window_state_event != NULL) {
+	if(GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->window_state_event != NULL) {
 		res = GTK_WIDGET_CLASS(pw3270ApplicationWindow_parent_class)->window_state_event(widget, event);
-  	}
+	}
 
-  	{
-  		pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
+	{
+		pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
 
 		window->state.is_maximized = (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) == 0 ? 0 : 1;
 		window->state.is_fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) == 0 ? 0 : 1;
-  	}
+	}
 
 	return res;
- }
+}
 
- static void constructed(GObject *object) {
+static void constructed(GObject *object) {
 
 	// https://developer.gnome.org/SaveWindowState/
 
- 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(object);
+	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(object);
 
 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 	if(settings) {
@@ -139,15 +139,15 @@
 		gtk_window_fullscreen(GTK_WINDOW (object));
 
 	G_OBJECT_CLASS (pw3270ApplicationWindow_parent_class)->constructed (object);
- }
+}
 
- static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
+static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
 #ifdef DEBUG
 	{
 		gtk_icon_theme_append_search_path(
-			gtk_icon_theme_get_default(),
-			"./icons"
+		    gtk_icon_theme_get_default(),
+		    "./icons"
 		);
 	}
 #else
@@ -155,8 +155,8 @@
 		lib3270_autoptr(char) path = lib3270_build_data_filename("icons",NULL);
 		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
 			gtk_icon_theme_append_search_path(
-				gtk_icon_theme_get_default(),
-				path
+			    gtk_icon_theme_get_default(),
+			    path
 			);
 		}
 	}
@@ -178,38 +178,38 @@
 		object_class->constructed = constructed;
 
 		g_object_class_install_property(
-			object_class,
-			PROP_ACTION_NAMES,
-			g_param_spec_string ("action-names",
-				N_("Action Names"),
-				N_("The name of the actions in the header bar"),
-				NULL,
-				G_PARAM_WRITABLE|G_PARAM_READABLE)
+		    object_class,
+		    PROP_ACTION_NAMES,
+		    g_param_spec_string ("action-names",
+		                         N_("Action Names"),
+		                         N_("The name of the actions in the header bar"),
+		                         NULL,
+		                         G_PARAM_WRITABLE|G_PARAM_READABLE)
 		);
 	}
 
- }
+}
 
- void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
+void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	if(prop_id == PROP_ACTION_NAMES) {
 		pw3270_window_set_header_action_names(GTK_WIDGET(object), g_value_get_string(value));
 	}
 
- }
+}
 
- void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
+void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
- 	if(prop_id == PROP_ACTION_NAMES) {
-    	g_value_take_string(value,pw3270_window_get_action_names(GTK_WIDGET(object)));
+	if(prop_id == PROP_ACTION_NAMES) {
+		g_value_take_string(value,pw3270_window_get_action_names(GTK_WIDGET(object)));
 	}
 
- }
+}
 
- static void save_keypad_state(GtkWidget *keypad, GtkWidget *window, gboolean visible) {
+static void save_keypad_state(GtkWidget *keypad, GtkWidget *window, gboolean visible) {
 
- 	GtkWidget * terminal = pw3270_application_window_get_active_terminal(window);
- 	if(!terminal)
+	GtkWidget * terminal = pw3270_application_window_get_active_terminal(window);
+	if(!terminal)
 		return;
 
 	GKeyFile * keyfile = v3270_key_file_get(terminal);
@@ -217,25 +217,25 @@
 		return;
 
 	g_key_file_set_boolean(
-		keyfile,
-		"keypads",
-		gtk_widget_get_name(keypad),
-		visible
+	    keyfile,
+	    "keypads",
+	    gtk_widget_get_name(keypad),
+	    visible
 	);
 
 	v3270_emit_save_settings(terminal,NULL);
 
- }
+}
 
- static void keypad_hide(GtkWidget *keypad, GtkWidget *window) {
+static void keypad_hide(GtkWidget *keypad, GtkWidget *window) {
 	save_keypad_state(keypad,window,FALSE);
- }
+}
 
- static void keypad_show(GtkWidget *keypad, GtkWidget *window) {
+static void keypad_show(GtkWidget *keypad, GtkWidget *window) {
 	save_keypad_state(keypad,window,TRUE);
- }
+}
 
- static GtkWidget * setup_keypad(pw3270ApplicationWindow *window, GObject * model) {
+static GtkWidget * setup_keypad(pw3270ApplicationWindow *window, GObject * model) {
 
 	GtkWidget * widget = pw3270_keypad_get_from_model(model);
 
@@ -255,22 +255,22 @@
 	g_autofree gchar * action_name = g_strconcat("keypad.",name,NULL);
 
 	GPropertyAction * action =
-			g_property_action_new(
-				action_name,
-				widget,
-				"visible"
-			);
+	    g_property_action_new(
+	        action_name,
+	        widget,
+	        "visible"
+	    );
 
 	g_action_map_add_action(
-		G_ACTION_MAP(window),
-		G_ACTION(action)
+	    G_ACTION_MAP(window),
+	    G_ACTION(action)
 	);
 
 	return widget;
 
- }
+}
 
- static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
+static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 
 	// Get settings
 	g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
@@ -327,8 +327,8 @@
 		widget->toolbar = GTK_TOOLBAR(pw3270_toolbar_new());
 
 		g_action_map_add_action(
-			G_ACTION_MAP(widget),
-			G_ACTION(g_property_action_new("toolbar", widget->toolbar, "visible"))
+		    G_ACTION_MAP(widget),
+		    G_ACTION(g_property_action_new("toolbar", widget->toolbar, "visible"))
 		);
 
 		switch(g_settings_get_int(settings,"toolbar-position")) {
@@ -355,35 +355,35 @@
 		}
 
 		g_settings_bind(
-			settings,
-			"toolbar-visible",
-			widget->toolbar,
-			"visible",
-			G_SETTINGS_BIND_DEFAULT
+		    settings,
+		    "toolbar-visible",
+		    widget->toolbar,
+		    "visible",
+		    G_SETTINGS_BIND_DEFAULT
 		);
 
 		g_settings_bind(
-			settings,
-			"toolbar-icon-type",
-			widget->toolbar,
-			"icon-type",
-			G_SETTINGS_BIND_DEFAULT
+		    settings,
+		    "toolbar-icon-type",
+		    widget->toolbar,
+		    "icon-type",
+		    G_SETTINGS_BIND_DEFAULT
 		);
 
 		g_settings_bind(
-			settings,
-			"toolbar-style",
-			widget->toolbar,
-			"style",
-			G_SETTINGS_BIND_DEFAULT
+		    settings,
+		    "toolbar-style",
+		    widget->toolbar,
+		    "style",
+		    G_SETTINGS_BIND_DEFAULT
 		);
 
 		g_settings_bind(
-			settings,
-			"toolbar-icon-size",
-			widget->toolbar,
-			"icon-size",
-			G_SETTINGS_BIND_DEFAULT
+		    settings,
+		    "toolbar-icon-size",
+		    widget->toolbar,
+		    "icon-size",
+		    G_SETTINGS_BIND_DEFAULT
 		);
 
 	}
@@ -398,26 +398,26 @@
 		GList * keypad;
 
 		// Add top Keypads
-		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+		for(keypad = keypads; keypad; keypad = g_list_next(keypad)) {
 
 			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_TOP) {
 				gtk_box_pack_start(
-					vBox,
-					setup_keypad(widget, G_OBJECT(keypad->data)),
-					FALSE,FALSE,0
+				    vBox,
+				    setup_keypad(widget, G_OBJECT(keypad->data)),
+				    FALSE,FALSE,0
 				);
 			}
 		}
 
 
 		// Add left keypads
-		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+		for(keypad = keypads; keypad; keypad = g_list_next(keypad)) {
 
 			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_LEFT) {
 				gtk_box_pack_start(
-					hBox,
-					setup_keypad(widget, G_OBJECT(keypad->data)),
-					FALSE,FALSE,0
+				    hBox,
+				    setup_keypad(widget, G_OBJECT(keypad->data)),
+				    FALSE,FALSE,0
 				);
 			}
 		}
@@ -427,26 +427,26 @@
 		gtk_box_pack_start(hBox,GTK_WIDGET(vBox),TRUE,TRUE,0);
 
 		// Add bottom keypads
-		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+		for(keypad = keypads; keypad; keypad = g_list_next(keypad)) {
 
 			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_BOTTOM) {
 				gtk_box_pack_end(
-					vBox,
-					setup_keypad(widget, G_OBJECT(keypad->data)),
-					FALSE,FALSE,0
+				    vBox,
+				    setup_keypad(widget, G_OBJECT(keypad->data)),
+				    FALSE,FALSE,0
 				);
 			}
 		}
 
 
 		// Add right keypads
-		for(keypad = keypads;keypad;keypad = g_list_next(keypad)) {
+		for(keypad = keypads; keypad; keypad = g_list_next(keypad)) {
 
 			if(pw3270_keypad_get_position(G_OBJECT(keypad->data)) == KEYPAD_POSITION_RIGHT) {
 				gtk_box_pack_end(
-					hBox,
-					setup_keypad(widget, G_OBJECT(keypad->data)),
-					FALSE,FALSE,0
+				    hBox,
+				    setup_keypad(widget, G_OBJECT(keypad->data)),
+				    FALSE,FALSE,0
 				);
 			}
 		}
@@ -505,58 +505,58 @@
 	// Bind properties
 	//
 	g_action_map_add_action(
-		G_ACTION_MAP(widget),
-		G_ACTION(g_property_action_new("menubar", widget, "show-menubar"))
+	    G_ACTION_MAP(widget),
+	    G_ACTION(g_property_action_new("menubar", widget, "show-menubar"))
 	);
 
 	g_settings_bind(
-		settings,
-		"toolbar-action-names",
-		widget->toolbar,
-		"action-names",
-		G_SETTINGS_BIND_DEFAULT
+	    settings,
+	    "toolbar-action-names",
+	    widget->toolbar,
+	    "action-names",
+	    G_SETTINGS_BIND_DEFAULT
 	);
 
 
- }
+}
 
- static void page_added(GtkNotebook *notebook, GtkWidget *child, guint G_GNUC_UNUSED(page_num), GtkApplication * application) {
+static void page_added(GtkNotebook *notebook, GtkWidget *child, guint G_GNUC_UNUSED(page_num), GtkApplication * application) {
 
 	debug("%s(%p)",__FUNCTION__,child);
 
- 	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
+	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
 
- 	// Call plugins
-  	int (*call)(GtkWidget *);
+	// Call plugins
+	int (*call)(GtkWidget *);
 
-  	GSList * item;
-  	for(item = pw3270_application_get_plugins(G_APPLICATION(application)); item; item = g_slist_next(item)) {
+	GSList * item;
+	for(item = pw3270_application_get_plugins(G_APPLICATION(application)); item; item = g_slist_next(item)) {
 		if(g_module_symbol((GModule *) item->data, "pw3270_plugin_page_added", (gpointer *) &call)) {
 			call(child);
-       }
-  	}
+		}
+	}
 
- }
+}
 
- static void page_removed(GtkNotebook *notebook, GtkWidget *child, guint G_GNUC_UNUSED(page_num), GtkApplication * application) {
+static void page_removed(GtkNotebook *notebook, GtkWidget *child, guint G_GNUC_UNUSED(page_num), GtkApplication * application) {
 
 	debug("%s(%p)",__FUNCTION__,child);
 
- 	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
+	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
 
- 	// Call plugins
-  	int (*call)(GtkWidget *);
+	// Call plugins
+	int (*call)(GtkWidget *);
 
-  	GSList * item;
-  	for(item = pw3270_application_get_plugins(G_APPLICATION(application)); item; item = g_slist_next(item)) {
+	GSList * item;
+	for(item = pw3270_application_get_plugins(G_APPLICATION(application)); item; item = g_slist_next(item)) {
 		if(g_module_symbol((GModule *) item->data, "pw3270_plugin_page_removed", (gpointer *) &call)) {
 			call(child);
-       }
-  	}
+		}
+	}
 
- }
+}
 
- GtkWidget * pw3270_application_window_new(GtkApplication * application, const gchar *session_file) {
+GtkWidget * pw3270_application_window_new(GtkApplication * application, const gchar *session_file) {
 
 	gchar *title = _( "IBM 3270 Terminal emulator" );
 
@@ -566,10 +566,10 @@
 
 	g_return_val_if_fail(GTK_IS_APPLICATION(application), NULL);
 	pw3270ApplicationWindow * window =
-		g_object_new(
-			PW3270_TYPE_APPLICATION_WINDOW,
-			"application", application,
-			NULL);
+	    g_object_new(
+	        PW3270_TYPE_APPLICATION_WINDOW,
+	        "application", application,
+	        NULL);
 
 	g_signal_connect(G_OBJECT(window->notebook), "page-added", G_CALLBACK(page_added), application);
 	g_signal_connect(G_OBJECT(window->notebook), "page-removed", G_CALLBACK(page_removed), application);
@@ -611,11 +611,11 @@
 		if(style == PW3270_UI_STYLE_AUTOMATIC) {
 
 #ifdef G_OS_UNIX
-            style = PW3270_UI_STYLE_GNOME;
+			style = PW3270_UI_STYLE_GNOME;
 			g_settings_set_boolean(settings,"menubar-visible",FALSE);
 			g_settings_set_int(settings,"header-icon-type",1);
 #else
-            style = PW3270_UI_STYLE_CLASSICAL;
+			style = PW3270_UI_STYLE_CLASSICAL;
 			g_settings_set_boolean(settings,"menubar-visible",TRUE);
 			g_settings_set_int(settings,"header-icon-type",0);
 #endif // G_OS_UNIX
@@ -637,22 +637,22 @@
 
 			gtk_header_bar_set_title(header,title);
 			g_settings_bind(
-				settings,
-				"has-subtitle",
-				header,
-				"has-subtitle",
-				G_SETTINGS_BIND_DEFAULT
+			    settings,
+			    "has-subtitle",
+			    header,
+			    "has-subtitle",
+			    G_SETTINGS_BIND_DEFAULT
 			);
 
 			// Show the new header
 			gtk_widget_show_all(GTK_WIDGET(header));
 
 			g_settings_bind(
-				settings,
-				"header-action-names",
-				window,
-				"action-names",
-				G_SETTINGS_BIND_DEFAULT
+			    settings,
+			    "header-action-names",
+			    window,
+			    "action-names",
+			    G_SETTINGS_BIND_DEFAULT
 			);
 
 		} else {
@@ -662,11 +662,11 @@
 		}
 
 		g_settings_bind(
-			settings,
-			"menubar-visible",
-			window,
-			"show-menubar",
-			G_SETTINGS_BIND_DEFAULT
+		    settings,
+		    "menubar-visible",
+		    window,
+		    "show-menubar",
+		    G_SETTINGS_BIND_DEFAULT
 		);
 
 	}
@@ -717,9 +717,9 @@
 
 	return GTK_WIDGET(window);
 
- }
+}
 
- void pw3270_window_set_current_page(GtkWidget *window, gint page_num) {
+void pw3270_window_set_current_page(GtkWidget *window, gint page_num) {
 
 	g_return_if_fail(PW3270_IS_APPLICATION_WINDOW(window));
 
@@ -730,31 +730,31 @@
 	gtk_notebook_set_current_page(notebook, page_num);
 	gtk_widget_grab_focus(gtk_notebook_get_nth_page(notebook, page_num));
 
- }
+}
 
- void pw3270_window_set_subtitle(GtkWidget *window, const gchar *subtitle) {
+void pw3270_window_set_subtitle(GtkWidget *window, const gchar *subtitle) {
 
 	g_return_if_fail(PW3270_IS_APPLICATION_WINDOW(window));
 
- 	GtkWidget * title_bar = gtk_window_get_titlebar(GTK_WINDOW(window));
+	GtkWidget * title_bar = gtk_window_get_titlebar(GTK_WINDOW(window));
 
- 	if(title_bar && GTK_IS_HEADER_BAR(title_bar) && gtk_header_bar_get_has_subtitle(GTK_HEADER_BAR(title_bar))) {
+	if(title_bar && GTK_IS_HEADER_BAR(title_bar) && gtk_header_bar_get_has_subtitle(GTK_HEADER_BAR(title_bar))) {
 		gtk_header_bar_set_subtitle(GTK_HEADER_BAR(title_bar), subtitle);
 	}
 
- }
+}
 
- GtkWidget * pw3270_application_window_get_active_terminal(GtkWidget *widget) {
- 	return PW3270_APPLICATION_WINDOW(widget)->terminal;
- }
+GtkWidget * pw3270_application_window_get_active_terminal(GtkWidget *widget) {
+	return PW3270_APPLICATION_WINDOW(widget)->terminal;
+}
 
- void pw3270_application_window_set_active_terminal(GtkWidget *widget, GtkWidget *terminal) {
+void pw3270_application_window_set_active_terminal(GtkWidget *widget, GtkWidget *terminal) {
 
 	size_t ix;
 
- 	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
+	pw3270ApplicationWindow * window = PW3270_APPLICATION_WINDOW(widget);
 
- 	if(window->terminal == terminal)
+	if(window->terminal == terminal)
 		return;
 
 	if(terminal && GTK_IS_V3270(terminal)) {
@@ -837,28 +837,28 @@
 		}
 	}
 
- }
+}
 
- GSettings *pw3270_application_window_settings_new() {
+GSettings *pw3270_application_window_settings_new() {
 
 #ifdef DEBUG
 
 	GError * error = NULL;
 	GSettingsSchemaSource * source =
-		g_settings_schema_source_new_from_directory(
-			".",
-			NULL,
-			TRUE,
-			&error
-		);
+	    g_settings_schema_source_new_from_directory(
+	        ".",
+	        NULL,
+	        TRUE,
+	        &error
+	    );
 
 	g_assert_no_error(error);
 
 	GSettingsSchema * schema =
-		g_settings_schema_source_lookup(
-			source,
-			"br.com.bb." G_STRINGIFY(PRODUCT_NAME) ".window",
-			TRUE);
+	    g_settings_schema_source_lookup(
+	        source,
+	        "br.com.bb." G_STRINGIFY(PRODUCT_NAME) ".window",
+	        TRUE);
 
 	GSettings * settings = g_settings_new_full(schema, NULL, NULL);
 
@@ -872,11 +872,11 @@
 
 	return settings;
 
- }
+}
 
- GList * pw3270_application_window_get_keypads(GtkWidget *window) {
+GList * pw3270_application_window_get_keypads(GtkWidget *window) {
 
 	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(window),NULL);
 	return PW3270_APPLICATION_WINDOW(window)->keypads;
 
- }
+}

@@ -34,40 +34,40 @@
 
 #ifndef PW3270_H_INCLUDED
 
-	#define PW3270_H_INCLUDED
+#define PW3270_H_INCLUDED
 
-	#include <config.h>
+#include <config.h>
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+#ifndef GETTEXT_PACKAGE
+#define GETTEXT_PACKAGE PACKAGE_NAME
+#endif
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+#include <libintl.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
-	G_BEGIN_DECLS
+G_BEGIN_DECLS
 
-	/* not really I18N-related, but also a string marker macro */
-	#define I_(string) g_intern_static_string (string)
+/* not really I18N-related, but also a string marker macro */
+#define I_(string) g_intern_static_string (string)
 
 
-	void		  pw3270_load_placeholders(GApplication *application, GtkBuilder * builder);
+void		  pw3270_load_placeholders(GApplication *application, GtkBuilder * builder);
 //	GtkWidget	* pw3270_frame_new(GtkWidget * child, const gchar *title);
 
-	// Application settings widget
-	typedef struct _Pw3270SettingsPage Pw3270SettingsPage;
+// Application settings widget
+typedef struct _Pw3270SettingsPage Pw3270SettingsPage;
 
-	struct _Pw3270SettingsPage {
-		GtkWidget	* widget;		///< @brief Settings widget.
-		const gchar	* label;		///< @brief Page lagel.
-		const gchar * title;		///< @brief Page title.
-		void (*load)(Pw3270SettingsPage *, GtkApplication *);
-		void (*apply)(Pw3270SettingsPage *, GtkApplication *);
-	};
+struct _Pw3270SettingsPage {
+	GtkWidget	* widget;		///< @brief Settings widget.
+	const gchar	* label;		///< @brief Page lagel.
+	const gchar * title;		///< @brief Page title.
+	void (*load)(Pw3270SettingsPage *, GtkApplication *);
+	void (*apply)(Pw3270SettingsPage *, GtkApplication *);
+};
 
-	void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser);
+void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser);
 
-	G_END_DECLS
+G_END_DECLS
 
 #endif // PW3270_H_INCLUDED

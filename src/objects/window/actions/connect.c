@@ -27,24 +27,24 @@
  *
  */
 
- /**
-  * @brief Implement PW3270 "connect" action.
-  *
-  */
+/**
+ * @brief Implement PW3270 "connect" action.
+ *
+ */
 
- #include <pw3270.h>
- #include <pw3270/actions.h>
- #include <lib3270/properties.h>
- #include "../private.h"
+#include <pw3270.h>
+#include <pw3270/actions.h>
+#include <lib3270/properties.h>
+#include "../private.h"
 
- static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
+static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
 	debug("%s",__FUNCTION__);
-    gtk_widget_activate(terminal);
+	gtk_widget_activate(terminal);
 
- }
+}
 
- GAction * pw3270_action_connect_new(void) {
+GAction * pw3270_action_connect_new(void) {
 
 	V3270SimpleAction *action = v3270_simple_action_new();
 
@@ -61,4 +61,4 @@
 
 	return G_ACTION(action);
 
- }
+}

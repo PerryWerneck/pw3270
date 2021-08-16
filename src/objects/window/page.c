@@ -27,50 +27,50 @@
  *
  */
 
- #include "private.h"
- #include <pw3270/actions.h>
- #include <pw3270/application.h>
- #include <lib3270/toggle.h>
- #include <v3270/settings.h>
- #include <v3270/dialogs.h>
- #include <v3270/actions.h>
- #include <v3270/print.h>
- #include <v3270/keyfile.h>
- #include <pw3270.h>
+#include "private.h"
+#include <pw3270/actions.h>
+#include <pw3270/application.h>
+#include <lib3270/toggle.h>
+#include <v3270/settings.h>
+#include <v3270/dialogs.h>
+#include <v3270/actions.h>
+#include <v3270/print.h>
+#include <v3270/keyfile.h>
+#include <pw3270.h>
 
 //---[ Gtk Label with customized popup-menu ]---------------------------------------------------------------------------------------
 
- typedef struct _pw3270TabLabel {
+typedef struct _pw3270TabLabel {
 
- 	GtkLabel parent;
+	GtkLabel parent;
 
- } pw3270TabLabel;
+} pw3270TabLabel;
 
- typedef struct _pw3270TabLabelClass {
+typedef struct _pw3270TabLabelClass {
 
- 	GtkLabelClass parent_class;
+	GtkLabelClass parent_class;
 
- } pw3270TabLabelClass;
+} pw3270TabLabelClass;
 
- G_DEFINE_TYPE(pw3270TabLabel, pw3270TabLabel, GTK_TYPE_LABEL);
+G_DEFINE_TYPE(pw3270TabLabel, pw3270TabLabel, GTK_TYPE_LABEL);
 
- static void popup_menu_detach(GtkWidget G_GNUC_UNUSED(*label), GtkMenu *menu) {
+static void popup_menu_detach(GtkWidget G_GNUC_UNUSED(*label), GtkMenu *menu) {
 
- 	debug("%s(%p)",__FUNCTION__,menu);
+	debug("%s(%p)",__FUNCTION__,menu);
 
- }
+}
 
- static void popup_menu_deactivated(GtkMenu *menu, GtkWidget G_GNUC_UNUSED(*label)) {
- 	gtk_menu_detach(menu);
- }
+static void popup_menu_deactivated(GtkMenu *menu, GtkWidget G_GNUC_UNUSED(*label)) {
+	gtk_menu_detach(menu);
+}
 
 #ifdef DEBUG
- static void menu_destroy(GtkWidget *menu) {
- 	debug("%s(%p)",__FUNCTION__,menu);
- }
+static void menu_destroy(GtkWidget *menu) {
+	debug("%s(%p)",__FUNCTION__,menu);
+}
 #endif // DEBUG
 
- static gboolean tab_label_button_press(GtkWidget *label, GdkEventButton *event) {
+static gboolean tab_label_button_press(GtkWidget *label, GdkEventButton *event) {
 
 	if (event->button == 3 && event->type == GDK_BUTTON_PRESS) {
 
@@ -96,52 +96,52 @@
 	}
 
 	return FALSE;
- }
+}
 
- static void pw3270TabLabel_class_init(pw3270TabLabelClass *klass) {
+static void pw3270TabLabel_class_init(pw3270TabLabelClass *klass) {
 
 	GTK_WIDGET_CLASS(klass)->button_press_event = tab_label_button_press;
 
- }
+}
 
- static void pw3270TabLabel_init(pw3270TabLabel G_GNUC_UNUSED(*widget)) {
+static void pw3270TabLabel_init(pw3270TabLabel G_GNUC_UNUSED(*widget)) {
 
- }
+}
 
 //----------------------------------------------------------------------------------------------------------------------------------
 
- static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWidget * window);
- static void session_changed(GtkWidget *terminal, GtkWidget *label);
- static void disconnected(GtkWidget *terminal, GtkWindow * window);
- static void connected(GtkWidget *terminal, const gchar *host, GtkWindow * window);
- static void destroy(GtkWidget *terminal, GtkWindow * window);
- static void close_page(GtkButton *button, GtkWidget *terminal);
- static gboolean terminal_popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window);
- static gboolean oia_popup(GtkWidget *widget, guint field, GdkEvent *event, pw3270ApplicationWindow * window);
- static void label_populate_popup(GtkLabel *label, GtkMenu *menu, GtkWidget *terminal);
- static void label_disconnect(GtkWidget *label, GtkWidget *terminal);
+static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWidget * window);
+static void session_changed(GtkWidget *terminal, GtkWidget *label);
+static void disconnected(GtkWidget *terminal, GtkWindow * window);
+static void connected(GtkWidget *terminal, const gchar *host, GtkWindow * window);
+static void destroy(GtkWidget *terminal, GtkWindow * window);
+static void close_page(GtkButton *button, GtkWidget *terminal);
+static gboolean terminal_popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window);
+static gboolean oia_popup(GtkWidget *widget, guint field, GdkEvent *event, pw3270ApplicationWindow * window);
+static void label_populate_popup(GtkLabel *label, GtkMenu *menu, GtkWidget *terminal);
+static void label_disconnect(GtkWidget *label, GtkWidget *terminal);
 
- gint pw3270_application_window_append_page(GtkWidget * window, GtkWidget * terminal) {
+gint pw3270_application_window_append_page(GtkWidget * window, GtkWidget * terminal) {
 
 	// Setup label
- 	GtkWidget * label =
-		GTK_WIDGET(
-			g_object_new(
-			pw3270TabLabel_get_type(),
-			"label", v3270_get_session_name(terminal),
-			"selectable", TRUE,
-			NULL)
-		);
+	GtkWidget * label =
+	    GTK_WIDGET(
+	        g_object_new(
+	            pw3270TabLabel_get_type(),
+	            "label", v3270_get_session_name(terminal),
+	            "selectable", TRUE,
+	            NULL)
+	    );
 
 	g_signal_connect(G_OBJECT(terminal), "session_changed", G_CALLBACK(session_changed),label);
 	g_signal_connect(G_OBJECT(label), "destroy", G_CALLBACK(label_disconnect),terminal);
 
 	// Setup tab
- 	GtkWidget * tab			= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
- 	GtkWidget * button		= gtk_button_new_from_icon_name("window-close-symbolic",GTK_ICON_SIZE_MENU);
- 	GtkNotebook	* notebook	= PW3270_APPLICATION_WINDOW(window)->notebook;
+	GtkWidget * tab			= gtk_box_new(GTK_ORIENTATION_HORIZONTAL,2);
+	GtkWidget * button		= gtk_button_new_from_icon_name("window-close-symbolic",GTK_ICON_SIZE_MENU);
+	GtkNotebook	* notebook	= PW3270_APPLICATION_WINDOW(window)->notebook;
 
- 	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NONE);
+	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NONE);
 
 	g_signal_connect(G_OBJECT(label), "populate-popup", G_CALLBACK(label_populate_popup), terminal);
 
@@ -155,8 +155,8 @@
 
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(close_page), terminal);
 
- 	gtk_box_pack_start(GTK_BOX(tab),label,FALSE,FALSE,0);
- 	gtk_box_pack_end(GTK_BOX(tab),button,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(tab),label,FALSE,FALSE,0);
+	gtk_box_pack_end(GTK_BOX(tab),button,FALSE,FALSE,0);
 
 	gtk_widget_show_all(terminal);
 	gtk_widget_show_all(tab);
@@ -169,16 +169,16 @@
 
 	return page;
 
- }
+}
 
- static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWidget * window) {
+static gboolean on_terminal_focus(GtkWidget *terminal, GdkEvent G_GNUC_UNUSED(*event), GtkWidget * window) {
 
 	gtk_widget_grab_default(terminal);
 	pw3270_application_window_set_active_terminal(window,terminal);
- 	return FALSE;
- }
+	return FALSE;
+}
 
- static void session_changed(GtkWidget *terminal, GtkWidget *label) {
+static void session_changed(GtkWidget *terminal, GtkWidget *label) {
 
 	gtk_label_set_text(GTK_LABEL(label),v3270_get_session_name(terminal));
 
@@ -195,31 +195,31 @@
 
 	}
 
- }
+}
 
- static void disconnected(GtkWidget *terminal, GtkWindow * window) {
+static void disconnected(GtkWidget *terminal, GtkWindow * window) {
 
- 	debug("%s",__FUNCTION__);
+	debug("%s",__FUNCTION__);
 
- 	if(terminal != gtk_window_get_default_widget(window))
+	if(terminal != gtk_window_get_default_widget(window))
 		return;
 
 	pw3270_window_set_subtitle(GTK_WIDGET(window), _("Disconnected from host"));
 
- }
+}
 
- static void connected(GtkWidget *terminal, const gchar *host, GtkWindow * window) {
+static void connected(GtkWidget *terminal, const gchar *host, GtkWindow * window) {
 
- 	debug("%s(%s)",__FUNCTION__,host);
+	debug("%s(%s)",__FUNCTION__,host);
 
- 	if(terminal != gtk_window_get_default_widget(window))
+	if(terminal != gtk_window_get_default_widget(window))
 		return;
 
 	pw3270_window_set_subtitle(GTK_WIDGET(window), _("Connected to host"));
 
- }
+}
 
- static void destroy(GtkWidget *terminal, GtkWindow * window) {
+static void destroy(GtkWidget *terminal, GtkWindow * window) {
 
 	if(pw3270_application_window_get_active_terminal(GTK_WIDGET(window)) != terminal) {
 		debug("Terminal %p was destroyed (Default one is %p)",__FUNCTION__,pw3270_application_window_get_active_terminal(GTK_WIDGET(window)));
@@ -230,19 +230,19 @@
 
 	pw3270_application_window_set_active_terminal(GTK_WIDGET(window),NULL);
 
- }
+}
 
-  static void close_page(GtkButton G_GNUC_UNUSED(*button), GtkWidget *terminal) {
+static void close_page(GtkButton G_GNUC_UNUSED(*button), GtkWidget *terminal) {
 
- 	debug("%s",__FUNCTION__);
+	debug("%s",__FUNCTION__);
 
 	GtkNotebook * notebook = GTK_NOTEBOOK(gtk_widget_get_parent(terminal));
 	gtk_notebook_remove_page(notebook,gtk_notebook_page_num(notebook, terminal));
 
 
- }
+}
 
- static void on_rename_session_response(GtkDialog *dialog, gint response_id, GtkWidget *terminal) {
+static void on_rename_session_response(GtkDialog *dialog, gint response_id, GtkWidget *terminal) {
 
 	if(response_id == GTK_RESPONSE_APPLY) {
 
@@ -251,20 +251,20 @@
 
 	}
 
- 	gtk_widget_destroy(GTK_WIDGET(dialog));
- }
+	gtk_widget_destroy(GTK_WIDGET(dialog));
+}
 
- static void rename_session(GtkWidget G_GNUC_UNUSED(*widget), GtkWidget *terminal) {
+static void rename_session(GtkWidget G_GNUC_UNUSED(*widget), GtkWidget *terminal) {
 
- 	debug("%s",__FUNCTION__);
+	debug("%s",__FUNCTION__);
 
- 	GtkWidget * dialog = v3270_dialog_new_with_buttons(
-								_("Rename Session"),
-								terminal,
-								_("Apply"), GTK_RESPONSE_APPLY,
-								_("Cancel"), GTK_RESPONSE_CANCEL,
-								NULL
-							);
+	GtkWidget * dialog = v3270_dialog_new_with_buttons(
+	                         _("Rename Session"),
+	                         terminal,
+	                         _("Apply"), GTK_RESPONSE_APPLY,
+	                         _("Cancel"), GTK_RESPONSE_CANCEL,
+	                         NULL
+	                     );
 
 	g_signal_connect(G_OBJECT(dialog),"response",G_CALLBACK(on_rename_session_response),terminal);
 
@@ -303,9 +303,9 @@
 	// Show dialog.
 	gtk_widget_show_all(dialog);
 
- }
+}
 
- static gboolean terminal_popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window) {
+static gboolean terminal_popup(GtkWidget *widget, gboolean selected, gboolean online, GdkEvent *event, pw3270ApplicationWindow * window) {
 
 	GtkWidget * popup = window->popups[PW3270_APP_WINDOW_POPUP_OVER_UNSELECTED_AREA];
 
@@ -330,9 +330,9 @@
 
 	return TRUE;
 
- }
+}
 
- static gboolean oia_popup(GtkWidget *widget, guint field, GdkEvent *event, pw3270ApplicationWindow * window) {
+static gboolean oia_popup(GtkWidget *widget, guint field, GdkEvent *event, pw3270ApplicationWindow * window) {
 
 	debug("%s(%u)",__FUNCTION__,field);
 
@@ -351,9 +351,9 @@
 #endif
 
 	return TRUE;
- }
+}
 
- static void label_populate_popup(GtkLabel G_GNUC_UNUSED(*label), GtkMenu *menu, GtkWidget *terminal) {
+static void label_populate_popup(GtkLabel G_GNUC_UNUSED(*label), GtkMenu *menu, GtkWidget *terminal) {
 
 	static const struct Item {
 		const gchar * label;
@@ -389,11 +389,11 @@
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 	}
 
- }
+}
 
- static void label_disconnect(GtkWidget *label, GtkWidget *terminal) {
- 	debug("%s(%p)",__FUNCTION__,label);
- 	g_signal_handlers_disconnect_by_data(G_OBJECT(terminal),label);
- }
+static void label_disconnect(GtkWidget *label, GtkWidget *terminal) {
+	debug("%s(%p)",__FUNCTION__,label);
+	g_signal_handlers_disconnect_by_data(G_OBJECT(terminal),label);
+}
 
 

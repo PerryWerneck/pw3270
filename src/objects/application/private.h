@@ -29,35 +29,36 @@
 
 #ifndef PRIVATE_H_INCLUDED
 
-	#define PRIVATE_H_INCLUDED
+#define PRIVATE_H_INCLUDED
 
-	#include <config.h>
+#include <config.h>
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+#ifndef GETTEXT_PACKAGE
+#define GETTEXT_PACKAGE PACKAGE_NAME
+#endif
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+#include <libintl.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
-	#include <pw3270/window.h>
-	#include <v3270.h>
-	#include <lib3270.h>
-	#include <lib3270/log.h>
+#include <pw3270/window.h>
+#include <v3270.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
 
-	G_GNUC_INTERNAL void		  pw3270_application_open(GApplication * application, GFile **files, gint n_files, const gchar *hint);
-	G_GNUC_INTERNAL GtkWidget	* pw3270_terminal_new(const gchar *session_file);
-	G_GNUC_INTERNAL GSettings	* pw3270_application_settings_new();
+G_GNUC_INTERNAL void		  pw3270_application_open(GApplication * application, GFile **files, gint n_files, const gchar *hint);
+G_GNUC_INTERNAL GtkWidget	* pw3270_terminal_new(const gchar *session_file);
+G_GNUC_INTERNAL GSettings	* pw3270_application_settings_new();
 
-	// Actions
-    G_GNUC_INTERNAL GAction * pw3270_about_action_new();
-	G_GNUC_INTERNAL GAction * pw3270_preferences_action_new();
-    G_GNUC_INTERNAL GAction * pw3270_new_tab_action_new();
-	G_GNUC_INTERNAL GAction * pw3270_new_window_action_new();
-	G_GNUC_INTERNAL GAction * pw3270_quit_action_new();
+// Actions
+G_GNUC_INTERNAL GAction * pw3270_about_action_new();
+G_GNUC_INTERNAL GAction * pw3270_preferences_action_new();
+G_GNUC_INTERNAL GAction * pw3270_new_tab_action_new();
+G_GNUC_INTERNAL GAction * pw3270_new_window_action_new();
+G_GNUC_INTERNAL GAction * pw3270_quit_action_new();
 
-	G_GNUC_INTERNAL GAction * pw3270_open_window_action_new();
-	G_GNUC_INTERNAL GAction * pw3270_open_tab_action_new();
+G_GNUC_INTERNAL GAction * pw3270_open_session_action_new();
+G_GNUC_INTERNAL GAction * pw3270_open_window_action_new();
+G_GNUC_INTERNAL GAction * pw3270_open_tab_action_new();
 
 #endif // PRIVATE_H_INCLUDED

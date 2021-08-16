@@ -27,38 +27,46 @@
  *
  */
 
- #include <config.h>
- #include <glib.h>
- #include <glib/gstdio.h>
- #include <fcntl.h>
- #include <sys/types.h>
- #include <sys/stat.h>
- #include <lib3270.h>
- #include <lib3270/log.h>
- #include <v3270.h>
- #include <v3270/settings.h>
- #include <v3270/keyfile.h>
- #include <v3270/actions.h>
- #include <lib3270/properties.h>
- #include <string.h>
- #include <stdlib.h>
+#include <config.h>
 
- struct _V3270KeyFile
- {
- 	gboolean	  changed;		///< @brief Save file?
+#ifndef GETTEXT_PACKAGE
+#define GETTEXT_PACKAGE PACKAGE_NAME
+#endif
+
+#include <libintl.h>
+#include <glib/gi18n.h>
+
+#include <glib.h>
+#include <glib/gstdio.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
+#include <v3270.h>
+#include <v3270/settings.h>
+#include <v3270/keyfile.h>
+#include <v3270/actions.h>
+#include <lib3270/properties.h>
+#include <string.h>
+#include <stdlib.h>
+#include <pw3270/application.h>
+
+struct _V3270KeyFile {
+	gboolean	  changed;		///< @brief Save file?
 	GKeyFile	* key_file;
 	gchar		  filename[1];
- };
+};
 
- static V3270KeyFile * v3270_get_session_descriptor(GtkWidget *terminal) {
+static V3270KeyFile * v3270_get_session_descriptor(GtkWidget *terminal) {
 
- 	return (V3270KeyFile *) g_object_get_data(G_OBJECT(terminal),"session-descriptor");
+	return (V3270KeyFile *) g_object_get_data(G_OBJECT(terminal),"session-descriptor");
 
- }
+}
 
- static void close_keyfile(V3270KeyFile * session) {
+static void close_keyfile(V3270KeyFile * session) {
 
- 	if(session->key_file) {
+	if(session->key_file) {
 
 		if(session->changed) {
 			g_message("Saving file %s",session->filename);
@@ -70,12 +78,12 @@
 
 		g_key_file_free(session->key_file);
 		session->key_file = NULL;
- 	}
+	}
 
- 	g_free(session);
- }
+	g_free(session);
+}
 
- static void search_for_defaults(V3270KeyFile *session) {
+static void search_for_defaults(V3270KeyFile *session) {
 
 	GError *error = NULL;
  	size_t ix;
@@ -100,6 +108,7 @@
 				g_error_free(error);
 			} else {
 				g_message("Loading session preferences from %s",default_settings);
+				return;
 			}
 		}
 
@@ -127,6 +136,7 @@
 				g_error_free(error);
 			} else {
 				g_message("Loading session preferences from %s",default_settings);
+				return;
 			}
 		}
 
@@ -134,9 +144,9 @@
 
  	g_message("Can't find default session file");
 
- }
+}
 
- V3270KeyFile * v3270_key_file_open(GtkWidget *terminal, const gchar *filename, GError **error) {
+V3270KeyFile * v3270_key_file_open(GtkWidget *terminal, const gchar *filename, GError **error) {
 
 	g_return_val_if_fail(GTK_IS_V3270(terminal),FALSE);
 	g_return_val_if_fail(*error == NULL,FALSE);
@@ -157,11 +167,11 @@
 	if(g_file_test(new_session->filename,G_FILE_TEST_IS_REGULAR)) {
 
 		// Found session file, open it.
-        if(!g_key_file_load_from_file(new_session->key_file,new_session->filename,G_KEY_FILE_NONE,error)) {
+		if(!g_key_file_load_from_file(new_session->key_file,new_session->filename,G_KEY_FILE_NONE,error)) {
 			g_warning("Can't load \"%s\"",new_session->filename);
-        } else {
+		} else {
 			g_message("Loading session preferences from %s",new_session->filename);
-        }
+		}
 
 	} else {
 
@@ -186,7 +196,7 @@
 
 		if(keys) {
 			size_t ix;
-			for(ix=0;keys[ix];ix++) {
+			for(ix=0; keys[ix]; ix++) {
 				g_autofree gchar * value = g_key_file_get_string(new_session->key_file,"environment",keys[ix],NULL);
 				if(value) {
 #ifdef _WIN32
@@ -204,6 +214,42 @@
 		}
 	}
 
+	if(!*error) {
+
+		GSettings * settings = pw3270_application_get_settings(g_application_get_default());
+
+		if(settings && g_settings_get_boolean(settings,"update-default-session-file")) {
+
+			g_message("Updating default session file to '%s'",filename);
+			g_settings_set_string(settings,"default-session-file",filename);
+
+		}
+
+		if(settings && g_settings_get_boolean(settings,"add-session-to-recent-manager")) {
+
+			// new_session->key_file
+			g_autofree gchar * display_name = g_key_file_get_string(new_session->key_file,"terminal","session-name",NULL);
+
+			GtkRecentData recent_data = {
+
+				.display_name = display_name,
+				.app_name = G_STRINGIFY(PRODUCT_NAME),
+				.description = _("TN3270 Session description"),
+				.mime_type = "application/x-pw3270",
+				.app_exec = G_STRINGIFY(PRODUCT_NAME) " %f",
+
+			};
+
+			gtk_recent_manager_add_full(
+			    gtk_recent_manager_get_default(),
+			    filename,
+			    &recent_data
+			);
+
+		}
+	}
+
+
 	return new_session;
 }
 
@@ -211,7 +257,7 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
 	V3270KeyFile *session = g_object_get_data(G_OBJECT(terminal),"session-descriptor");
 
- 	if(session->key_file) {
+	if(session->key_file) {
 
 		if(session->changed) {
 			g_message("Saving file %s",session->filename);
@@ -223,15 +269,15 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
 		g_key_file_free(session->key_file);
 		session->key_file = NULL;
- 	}
+	}
 
- }
+}
 
- GKeyFile * v3270_key_file_get(GtkWidget *terminal) {
+GKeyFile * v3270_key_file_get(GtkWidget *terminal) {
 	return v3270_get_session_descriptor(terminal)->key_file;
- }
+}
 
- void v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename, GError **error) {
+void v3270_key_file_save_to_file(GtkWidget * terminal, const gchar *filename, GError **error) {
 
 	if(error && *error)
 		return;
@@ -239,7 +285,7 @@ void v3270_key_file_close(GtkWidget *terminal) {
 	V3270KeyFile * new_session = (V3270KeyFile *) g_malloc0(sizeof(struct _V3270KeyFile) + strlen(filename));
 	V3270KeyFile * old_session = g_object_get_data(G_OBJECT(terminal),"session-descriptor");
 
- 	if(old_session) {
+	if(old_session) {
 		*new_session = *old_session;
 	}
 
@@ -249,9 +295,9 @@ void v3270_key_file_close(GtkWidget *terminal) {
 	g_object_set_data_full(G_OBJECT(terminal),"session-descriptor",new_session,(GDestroyNotify) close_keyfile);
 	v3270_key_file_save(terminal,error);
 
- }
+}
 
- void v3270_key_file_save(GtkWidget *terminal, GError **error) {
+void v3270_key_file_save(GtkWidget *terminal, GError **error) {
 
 	if(error && *error)
 		return;
@@ -267,10 +313,10 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
 	g_key_file_save_to_file(session->key_file,session->filename,NULL);
 
- }
+}
 
- /// @brief Search standard paths.
- gchar * v3270_key_file_get_default_path(GtkWidget *terminal) {
+/// @brief Search standard paths.
+gchar * v3270_key_file_get_default_path(GtkWidget *terminal) {
 
 	size_t folder;
 	const gchar *folders[] = {
@@ -310,18 +356,38 @@ void v3270_key_file_close(GtkWidget *terminal) {
 	const gchar * filename = v3270_key_file_get_filename(terminal);
 	debug("Testing for \"%s\"",filename);
 	if(filename
-			&& g_file_test(filename,G_FILE_TEST_IS_REGULAR)
-			&& g_str_has_prefix(filename,g_get_user_data_dir())
-			&& !g_str_has_prefix(filename,g_get_user_config_dir())
-		) {
+	        && g_file_test(filename,G_FILE_TEST_IS_REGULAR)
+	        && g_str_has_prefix(filename,g_get_user_data_dir())
+	        && !g_str_has_prefix(filename,g_get_user_config_dir())
+	  ) {
 		return g_path_get_dirname(filename);
 	}
 
 	return g_strdup(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS));
 
- }
+}
 
- gchar * v3270_keyfile_get_default_filename(void) {
+gchar * v3270_keyfile_get_default_filename(void) {
+
+	GSettings *settings = pw3270_application_get_settings(g_application_get_default());
+	if(settings) {
+
+		g_autofree gchar * def_key_file = g_settings_get_string(settings,"default-session-file");
+
+		if(def_key_file && *def_key_file) {
+
+			if(g_file_test(def_key_file,G_FILE_TEST_IS_REGULAR))
+				return g_strdup(def_key_file);
+
+			g_autofree gchar * def_key_full = g_build_filename(g_get_user_config_dir(),def_key_file,NULL);
+
+			if(g_file_test(def_key_full,G_FILE_TEST_IS_REGULAR))
+				return g_strdup(def_key_full);
+		}
+
+	}
+
+	// No default key file, use the old scheme.
 
 	gchar * filename = g_build_filename(g_get_user_config_dir(),"default.3270",NULL);
 
@@ -329,12 +395,13 @@ void v3270_key_file_close(GtkWidget *terminal) {
 	if(g_file_test(compatible,G_FILE_TEST_IS_REGULAR))
 		g_rename(compatible,filename);
 
+
 	return filename;
- }
+}
 
- gchar * v3270_key_file_build_filename(GtkWidget *terminal) {
+gchar * v3270_key_file_build_filename(GtkWidget *terminal) {
 
-  	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
+	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
 	const gchar * current = v3270_key_file_get_filename(terminal);
 
 	// If is not the default name, return it.
@@ -357,20 +424,20 @@ void v3270_key_file_close(GtkWidget *terminal) {
 	debug("%s returns \"%s\"",__FUNCTION__,name);
 
 	return name;
- }
+}
 
- const gchar * v3270_key_file_get_filename(GtkWidget *terminal) {
+const gchar * v3270_key_file_get_filename(GtkWidget *terminal) {
 
- 	V3270KeyFile *session = v3270_get_session_descriptor(terminal);
+	V3270KeyFile *session = v3270_get_session_descriptor(terminal);
 
- 	if(session && *session->filename)
+	if(session && *session->filename)
 		return session->filename;
 
 	return NULL;
 
- }
+}
 
- void v3270_key_file_set_boolean(GtkWidget *terminal, const gchar *group_name, const gchar *key, gboolean value) {
+void v3270_key_file_set_boolean(GtkWidget *terminal, const gchar *group_name, const gchar *key, gboolean value) {
 
 	V3270KeyFile *session = v3270_get_session_descriptor(terminal);
 	g_key_file_set_boolean(session->key_file,group_name ? group_name : "terminal",key,value);
@@ -378,7 +445,7 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
 }
 
- gboolean v3270_key_file_can_write(GtkWidget *widget) {
+gboolean v3270_key_file_can_write(GtkWidget *widget) {
 
 #if defined(DEBUG)
 
@@ -402,7 +469,6 @@ void v3270_key_file_close(GtkWidget *terminal) {
 
 #endif // DEBUG
 
- }
-
+}
 
 

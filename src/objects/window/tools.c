@@ -27,21 +27,21 @@
  *
  */
 
- #include "private.h"
- #include <pw3270/application.h>
+#include "private.h"
+#include <pw3270/application.h>
 
- /*
- GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name) {
+/*
+GtkWidget * pw3270_setup_image_button(GtkWidget *button, const gchar *image_name) {
 
-	gtk_button_set_image(GTK_BUTTON(button),gtk_image_new_from_icon_name(image_name,GTK_ICON_SIZE_MENU));
+gtk_button_set_image(GTK_BUTTON(button),gtk_image_new_from_icon_name(image_name,GTK_ICON_SIZE_MENU));
 
-	gtk_widget_set_can_focus(button,FALSE);
-	gtk_widget_set_can_default(button,FALSE);
-	gtk_widget_set_focus_on_click(button,FALSE);
+gtk_widget_set_can_focus(button,FALSE);
+gtk_widget_set_can_default(button,FALSE);
+gtk_widget_set_focus_on_click(button,FALSE);
 
-	return button;
+return button;
 
- }
+}
 */
 
 /*

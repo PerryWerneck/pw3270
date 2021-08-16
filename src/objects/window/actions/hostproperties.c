@@ -27,15 +27,15 @@
  *
  */
 
- #include "../private.h"
- #include <pw3270/window.h>
- #include <pw3270/actions.h>
- #include <v3270/settings.h>
- #include <v3270/dialogs.h>
+#include "../private.h"
+#include <pw3270/window.h>
+#include <pw3270/actions.h>
+#include <v3270/settings.h>
+#include <v3270/dialogs.h>
 
- static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
+static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
 
- GAction * pw3270_action_host_properties_new(void) {
+GAction * pw3270_action_host_properties_new(void) {
 
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
@@ -45,14 +45,14 @@
 	action->label = N_("Host properties");
 
 	return G_ACTION(action);
- }
+}
 
- GtkWidget * factory(V3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
+GtkWidget * factory(V3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *terminal) {
 
- 	GtkWidget 		* dialog = v3270_settings_dialog_new();
- 	V3270Settings	* settings = GTK_V3270_SETTINGS(v3270_host_settings_new());
+	GtkWidget 		* dialog = v3270_settings_dialog_new();
+	V3270Settings	* settings = GTK_V3270_SETTINGS(v3270_host_settings_new());
 
- 	if(settings->title)
+	if(settings->title)
 		gtk_window_set_title(GTK_WINDOW(dialog), settings->title);
 
 	gtk_container_add(GTK_CONTAINER(dialog), GTK_WIDGET(settings));
@@ -67,5 +67,5 @@
 	gtk_widget_show_all(dialog);
 	return dialog;
 
- }
+}
 

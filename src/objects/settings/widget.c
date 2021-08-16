@@ -28,47 +28,47 @@
  */
 
 #ifdef _WIN32
-	#include <winsock2.h>
-	#include <windows.h>
+#include <winsock2.h>
+#include <windows.h>
 #endif // _WIN32
 
- #include <pw3270.h>
- #include <pw3270/settings.h>
- #include <lib3270.h>
- #include <lib3270/log.h>
+#include <pw3270.h>
+#include <pw3270/settings.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
 
- G_DEFINE_TYPE(PW3270Settings, PW3270Settings, GTK_TYPE_GRID);
+G_DEFINE_TYPE(PW3270Settings, PW3270Settings, GTK_TYPE_GRID);
 
- static void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
- static void apply(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
- static void revert(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
- static void finalize(GObject *object);
+static void load(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+static void apply(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+static void revert(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);
+static void finalize(GObject *object);
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
- PW3270Settings * pw3270_settings_new() {
+PW3270Settings * pw3270_settings_new() {
 	return GTK_PW3270_SETTINGS(g_object_new(GTK_TYPE_PW3270_SETTINGS,NULL));
- }
+}
 
- static void PW3270Settings_class_init(PW3270SettingsClass *klass) {
+static void PW3270Settings_class_init(PW3270SettingsClass *klass) {
 
 	G_OBJECT_CLASS(klass)->finalize = finalize;
- }
+}
 
- static void PW3270Settings_init(PW3270Settings *widget) {
+static void PW3270Settings_init(PW3270Settings *widget) {
 
 	// https://developer.gnome.org/hig/stable/visual-layout.html.en
- 	gtk_grid_set_row_spacing(GTK_GRID(widget),6);
- 	gtk_grid_set_column_spacing(GTK_GRID(widget),12);
+	gtk_grid_set_row_spacing(GTK_GRID(widget),6);
+	gtk_grid_set_column_spacing(GTK_GRID(widget),12);
 
- 	widget->settings = NULL;	// Just in case.
+	widget->settings = NULL;	// Just in case.
 	widget->load = load;
 	widget->apply = apply;
 	widget->revert = revert;
 
- }
+}
 
- static void finalize(GObject *object) {
+static void finalize(GObject *object) {
 
 	PW3270Settings * settings = GTK_PW3270_SETTINGS(object);
 	if(settings->settings) {
@@ -78,12 +78,12 @@
 
 }
 
- void load(GtkWidget G_GNUC_UNUSED(*widget), GSettings G_GNUC_UNUSED(*settings), PW3270SettingsPage G_GNUC_UNUSED(*page)) {
- }
+void load(GtkWidget G_GNUC_UNUSED(*widget), GSettings G_GNUC_UNUSED(*settings), PW3270SettingsPage G_GNUC_UNUSED(*page)) {
+}
 
- void apply(GtkWidget G_GNUC_UNUSED(*widget), GSettings G_GNUC_UNUSED(*settings), PW3270SettingsPage G_GNUC_UNUSED(*page)) {
- }
+void apply(GtkWidget G_GNUC_UNUSED(*widget), GSettings G_GNUC_UNUSED(*settings), PW3270SettingsPage G_GNUC_UNUSED(*page)) {
+}
 
- void revert(GtkWidget G_GNUC_UNUSED(*widget), GSettings G_GNUC_UNUSED(*settings), PW3270SettingsPage G_GNUC_UNUSED(*page)) {
- }
+void revert(GtkWidget G_GNUC_UNUSED(*widget), GSettings G_GNUC_UNUSED(*settings), PW3270SettingsPage G_GNUC_UNUSED(*page)) {
+}
 

@@ -29,31 +29,31 @@
 
 #ifndef PW3270SETTINGS_H_INCLUDED
 
- #define PW3270SETTINGS_H_INCLUDED 1
+#define PW3270SETTINGS_H_INCLUDED 1
 
 #ifdef _WIN32
-	#include <windows.h>
+#include <windows.h>
 #endif // _WIN32
 
- #include <gtk/gtk.h>
- #include <pw3270/actions.h>
+#include <gtk/gtk.h>
+#include <pw3270/actions.h>
 
- G_BEGIN_DECLS
+G_BEGIN_DECLS
 
 /*--[ PW3270 Settings Widget ]-----------------------------------------------------------------------*/
 
- #define GTK_TYPE_PW3270_SETTINGS					(PW3270Settings_get_type())
- #define GTK_PW3270_SETTINGS(obj)					(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PW3270_SETTINGS, PW3270Settings))
- #define GTK_PW3270_SETTINGS_CLASS(klass)			(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PW3270_SETTINGS, PW3270SettingsClass))
- #define GTK_IS_PW3270_SETTINGS(obj)				(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PW3270_SETTINGS))
- #define GTK_IS_PW3270_SETTINGS_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PW3270_SETTINGS))
- #define GTK_PW3270_SETTINGS_GET_CLASS(obj)			(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PW3270_SETTINGS, PW3270SettingsClass))
+#define GTK_TYPE_PW3270_SETTINGS					(PW3270Settings_get_type())
+#define GTK_PW3270_SETTINGS(obj)					(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PW3270_SETTINGS, PW3270Settings))
+#define GTK_PW3270_SETTINGS_CLASS(klass)			(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PW3270_SETTINGS, PW3270SettingsClass))
+#define GTK_IS_PW3270_SETTINGS(obj)				(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PW3270_SETTINGS))
+#define GTK_IS_PW3270_SETTINGS_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PW3270_SETTINGS))
+#define GTK_PW3270_SETTINGS_GET_CLASS(obj)			(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PW3270_SETTINGS, PW3270SettingsClass))
 
- GType PW3270Settings_get_type(void);
+GType PW3270Settings_get_type(void);
 
- typedef struct _PW3270SettingsPage PW3270SettingsPage;
+typedef struct _PW3270SettingsPage PW3270SettingsPage;
 
- typedef struct _PW3270Settings {
+typedef struct _PW3270Settings {
 
 	GtkGrid parent;
 
@@ -61,52 +61,52 @@
 	const gchar			* label;										///< @brief Page lagel.
 	const gchar			* title;										///< @brief Page title.
 
- 	void (*load)(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);			///< @brief Method to load the properties from terminal widget
- 	void (*apply)(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);		///< @brief Method for GTK_RESPONSE_APPLY
- 	void (*revert)(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);		///< @brief Method for GTK_RESPONSE_CANCEL
+	void (*load)(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);			///< @brief Method to load the properties from terminal widget
+	void (*apply)(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);		///< @brief Method for GTK_RESPONSE_APPLY
+	void (*revert)(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *page);		///< @brief Method for GTK_RESPONSE_CANCEL
 
- } PW3270Settings;
+} PW3270Settings;
 
- typedef struct _PW3270SettingsClass	{
+typedef struct _PW3270SettingsClass	{
 
- 	GtkGridClass parent_class;
+	GtkGridClass parent_class;
 
- } PW3270SettingsClass;
+} PW3270SettingsClass;
 
- /// @brief Create a new pw3270 settings.
- PW3270Settings * pw3270_settings_new();
+/// @brief Create a new pw3270 settings.
+PW3270Settings * pw3270_settings_new();
 
 
 /*--[ PW3270 Settings Dialog ]-----------------------------------------------------------------------*/
 
- #define GTK_TYPE_PW3270_SETTINGS_DIALOG				(PW3270SettingsDialog_get_type())
- #define GTK_PW3270_SETTINGS_DIALOG(obj)	   			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PW3270_SETTINGS_DIALOG, PW3270SettingsDialog))
- #define GTK_PW3270_SETTINGS_DIALOG_CLASS(klass)	    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PW3270_SETTINGS_DIALOG, PW3270SettingsDialogClass))
- #define GTK_IS_PW3270_SETTINGS_DIALOG(obj)				(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PW3270_SETTINGS_DIALOG))
- #define GTK_IS_PW3270_SETTINGS_DIALOG_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PW3270_SETTINGS_DIALOG))
- #define GTK_PW3270_SETTINGS_DIALOG_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PW3270_SETTINGS_DIALOG, PW3270SettingsDialogClass))
+#define GTK_TYPE_PW3270_SETTINGS_DIALOG				(PW3270SettingsDialog_get_type())
+#define GTK_PW3270_SETTINGS_DIALOG(obj)	   			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PW3270_SETTINGS_DIALOG, PW3270SettingsDialog))
+#define GTK_PW3270_SETTINGS_DIALOG_CLASS(klass)	    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PW3270_SETTINGS_DIALOG, PW3270SettingsDialogClass))
+#define GTK_IS_PW3270_SETTINGS_DIALOG(obj)				(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PW3270_SETTINGS_DIALOG))
+#define GTK_IS_PW3270_SETTINGS_DIALOG_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PW3270_SETTINGS_DIALOG))
+#define GTK_PW3270_SETTINGS_DIALOG_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PW3270_SETTINGS_DIALOG, PW3270SettingsDialogClass))
 
- typedef struct _PW3270SettingsDialog		PW3270SettingsDialog;
- typedef struct _PW3270SettingsDialogClass	PW3270SettingsDialogClass;
+typedef struct _PW3270SettingsDialog		PW3270SettingsDialog;
+typedef struct _PW3270SettingsDialogClass	PW3270SettingsDialogClass;
 
- GType		  PW3270SettingsDialog_get_type(void);
- GtkWidget	* pw3270_settings_dialog_new(GAction *action, gboolean has_subtitle);
+GType		  PW3270SettingsDialog_get_type(void);
+GtkWidget	* pw3270_settings_dialog_new(GAction *action, gboolean has_subtitle);
 
- G_END_DECLS
+G_END_DECLS
 
 /*--[ PW3270 Action List Editor ]--------------------------------------------------------------------*/
 
- #define GTK_TYPE_PW3270_SETTINGS_ACTIONS				(PW3270SettingsActions_get_type())
+#define GTK_TYPE_PW3270_SETTINGS_ACTIONS				(PW3270SettingsActions_get_type())
 
- typedef struct _PW3270SettingsActions			PW3270SettingsActions;
- typedef struct _PW3270SettingsActionsClass		PW3270SettingsActionsClass;
+typedef struct _PW3270SettingsActions			PW3270SettingsActions;
+typedef struct _PW3270SettingsActionsClass		PW3270SettingsActionsClass;
 
- GType				  PW3270SettingsActions_get_type(void);
- GtkWidget			* pw3270_settings_actions_new();
- Pw3270ActionList	* pw3270_settings_action_set(GtkWidget *widget, Pw3270ActionList *available, const gchar *value);
- gchar 				* pw3270_settings_action_get(GtkWidget *widget);
+GType				  PW3270SettingsActions_get_type(void);
+GtkWidget			* pw3270_settings_actions_new();
+Pw3270ActionList	* pw3270_settings_action_set(GtkWidget *widget, Pw3270ActionList *available, const gchar *value);
+gchar 				* pw3270_settings_action_get(GtkWidget *widget);
 
- G_END_DECLS
+G_END_DECLS
 
 
 #endif // V3270SETTINGS_H_INCLUDED

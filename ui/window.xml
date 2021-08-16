@@ -53,6 +53,11 @@
 			<attribute name='label' translatable='yes'>_Open</attribute>
 
 			<item>
+				<attribute name="label" translatable="yes">Session</attribute>
+				<attribute name="action">app.open.session</attribute>
+			</item>
+
+			<item>
 				<attribute name="label" translatable="yes">Session in new window</attribute>
 				<attribute name="action">app.open.session.window</attribute>
 			</item>

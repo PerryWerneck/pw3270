@@ -28,39 +28,39 @@
  */
 
 #ifdef _WIN32
-	#include <winsock2.h>
-	#include <windows.h>
+#include <winsock2.h>
+#include <windows.h>
 #endif // _WIN32
 
- #include <pw3270.h>
- #include <pw3270/settings.h>
- #include <lib3270.h>
- #include <lib3270/log.h>
- #include <pw3270/actions.h>
+#include <pw3270.h>
+#include <pw3270/settings.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
+#include <pw3270/actions.h>
 
- struct _PW3270SettingsActions {
-  	GtkGrid parent;
+struct _PW3270SettingsActions {
+	GtkGrid parent;
 	GtkWidget * views[3];
 	GtkTreeModel * model;
- };
+};
 
- struct _PW3270SettingsActionsClass {
- 	GtkGridClass parent;
+struct _PW3270SettingsActionsClass {
+	GtkGridClass parent;
 
- 	int dunno;
- };
+	int dunno;
+};
 
- G_DEFINE_TYPE(PW3270SettingsActions, PW3270SettingsActions, GTK_TYPE_GRID);
+G_DEFINE_TYPE(PW3270SettingsActions, PW3270SettingsActions, GTK_TYPE_GRID);
 
- static void PW3270SettingsActions_class_init(PW3270SettingsActionsClass *klass) {
+static void PW3270SettingsActions_class_init(PW3270SettingsActionsClass *klass) {
 
- }
+}
 
- static void PW3270SettingsActions_init(PW3270SettingsActions *grid) {
+static void PW3270SettingsActions_init(PW3270SettingsActions *grid) {
 
 	size_t ix;
 
- 	static const struct View {
+	static const struct View {
 		const gchar *label;
 		const gchar *tooltip;
 	} views[G_N_ELEMENTS(grid->views)] = {
@@ -78,16 +78,16 @@
 			.label = N_("End"),
 			.tooltip = N_("Items packed from the end to the start")
 		}
- 	};
+	};
 
 	gtk_grid_set_row_homogeneous(GTK_GRID(grid),FALSE);
 	gtk_grid_set_row_spacing(GTK_GRID(grid),12);
- 	gtk_grid_set_column_spacing(GTK_GRID(grid),6);
+	gtk_grid_set_column_spacing(GTK_GRID(grid),6);
 
- 	{
- 		// Create views
- 		GtkTreeSelection * selection;
- 		GtkWidget *box;
+	{
+		// Create views
+		GtkTreeSelection * selection;
+		GtkWidget *box;
 
 		for(ix = 0; ix < G_N_ELEMENTS(grid->views); ix++) {
 
@@ -99,10 +99,10 @@
 			gtk_widget_set_vexpand(label,FALSE);
 
 			gtk_grid_attach(
-				GTK_GRID(grid),
-				label,
-				(ix*2),0,
-				1,1
+			    GTK_GRID(grid),
+			    label,
+			    (ix*2),0,
+			    1,1
 			);
 
 			// Create view
@@ -119,22 +119,22 @@
 			gtk_container_add(GTK_CONTAINER(box),grid->views[ix]);
 
 			gtk_grid_attach(
-				GTK_GRID(grid),
-				box,
-				(ix*2),1,
-				1,5
+			    GTK_GRID(grid),
+			    box,
+			    (ix*2),1,
+			    1,5
 			);
 
 		}
 
- 	}
+	}
 
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(grid->views[0]),TRUE);
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(grid->views[2]),TRUE);
 	pw3270_action_view_order_by_label(grid->views[1]);
 
- 	// Create buttons
- 	{
+	// Create buttons
+	{
 		GtkWidget *buttons[] = {
 			pw3270_action_view_move_button_new(grid->views[1],grid->views[0],"go-previous"),
 			pw3270_action_view_move_button_new(grid->views[1],grid->views[2],"go-next"),
@@ -148,20 +148,20 @@
 		gtk_grid_attach(GTK_GRID(grid),buttons[2],1,3,1,1);
 		gtk_grid_attach(GTK_GRID(grid),buttons[3],3,3,1,1);
 
- 	}
+	}
 
- }
+}
 
- GtkWidget * pw3270_settings_actions_new() {
+GtkWidget * pw3270_settings_actions_new() {
 
 	return GTK_WIDGET(g_object_new(
-			GTK_TYPE_PW3270_SETTINGS_ACTIONS,
-			NULL
-		));
+	                      GTK_TYPE_PW3270_SETTINGS_ACTIONS,
+	                      NULL
+	                  ));
 
- }
+}
 
- Pw3270ActionList * pw3270_settings_action_set(GtkWidget *widget, Pw3270ActionList *action_list, const gchar *action_names) {
+Pw3270ActionList * pw3270_settings_action_set(GtkWidget *widget, Pw3270ActionList *action_list, const gchar *action_names) {
 
 	PW3270SettingsActions *editor = (PW3270SettingsActions *) widget;
 
@@ -178,30 +178,30 @@
 
 		gchar ** actions = g_strsplit(views[column],",",-1);
 
-		for(action = 0; actions[action];action++) {
+		for(action = 0; actions[action]; action++) {
 			action_list = pw3270_action_list_move_action(
-								action_list,
-								actions[action],
-								editor->views[columns[column]]
-							);
+			                  action_list,
+			                  actions[action],
+			                  editor->views[columns[column]]
+			              );
 		}
 
 		g_strfreev(actions);
-    }
+	}
 
-   	g_strfreev(views);
+	g_strfreev(views);
 
 	pw3270_action_view_set_actions(editor->views[1], action_list);
 
 	return action_list;
- }
+}
 
- gchar * pw3270_settings_action_get(GtkWidget *widget) {
+gchar * pw3270_settings_action_get(GtkWidget *widget) {
 
 	PW3270SettingsActions *editor = (PW3270SettingsActions *) widget;
 
-  	g_autofree gchar * left_names = pw3270_action_view_get_action_names(editor->views[0]);
- 	g_autofree gchar * right_names = pw3270_action_view_get_action_names(editor->views[2]);
- 	return g_strconcat(left_names,":",right_names,NULL);
+	g_autofree gchar * left_names = pw3270_action_view_get_action_names(editor->views[0]);
+	g_autofree gchar * right_names = pw3270_action_view_get_action_names(editor->views[2]);
+	return g_strconcat(left_names,":",right_names,NULL);
 
- }
+}

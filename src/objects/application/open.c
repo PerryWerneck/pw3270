@@ -27,9 +27,11 @@
  *
  */
 
- #include "private.h"
+#include "private.h"
+#include <pw3270/application.h>
+#include <v3270/keyfile.h>
 
- gchar * v3270_keyfile_find(const gchar *name) {
+gchar * v3270_keyfile_find(const gchar *name) {
 	//
 	// It can be a session file, scans for it
 	//
@@ -66,13 +68,15 @@
 
 	return NULL;
 
- }
+}
 
- void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
+void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
 	GtkWidget * window = GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application)));
-	size_t path, subdir;
+
 	gint file;
+
+	debug("%s files=%d",__FUNCTION__,n_files);
 
 	for(file = 0; file < n_files; file++) {
 
@@ -84,6 +88,8 @@
 			g_autofree gchar * scheme = g_file_get_uri_scheme(files[file]);
 
 			if(!(g_ascii_strcasecmp(scheme,"tn3270") && g_ascii_strcasecmp(scheme,"tn3270s"))) {
+
+				// It's an URL, load it in the default session.
 
 				g_autofree gchar * uri = g_file_get_uri(files[file]);
 				size_t sz = strlen(uri);
@@ -99,7 +105,11 @@
 					window = pw3270_application_window_new_tab(window, NULL);
 				}
 
-				v3270_set_url(pw3270_application_window_get_active_terminal(window),uri);
+				// Load default
+				GtkWidget * terminal = pw3270_application_window_get_active_terminal(window);
+
+				v3270_set_default_session(terminal);
+				v3270_set_url(terminal,uri);
 
 			}
 
@@ -110,11 +120,14 @@
 		if(g_file_test(path,G_FILE_TEST_IS_REGULAR)) {
 
 			// The file exists, use it.
+			debug("%s: Loading '%s'",__FUNCTION__,path);
 
 			if(!window) {
+				debug("%s: Creating new window",__FUNCTION__);
 				window = pw3270_application_window_new(GTK_APPLICATION(application), path);
 			} else {
-				window = pw3270_application_window_new_tab(window,path);
+				debug("%s: Creating new tab",__FUNCTION__);
+				pw3270_application_window_new_tab(window,path);
 			}
 
 			continue;
@@ -127,9 +140,11 @@
 			if(filename) {
 
 				if(!window) {
+					debug("%s: Creating new window",__FUNCTION__);
 					window = pw3270_application_window_new(GTK_APPLICATION(application), filename);
 				} else {
-					window = pw3270_application_window_new_tab(window, filename);
+					debug("%s: Creating new tab",__FUNCTION__);
+					pw3270_application_window_new_tab(window, filename);
 				}
 
 				continue;
@@ -142,5 +157,5 @@
 	if(window)
 		gtk_window_present(GTK_WINDOW(window));
 
- }
+}
 

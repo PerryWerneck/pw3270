@@ -27,51 +27,51 @@
  *
  */
 
- #include "private.h"
+#include "private.h"
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
- static void create_child(const KeypadElement *element, GtkGrid *grid) {
+static void create_child(const KeypadElement *element, GtkGrid *grid) {
 
- 	GtkWidget * button;
+	GtkWidget * button;
 
- 	if(element->icon_name) {
+	if(element->icon_name) {
 		button = gtk_button_new_from_icon_name(element->icon_name,GTK_ICON_SIZE_SMALL_TOOLBAR);
- 	} else if(element->label) {
- 		g_autofree gchar * label = g_strcompress(element->label);
+	} else if(element->label) {
+		g_autofree gchar * label = g_strcompress(element->label);
 		button = gtk_button_new_with_label(label);
 	} else {
 		button = gtk_button_new();
- 	}
+	}
 
- 	if(element->action && *element->action) {
+	if(element->action && *element->action) {
 		gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(button),element->action);
- 	}
+	}
 
- 	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NORMAL);
+	gtk_button_set_relief(GTK_BUTTON(button),GTK_RELIEF_NORMAL);
 	gtk_widget_set_can_focus(button,FALSE);
 	gtk_widget_set_can_default(button,FALSE);
 	gtk_widget_set_focus_on_click(button,FALSE);
 
 	gtk_widget_show_all(button);
 
-  	gtk_grid_attach(
-		grid,
-		button,
-		element->col,element->row,
-		element->width,element->height
+	gtk_grid_attach(
+	    grid,
+	    button,
+	    element->col,element->row,
+	    element->width,element->height
 	);
 
- }
+}
 
- static void destroy(GtkWidget *grid, KeypadModel * keypad) {
+static void destroy(GtkWidget *grid, KeypadModel * keypad) {
 
 	keypad->widgets = g_list_remove(keypad->widgets,grid);
 	g_object_unref(keypad);
 
- }
+}
 
- GtkWidget * pw3270_keypad_get_from_model(GObject *model) {
+GtkWidget * pw3270_keypad_get_from_model(GObject *model) {
 
 	g_return_val_if_fail(PW_IS_KEYPAD_MODEL(model),NULL);
 
@@ -90,4 +90,4 @@
 	gtk_widget_show(grid); // FIX-ME
 
 	return grid;
- }
+}

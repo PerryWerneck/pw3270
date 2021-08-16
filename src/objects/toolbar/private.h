@@ -29,33 +29,33 @@
 
 #ifndef PRIVATE_H_INCLUDED
 
-	#define PRIVATE_H_INCLUDED
+#define PRIVATE_H_INCLUDED
 
-	#include <config.h>
+#include <config.h>
 
-	#ifndef GETTEXT_PACKAGE
-		#define GETTEXT_PACKAGE PACKAGE_NAME
-	#endif
+#ifndef GETTEXT_PACKAGE
+#define GETTEXT_PACKAGE PACKAGE_NAME
+#endif
 
-	/* not really I18N-related, but also a string marker macro */
-	#define I_(string) g_intern_static_string (string)
+/* not really I18N-related, but also a string marker macro */
+#define I_(string) g_intern_static_string (string)
 
-	#include <libintl.h>
-	#include <glib/gi18n.h>
-	#include <gtk/gtk.h>
+#include <libintl.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
-	#include <pw3270/toolbar.h>
-	#include <lib3270/log.h>
+#include <pw3270/toolbar.h>
+#include <lib3270/log.h>
 
-	G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new(GAction *action);
-	G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new_from_action_name(const gchar * action_name);
+G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new(GAction *action);
+G_GNUC_INTERNAL GtkWidget 		* pw3270_tool_button_new_from_action_name(const gchar * action_name);
 
-	GtkTreeModel					* pw3270_model_from_name(const gchar *name);
-	GtkWidget						* pw3270_menu_item_from_model(GtkWidget *widget, const gchar *model_name);
-	void							  pw3270_menu_item_set_value(GtkWidget *menu, guint value);
+GtkTreeModel					* pw3270_model_from_name(const gchar *name);
+GtkWidget						* pw3270_menu_item_from_model(GtkWidget *widget, const gchar *model_name);
+void							  pw3270_menu_item_set_value(GtkWidget *menu, guint value);
 
-	G_GNUC_INTERNAL void			  pw3270_model_get_iter_from_value(GtkTreeModel * model, GtkTreeIter *iter, guint value);
-	G_GNUC_INTERNAL guint			  pw3270_model_get_value_from_iter(GtkTreeModel * model, GtkTreeIter *iter);
+G_GNUC_INTERNAL void			  pw3270_model_get_iter_from_value(GtkTreeModel * model, GtkTreeIter *iter, guint value);
+G_GNUC_INTERNAL guint			  pw3270_model_get_value_from_iter(GtkTreeModel * model, GtkTreeIter *iter);
 
 
 #endif // PRIVATE_H_INCLUDED

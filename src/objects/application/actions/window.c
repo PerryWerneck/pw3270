@@ -31,11 +31,11 @@
  *
  */
 
- #include "../private.h"
- #include <pw3270/application.h>
- #include <pw3270/actions.h>
+#include "../private.h"
+#include <pw3270/application.h>
+#include <pw3270/actions.h>
 
- static void quit_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkApplication *application) {
+static void quit_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkApplication *application) {
 
 	g_print("Exiting application\n");
 
@@ -54,9 +54,9 @@
 
 	g_application_quit(G_APPLICATION(application));
 
- }
+}
 
- GAction * pw3270_quit_action_new() {
+GAction * pw3270_quit_action_new() {
 
 	PW3270Action * action = pw3270_action_new();
 
@@ -66,17 +66,17 @@
 	action->icon_name = "gtk-quit";
 	action->activate = quit_activated;
 
- 	return G_ACTION(action);
- }
+	return G_ACTION(action);
+}
 
- static void new_tab_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkApplication *application) {
+static void new_tab_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkApplication *application) {
 
- 	debug("%s",__FUNCTION__);
- 	pw3270_application_window_new_tab(GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application))), NULL);
+	debug("%s",__FUNCTION__);
+	pw3270_application_window_new_tab(GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application))), NULL);
 
- }
+}
 
- GAction * pw3270_new_tab_action_new() {
+GAction * pw3270_new_tab_action_new() {
 
 	PW3270Action * action = pw3270_action_new();
 
@@ -86,17 +86,17 @@
 	action->icon_name = "tab-new";
 	action->activate = new_tab_activated;
 
- 	return G_ACTION(action);
- }
+	return G_ACTION(action);
+}
 
- static void new_window_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkApplication *application) {
+static void new_window_activated(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkApplication *application) {
 
- 	debug("%s",__FUNCTION__);
- 	g_application_activate(G_APPLICATION(application));
+	debug("%s",__FUNCTION__);
+	g_application_activate(G_APPLICATION(application));
 
- }
+}
 
- GAction * pw3270_new_window_action_new() {
+GAction * pw3270_new_window_action_new() {
 
 	PW3270Action * action = pw3270_action_new();
 
@@ -106,6 +106,6 @@
 	action->icon_name = "window-new";
 	action->activate = new_window_activated;
 
- 	return G_ACTION(action);
- }
+	return G_ACTION(action);
+}
 

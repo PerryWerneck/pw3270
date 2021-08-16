@@ -27,24 +27,24 @@
  *
  */
 
- #include "private.h"
- #include <pw3270/application.h>
- #include <pw3270/settings.h>
- #include <pw3270/window.h>
+#include "private.h"
+#include <pw3270/application.h>
+#include <pw3270/settings.h>
+#include <pw3270/window.h>
 
- #define GTK_TOOLBAR_DEFAULT_STYLE ((GtkToolbarStyle) -1)
+#define GTK_TOOLBAR_DEFAULT_STYLE ((GtkToolbarStyle) -1)
 
- struct _contents {
+struct _contents {
 	const gchar * label;
 	int			  value;
- };
+};
 
- static const struct _models {
+static const struct _models {
 	const gchar *name;
 	const gchar *property;
 	const gchar *label;
 	const struct _contents *contents;
- } models[] = {
+} models[] = {
 
 	{
 		"toolbar-icon-size",
@@ -96,8 +96,7 @@
 			{
 				.label = N_( "Icons & text" ),
 				.value = GTK_TOOLBAR_BOTH
-			},
-			{
+			}, {
 				.label = NULL
 			}
 		}
@@ -111,12 +110,10 @@
 			{
 				.label = N_( "System default" ),
 				.value = 0
-			},
-			{
+			}, {
 				.label = N_( "Symbolic" ),
 				.value = 1
-			},
-			{
+			}, {
 				.label = NULL
 			}
 		}
@@ -130,27 +127,23 @@
 			{
 				.label = N_( "Top (system default)" ),
 				.value = 0
-			},
-			{
+			}, {
 				.label = N_( "Left" ),
 				.value = 3
-			},
-			{
+			}, {
 				.label = N_( "Bottom" ),
 				.value = 1
-			},
-			{
+			}, {
 				.label = N_( "Right" ),
 				.value = 2
-			},
-			{
+			}, {
 				.label = NULL
 			}
 		}
 	}
- };
+};
 
-  GtkTreeModel * pw3270_model_from_name(const gchar *name) {
+GtkTreeModel * pw3270_model_from_name(const gchar *name) {
 
 	size_t model;
 
@@ -167,10 +160,10 @@
 		for(row = 0; models[model].contents[row].label; row++) {
 			gtk_list_store_append(store,&iter);
 			gtk_list_store_set(	store,
-								&iter,
-								0, gettext(models[model].contents[row].label),
-								1, models[model].contents[row].value,
-								-1);
+			                    &iter,
+			                    0, gettext(models[model].contents[row].label),
+			                    1, models[model].contents[row].value,
+			                    -1);
 		}
 
 		return GTK_TREE_MODEL(store);
@@ -179,9 +172,9 @@
 
 	g_warning("Can't create combobox '%s'",name);
 	return NULL;
- }
+}
 
- void pw3270_model_get_iter_from_value(GtkTreeModel * model, GtkTreeIter *iter, guint value) {
+void pw3270_model_get_iter_from_value(GtkTreeModel * model, GtkTreeIter *iter, guint value) {
 
 	if(gtk_tree_model_get_iter_first(model,iter)) {
 
@@ -200,17 +193,17 @@
 
 	}
 
- }
+}
 
- guint pw3270_model_get_value_from_iter(GtkTreeModel * model, GtkTreeIter *iter) {
+guint pw3270_model_get_value_from_iter(GtkTreeModel * model, GtkTreeIter *iter) {
 	GValue gVal = { 0, };
 	gtk_tree_model_get_value(model,iter,1,&gVal);
 	guint iVal = g_value_get_uint(&gVal);
 	g_value_unset(&gVal);
 	return iVal;
- }
+}
 
- static void set_property(GObject *menuitem, GObject *widget) {
+static void set_property(GObject *menuitem, GObject *widget) {
 
 	if(gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menuitem))) {
 
@@ -222,18 +215,18 @@
 
 	}
 
- }
+}
 
- static void set_toggle_menu_item(GtkCheckMenuItem *item, gint *value) {
+static void set_toggle_menu_item(GtkCheckMenuItem *item, gint *value) {
 	const struct _contents *model = (const struct _contents *) g_object_get_data(G_OBJECT(item), I_("pw3270_model_data"));
 	if(model) {
 		gtk_check_menu_item_set_active(item,model->value == *value);
 	}
- }
+}
 
- static void property_changed(GObject *widget, GParamSpec G_GNUC_UNUSED(*pspec), GtkContainer *menu) {
+static void property_changed(GObject *widget, GParamSpec G_GNUC_UNUSED(*pspec), GtkContainer *menu) {
 
- 	gint value = -1;
+	gint value = -1;
 	const gchar * name = g_object_get_data(G_OBJECT(menu), I_("pw3270_property_name"));
 	g_object_get(widget,name,&value,NULL);
 
@@ -242,9 +235,9 @@
 	gtk_container_foreach(menu,(GtkCallback) set_toggle_menu_item,&value);
 
 
- }
+}
 
- GtkWidget * pw3270_menu_item_from_model(GtkWidget *widget, const gchar *name) {
+GtkWidget * pw3270_menu_item_from_model(GtkWidget *widget, const gchar *name) {
 
 	size_t model;
 
@@ -268,7 +261,7 @@
 			g_object_get(G_OBJECT(widget),models[model].property,&selected,NULL);
 			g_autofree gchar * signame = g_strconcat("notify::",models[model].property,NULL);
 			g_signal_connect(G_OBJECT(widget),signame,G_CALLBACK(property_changed),submenu);
- 		}
+		}
 
 		for(row = 0; models[model].contents[row].label; row++) {
 
@@ -294,11 +287,11 @@
 	}
 
 	return NULL;
- }
+}
 
- void pw3270_menu_item_set_value(GtkWidget *menu, guint value) {
+void pw3270_menu_item_set_value(GtkWidget *menu, guint value) {
 
 	debug("%s(%p,%d)",__FUNCTION__,menu,value);
 
- }
+}
 

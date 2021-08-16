@@ -31,104 +31,104 @@
  *
  */
 
- #include "private.h"
- #include <pw3270.h>
- #include <pw3270/application.h>
- #include <pw3270/actions.h>
- #include <pw3270/keypad.h>
- #include <stdlib.h>
+#include "private.h"
+#include <pw3270.h>
+#include <pw3270/application.h>
+#include <pw3270/actions.h>
+#include <pw3270/keypad.h>
+#include <stdlib.h>
 
- enum {
+enum {
 	PROP_ZERO,
 	PROP_UI_STYLE,
 
 	NUM_PROPERTIES
- };
+};
 
- static GParamSpec * props[NUM_PROPERTIES];
+static GParamSpec * props[NUM_PROPERTIES];
 
- struct _pw3270ApplicationClass {
- 	GtkApplicationClass parent_class;
- };
+struct _pw3270ApplicationClass {
+	GtkApplicationClass parent_class;
+};
 
- struct _pw3270Application {
- 	GtkApplication parent;
+struct _pw3270Application {
+	GtkApplication parent;
 
- 	GSettings * settings;
+	GSettings * settings;
 	GList * keypads;
 
- 	GSList * plugins;		///< @brief Handlers of the loaded plugins.
+	GSList * plugins;		///< @brief Handlers of the loaded plugins.
 
- 	PW3270_UI_STYLE	ui_style;
+	PW3270_UI_STYLE	ui_style;
 
- };
+};
 
- static void 		startup(GApplication * application);
- static void 		activate(GApplication * application);
- static void		finalize(GObject *object);
+static void 	startup(GApplication * application);
+static void 	activate(GApplication * application);
+static void		finalize(GObject *object);
 
- G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
+G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
 
- static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
+static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	switch (prop_id) {
 	case PROP_UI_STYLE:
 		g_value_set_uint(value,pw3270_application_get_ui_style(G_APPLICATION(object)));
 		break;
 
-    default:
-      g_assert_not_reached ();
-    }
+	default:
+		g_assert_not_reached ();
+	}
 
- }
+}
 
- static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
+static void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
 	switch (prop_id) {
 	case PROP_UI_STYLE:
 		pw3270_application_set_ui_style(G_APPLICATION(object),g_value_get_uint(value));
 		break;
 
-    default:
-      g_assert_not_reached ();
-    }
+	default:
+		g_assert_not_reached ();
+	}
 
- }
+}
 
- static void window_added(GtkApplication *application, GtkWindow *window) {
+static void window_added(GtkApplication *application, GtkWindow *window) {
 
-  	GTK_APPLICATION_CLASS(pw3270Application_parent_class)->window_added(application,window);
+	GTK_APPLICATION_CLASS(pw3270Application_parent_class)->window_added(application,window);
 
-  	void (*call)(GtkWindow *window);
+	void (*call)(GtkWindow *window);
 
-  	GSList * item;
-  	for(item = PW3270_APPLICATION(application)->plugins; item; item = g_slist_next(item)) {
+	GSList * item;
+	for(item = PW3270_APPLICATION(application)->plugins; item; item = g_slist_next(item)) {
 		if(g_module_symbol((GModule *) item->data, "pw3270_plugin_window_added", (gpointer *) &call)) {
-               call(window);
-       }
-  	}
+			call(window);
+		}
+	}
 
- }
+}
 
- static void window_removed(GtkApplication *application, GtkWindow *window) {
+static void window_removed(GtkApplication *application, GtkWindow *window) {
 
- 	debug("%s(%p)",__FUNCTION__,window);
+	debug("%s(%p)",__FUNCTION__,window);
 
-  	void (*call)(GtkWindow *window);
+	void (*call)(GtkWindow *window);
 
-  	GSList * item;
-  	for(item = PW3270_APPLICATION(application)->plugins; item; item = g_slist_next(item)) {
+	GSList * item;
+	for(item = PW3270_APPLICATION(application)->plugins; item; item = g_slist_next(item)) {
 		if(g_module_symbol((GModule *) item->data, "pw3270_plugin_window_removed", (gpointer *) &call)) {
-               call(window);
-       }
-  	}
+			call(window);
+		}
+	}
 
 
-   	GTK_APPLICATION_CLASS(pw3270Application_parent_class)->window_removed(application,window);
+	GTK_APPLICATION_CLASS(pw3270Application_parent_class)->window_removed(application,window);
 
- }
+}
 
- static void pw3270Application_class_init(pw3270ApplicationClass *klass) {
+static void pw3270Application_class_init(pw3270ApplicationClass *klass) {
 
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
@@ -154,29 +154,38 @@
 	}
 
 	props[PROP_UI_STYLE] =
-		g_param_spec_uint(
-			"ui-style",
-			_("UI Type"),
-			_("The code of the User interface type"),
-			PW3270_UI_STYLE_CLASSICAL,
-			PW3270_UI_STYLE_AUTOMATIC,
+	    g_param_spec_uint(
+	        "ui-style",
+	        _("UI Type"),
+	        _("The code of the User interface type"),
+	        PW3270_UI_STYLE_CLASSICAL,
+	        PW3270_UI_STYLE_AUTOMATIC,
 #ifdef _WIN32
-			PW3270_UI_STYLE_CLASSICAL,
+	        PW3270_UI_STYLE_CLASSICAL,
 #else
-			PW3270_UI_STYLE_AUTOMATIC,
+	        PW3270_UI_STYLE_AUTOMATIC,
 #endif // _WIN32
-			G_PARAM_READABLE|G_PARAM_WRITABLE
-		);
+	        G_PARAM_READABLE|G_PARAM_WRITABLE
+	    );
 
 
 	g_object_class_install_properties(object_class, NUM_PROPERTIES, props);
 
- }
+}
 
- static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
+static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
 
 	g_autoptr(GSettings) app_settings = pw3270_application_settings_new();
+	if(!app_settings) {
+		g_warning("Can't get application settings");
+		return FALSE;
+	}
+
 	g_autoptr(GSettings) win_settings = pw3270_application_window_settings_new();
+	if(!win_settings) {
+		g_warning("Can't get window settings");
+		return FALSE;
+	}
 
 	if(!g_ascii_strcasecmp(value,"gnome")) {
 
@@ -197,19 +206,19 @@
 	} else {
 
 		g_set_error(
-			error,
-			g_quark_from_static_string(G_STRINGIFY(PRODUCT_NAME)),
-			EINVAL,
-			_( "\"%s\" is not a valid user interface name" ), value
+		    error,
+		    g_quark_from_static_string(G_STRINGIFY(PRODUCT_NAME)),
+		    EINVAL,
+		    _( "\"%s\" is not a valid user interface name" ), value
 		);
 
 	}
 
 	return TRUE;
 
- }
+}
 
- static void pw3270Application_init(pw3270Application *app) {
+static void pw3270Application_init(pw3270Application *app) {
 
 	static GOptionEntry cmd_options[] = {
 
@@ -231,6 +240,7 @@
 
 	// Bind properties
 	if(app->settings) {
+
 		g_object_ref_sink(G_OBJECT(app->settings));
 
 #ifdef _WIN32
@@ -250,9 +260,9 @@
 	// Get plugins.
 	{
 #ifdef _WIN32
-        lib3270_autoptr(char) path = lib3270_build_data_filename("plugins",NULL);
+		lib3270_autoptr(char) path = lib3270_build_data_filename("plugins",NULL);
 #else
-        const gchar * path = G_STRINGIFY(LIBDIR) G_DIR_SEPARATOR_S G_STRINGIFY(PRODUCT_NAME) "-plugins";
+		const gchar * path = G_STRINGIFY(LIBDIR) G_DIR_SEPARATOR_S G_STRINGIFY(PRODUCT_NAME) "-plugins";
 #endif // _WIN32
 
 		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
@@ -287,8 +297,6 @@
 
 					}
 
-
-
 				}
 
 				g_dir_close(dir);
@@ -301,54 +309,53 @@
 
 			}
 
-
 		}
 
 	}
 
- }
+}
 
 
- static void finalize(GObject *object) {
+static void finalize(GObject *object) {
 
- 	pw3270Application * application = PW3270_APPLICATION(object);
+	pw3270Application * application = PW3270_APPLICATION(object);
 
- 	if(application->plugins) {
- 		#pragma GCC diagnostic push
+	if(application->plugins) {
+#pragma GCC diagnostic push
 #ifdef _WIN32
-		#pragma GCC diagnostic ignored "-Wcast-function-type"
+#pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif // _WIN32
 		g_slist_free_full(application->plugins,(GDestroyNotify) g_module_close);
- 		#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 		application->plugins = NULL;
- 	}
+	}
 
- 	if(application->settings) {
+	if(application->settings) {
 		g_object_unref(application->settings);
 		application->settings = NULL;
- 	}
+	}
 
- 	g_list_free_full(application->keypads,g_object_unref);
+	g_list_free_full(application->keypads,g_object_unref);
 
- 	G_OBJECT_CLASS(pw3270Application_parent_class)->finalize(object);
+	G_OBJECT_CLASS(pw3270Application_parent_class)->finalize(object);
 
- }
+}
 
- GtkApplication * pw3270_application_new(const gchar *application_id, GApplicationFlags flags) {
+GtkApplication * pw3270_application_new(const gchar *application_id, GApplicationFlags flags) {
 
 	return g_object_new(
-				PW3270_TYPE_APPLICATION,
-				"application-id", application_id,
-				"flags", flags,
-				NULL);
+	           PW3270_TYPE_APPLICATION,
+	           "application-id", application_id,
+	           "flags", flags,
+	           NULL);
 
- }
+}
 
- void startup(GApplication *application) {
+void startup(GApplication *application) {
 
- 	size_t ix;
+	size_t ix;
 
- 	pw3270Application * app = PW3270_APPLICATION(application);
+	pw3270Application * app = PW3270_APPLICATION(application);
 
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
 
@@ -365,6 +372,13 @@
 
 	for(ix = 0; ix < G_N_ELEMENTS(actions); ix++) {
 		g_action_map_add_action(G_ACTION_MAP(application),actions[ix]);
+	}
+
+	//
+	// Open session actions.
+	//
+	if(g_settings_get_boolean(settings,"allow-open-session-actions")) {
+		g_action_map_add_action(G_ACTION_MAP(application),pw3270_open_session_action_new());
 	}
 
 	//
@@ -441,15 +455,15 @@
 	if(gtk_application_prefers_app_menu(GTK_APPLICATION(application)))
 		gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
 
-    gtk_application_set_menubar(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "menubar")));
+	gtk_application_set_menubar(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "menubar")));
 
 	pw3270_load_placeholders(application, builder);
 
 	g_object_unref(builder);
 
- }
+}
 
- void activate(GApplication *application) {
+void activate(GApplication *application) {
 
 	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application),NULL);
 
@@ -457,11 +471,11 @@
 	pw3270_window_set_current_page(window,0);
 	gtk_window_present(GTK_WINDOW(window));
 
- }
+}
 
- void pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type) {
+void pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type) {
 
- 	g_return_if_fail(PW3270_IS_APPLICATION(app));
+	g_return_if_fail(PW3270_IS_APPLICATION(app));
 
 	pw3270Application * application = PW3270_APPLICATION(app);
 
@@ -471,77 +485,77 @@
 	application->ui_style = type;
 	g_object_notify_by_pspec(G_OBJECT(app), props[PROP_UI_STYLE]);
 
- }
+}
 
- PW3270_UI_STYLE pw3270_application_get_ui_style(GApplication *app) {
+PW3270_UI_STYLE pw3270_application_get_ui_style(GApplication *app) {
 
- 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),PW3270_UI_STYLE_CLASSICAL);
-    return PW3270_APPLICATION(app)->ui_style;
+	g_return_val_if_fail(PW3270_IS_APPLICATION(app),PW3270_UI_STYLE_CLASSICAL);
+	return PW3270_APPLICATION(app)->ui_style;
 
- }
+}
 
- GSettings * pw3270_application_get_settings(GApplication *app) {
+GSettings * pw3270_application_get_settings(GApplication *app) {
 
 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
 	return PW3270_APPLICATION(app)->settings;
 
- }
+}
 
- GSList * pw3270_application_get_plugins(GApplication *app) {
+GSList * pw3270_application_get_plugins(GApplication *app) {
 
 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
 	return PW3270_APPLICATION(app)->plugins;
 
- }
+}
 
- void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data) {
+void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data) {
 
 	g_return_if_fail(PW3270_IS_APPLICATION(app));
 
-   	GSList * item;
- 	for(item = PW3270_APPLICATION(app)->plugins; item; item = g_slist_next(item)) {
+	GSList * item;
+	for(item = PW3270_APPLICATION(app)->plugins; item; item = g_slist_next(item)) {
 		func(item->data,user_data);
-  	}
+	}
 
- }
+}
 
- void pw3270_application_plugin_call(GApplication *app, const gchar *method, gpointer user_data) {
+void pw3270_application_plugin_call(GApplication *app, const gchar *method, gpointer user_data) {
 
 	g_return_if_fail(PW3270_IS_APPLICATION(app));
 
- 	int (*call)(GtkWidget *);
+	int (*call)(GtkWidget *);
 
-  	GSList * item;
-  	for(item = PW3270_APPLICATION(app)->plugins; item; item = g_slist_next(item)) {
+	GSList * item;
+	for(item = PW3270_APPLICATION(app)->plugins; item; item = g_slist_next(item)) {
 		if(g_module_symbol((GModule *) item->data, method, (gpointer *) &call)) {
 			call(user_data);
-       }
-  	}
+		}
+	}
 
- }
+}
 
 
- GSettings * pw3270_application_settings_new() {
+GSettings * pw3270_application_settings_new() {
 
 	GSettings *settings = NULL;
 
 #ifdef DEBUG
 	GError * error = NULL;
 	GSettingsSchemaSource * source =
-		g_settings_schema_source_new_from_directory(
-			".",
-			NULL,
-			TRUE,
-			&error
-		);
+	    g_settings_schema_source_new_from_directory(
+	        ".",
+	        NULL,
+	        TRUE,
+	        &error
+	    );
 
 	g_assert_no_error(error);
 
 	GSettingsSchema * schema =
-		g_settings_schema_source_lookup(
-			source,
-			"br.com.bb." G_STRINGIFY(PRODUCT_NAME),
-			TRUE);
+	    g_settings_schema_source_lookup(
+	        source,
+	        "br.com.bb." G_STRINGIFY(PRODUCT_NAME),
+	        TRUE);
 
 	debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);
 
@@ -556,10 +570,10 @@
 #endif // DEBUG
 
 	return settings;
- }
+}
 
- GList * pw3270_application_get_keypad_models(GApplication *app) {
- 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
- 	return PW3270_APPLICATION(app)->keypads;
- }
+GList * pw3270_application_get_keypad_models(GApplication *app) {
+	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
+	return PW3270_APPLICATION(app)->keypads;
+}
 

@@ -28,34 +28,34 @@
  */
 
 #ifdef _WIN32
-	#include <winsock2.h>
-	#include <windows.h>
+#include <winsock2.h>
+#include <windows.h>
 #endif // _WIN32
 
- #include <pw3270.h>
- #include <pw3270/settings.h>
- #include <pw3270/actions.h>
- #include <pw3270/window.h>
- #include <lib3270.h>
- #include <lib3270/log.h>
+#include <pw3270.h>
+#include <pw3270/settings.h>
+#include <pw3270/actions.h>
+#include <pw3270/window.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
 
- struct _PW3270SettingsDialog {
-  	GtkDialog		  parent;
-  	GtkNotebook		* tabs;
-  	gboolean		  has_subtitle;
- };
+struct _PW3270SettingsDialog {
+	GtkDialog		  parent;
+	GtkNotebook		* tabs;
+	gboolean		  has_subtitle;
+};
 
- struct _PW3270SettingsDialogClass	{
- 	GtkDialogClass parent_class;
- };
+struct _PW3270SettingsDialogClass	{
+	GtkDialogClass parent_class;
+};
 
- G_DEFINE_TYPE(PW3270SettingsDialog, PW3270SettingsDialog, GTK_TYPE_DIALOG);
+G_DEFINE_TYPE(PW3270SettingsDialog, PW3270SettingsDialog, GTK_TYPE_DIALOG);
 
- static void add(GtkContainer *container, GtkWidget *widget);
- static void page_changed(GtkNotebook *notebook, GtkWidget *child, guint page_num, PW3270SettingsDialog *dialog);
- static void switch_page(GtkNotebook *notebook, PW3270Settings *page, guint page_num, PW3270SettingsDialog *dialog);
- static void dialog_close(GtkDialog *dialog);
- static void response(GtkDialog *dialog, gint response_id);
+static void add(GtkContainer *container, GtkWidget *widget);
+static void page_changed(GtkNotebook *notebook, GtkWidget *child, guint page_num, PW3270SettingsDialog *dialog);
+static void switch_page(GtkNotebook *notebook, PW3270Settings *page, guint page_num, PW3270SettingsDialog *dialog);
+static void dialog_close(GtkDialog *dialog);
+static void response(GtkDialog *dialog, gint response_id);
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 
@@ -65,20 +65,19 @@ static void PW3270SettingsDialog_class_init(PW3270SettingsDialogClass *klass) {
 	GTK_DIALOG_CLASS(klass)->response = response;
 }
 
-static void PW3270SettingsDialog_init(PW3270SettingsDialog *dialog)
-{
+static void PW3270SettingsDialog_init(PW3270SettingsDialog *dialog) {
 	GtkWidget * content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 
 	// Get use of header bar.
 	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &dialog->has_subtitle, NULL);
 
-    gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
 
 	gtk_dialog_add_buttons(
-		GTK_DIALOG(dialog),
-		_("_Cancel"), GTK_RESPONSE_CANCEL,
-		_("_Apply"), GTK_RESPONSE_APPLY,
-		NULL
+	    GTK_DIALOG(dialog),
+	    _("_Cancel"), GTK_RESPONSE_CANCEL,
+	    _("_Apply"), GTK_RESPONSE_APPLY,
+	    NULL
 	);
 
 	// Create notebook for settings widgets
@@ -103,11 +102,11 @@ GtkWidget * pw3270_settings_dialog_new(GAction *action, gboolean has_subtitle) {
 #ifdef _WIN32
 
 	GtkWidget * dialog =
-		GTK_WIDGET(g_object_new(
-			GTK_TYPE_PW3270_SETTINGS_DIALOG,
-			"use-header-bar", FALSE,
-			NULL
-		));
+	    GTK_WIDGET(g_object_new(
+	                   GTK_TYPE_PW3270_SETTINGS_DIALOG,
+	                   "use-header-bar", FALSE,
+	                   NULL
+	               ));
 
 #elif GTK_CHECK_VERSION(3,12,0)
 
@@ -115,11 +114,11 @@ GtkWidget * pw3270_settings_dialog_new(GAction *action, gboolean has_subtitle) {
 	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &use_header, NULL);
 
 	GtkWidget * dialog =
-		GTK_WIDGET(g_object_new(
-			GTK_TYPE_PW3270_SETTINGS_DIALOG,
-			"use-header-bar", (use_header ? 1 : 0),
-			NULL
-		));
+	    GTK_WIDGET(g_object_new(
+	                   GTK_TYPE_PW3270_SETTINGS_DIALOG,
+	                   "use-header-bar", (use_header ? 1 : 0),
+	                   NULL
+	               ));
 
 #else
 
@@ -131,13 +130,13 @@ GtkWidget * pw3270_settings_dialog_new(GAction *action, gboolean has_subtitle) {
 
 	if(action) {
 
-        if(PW3270_IS_ACTION(action)) {
+		if(PW3270_IS_ACTION(action)) {
 			gtk_window_set_title(GTK_WINDOW(dialog),PW3270_ACTION(action)->label);
-        }
+		}
 
 	}
 
- 	return dialog;
+	return dialog;
 
 }
 
@@ -171,17 +170,17 @@ void response(GtkDialog *dialog, gint response_id) {
 	switch(response_id) {
 	case GTK_RESPONSE_APPLY:
 		gtk_container_foreach(
-			GTK_CONTAINER(GTK_PW3270_SETTINGS_DIALOG(dialog)->tabs),
-			(GtkCallback) apply,
-			settings
+		    GTK_CONTAINER(GTK_PW3270_SETTINGS_DIALOG(dialog)->tabs),
+		    (GtkCallback) apply,
+		    settings
 		);
 		break;
 
 	case GTK_RESPONSE_CANCEL:
 		gtk_container_foreach(
-			GTK_CONTAINER(GTK_PW3270_SETTINGS_DIALOG(dialog)->tabs),
-			(GtkCallback) revert,
-			settings
+		    GTK_CONTAINER(GTK_PW3270_SETTINGS_DIALOG(dialog)->tabs),
+		    (GtkCallback) revert,
+		    settings
 		);
 		break;
 
@@ -209,15 +208,15 @@ void add(GtkContainer *container, GtkWidget *widget) {
 
 	gtk_widget_show(widget);
 	gtk_notebook_append_page(
-		GTK_PW3270_SETTINGS_DIALOG(container)->tabs,
-		widget,
-		label
+	    GTK_PW3270_SETTINGS_DIALOG(container)->tabs,
+	    widget,
+	    label
 	);
 
 }
 
 void page_changed(GtkNotebook *notebook, GtkWidget G_GNUC_UNUSED(*child), guint G_GNUC_UNUSED(page_num), PW3270SettingsDialog G_GNUC_UNUSED(*dialog)) {
- 	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
+	gtk_notebook_set_show_tabs(notebook,gtk_notebook_get_n_pages(notebook) > 1);
 }
 
 void switch_page(GtkNotebook G_GNUC_UNUSED(*notebook), PW3270Settings *page, guint G_GNUC_UNUSED(page_num), PW3270SettingsDialog *dialog) {

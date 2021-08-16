@@ -27,46 +27,46 @@
  *
  */
 
- /**
-  * @brief Implement Windows version of the save desktop icon action.
-  *
-  * References:
-  *
-  * <https://stackoverflow.com/questions/3906974/how-to-programmatically-create-a-shortcut-using-win32>
-  * <https://docs.microsoft.com/pt-br/windows/win32/shell/links?redirectedfrom=MSDN>
-  *
-  */
+/**
+ * @brief Implement Windows version of the save desktop icon action.
+ *
+ * References:
+ *
+ * <https://stackoverflow.com/questions/3906974/how-to-programmatically-create-a-shortcut-using-win32>
+ * <https://docs.microsoft.com/pt-br/windows/win32/shell/links?redirectedfrom=MSDN>
+ *
+ */
 
 // #include <stdafx.h>
- #include <winsock2.h>
- #include <windows.h>
- #include <winnls.h>
- #include <shobjidl.h>
- #include <objbase.h>
- #include <objidl.h>
- #include <shlguid.h>
+#include <winsock2.h>
+#include <windows.h>
+#include <winnls.h>
+#include <shobjidl.h>
+#include <objbase.h>
+#include <objidl.h>
+#include <shlguid.h>
 
- #include <v3270.h>
- #include <pw3270.h>
- #include <pw3270/application.h>
- #include <v3270/actions.h>
- #include <lib3270.h>
- #include <lib3270/log.h>
- #include <v3270/tools.h>
- #include <v3270/keyfile.h>
- #include <v3270/settings.h>
+#include <v3270.h>
+#include <pw3270.h>
+#include <pw3270/application.h>
+#include <v3270/actions.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
+#include <v3270/tools.h>
+#include <v3270/keyfile.h>
+#include <v3270/settings.h>
 
- static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
- static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
+static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
+static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
 
- static const struct _entry {
+static const struct _entry {
 
 	const gchar * label;
 	const gchar * tooltip;
 	gint margin_top;
 	gint width;
 
- } entries[] = {
+} entries[] = {
 
 	// 0 - Shorcut file name
 	{
@@ -96,9 +96,9 @@
 		.width = 40,
 	}
 
- };
+};
 
- GAction * pw3270_action_save_desktop_icon_new(void) {
+GAction * pw3270_action_save_desktop_icon_new(void) {
 
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
@@ -108,9 +108,9 @@
 
 	return G_ACTION(action);
 
- }
+}
 
- GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
+GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 
 	size_t ix;
 
@@ -118,20 +118,20 @@
 	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &use_header, NULL);
 
 	GtkWidget *	dialog =
-		GTK_WIDGET(g_object_new(
-			GTK_TYPE_DIALOG,
-			"use-header-bar", (use_header ? 1 : 0),
-			NULL
-		));
+	    GTK_WIDGET(g_object_new(
+	                   GTK_TYPE_DIALOG,
+	                   "use-header-bar", (use_header ? 1 : 0),
+	                   NULL
+	               ));
 
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
 	gtk_window_set_title(GTK_WINDOW(dialog),action->label);
 
 	gtk_dialog_add_buttons(
-		GTK_DIALOG(dialog),
-		_("_Cancel"), GTK_RESPONSE_CANCEL,
-		_("_Save"), GTK_RESPONSE_APPLY,
-		NULL
+	    GTK_DIALOG(dialog),
+	    _("_Cancel"), GTK_RESPONSE_CANCEL,
+	    _("_Save"), GTK_RESPONSE_APPLY,
+	    NULL
 	);
 
 	g_signal_connect(dialog,"response",G_CALLBACK(response),terminal);
@@ -147,8 +147,8 @@
 
 	// https://developer.gnome.org/hig/stable/visual-layout.html.en
 	gtk_container_set_border_width(GTK_CONTAINER(grid),18);
- 	gtk_grid_set_row_spacing(GTK_GRID(grid),6);
- 	gtk_grid_set_column_spacing(GTK_GRID(grid),12);
+	gtk_grid_set_row_spacing(GTK_GRID(grid),6);
+	gtk_grid_set_column_spacing(GTK_GRID(grid),12);
 
 	for(ix = 0; ix < G_N_ELEMENTS(entries); ix++) {
 
@@ -179,18 +179,18 @@
 	// Setup short-cut name entry.
 	{
 		gtk_entry_bind_to_filechooser(
-			inputs[0],
-			GTK_FILE_CHOOSER_ACTION_SAVE,
-			_("Save to windows shortcut"),
-			NULL,
-			"*.lnk",
-			_("Windows shortcuts")
+		    inputs[0],
+		    GTK_FILE_CHOOSER_ACTION_SAVE,
+		    _("Save to windows shortcut"),
+		    NULL,
+		    "*.lnk",
+		    _("Windows shortcuts")
 		);
 
 		gchar * filename = g_strdup_printf(
-								"%s\\" G_STRINGIFY(PRODUCT_NAME) ".lnk",
-								g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP)
-							);
+		                       "%s\\" G_STRINGIFY(PRODUCT_NAME) ".lnk",
+		                       g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP)
+		                   );
 
 		size_t ix = 0;
 
@@ -198,10 +198,10 @@
 
 			g_free(filename);
 			filename = g_strdup_printf(
-								"%s\\" G_STRINGIFY(PRODUCT_NAME) "%u.lnk",
-								g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP),
-								(unsigned int) ++ix
-							);
+			               "%s\\" G_STRINGIFY(PRODUCT_NAME) "%u.lnk",
+			               g_get_user_special_dir(G_USER_DIRECTORY_DESKTOP),
+			               (unsigned int) ++ix
+			           );
 
 		}
 
@@ -214,21 +214,21 @@
 		gtk_entry_set_text(GTK_ENTRY(inputs[3]),session_filename);
 
 		gtk_entry_bind_to_filechooser(
-			inputs[3],
-			GTK_FILE_CHOOSER_ACTION_SAVE,
-			_("File for session preferences"),
-			NULL,
-			"*.3270",
-			_("3270 session files")
+		    inputs[3],
+		    GTK_FILE_CHOOSER_ACTION_SAVE,
+		    _("File for session preferences"),
+		    NULL,
+		    "*.3270",
+		    _("3270 session files")
 		);
 
 	}
 
 	gtk_widget_show_all(GTK_WIDGET(grid));
 	return dialog;
- }
+}
 
- static HRESULT CreateShortCut(const char * pszTargetfile, const char * pszTargetargs, const char * pszLinkfile, const char * pszDescription, int iShowmode, const char * pszCurdir, LPSTR pszIconfile, int iIconindex) {
+static HRESULT CreateShortCut(const char * pszTargetfile, const char * pszTargetargs, const char * pszLinkfile, const char * pszDescription, int iShowmode, const char * pszCurdir, LPSTR pszIconfile, int iIconindex) {
 
 	// https://www.codeproject.com/Articles/11467/How-to-create-short-cuts-link-files
 	IShellLink*   pShellLink;            // IShellLink object pointer
@@ -237,12 +237,12 @@
 	int           iWideCharsWritten;     // Number of wide characters written
 
 	HRESULT hRes =
-		CoCreateInstance(
-			&CLSID_ShellLink,			// predefined CLSID of the IShellLink object
-			NULL,						// pointer to parent interface if part of aggregate
-			CLSCTX_INPROC_SERVER,		// caller and called code are in same process
-			&IID_IShellLink,			// predefined interface of the IShellLink object
-			(void **) &pShellLink);		// Returns a pointer to the IShellLink object
+	    CoCreateInstance(
+	        &CLSID_ShellLink,			// predefined CLSID of the IShellLink object
+	        NULL,						// pointer to parent interface if part of aggregate
+	        CLSCTX_INPROC_SERVER,		// caller and called code are in same process
+	        &IID_IShellLink,			// predefined interface of the IShellLink object
+	        (void **) &pShellLink);		// Returns a pointer to the IShellLink object
 
 	if(!SUCCEEDED(hRes)) {
 		return hRes;
@@ -286,12 +286,12 @@
 
 	// Use the IPersistFile object to save the shell link
 	hRes = pShellLink->lpVtbl->QueryInterface(
-				pShellLink,					// existing IShellLink object
-				&IID_IPersistFile,			// pre-defined interface of the IPersistFile object
-				(void **) &pPersistFile);	// returns a pointer to the IPersistFile object
+	           pShellLink,					// existing IShellLink object
+	           &IID_IPersistFile,			// pre-defined interface of the IPersistFile object
+	           (void **) &pPersistFile);	// returns a pointer to the IPersistFile object
 
 
-	if(SUCCEEDED(hRes)){
+	if(SUCCEEDED(hRes)) {
 		iWideCharsWritten = MultiByteToWideChar(CP_ACP, 0, pszLinkfile, -1, wszLinkfile, MAX_PATH);
 		hRes = pPersistFile->lpVtbl->Save(pPersistFile,wszLinkfile, TRUE);
 		pPersistFile->lpVtbl->Release(pPersistFile);
@@ -300,9 +300,9 @@
 	pShellLink->lpVtbl->Release(pShellLink);
 
 	return hRes;
- }
+}
 
- void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal) {
+void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal) {
 
 	debug("%s(%d)",__FUNCTION__,response_id);
 
@@ -314,23 +314,23 @@
 		// Save keyfile
 		GError * error = NULL;
 		v3270_key_file_save_to_file(
-			terminal,
-			gtk_entry_get_text(GTK_ENTRY(inputs[3])),
-			&error
+		    terminal,
+		    gtk_entry_get_text(GTK_ENTRY(inputs[3])),
+		    &error
 		);
 
 		if(!error) {
 
 			HRESULT hRes = CreateShortCut(
-								NULL,										// LPSTR pszTargetfile,
-								gtk_entry_get_text(GTK_ENTRY(inputs[3])),	// LPSTR pszTargetargs,
-								gtk_entry_get_text(GTK_ENTRY(inputs[0])),	// LPSTR pszLinkfile,
-								gtk_entry_get_text(GTK_ENTRY(inputs[1])),	// LPSTR pszDescription,
-								0,
-								NULL,
-								NULL,
-								0
-							);
+			                   NULL,										// LPSTR pszTargetfile,
+			                   gtk_entry_get_text(GTK_ENTRY(inputs[3])),	// LPSTR pszTargetargs,
+			                   gtk_entry_get_text(GTK_ENTRY(inputs[0])),	// LPSTR pszLinkfile,
+			                   gtk_entry_get_text(GTK_ENTRY(inputs[1])),	// LPSTR pszDescription,
+			                   0,
+			                   NULL,
+			                   NULL,
+			                   0
+			               );
 
 		}
 
@@ -349,6 +349,6 @@
 
 	}
 
- 	gtk_widget_destroy(dialog);
+	gtk_widget_destroy(dialog);
 
 }

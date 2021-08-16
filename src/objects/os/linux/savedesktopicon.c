@@ -27,26 +27,26 @@
  *
  */
 
- /**
-  * @brief Implement Linux version of the save desktop icon action.
-  *
-  */
+/**
+ * @brief Implement Linux version of the save desktop icon action.
+ *
+ */
 
- #include <v3270.h>
- #include <pw3270.h>
- #include <pw3270/application.h>
- #include <v3270/actions.h>
- #include <v3270/keyfile.h>
- #include <v3270/settings.h>
- #include <lib3270.h>
- #include <lib3270/log.h>
- #include <lib3270/properties.h>
- #include <v3270/tools.h>
+#include <v3270.h>
+#include <pw3270.h>
+#include <pw3270/application.h>
+#include <v3270/actions.h>
+#include <v3270/keyfile.h>
+#include <v3270/settings.h>
+#include <lib3270.h>
+#include <lib3270/log.h>
+#include <lib3270/properties.h>
+#include <v3270/tools.h>
 
- static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
- static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
+static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
+static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
 
- static const struct _entry {
+static const struct _entry {
 
 	const gchar * key;
 	const gchar * label;
@@ -55,7 +55,7 @@
 	gint margin_top;
 	gint width;
 
- } entries[] = {
+} entries[] = {
 
 	// 0 = Shortcut name
 	{
@@ -103,9 +103,9 @@
 		.width = 30,
 	}
 
- };
+};
 
- GAction * pw3270_action_save_desktop_icon_new(void) {
+GAction * pw3270_action_save_desktop_icon_new(void) {
 
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
@@ -115,43 +115,43 @@
 
 	return G_ACTION(action);
 
- }
+}
 
- /*
- static gchar * get_filename(GtkWidget *terminal) {
+/*
+static gchar * get_filename(GtkWidget *terminal) {
 
- 	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
-	const gchar * current = v3270_key_file_get_filename(terminal);
+	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
+const gchar * current = v3270_key_file_get_filename(terminal);
 
-	// If is not the default name, return it.
-	if(strcmp(defname,current)) {
-		return g_strdup(current);
-	}
+// If is not the default name, return it.
+if(strcmp(defname,current)) {
+	return g_strdup(current);
+}
 
-	// It's the default one, create a new one on the user_config dir
-	g_autofree gchar * config_path = v3270_key_file_get_default_path(terminal);
+// It's the default one, create a new one on the user_config dir
+g_autofree gchar * config_path = v3270_key_file_get_default_path(terminal);
 
-	// Use the hostname
-	const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
-	if(!hostname) {
-		hostname = G_STRINGIFY(PRODUCT_NAME);
-	}
+// Use the hostname
+const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
+if(!hostname) {
+	hostname = G_STRINGIFY(PRODUCT_NAME);
+}
 
-	// Build the filename
-	gchar *filename = g_strconcat(config_path,G_DIR_SEPARATOR_S,hostname,".3270",NULL);
+// Build the filename
+gchar *filename = g_strconcat(config_path,G_DIR_SEPARATOR_S,hostname,".3270",NULL);
 
-	unsigned int index = 0;
-	while(g_file_test(filename,G_FILE_TEST_EXISTS)) {
-		g_free(filename);
-		filename = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s.%u.3270",config_path,hostname,++index);
-	}
+unsigned int index = 0;
+while(g_file_test(filename,G_FILE_TEST_EXISTS)) {
+	g_free(filename);
+	filename = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s.%u.3270",config_path,hostname,++index);
+}
 
-	return filename;
+return filename;
 
- }
- */
+}
+*/
 
- GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
+GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 
 	size_t ix;
 
@@ -159,21 +159,21 @@
 	g_object_get(gtk_settings_get_default(), "gtk-dialogs-use-header", &use_header, NULL);
 
 	GtkWidget *	dialog =
-		GTK_WIDGET(g_object_new(
-			GTK_TYPE_DIALOG,
-			"use-header-bar", (use_header ? 1 : 0),
-			NULL
-		));
+	    GTK_WIDGET(g_object_new(
+	                   GTK_TYPE_DIALOG,
+	                   "use-header-bar", (use_header ? 1 : 0),
+	                   NULL
+	               ));
 
 
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
 	gtk_window_set_title(GTK_WINDOW(dialog),action->label);
 
 	gtk_dialog_add_buttons(
-		GTK_DIALOG(dialog),
-		_("_Cancel"), GTK_RESPONSE_CANCEL,
-		_("_Save"), GTK_RESPONSE_APPLY,
-		NULL
+	    GTK_DIALOG(dialog),
+	    _("_Cancel"), GTK_RESPONSE_CANCEL,
+	    _("_Save"), GTK_RESPONSE_APPLY,
+	    NULL
 	);
 
 	g_signal_connect(dialog,"response",G_CALLBACK(response),terminal);
@@ -189,8 +189,8 @@
 
 	// https://developer.gnome.org/hig/stable/visual-layout.html.en
 	gtk_container_set_border_width(GTK_CONTAINER(grid),18);
- 	gtk_grid_set_row_spacing(GTK_GRID(grid),6);
- 	gtk_grid_set_column_spacing(GTK_GRID(grid),12);
+	gtk_grid_set_row_spacing(GTK_GRID(grid),6);
+	gtk_grid_set_column_spacing(GTK_GRID(grid),12);
 
 	// https://developer.gnome.org/hig/stable/visual-layout.html.en
 	// gtk_box_set_spacing(GTK_BOX(content_area),18);
@@ -231,12 +231,12 @@
 	{
 		gtk_entry_set_text(GTK_ENTRY(inputs[1]),filename);
 		gtk_entry_bind_to_filechooser(
-			inputs[1],
-			GTK_FILE_CHOOSER_ACTION_SAVE,
-			_("Save to shortcut file"),
-			NULL,
-			"*.desktop",
-			_("Standard desktop files")
+		    inputs[1],
+		    GTK_FILE_CHOOSER_ACTION_SAVE,
+		    _("Save to shortcut file"),
+		    NULL,
+		    "*.desktop",
+		    _("Standard desktop files")
 		);
 
 	}
@@ -259,12 +259,12 @@
 		gtk_entry_set_text(GTK_ENTRY(inputs[3]),session_filename);
 
 		gtk_entry_bind_to_filechooser(
-			inputs[3],
-			GTK_FILE_CHOOSER_ACTION_SAVE,
-			_("Save to session filename"),
-			NULL,
-			"*.3270",
-			_("3270 session files")
+		    inputs[3],
+		    GTK_FILE_CHOOSER_ACTION_SAVE,
+		    _("Save to session filename"),
+		    NULL,
+		    "*.3270",
+		    _("3270 session files")
 		);
 
 	}
@@ -276,21 +276,21 @@
 
 	gtk_widget_show_all(GTK_WIDGET(grid));
 	return dialog;
- }
+}
 
- static void apply(GtkWidget *dialog, GtkWidget *terminal) {
+static void apply(GtkWidget *dialog, GtkWidget *terminal) {
 
 	GError * error = NULL;
 	size_t ix;
 
 	static const char * key_file_data =
-		"[Desktop Entry]\n" \
-		"Icon=" G_STRINGIFY(PRODUCT_NAME) "\n"  \
-		"Terminal=false\n" \
-		"Type=Application\n" \
-		"StartupNotify=true\n" \
-		"Categories=GTK;GNOME;TerminalEmulator\n" \
-		"OnlyShowIn=GNOME;Unity\n";
+	    "[Desktop Entry]\n" \
+	    "Icon=" G_STRINGIFY(PRODUCT_NAME) "\n"  \
+	    "Terminal=false\n" \
+	    "Type=Application\n" \
+	    "StartupNotify=true\n" \
+	    "Categories=GTK;GNOME;TerminalEmulator\n" \
+	    "OnlyShowIn=GNOME;Unity\n";
 
 	GKeyFile * keyfile = g_key_file_new();
 	g_key_file_load_from_data(keyfile,key_file_data,-1,G_KEY_FILE_NONE,NULL);
@@ -315,9 +315,9 @@
 
 	// Save keyfile
 	v3270_key_file_save_to_file(
-		terminal,
-		gtk_entry_get_text(GTK_ENTRY(inputs[3])),
-		&error
+	    terminal,
+	    gtk_entry_get_text(GTK_ENTRY(inputs[3])),
+	    &error
 	);
 
 	// Get program file name
@@ -332,11 +332,11 @@
 			buffer[bytes] = '\0';
 
 		g_autofree gchar * exec_line =
-								g_strconcat(
-									buffer,
-									" \"",gtk_entry_get_text(GTK_ENTRY(inputs[3])),"\"",
-									NULL
-								);
+		    g_strconcat(
+		        buffer,
+		        " \"",gtk_entry_get_text(GTK_ENTRY(inputs[3])),"\"",
+		        NULL
+		    );
 
 		g_key_file_set_string(keyfile,"Desktop Entry","Exec",exec_line);
 

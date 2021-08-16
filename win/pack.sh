@@ -129,13 +129,14 @@ prepare()
 
 			for spec in $(find ${WORKDIR}/sources/${1}/win/${ARCH} -name "*.spec")
 			do
+				echo "Parsing ${spec}"
 				grep -i buildrequires "${spec}" | grep -v "%" | cut -d: -f2- | tr -d '[:blank:]' >> ${WORKDIR}/sources/pre-reqs
 			done
 		
 		fi
 
 	done
-
+	
 }
 
 #
@@ -152,9 +153,10 @@ configure()
 		echo "mingw32-cross-nsis" >> ${WORKDIR}/sources/pre-reqs 
 
 		cat ${WORKDIR}/sources/pre-reqs \
+			| cut -d'>' -f1 \
 			| grep -v 3270 \
 			| sort --unique \
-			| xargs sudo zypper --non-interactive --quiet in
+			| xargs sudo zypper --non-interactive --verbose in
 
 	fi
 
