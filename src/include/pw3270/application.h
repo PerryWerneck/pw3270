@@ -87,6 +87,8 @@ GtkBuilder		* pw3270_application_get_builder(const gchar *name);
 
 void			  gtk_container_remove_all(GtkContainer *container);
 
+gboolean		  pw3270_application_allow_tabs(GApplication *application);
+
 // Actions
 void pw3270_application_print_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
 void pw3270_application_save_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);

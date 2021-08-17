@@ -97,7 +97,7 @@ void pw3270_application_open(GApplication *application, GFile **files, gint n_fi
 				if(sz > 0 && uri[sz-1] == '/')
 					uri[sz-1] = 0;
 
-				if(!window) {
+				if(!(window && pw3270_application_allow_tabs(application))) {
 					debug("%s: Creating new window",__FUNCTION__);
 					window = pw3270_application_window_new(GTK_APPLICATION(application), NULL);
 				} else {
@@ -122,7 +122,7 @@ void pw3270_application_open(GApplication *application, GFile **files, gint n_fi
 			// The file exists, use it.
 			debug("%s: Loading '%s'",__FUNCTION__,path);
 
-			if(!window) {
+			if(!(window && pw3270_application_allow_tabs(application))) {
 				debug("%s: Creating new window",__FUNCTION__);
 				window = pw3270_application_window_new(GTK_APPLICATION(application), path);
 			} else {
