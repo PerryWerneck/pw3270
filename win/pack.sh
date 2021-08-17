@@ -36,7 +36,7 @@ PACKAGE_EXTRAS="libhllapi pw3270-keypads"
 TARGET_ARCHS="x86_64"
 
 GIT_URL="https://github.com/PerryWerneck"
-BUILD_UNSTABLE=0
+BUILD_BRANCH="master"
 MAKE_ZIP=0
 CLEAR_TARGET_PATH=0
 
@@ -83,17 +83,16 @@ failed()
 #
 clone()
 {
-	echo -e "\e]2;Cloning ${1}\a"
 
 	mkdir -p ${WORKDIR}/sources
 
-	if [ "${BUILD_UNSTABLE}" == "1" ]; then
-		BRANCH="develop"
-	else
-		TEMPVAR=$(echo ${1}_branch | sed -e "s@-@@g")
-		BRANCH=${!TEMPVAR}		
+	TEMPVAR=$(echo ${1}_branch | sed -e "s@-@@g")
+	BRANCH=${!TEMPVAR}		
+	if [ -z ${BRANCH} ]; then
+		BRANCH=${BUILD_BRANCH}
 	fi
 
+	echo -e "\e]2;Cloning ${1} ${BRANCH}\a"
 	echo "Cloning ${1} ${BRANCH}"
 	if [ -z ${BRANCH} ]; then
 		git clone --quiet ${GIT_URL}/${1}.git ${WORKDIR}/sources/${1}
@@ -424,7 +423,7 @@ buildApplication()
 			fi
 		done
 
-		if [ "${BUILD_UNSTABLE}" == "1" ]; then
+		if [ "${BUILD_BRANCH}" == "develop" ]; then
 			APP_OPTIONS="--enable-unstable"
 		else
 			APP_OPTIONS=""
@@ -569,13 +568,22 @@ copy_install_file() {
 		failed "Can't copy ${1} to ${FILENAME}"
 	fi
 
-	if [ ${BUILD_UNSTABLE} == "1" ]; then
+	case ${BUILD_BRANCH} in
+	develop)
 		TARGET_PATH="/${PRODUCT_NAME}/unstable/${ARCH}"
 		FILENAME=${PROJECTDIR}/dist/unstable/${ARCH}/$(basename ${1})
-	else
+		;;
+		
+	master)
 		TARGET_PATH="/${PRODUCT_NAME}/stable/${ARCH}"
 		FILENAME=${PROJECTDIR}/dist/stable/${ARCH}/$(basename ${1})
-	fi
+		;;
+		
+	*)
+		TARGET_PATH="/${PRODUCT_NAME}/${BUILD_BRANCH}/${ARCH}"
+		FILENAME=${PROJECTDIR}/dist/${BUILD_BRANCH}/${ARCH}/$(basename ${1})
+		
+	esac
 
 	if [ "${CLEAR_TARGET_PATH}" == "1" ]; then
 		rm -fr "$(dirname ${FILENAME})/*"
@@ -798,21 +806,6 @@ do
 
 		CLEAR)
 			CLEAR_TARGET_PATH=1
-
-#			if [ ${BUILD_UNSTABLE} == "1" ]; then
-#				CLEAR_TARGET="${PRODUCT_NAME}/unstable"
-#			else
-#				CLEAR_TARGET="${PRODUCT_NAME}/stable"
-#			fi
-#
-#			if [ -d ~/public_html/win/${STORAGE_PATH} ]; then
-#				echo rm -fr ~/public_html/win/${CLEAR_TARGET}/{x86_32,x86_64}
-#			fi
-#
-#			if [ ! -z "${XDG_PUBLICSHARE_DIR}" ] && [ -d "${XDG_PUBLICSHARE_DIR}/${CLEAR_TARGET}" ]; then
-#				echo rm -fr ${XDG_PUBLICSHARE_DIR}/${CLEAR_TARGET}/{x86_32,x86_64}
-#			fi
-
 			;;
 
 		EXTRA-PACKAGES)
@@ -836,11 +829,15 @@ do
 			;;
 
 		UNSTABLE)
-			BUILD_UNSTABLE=1
+			BUILD_BRANCH="develop"
 			;;
 
 		DEVELOP)
-			BUILD_UNSTABLE=1
+			BUILD_BRANCH="develop"
+			;;
+
+		BRANCH)
+			BUILD_BRANCH=${value}
 			;;
 
 		SHELL-ON-ERROR)
@@ -863,7 +860,8 @@ do
 
 			echo "  --product-name	Set the product name (current is ${PRODUCT_NAME})"
 			echo "  --project-path	Set the path for the customization data"
-			echo "  --unstable		Build unstable version"
+			echo "  --unstable		Build unstable version (--branch=develop)"
+			echo "  --branch		Build selected branch (current=${BUILD_BRANCH}"
 
 			echo "  --target-archs	Set the target architectures (current are ${TARGET_ARCHS})"
 			echo "  --sources-from	Base URL of the git server with the sources (current is ${GIT_URL})"
