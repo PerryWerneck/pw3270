@@ -297,24 +297,6 @@ static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 	gtk_notebook_set_show_border(widget->notebook, FALSE);
 	gtk_notebook_set_group_name(widget->notebook,PACKAGE_NAME ":Terminals");
 
-	/*
-	{
-		// Create new tab action widget
-		GtkWidget * new_tab = gtk_button_new_from_icon_name("tab-new-symbolic",GTK_ICON_SIZE_LARGE_TOOLBAR);
-		gtk_button_set_relief(GTK_BUTTON(new_tab),GTK_RELIEF_NONE);
-		gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab),g_intern_static_string("app.new.tab"));
-
-		gtk_widget_set_margin_start(new_tab,6);
-		gtk_widget_set_margin_end(new_tab,6);
-		gtk_widget_set_margin_bottom(new_tab,0);
-		gtk_widget_set_valign(new_tab,GTK_ALIGN_END);
-
-		gtk_button_set_image_position(GTK_BUTTON(new_tab),GTK_POS_BOTTOM);
-		gtk_widget_show_all(new_tab);
-		gtk_notebook_set_action_widget(widget->notebook,new_tab,GTK_PACK_START);
-	}
-	*/
-
 	// Create boxes
 	GtkBox * hBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0));
 	GtkBox * vBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL,0));
@@ -889,7 +871,7 @@ GSettings *pw3270_application_window_settings_new() {
 			GSettingsSchema * schema =
 				g_settings_schema_source_lookup(
 					source,
-					"br.com.bb." G_STRINGIFY(PRODUCT_NAME),
+					"br.com.bb." G_STRINGIFY(PRODUCT_NAME) ".window",
 					TRUE);
 
 			debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);

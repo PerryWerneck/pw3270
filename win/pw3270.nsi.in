@@ -122,7 +122,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 		# Schema
 		CreateDirectory "$INSTDIR\schemas"
 		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-application.gschema.xml"	"share\glib-2.0\schemas\pw3270-application.gschema.xml"
-		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-window.gmasma.xml"			"share\glib-2.0\schemas\pw3270-window.gschema.xml"
+		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-window.gschema.xml"		"share\glib-2.0\schemas\pw3270-window.gschema.xml"
 
 		# Configuration files
 		file "/oname=$INSTDIR\colors.conf"								"share\@PRODUCT_NAME@\colors.conf"
