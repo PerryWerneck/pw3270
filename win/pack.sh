@@ -129,7 +129,8 @@ prepare()
 			for spec in $(find ${WORKDIR}/sources/${1}/win/${ARCH} -name "*.spec")
 			do
 				echo "Parsing ${spec}"
-				grep -i buildrequires "${spec}" | grep -v "%" | cut -d: -f2- | tr -d '[:blank:]' >> ${WORKDIR}/sources/pre-reqs
+				grep -i "^Requires:" "${spec}" | grep -v "%" | cut -d: -f2- | tr -d '[:blank:]' >> ${WORKDIR}/sources/pre-reqs
+				grep -i "^BuildRequires:" "${spec}" | grep -v "%" | cut -d: -f2- | tr -d '[:blank:]' >> ${WORKDIR}/sources/pre-reqs
 			done
 		
 		fi

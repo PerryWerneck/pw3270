@@ -25,6 +25,13 @@
 # erico.mendonca@gmail.com      (Erico Mascarenhas de Mendonça)
 #
 
+#
+# Referencias:
+#
+# https://www.gtk.org/docs/installations/windows/
+# http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
+#
+
 # Get myDIR
 myDIR=$(dirname $(readlink -f "${0}"))
 

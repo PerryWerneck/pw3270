@@ -124,6 +124,8 @@ SubSection "@PRODUCT_NAME@" SecMain
 		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-application.gschema.xml"	"share\glib-2.0\schemas\pw3270-application.gschema.xml"
 		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-window.gschema.xml"		"share\glib-2.0\schemas\pw3270-window.gschema.xml"
 
+		file "/oname=$INSTDIR\gschemas.compiled"								"runtime/share/glib-2.0/schemas/gschemas.compiled"
+
 		# Configuration files
 		file "/oname=$INSTDIR\colors.conf"								"share\@PRODUCT_NAME@\colors.conf"
 
@@ -523,5 +525,10 @@ Function .onInit
 
 FunctionEnd
 
+Function .onInstSuccess
 
+	# Update GTK Image loaders
+	
+
+FunctionEnd
 
