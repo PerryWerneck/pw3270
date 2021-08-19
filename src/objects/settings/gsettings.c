@@ -92,8 +92,6 @@
 					schema_id,
 					TRUE);
 
-			debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);
-
 			g_message("Loading '%s'",filename);
 			settings = g_settings_new_full(schema, NULL, NULL);
 
