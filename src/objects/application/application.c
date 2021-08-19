@@ -242,8 +242,7 @@ static gboolean on_allow_tabs(const gchar G_GNUC_UNUSED(*option), const gchar *v
 }
 
 static gboolean on_logfile(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
-	pw3270Application *app = PW3270_APPLICATION(g_application_get_default());
-	pw3270_application_set_log_filename(app,value);
+	pw3270_application_set_log_filename(g_application_get_default(),value);
 	return TRUE;
 }
 
@@ -579,81 +578,6 @@ void pw3270_application_plugin_call(GApplication *app, const gchar *method, gpoi
 
 }
 
-
-GSettings * pw3270_application_settings_new() {
-
-	GSettings *settings = NULL;
-
-#if defined(DEBUG)
-	{
-		GError * error = NULL;
-		GSettingsSchemaSource * source =
-			g_settings_schema_source_new_from_directory(
-				".",
-				NULL,
-				TRUE,
-				&error
-			);
-
-		g_assert_no_error(error);
-
-		GSettingsSchema * schema =
-			g_settings_schema_source_lookup(
-				source,
-				"br.com.bb." G_STRINGIFY(PRODUCT_NAME),
-				TRUE);
-
-		debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);
-
-		settings = g_settings_new_full(schema, NULL, NULL);
-
-		g_settings_schema_source_unref(source);
-	}
-#elif defined(_WIN32)
-	{
-		lib3270_autoptr(char) filename = lib3270_build_filename("gschemas.compiled",NULL);
-
-		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR)) {
-
-			GError * error = NULL;
-			g_autofree gchar *dirname = g_path_get_dirname(filename);
-
-			GSettingsSchemaSource * source =
-				g_settings_schema_source_new_from_directory(
-					dirname,
-					NULL,
-					TRUE,
-					&error
-				);
-
-			g_assert_no_error(error);
-
-			GSettingsSchema * schema =
-				g_settings_schema_source_lookup(
-					source,
-					"br.com.bb." G_STRINGIFY(PRODUCT_NAME),
-					TRUE);
-
-			debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);
-
-			settings = g_settings_new_full(schema, NULL, NULL);
-
-			g_settings_schema_source_unref(source);
-
-		} else {
-
-			settings = g_settings_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME));
-
-		}
-	}
-#else
-
-	settings = g_settings_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME));
-
-#endif // DEBUG
-
-	return settings;
-}
 
 GList * pw3270_application_get_keypad_models(GApplication *app) {
 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);

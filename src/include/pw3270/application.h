@@ -68,6 +68,7 @@ GtkApplication	* pw3270_application_new(const gchar *application_id, GApplicatio
 /// @brief Get application settings.
 /// @param app	The pw3270 application object.
 /// @return The internal settings object (Do not unref it).
+GSettings		* pw3270_application_settings_new();
 GSettings		* pw3270_application_get_settings(GApplication *app);
 GList			* pw3270_application_get_keypad_models(GApplication *app);
 
