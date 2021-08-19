@@ -132,7 +132,7 @@ static void g_log_to_lib3270(const gchar *log_domain,GLogLevelFlags G_GNUC_UNUSE
 	debug("%s",message);
 	lib3270_write_log(
 		NULL,
-		log_domain ? log_domain : G_STRINGIFY(PRODUCT_NAME),
+		log_domain ? log_domain : "gtk",
 		"%s",
 		message
 	);

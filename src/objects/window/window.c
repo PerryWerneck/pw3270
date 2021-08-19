@@ -152,8 +152,11 @@ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *kla
 
 	size_t ix;
 	for(ix = 0; ix < G_N_ELEMENTS(icon_search_paths); ix++) {
-#ifdef DEBUG
+#if defined(DEBUG)
 		lib3270_autoptr(char) path = g_build_filename(g_get_current_dir(),icon_search_paths[ix],NULL);
+#elif defined(_WIN32)
+		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
+		lib3270_autoptr(char) path = g_build_filename(appdir,icon_search_paths[ix],NULL);
 #else
 		lib3270_autoptr(char) path = lib3270_build_data_filename(icon_search_paths[ix],NULL);
 #endif
@@ -164,10 +167,15 @@ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *kla
 				gtk_icon_theme_get_default(),
 				path
 			);
+		} else {
+
+			g_message("Folder '%s' is not valid",path);
+
 		}
+
 	}
 
-#ifdef DEBUG
+#if defined(DEBUG) || defined(_WIN32)
 	{
 		gchar **paths = NULL;
 		gint n_paths = 0;
@@ -178,9 +186,10 @@ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *kla
 			&n_paths
 		);
 
+		g_message("Icon search path:");
 		gint p;
 		for(p = 0; p < n_paths;p++) {
-			printf("**** [%s]\n",paths[p]);
+			g_message("\t%s",paths[p]);
 		}
 	}
 #endif // DEBUG
