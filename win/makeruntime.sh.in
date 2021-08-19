@@ -264,15 +264,6 @@ copy_theme() {
 	rm -f ${TARGET}/etc/gtk-3.0/settings.ini
 	rm -f ${TARGET}/etc/gtk-3.0/gtkrc
 
-#	echo "[Settings]" >> ${TARGET}/etc/gtk-3.0/settings.ini
-#	echo "gtk-theme-name = win32" >> ${TARGET}/etc/gtk-3.0/settings.ini
-
-#	echo "gtk-theme-name = MS-Windows" >> ${TARGET}/etc/gtk-3.0/settings.ini
-#	echo "gtk-icon-theme-name = ${1}" >> ${TARGET}/etc/gtk-3.0/settings.ini
-#	echo "gtk-fallback-icon-theme = ${1}" >> ${TARGET}/etc/gtk-3.0/settings.ini
-#	echo "gtk-font-name = Sans 10" >> ${TARGET}/etc/gtk-3.0/settings.ini
-#	echo "gtk-button-images = 1" >> ${TARGET}/etc/gtk-3.0/settings.ini
-
 	mkdir -p ${TARGET}/share/icons
 	if [ "$?" != 0 ]; then
 		echo "Can´t create icons folder"
@@ -291,11 +282,11 @@ copy_theme() {
 		exit -1
 	fi
 
-	cp -rv /usr/share/themes/${1} ${TARGET}/share/themes
-	if [ "$?" != 0 ]; then
-		echo "Can´t copy ${1} theme"
-		exit -1
-	fi
+#	cp -rv /usr/share/themes/${1} ${TARGET}/share/themes
+#	if [ "$?" != 0 ]; then
+#		echo "Can´t copy ${1} theme"
+#		exit -1
+#	fi
 
 	echo "${myDIR}/gtk.css"
 	if [ -e "${myDIR}/gtk.css" ]; then

@@ -143,25 +143,75 @@ static void constructed(GObject *object) {
 
 static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
+	static const char * icon_search_paths[] = {
+		"icons",
+#ifdef _WIN32
+		"share/icons",
+#endif // _WIN32
+	};
+
+	size_t ix;
+	for(ix = 0; ix < G_N_ELEMENTS(icon_search_paths); ix++) {
 #ifdef DEBUG
+		lib3270_autoptr(char) path = g_build_filename(g_get_current_dir(),icon_search_paths[ix],NULL);
+#else
+		lib3270_autoptr(char) path = lib3270_build_data_filename(icon_search_paths[ix],NULL);
+#endif
+
+		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
+			g_message("Adding '%s' on icon search path",path);
+			gtk_icon_theme_append_search_path(
+				gtk_icon_theme_get_default(),
+				path
+			);
+		}
+	}
+
+#ifdef DEBUG
+	{
+		gchar **paths = NULL;
+		gint n_paths = 0;
+
+		gtk_icon_theme_get_search_path (
+		    gtk_icon_theme_get_default(),
+			&paths,
+			&n_paths
+		);
+
+		gint p;
+		for(p = 0; p < n_paths;p++) {
+			printf("**** [%s]\n",paths[p]);
+		}
+	}
+#endif // DEBUG
+
+	/*
 	{
 		gtk_icon_theme_append_search_path(
 		    gtk_icon_theme_get_default(),
 		    "./icons"
 		);
+
+		gchar **paths = NULL;
+		gint n_paths = 0;
+
+		gtk_icon_theme_get_search_path (
+		    gtk_icon_theme_get_default(),
+			&paths,
+			&n_paths
+		);
+
+		gint p;
+		for(p = 0; p < n_paths;p++) {
+			printf("**** [%s]\n",paths[p]);
+		}
+
 	}
 #else
 	{
-		lib3270_autoptr(char) path = lib3270_build_data_filename("icons",NULL);
-		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
-			gtk_icon_theme_append_search_path(
-			    gtk_icon_theme_get_default(),
-			    path
-			);
-		}
 	}
 #endif // DEBUG
-
+	*/
 
 	{
 		GtkWidgetClass *widget = GTK_WIDGET_CLASS(klass);
