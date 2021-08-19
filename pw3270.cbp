@@ -145,7 +145,6 @@
 		<Unit filename="src/objects/settings/gsettings.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/objects/settings/gsettings.cc" />
 		<Unit filename="src/objects/settings/widget.c">
 			<Option compilerVar="CC" />
 		</Unit>

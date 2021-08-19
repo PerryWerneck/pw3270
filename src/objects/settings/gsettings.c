@@ -27,8 +27,6 @@
  #include <glib/gi18n.h>
  #include <gtk/gtk.h>
 
- #include <lib3270.h>
- #include <v3270/dialogs.h>
  #include <pw3270/application.h>
  #include <pw3270/window.h>
 
@@ -47,7 +45,9 @@
 				&error
 			);
 
-		if(v3270_popup_gerror(NULL, &error, "Configuration error", _("Can't load '%s' from current path"), "gschemas.compiled")) {
+		if(error) {
+			g_warning("Error loading '%s': %s","gschemas.compiled",error->message);
+			g_error_free(error);
 			return NULL;
 		}
 
@@ -80,7 +80,9 @@
 					&error
 				);
 
-			if(v3270_popup_gerror(NULL, &error, "Configuration error", _("Can't load '%s'"), filename)) {
+			if(error) {
+				g_warning("Error loading '%s': %s",filename,error->message);
+				g_error_free(error);
 				return NULL;
 			}
 
@@ -110,6 +112,10 @@
 	settings = g_settings_new(schema_id);
 
 #endif // DEBUG
+
+	if(!settings) {
+		g_warning("Error creating settings");
+	}
 
 	return settings;
  }
