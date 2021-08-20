@@ -64,27 +64,6 @@ void gtk_container_remove_all(GtkContainer *container) {
 
 }
 
-/*
-GtkWidget * pw3270_frame_new(GtkWidget * child, const gchar *title) {
-
-GtkFrame			* frame		= GTK_FRAME(gtk_frame_new(""));
-g_autofree gchar	* markup	= g_strdup_printf("<b>%s</b>",title);
-GtkWidget			* label		= gtk_label_new(NULL);
-
-gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_NONE);
-gtk_label_set_markup(GTK_LABEL(label),markup);
-gtk_frame_set_label_widget(GTK_FRAME(frame),label);
-	gtk_container_set_border_width(GTK_CONTAINER(child),12);
-
-gtk_container_add(GTK_CONTAINER(frame),GTK_WIDGET(child));
-
-g_object_set(G_OBJECT(frame),"margin-top",6,NULL);
-
-return GTK_WIDGET(frame);
-
-}
-*/
-
 void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser) {
 
 	static const struct Filter {
@@ -112,4 +91,15 @@ void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser) {
 
 }
 
+H3270 * pw3270_get_active_session() {
+
+	GApplication *app = g_application_get_default();
+
+	g_return_val_if_fail(GTK_IS_APPLICATION(app),NULL);
+
+	GtkWindow * window = gtk_application_get_active_window(GTK_APPLICATION(app));
+
+	return pw3270_window_get_session_handle(GTK_WIDGET(window));
+
+}
 

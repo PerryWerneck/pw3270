@@ -37,6 +37,7 @@
 #define PW3270_APPLICATION_H_INCLUDED
 
 #include <gtk/gtk.h>
+#include <lib3270.h>
 
 G_BEGIN_DECLS
 
@@ -97,6 +98,9 @@ void pw3270_application_save_copy_activated(GAction *action, GVariant *parameter
 
 // Settings
 GtkWidget * pw3270_header_settings_new();
+
+// Tools
+H3270			* pw3270_get_active_session();
 
 
 G_END_DECLS
