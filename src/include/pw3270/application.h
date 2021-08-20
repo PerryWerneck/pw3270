@@ -101,7 +101,7 @@ GtkWidget * pw3270_header_settings_new();
 
 // Tools
 H3270			* pw3270_get_active_session();
-
+GtkWidget		* pw3270_get_active_terminal();
 
 G_END_DECLS
 

@@ -37,6 +37,7 @@
 #include <pw3270.h>
 #include <pw3270/application.h>
 #include <pw3270/settings.h>
+#include <pw3270/window.h>
 
 /*---[ Implement ]----------------------------------------------------------------------------------*/
 
@@ -91,6 +92,17 @@ void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser) {
 
 }
 
+GtkWidget * pw3270_get_active_terminal() {
+
+	GApplication *app = g_application_get_default();
+	g_return_val_if_fail(GTK_IS_APPLICATION(app),NULL);
+
+	GtkWindow * window = gtk_application_get_active_window(GTK_APPLICATION(app));
+
+	return pw3270_application_window_get_active_terminal(GTK_WIDGET(window));
+
+}
+
 H3270 * pw3270_get_active_session() {
 
 	GApplication *app = g_application_get_default();
@@ -102,4 +114,3 @@ H3270 * pw3270_get_active_session() {
 	return pw3270_window_get_session_handle(GTK_WIDGET(window));
 
 }
-
