@@ -111,7 +111,7 @@
     </key>
 
     <key name="header-action-names" type="s">
-      <default>'app.new.tab:menu.open-menu,win.disconnect,win.reconnect'</default>
+      <default>'app.tab.new:menu.open-menu,win.disconnect,win.reconnect'</default>
       <summary>The title bar action list</summary>
       <description></description>
     </key>

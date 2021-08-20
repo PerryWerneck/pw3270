@@ -63,7 +63,7 @@ GAction * pw3270_quit_action_new() {
 	action->name = "quit";
 	action->label = _( "Quit" );
 	action->tooltip = _( "Close all windows and exit application" );
-	action->icon_name = "gtk-quit";
+	action->icon_name = "application-exit";
 	action->activate = quit_activated;
 
 	return G_ACTION(action);
@@ -80,7 +80,7 @@ GAction * pw3270_new_tab_action_new() {
 
 	PW3270Action * action = pw3270_action_new();
 
-	action->name = "new.tab";
+	action->name = "tab.new";
 	action->label = _( "New tab" );
 	action->tooltip = _( "New tab with default session" );
 	action->icon_name = "tab-new";
@@ -100,7 +100,7 @@ GAction * pw3270_new_window_action_new() {
 
 	PW3270Action * action = pw3270_action_new();
 
-	action->name = "new.window";
+	action->name = "window.new";
 	action->label = _( "New window" );
 	action->tooltip = _( "New window with default session" );
 	action->icon_name = "window-new";
