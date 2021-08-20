@@ -460,6 +460,24 @@ buildApplication()
 			failed "Can't configure ${1}"
 		fi
 
+		if [ ! -e "branding/${PRODUCT_NAME}.svg" ]; then
+		
+			if [ -e "${PROJECTDIR}/${PRODUCT_NAME}.svg" ]; then
+				echo "Getting icon from ${PROJECTDIR}/${PRODUCT_NAME}.svg"
+				ln -s "$(readlink -f "${PROJECTDIR}/${PRODUCT_NAME}.svg")" "branding/${PRODUCT_NAME}.svg"
+
+			elif [ -e "${PROJECTDIR}/branding/${PRODUCT_NAME}.svg" ]; then
+				echo "Getting icon from ${PROJECTDIR}/branding/${PRODUCT_NAME}.svg"
+				ln -s "$(readlink -f "${PROJECTDIR}/branding/${PRODUCT_NAME}.svg")" "branding/${PRODUCT_NAME}.svg"
+	
+			else
+				echo "Using default icon"
+				ln -s "pw3270.svg" "branding/${PRODUCT_NAME}.svg"
+			
+			fi
+		
+		fi
+		
 		make all
 		if [ "$?" != "0" ]; then
 			failed "Can't buid ${1}"

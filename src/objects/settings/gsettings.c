@@ -99,7 +99,7 @@
 
 		} else {
 
-			g_message("Loading '%s' from default path","gschemas.compiled");
+			g_message("Can't find '%s' loading from default path",filename);
 			settings = g_settings_new(schema_id);
 
 		}
