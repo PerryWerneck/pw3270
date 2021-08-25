@@ -71,16 +71,24 @@ gchar * v3270_keyfile_find(const gchar *name) {
 }
 
 /// @brief Open session file
-static void open(GtkApplication *application, const gchar *filename) {
+static void open(GtkApplication *application, GtkWindow **window, const gchar *filename) {
 
 	g_message("Opening '%s'",filename);
 
-	GtkWindow *window = GTK_WINDOW(pw3270_application_window_new(application, filename));
-	gtk_window_present(window);
+	if(*window) {
+
+		// Already open a window, open in new tab.
+		pw3270_application_window_new_tab(GTK_WIDGET(*window), filename);
+
+	} else {
+		// It's a new window
+		*window = GTK_WINDOW(pw3270_application_window_new(application, filename));
+
+	}
 
 }
 
-void pw3270_application_open_file(GtkApplication *application, GFile *file) {
+void pw3270_application_open_file(GtkApplication *application, GtkWindow **window, GFile *file) {
 
 //	GtkWidget * window = gtk_application_get_active_window(application);
 	g_autofree gchar * scheme = g_file_get_uri_scheme(file);
@@ -92,7 +100,7 @@ void pw3270_application_open_file(GtkApplication *application, GFile *file) {
 
 			// The file exists, load it.
 			g_autofree gchar *filename = g_file_get_path(file);
-			open(application,filename);
+			open(application,window,filename);
 
 		} else {
 
@@ -101,7 +109,7 @@ void pw3270_application_open_file(GtkApplication *application, GFile *file) {
 			g_autofree gchar * filename = v3270_keyfile_find(basename);
 
 			if(filename) {
-				open(application,filename);
+				open(application,window,filename);
 			} else {
 				g_warning("Cant find session '%s'",basename);
 			}
@@ -124,13 +132,14 @@ void pw3270_application_open_file(GtkApplication *application, GFile *file) {
 void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
 	gint file;
+	GtkWindow *window = NULL;
 
 	debug("\n\n%s files=%d",__FUNCTION__,n_files);
 
 	for(file = 0; file < n_files; file++) {
 
 		debug("%s(%d,%p)",__FUNCTION__,file,files[file]);
-		pw3270_application_open_file(GTK_APPLICATION(application),files[file]);
+		pw3270_application_open_file(GTK_APPLICATION(application),&window,files[file]);
 
 		/*
 
@@ -209,8 +218,8 @@ void pw3270_application_open(GApplication *application, GFile **files, gint n_fi
 		*/
 	}
 
-//	if(window)
-//		gtk_window_present(GTK_WINDOW(window));
+	if(window)
+		gtk_window_present(GTK_WINDOW(window));
 
 }
 
