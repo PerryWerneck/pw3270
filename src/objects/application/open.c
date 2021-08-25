@@ -90,7 +90,6 @@ static void open(GtkApplication *application, GtkWindow **window, const gchar *f
 
 void pw3270_application_open_file(GtkApplication *application, GtkWindow **window, GFile *file) {
 
-//	GtkWidget * window = gtk_application_get_active_window(application);
 	g_autofree gchar * scheme = g_file_get_uri_scheme(file);
 
 	if(g_ascii_strcasecmp(scheme,"file") == 0) {
@@ -104,7 +103,7 @@ void pw3270_application_open_file(GtkApplication *application, GtkWindow **windo
 
 		} else {
 
-			// The file doesn't exist, search for.
+			// Search for file.
 			g_autofree gchar * basename = g_file_get_basename(file);
 			g_autofree gchar * filename = v3270_keyfile_find(basename);
 
@@ -118,6 +117,23 @@ void pw3270_application_open_file(GtkApplication *application, GtkWindow **windo
 
 	} else if(g_ascii_strcasecmp(scheme,"tn3270") == 0 || g_ascii_strcasecmp(scheme,"tn3270s") == 0) {
 
+		g_autofree gchar * uri = g_file_get_uri(file);
+		size_t sz = strlen(uri);
+
+		if(sz > 0 && uri[sz-1] == '/')
+			uri[sz-1] = 0;
+
+		g_message("Opening '%s' with default settings",uri);
+
+		if(!*window) {
+			*window = GTK_WINDOW(pw3270_application_window_new(application, NULL));
+		} else {
+			pw3270_application_window_new_tab(GTK_WIDGET(*window), NULL);
+		}
+
+		GtkWidget * terminal = pw3270_application_window_get_active_terminal(GTK_WIDGET(*window));
+		v3270_set_default_session(terminal);
+		v3270_set_url(terminal,uri);
 
 	} else {
 
