@@ -57,8 +57,6 @@ struct _pw3270Application {
 	GSettings	* settings;
 	GList		* keypads;
 	gchar 		* logfile;
-	gboolean	  allow_tabs;	///< @brief Always open window.
-
 	GSList		* plugins;		///< @brief Handlers of the loaded plugins.
 	PW3270_UI_STYLE	ui_style;
 
@@ -230,17 +228,6 @@ static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gcha
 
 }
 
-static gboolean on_allow_tabs(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
-	pw3270Application *app = PW3270_APPLICATION(g_application_get_default());
-	app->allow_tabs = (g_ascii_strcasecmp(value,"no") != 0);
-	if(app->allow_tabs) {
-		g_message("Opening new sessions on tabs");
-	} else {
-		g_message("Opening new sessions on windows");
-	}
-	return TRUE;
-}
-
 static gboolean on_logfile(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
 	pw3270_application_set_log_filename(g_application_get_default(),value);
 	return TRUE;
@@ -251,13 +238,10 @@ static void pw3270Application_init(pw3270Application *app) {
 	static GOptionEntry cmd_options[] = {
 
 		{ "user-interface", 'U', 0, G_OPTION_ARG_CALLBACK,	&on_user_interface, N_( "Set the user-interface type" ),  NULL },
-		{ "allow-tabs",		'T', 0, G_OPTION_ARG_CALLBACK,	&on_allow_tabs, N_( "If 'no' allways open a window" ),  NULL },
 		{ "logfile",		'l', 0, G_OPTION_ARG_CALLBACK,	&on_logfile, N_( "Set default log file name" ),  NULL },
 		{ NULL }
 
 	};
-
-	app->allow_tabs = TRUE;
 
 	g_application_add_main_option_entries(G_APPLICATION(app), cmd_options);
 
@@ -556,11 +540,6 @@ void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer u
 		func(item->data,user_data);
 	}
 
-}
-
-gboolean pw3270_application_allow_tabs(GApplication *app) {
-	g_return_val_if_fail(PW3270_IS_APPLICATION(app),TRUE);
-	return PW3270_APPLICATION(app)->allow_tabs;
 }
 
 void pw3270_application_plugin_call(GApplication *app, const gchar *method, gpointer user_data) {

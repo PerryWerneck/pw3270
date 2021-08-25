@@ -70,15 +70,69 @@ gchar * v3270_keyfile_find(const gchar *name) {
 
 }
 
-void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
+/// @brief Open session file
+static void open(GtkApplication *application, const gchar *filename) {
 
-	GtkWidget * window = GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application)));
+	g_message("Opening '%s'",filename);
+
+	GtkWindow *window = GTK_WINDOW(pw3270_application_window_new(application, filename));
+	gtk_window_present(window);
+
+}
+
+void pw3270_application_open_file(GtkApplication *application, GFile *file) {
+
+//	GtkWidget * window = gtk_application_get_active_window(application);
+	g_autofree gchar * scheme = g_file_get_uri_scheme(file);
+
+	if(g_ascii_strcasecmp(scheme,"file") == 0) {
+
+		// It's a file scheme.
+		if(g_file_query_exists(file,NULL)) {
+
+			// The file exists, load it.
+			g_autofree gchar *filename = g_file_get_path(file);
+			open(application,filename);
+
+		} else {
+
+			// The file doesn't exist, search for.
+			g_autofree gchar * basename = g_file_get_basename(file);
+			g_autofree gchar * filename = v3270_keyfile_find(basename);
+
+			if(filename) {
+				open(application,filename);
+			} else {
+				g_warning("Cant find session '%s'",basename);
+			}
+
+		}
+
+	} else if(g_ascii_strcasecmp(scheme,"tn3270") == 0 || g_ascii_strcasecmp(scheme,"tn3270s") == 0) {
+
+
+	} else {
+
+		g_warning("Don't know how to handle '%s' scheme",scheme);
+
+	}
+
+
+
+}
+
+void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
 	gint file;
 
-	debug("%s files=%d",__FUNCTION__,n_files);
+	debug("\n\n%s files=%d",__FUNCTION__,n_files);
 
 	for(file = 0; file < n_files; file++) {
+
+		debug("%s(%d,%p)",__FUNCTION__,file,files[file]);
+		pw3270_application_open_file(GTK_APPLICATION(application),files[file]);
+
+		/*
 
 		g_autofree gchar *path = g_file_get_path(files[file]);
 
@@ -152,10 +206,11 @@ void pw3270_application_open(GApplication *application, GFile **files, gint n_fi
 
 		}
 
+		*/
 	}
 
-	if(window)
-		gtk_window_present(GTK_WINDOW(window));
+//	if(window)
+//		gtk_window_present(GTK_WINDOW(window));
 
 }
 
