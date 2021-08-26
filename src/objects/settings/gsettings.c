@@ -112,7 +112,31 @@
 #endif // DEBUG
 
 	if(!settings) {
-		g_warning("Error creating settings");
+
+		g_warning("Error loading system settings");
+
+		GtkWidget * dialog = gtk_message_dialog_new_with_markup(
+								 NULL,
+								 0,
+								 GTK_MESSAGE_ERROR,
+								 GTK_BUTTONS_CLOSE,
+								 _("Can't load system settings")
+							 );
+
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_("Unable to initialize system settings. Application may crash in unexpected ways"));
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_("System settings error"));
+
+		gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
+
+		gtk_widget_show_all(dialog);
+
+		//g_signal_connect(dialog,"close",G_CALLBACK(gtk_widget_destroy),NULL);
+		//g_signal_connect(dialog,"response",G_CALLBACK(gtk_widget_destroy),NULL);
+		gtk_dialog_run(GTK_DIALOG(dialog));
+
+		g_application_quit(g_application_get_default());
+
 	}
 
 	return settings;
