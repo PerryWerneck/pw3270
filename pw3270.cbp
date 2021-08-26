@@ -136,6 +136,9 @@
 		<Unit filename="src/objects/os/linux/savedesktopicon.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/os/windows/open.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/os/windows/savedesktopicon.c">
 			<Option compilerVar="CC" />
 		</Unit>
