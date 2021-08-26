@@ -65,6 +65,7 @@ typedef struct _pw3270Application        pw3270Application;
 
 GType			  pw3270Application_get_type();
 GtkApplication	* pw3270_application_new(const gchar *application_id, GApplicationFlags flags);
+void			  pw3270_application_open_file(GtkApplication *application, GtkWindow **window, GFile *file);
 
 /// @brief Get application settings.
 /// @param app	The pw3270 application object.
