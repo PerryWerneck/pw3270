@@ -42,6 +42,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:		mingw64-gtk3
 Requires:		mingw64-lib3270 = %{version}
 Requires:		mingw64-hicolor-icon-theme
+Requires:		mingw64(libpixbufloader-svg.dll)
 
 Provides:		mingw64(lib:pw3270) = %{version}
 Requires:		mingw64-lib3270-%{MAJOR_VERSION}_%{MINOR_VERSION} = %{version}
