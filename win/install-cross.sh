@@ -1,62 +1,35 @@
 #!/bin/bash
+myDIR=$(dirname $(readlink -f ${0}))
 
-install_packages()
-{
+install_packages() {
 
-TEMPFILE=$(mktemp)
+	TEMPFILE=$(mktemp)
+	
+	for spec in $(find ${myDIR} -name "${1}*.spec")
+	do
+		echo "Parsing ${spec}"
+		grep -i "^Requires:" "${spec}" | grep -v "%" | cut -d: -f2- | tr -d '[:blank:]' | cut -d'>' -f1 >> ${TEMPFILE}
+		grep -i "^BuildRequires:" "${spec}" | grep -v "%" | cut -d: -f2- | tr -d '[:blank:]'  | cut -d'>' -f1 >> ${TEMPFILE}
+	done
+	
+	cat ${TEMPFILE} \
+		| sort --unique \
+		| xargs sudo zypper --non-interactive --verbose in
 
-cat > ${TEMPFILE} << EOF
-libopenssl
-libopenssl-devel
-libintl-devel
-libepoxy0
-libgdk_pixbuf-2_0-0
-atk-devel
-pango-devel
-win_iconv-devel
-pixman-devel
-glib2-devel
-cairo-devel
-freetype-devel
-winpthreads-devel
-gtk3-devel
-cross-gcc-c++
-cross-pkg-config
-cross-cpp
-cross-binutils
-cross-nsis
-filesystem
-gettext-tools
-gtk3-data
-gtk3-tools
-headers
-gnome-icon-theme
-hicolor-icon-theme
-gdk-pixbuf-loader-rsvg
-gdk-pixbuf-query-loaders
-EOF
-
-# Instala apicativos e temas necessários
-sudo zypper --non-interactive in \
-	adwaita-icon-theme \
-	gettext-tools \
-	glib2-devel \
-	optipng \
-	rsvg-view \
-	ImageMagick
-
-while read FILE
-do
-	sudo zypper --non-interactive in ${1}-${FILE}
-done < ${TEMPFILE}
-
-rm -f ${TEMPFILE}
+	rm -f ${TEMPFILE}
 
 }
 
 if [ -z ${1} ]; then
-	echo "Use ${0} --32 for 32 bits cross-compiler"
-	echo "Use ${0} --64 for 64 bits cross-compiler"
+	echo "${0} [options]"
+	echo ""
+	echo "Options:"
+	echo ""
+
+	echo "  --ar	Install required OBS repositories for zypper"
+	echo "  --32	Install cross compiler for 32 bits windows using zypper"
+	echo "  --64	Install cross compiler for 64 bits windows using zypper"
+	echo "  --all	Install cross compiler for 32 and 64 bits windows using zypper"
 	exit -1
 fi
 
@@ -70,9 +43,11 @@ do
 
 		case $parameter in
 
-		ar)
-			zypper ar --refresh http://download.opensuse.org/repositories/windows:/mingw:/win32/openSUSE_42.3/ mingw32
-			zypper ar --refresh http://download.opensuse.org/repositories/windows:/mingw:/win64/openSUSE_42.3/ mingw64
+		AR)
+			echo "Adding required repositories"
+			sudo zypper ar obs://windows:mingw:win32 windows_mingw_win32
+			sudo zypper ar obs://windows:mingw:win64 windows_mingw_win64
+			sudo zypper ar obs://home:PerryWerneck:pw3270 home_PerryWerneck_pw3270
 			;;
 
 		32)
