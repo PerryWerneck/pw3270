@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:46-0300\n"
-"PO-Revision-Date: 2021-08-20 15:46-0300\n"
+"POT-Creation-Date: 2021-09-01 23:55-0300\n"
+"PO-Revision-Date: 2021-09-01 23:57-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Português <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: src/objects/application/application.c:224
+#: src/objects/application/application.c:222
 #, c-format
 msgid "\"%s\" is not a valid user interface name"
 msgstr "\"%s\" não é um nome válido para interface de usuário"
@@ -133,6 +133,14 @@ msgstr "Em baixo"
 #: src/objects/window/terminal.c:196
 msgid "Can't load session file"
 msgstr "Não foi possível carregar arquivo de sessão"
+
+#: src/objects/os/windows/open.c:133
+msgid "Can't load session preferences"
+msgstr "Não foi possível carregar preferências da sessão"
+
+#: src/objects/settings/gsettings.c:123
+msgid "Can't load system settings"
+msgstr "Não foi possível carregar configurações de sistema"
 
 #: src/objects/application/actions/open.c:99 src/objects/window/terminal.c:191
 #, c-format
@@ -314,6 +322,10 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
+#: src/objects/os/windows/open.c:140
+msgid "Error starting session"
+msgstr "Erro iniciando sessão"
+
 #: ui/application.xml:352
 msgid "Field attributes"
 msgstr "Atributos de campo"
@@ -374,10 +386,6 @@ msgstr "Ícones e texto"
 #: src/objects/toolbar/models.c:87
 msgid "Icons only"
 msgstr "Apenas ícones"
-
-#: src/objects/application/application.c:254
-msgid "If 'no' allways open a window"
-msgstr "Se 'no' sempre abre uma nova janela"
 
 #: src/objects/actions/abstract.c:141
 msgid "If the action can be activated"
@@ -719,11 +727,11 @@ msgstr "Nome da sessão"
 msgid "Session preferences"
 msgstr "Preferências da sessão"
 
-#: src/objects/application/application.c:255
+#: src/objects/application/application.c:241
 msgid "Set default log file name"
 msgstr "Define o nome do arquivo de log padrão"
 
-#: src/objects/application/application.c:253
+#: src/objects/application/application.c:240
 msgid "Set the user-interface type"
 msgstr "Define o tipo de interface do usuário"
 
@@ -796,6 +804,10 @@ msgstr "Simbólico"
 msgid "System default"
 msgstr "Padrão do sistema"
 
+#: src/objects/settings/gsettings.c:128
+msgid "System settings error"
+msgstr "Erro nas configurações de sistema"
+
 #: src/main/tools.c:75
 msgid "TN3270 Session Files"
 msgstr "Arquivos de sessão TN3270"
@@ -828,7 +840,7 @@ msgstr "A etiqueta da ação"
 msgid "The action tooltip"
 msgstr "A dica da ação"
 
-#: src/objects/application/application.c:172
+#: src/objects/application/application.c:170
 msgid "The code of the User interface type"
 msgstr "Código identificando o tipo de interface do usuário"
 
@@ -951,9 +963,22 @@ msgstr "Trace"
 msgid "Track Cursor"
 msgstr "Mostrar posição do cursor"
 
-#: src/objects/application/application.c:171
+#: src/objects/application/application.c:169
 msgid "UI Type"
 msgstr "Interface de usuário"
+
+#: src/objects/settings/gsettings.c:126
+msgid ""
+"Unable to initialize system settings. Application may crash in unexpected "
+"ways"
+msgstr ""
+"Não foi possível iniciar configuração de sistema. Aplicação pode falhar de "
+"forma inesperada"
+
+#: src/objects/os/windows/open.c:137
+#, c-format
+msgid "Unable to load session preferences from '%s'"
+msgstr "Incapaz de ler preferências de sessa de '%s'"
 
 #: ui/window.xml:272 ui/application.xml:290
 msgid "Unselect"
@@ -1914,9 +1939,6 @@ msgstr "translator-credits"
 #~ msgid "Error in vasprintf"
 #~ msgstr "Erro na chamada vasprintf"
 
-#~ msgid "Error loading %s"
-#~ msgstr "Erro lendo %s"
-
 #~ msgid "Error loading CRL"
 #~ msgstr "Erro lendo CRL"
 
@@ -2152,6 +2174,9 @@ msgstr "translator-credits"
 
 #~ msgid "Identity not verified"
 #~ msgstr "Identidade não verificada"
+
+#~ msgid "If 'no' allways open a window"
+#~ msgstr "Se 'no' sempre abre uma nova janela"
 
 #~ msgid ""
 #~ "If active, pw3270 will respond to a Query(Color) with a list of 8 "
