@@ -228,7 +228,7 @@ static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gcha
 
 }
 
-static gboolean on_logfile(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
+static gboolean on_logfile(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError G_GNUC_UNUSED(**error)) {
 	pw3270_application_set_log_filename(g_application_get_default(),value);
 	return TRUE;
 }
@@ -563,7 +563,7 @@ GList * pw3270_application_get_keypad_models(GApplication *app) {
 	return PW3270_APPLICATION(app)->keypads;
 }
 
-static int loghandler(const H3270 *hSession, pw3270Application *app, const char *module, int code, const char *message) {
+static int loghandler(const H3270 G_GNUC_UNUSED(*hSession), pw3270Application *app, const char *module, int G_GNUC_UNUSED(code), const char *message) {
 
 	if(!app->logfile) {
 		return -1;

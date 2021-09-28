@@ -31,6 +31,8 @@
 #include <pw3270/window.h>
 
 GtkWidget * pw3270_window_get_terminal(GtkWidget *window) {
+	g_return_val_if_fail(PW3270_IS_APPLICATION_WINDOW(window),NULL);
+	return PW3270_APPLICATION_WINDOW(window)->terminal;
 }
 
 H3270 * pw3270_window_get_session_handle(GtkWidget *window) {

@@ -52,7 +52,7 @@ struct _PW3270SettingsActionsClass {
 
 G_DEFINE_TYPE(PW3270SettingsActions, PW3270SettingsActions, GTK_TYPE_GRID);
 
-static void PW3270SettingsActions_class_init(PW3270SettingsActionsClass *klass) {
+static void PW3270SettingsActions_class_init(PW3270SettingsActionsClass G_GNUC_UNUSED(*klass)) {
 
 }
 
@@ -87,7 +87,7 @@ static void PW3270SettingsActions_init(PW3270SettingsActions *grid) {
 	{
 		// Create views
 		GtkTreeSelection * selection;
-		GtkWidget *box;
+		//GtkWidget *box;
 
 		for(ix = 0; ix < G_N_ELEMENTS(grid->views); ix++) {
 

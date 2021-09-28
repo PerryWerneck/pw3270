@@ -45,7 +45,7 @@ static void parse_error (GMarkupParseContext G_GNUC_UNUSED(*context), GError G_G
 	g_free(data);
 }
 
-static void parse_text(GMarkupParseContext *context, const gchar *text, gsize text_len, gpointer user_data, GError **error) {
+static void parse_text(GMarkupParseContext G_GNUC_UNUSED(*context), const gchar *text, gsize G_GNUC_UNUSED(text_len), gpointer user_data, GError **error) {
 
 	if(text && ((struct Attribute *) user_data)->translatable ) {
 		text = gettext(text);
@@ -132,7 +132,7 @@ void attribute_element_start(GMarkupParseContext *context,const gchar **names,co
 
 }
 
-void attribute_element_end(GMarkupParseContext *context, GObject *parent, GError **error) {
+void attribute_element_end(GMarkupParseContext *context, GObject G_GNUC_UNUSED(*parent), GError G_GNUC_UNUSED(**error)) {
 
 	struct Attribute * data = g_markup_parse_context_pop(context);
 	g_free(data);
