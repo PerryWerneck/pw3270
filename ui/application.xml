@@ -103,7 +103,7 @@
 
 				<item>
 					<attribute name="label" translatable="yes">Window with default session</attribute>
-					<attribute name="action">app.new.window</attribute>
+					<attribute name="action">app.window.new</attribute>
 				</item>
 
 				<item>
@@ -161,7 +161,7 @@
 
 					<item>
 						<attribute name="label" translatable="yes">Session preferences</attribute>
-						<attribute name="action">win.save.session.as</attribute>
+						<attribute name="action">win.save.session.preferences</attribute>
 					</item>
 
 				</section>

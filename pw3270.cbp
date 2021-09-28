@@ -130,7 +130,13 @@
 		<Unit filename="src/objects/keypad/widget.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/os/linux/open.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/os/linux/savedesktopicon.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/os/windows/open.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/os/windows/savedesktopicon.c">
@@ -140,6 +146,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/settings/dialog.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/settings/gsettings.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/settings/widget.c">

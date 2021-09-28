@@ -31,54 +31,19 @@
 #include <pw3270/application.h>
 #include <v3270/keyfile.h>
 
-gchar * v3270_keyfile_find(const gchar *name) {
-	//
-	// It can be a session file, scans for it
-	//
-	const gchar * paths[] = {
-		g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS),
-		g_get_user_config_dir()
-	};
-
-	static const gchar *subdirs[] = {
-		"3270",
-		G_STRINGIFY(PRODUCT_NAME),
-		PACKAGE_NAME
-	};
-
-	size_t path, subdir;
-
-	g_autofree gchar * filename = g_strconcat(name,".3270",NULL);
-
-	for(path = 0; path < G_N_ELEMENTS(paths); path++) {
-
-		for(subdir = 0; subdir < G_N_ELEMENTS(subdirs); subdir++) {
-
-			gchar * fullpath = g_build_filename(paths[path],subdirs[subdir],filename,NULL);
-
-			debug("Searching for \"%s\"",fullpath);
-
-			if(g_file_test(fullpath,G_FILE_TEST_IS_REGULAR)) {
-				return fullpath;
-			}
-			g_free(fullpath);
-
-		}
-	}
-
-	return NULL;
-
-}
-
 void pw3270_application_open(GApplication *application, GFile **files, gint n_files, const gchar G_GNUC_UNUSED(*hint)) {
 
-	GtkWidget * window = GTK_WIDGET(gtk_application_get_active_window(GTK_APPLICATION(application)));
-
 	gint file;
+	GtkWindow *window = NULL;
 
-	debug("%s files=%d",__FUNCTION__,n_files);
+	debug("\n\n%s files=%d",__FUNCTION__,n_files);
 
 	for(file = 0; file < n_files; file++) {
+
+		debug("%s(%d,%p)",__FUNCTION__,file,files[file]);
+		pw3270_application_open_file(GTK_APPLICATION(application),&window,files[file]);
+
+		/*
 
 		g_autofree gchar *path = g_file_get_path(files[file]);
 
@@ -152,6 +117,7 @@ void pw3270_application_open(GApplication *application, GFile **files, gint n_fi
 
 		}
 
+		*/
 	}
 
 	if(window)

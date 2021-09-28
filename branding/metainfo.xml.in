@@ -4,6 +4,8 @@
 
 	References:
 
+		https://blogs.gnome.org/tbernard/2021/09/07/ready-for-software-41/
+		
 		https://www.freedesktop.org/software/appstream/docs/chap-Quickstart.html#sect-Quickstart-DesktopApps
 		https://people.freedesktop.org/~hughsient/temp/AppData_WhitePaper.pdf
 		https://docs.fedoraproject.org/en-US/packaging-guidelines/AppData/
@@ -21,8 +23,12 @@
 	<name>@PRODUCT_NAME@</name>
 	<name xml:lang="pt_BR">@PRODUCT_NAME@</name>
 
-	<summary>IBM 3270 Terminal emulator</summary>
-	<summary xml:lang="pt_BR">Emulador de terminal IBM 3270</summary>
+	<summary>Access TN3270 hosts</summary>
+	<summary xml:lang="pt_BR">Acesse servidores TN3270</summary>
+
+	<requires>
+		<control>keyboard</control>
+	</requires>
 
 	<developer_name>Perry Werneck</developer_name>
 

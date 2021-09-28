@@ -75,7 +75,7 @@
     </key>
 
     <key name="update-default-session-file" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Update default session time from command line</summary>
       <description></description>
     </key>

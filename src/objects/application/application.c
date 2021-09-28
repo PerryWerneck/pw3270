@@ -56,8 +56,7 @@ struct _pw3270Application {
 
 	GSettings	* settings;
 	GList		* keypads;
-	gboolean	  allow_tabs;	///< @brief Always open window.
-
+	gchar 		* logfile;
 	GSList		* plugins;		///< @brief Handlers of the loaded plugins.
 	PW3270_UI_STYLE	ui_style;
 
@@ -127,9 +126,21 @@ static void window_removed(GtkApplication *application, GtkWindow *window) {
 
 }
 
+static void g_log_to_lib3270(const gchar *log_domain,GLogLevelFlags G_GNUC_UNUSED(log_level),const gchar *message,gpointer G_GNUC_UNUSED(user_data)) {
+	debug("%s",message);
+	lib3270_write_log(
+		NULL,
+		log_domain ? log_domain : "gtk",
+		"%s",
+		message
+	);
+}
+
 static void pw3270Application_class_init(pw3270ApplicationClass *klass) {
 
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	g_log_set_default_handler(g_log_to_lib3270,NULL);
 
 	object_class->get_property = get_property;
 	object_class->set_property = set_property;
@@ -217,20 +228,8 @@ static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gcha
 
 }
 
-static gboolean on_log_file(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
-	pw3270Application *app = PW3270_APPLICATION(g_application_get_default());
-
-	return TRUE;
-}
-
-static gboolean on_allow_tabs(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
-	pw3270Application *app = PW3270_APPLICATION(g_application_get_default());
-	app->allow_tabs = (g_ascii_strcasecmp(value,"no") != 0);
-	if(app->allow_tabs) {
-		g_message("Opening new sessions on tabs");
-	} else {
-		g_message("Opening new sessions on windows");
-	}
+static gboolean on_logfile(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
+	pw3270_application_set_log_filename(g_application_get_default(),value);
 	return TRUE;
 }
 
@@ -239,13 +238,10 @@ static void pw3270Application_init(pw3270Application *app) {
 	static GOptionEntry cmd_options[] = {
 
 		{ "user-interface", 'U', 0, G_OPTION_ARG_CALLBACK,	&on_user_interface, N_( "Set the user-interface type" ),  NULL },
-		{ "log-filename", 'l', 0, G_OPTION_ARG_CALLBACK,	&on_log_file, N_( "Set custom log file for the active session" ),  NULL },
-		{ "allow-tabs", 'T', 0, G_OPTION_ARG_CALLBACK,		&on_allow_tabs, N_( "If 'no' allways open a window" ),  NULL },
+		{ "logfile",		'l', 0, G_OPTION_ARG_CALLBACK,	&on_logfile, N_( "Set default log file name" ),  NULL },
 		{ NULL }
 
 	};
-
-	app->allow_tabs = TRUE;
 
 	g_application_add_main_option_entries(G_APPLICATION(app), cmd_options);
 
@@ -353,6 +349,13 @@ static void finalize(GObject *object) {
 	if(application->settings) {
 		g_object_unref(application->settings);
 		application->settings = NULL;
+	}
+
+	lib3270_set_log_handler(NULL,NULL,NULL);
+
+	if(application->logfile) {
+		g_free(application->logfile);
+		application->logfile = NULL;
 	}
 
 	g_list_free_full(application->keypads,g_object_unref);
@@ -539,11 +542,6 @@ void pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer u
 
 }
 
-gboolean pw3270_application_allow_tabs(GApplication *app) {
-	g_return_val_if_fail(PW3270_IS_APPLICATION(app),TRUE);
-	return PW3270_APPLICATION(app)->allow_tabs;
-}
-
 void pw3270_application_plugin_call(GApplication *app, const gchar *method, gpointer user_data) {
 
 	g_return_if_fail(PW3270_IS_APPLICATION(app));
@@ -560,83 +558,55 @@ void pw3270_application_plugin_call(GApplication *app, const gchar *method, gpoi
 }
 
 
-GSettings * pw3270_application_settings_new() {
-
-	GSettings *settings = NULL;
-
-#if defined(DEBUG)
-	{
-		GError * error = NULL;
-		GSettingsSchemaSource * source =
-			g_settings_schema_source_new_from_directory(
-				".",
-				NULL,
-				TRUE,
-				&error
-			);
-
-		g_assert_no_error(error);
-
-		GSettingsSchema * schema =
-			g_settings_schema_source_lookup(
-				source,
-				"br.com.bb." G_STRINGIFY(PRODUCT_NAME),
-				TRUE);
-
-		debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);
-
-		settings = g_settings_new_full(schema, NULL, NULL);
-
-		g_settings_schema_source_unref(source);
-	}
-#elif defined(_WIN32)
-	{
-		lib3270_autoptr(char) filename = lib3270_build_filename("gschemas.compiled",NULL);
-
-		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR)) {
-
-			GError * error = NULL;
-			g_autofree gchar *dirname = g_path_get_dirname(filename);
-
-			GSettingsSchemaSource * source =
-				g_settings_schema_source_new_from_directory(
-					dirname,
-					NULL,
-					TRUE,
-					&error
-				);
-
-			g_assert_no_error(error);
-
-			GSettingsSchema * schema =
-				g_settings_schema_source_lookup(
-					source,
-					"br.com.bb." G_STRINGIFY(PRODUCT_NAME),
-					TRUE);
-
-			debug("schema %s=%p","br.com.bb." PACKAGE_NAME,schema);
-
-			settings = g_settings_new_full(schema, NULL, NULL);
-
-			g_settings_schema_source_unref(source);
-
-		} else {
-
-			settings = g_settings_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME));
-
-		}
-	}
-#else
-
-	settings = g_settings_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME));
-
-#endif // DEBUG
-
-	return settings;
-}
-
 GList * pw3270_application_get_keypad_models(GApplication *app) {
 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
 	return PW3270_APPLICATION(app)->keypads;
+}
+
+static int loghandler(const H3270 *hSession, pw3270Application *app, const char *module, int code, const char *message) {
+
+	if(!app->logfile) {
+		return -1;
+	}
+
+	FILE *f = fopen(app->logfile,"a");
+
+	if(f) {
+		time_t ltime = time(0);
+
+	   char timestamp[80];
+#ifdef HAVE_LOCALTIME_R
+		struct tm tm;
+		strftime(timestamp, 79, "%x %X", localtime_r(&ltime,&tm));
+#else
+		strftime(timestamp, 79, "%x %X", localtime(&ltime));
+#endif // HAVE_LOCALTIME_R
+
+		fprintf(f,"%s %s\t%s\n",timestamp,module,message);
+
+		fclose(f);
+	}
+
+	return 0;
+}
+
+void pw3270_application_set_log_filename(GApplication *app, const gchar *filename) {
+
+	g_return_if_fail(PW3270_IS_APPLICATION(app));
+
+	pw3270Application * application = PW3270_APPLICATION(app);
+
+	if(application->logfile) {
+		g_free(application->logfile);
+		application->logfile = NULL;
+	}
+
+	if(filename) {
+		application->logfile = g_strdup(filename);
+		lib3270_set_log_handler(NULL,(LIB3270_LOG_HANDLER) loghandler, app);
+	} else {
+		lib3270_set_log_handler(NULL,NULL,NULL);
+	}
+
 }
 

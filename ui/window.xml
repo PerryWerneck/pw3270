@@ -38,7 +38,7 @@
 
 			<item>
 				<attribute name="label" translatable="yes">Window with default session</attribute>
-				<attribute name="action">app.new.window</attribute>
+				<attribute name="action">app.window.new</attribute>
 			</item>
 
 			<item>

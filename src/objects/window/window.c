@@ -143,25 +143,84 @@ static void constructed(GObject *object) {
 
 static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
-#ifdef DEBUG
+	static const char * icon_search_paths[] = {
+		"icons",
+#ifdef _WIN32
+		"share/icons",
+#endif // _WIN32
+	};
+
+	size_t ix;
+	for(ix = 0; ix < G_N_ELEMENTS(icon_search_paths); ix++) {
+#if defined(DEBUG)
+		lib3270_autoptr(char) path = g_build_filename(g_get_current_dir(),icon_search_paths[ix],NULL);
+#elif defined(_WIN32)
+		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
+		lib3270_autoptr(char) path = g_build_filename(appdir,icon_search_paths[ix],NULL);
+#else
+		lib3270_autoptr(char) path = lib3270_build_data_filename(icon_search_paths[ix],NULL);
+#endif
+
+		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
+			g_message("Adding '%s' on icon search path",path);
+			gtk_icon_theme_append_search_path(
+				gtk_icon_theme_get_default(),
+				path
+			);
+		} else {
+
+			g_message("Folder '%s' is not valid",path);
+
+		}
+
+	}
+
+#if defined(DEBUG) || defined(_WIN32)
+	{
+		gchar **paths = NULL;
+		gint n_paths = 0;
+
+		gtk_icon_theme_get_search_path (
+		    gtk_icon_theme_get_default(),
+			&paths,
+			&n_paths
+		);
+
+		g_message("Icon search path:");
+		gint p;
+		for(p = 0; p < n_paths;p++) {
+			g_message("\t%s",paths[p]);
+		}
+	}
+#endif // DEBUG
+
+	/*
 	{
 		gtk_icon_theme_append_search_path(
 		    gtk_icon_theme_get_default(),
 		    "./icons"
 		);
+
+		gchar **paths = NULL;
+		gint n_paths = 0;
+
+		gtk_icon_theme_get_search_path (
+		    gtk_icon_theme_get_default(),
+			&paths,
+			&n_paths
+		);
+
+		gint p;
+		for(p = 0; p < n_paths;p++) {
+			printf("**** [%s]\n",paths[p]);
+		}
+
 	}
 #else
 	{
-		lib3270_autoptr(char) path = lib3270_build_data_filename("icons",NULL);
-		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
-			gtk_icon_theme_append_search_path(
-			    gtk_icon_theme_get_default(),
-			    path
-			);
-		}
 	}
 #endif // DEBUG
-
+	*/
 
 	{
 		GtkWidgetClass *widget = GTK_WIDGET_CLASS(klass);
@@ -296,24 +355,6 @@ static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 	gtk_notebook_set_show_tabs(widget->notebook,FALSE);
 	gtk_notebook_set_show_border(widget->notebook, FALSE);
 	gtk_notebook_set_group_name(widget->notebook,PACKAGE_NAME ":Terminals");
-
-	/*
-	{
-		// Create new tab action widget
-		GtkWidget * new_tab = gtk_button_new_from_icon_name("tab-new-symbolic",GTK_ICON_SIZE_LARGE_TOOLBAR);
-		gtk_button_set_relief(GTK_BUTTON(new_tab),GTK_RELIEF_NONE);
-		gtk_actionable_set_action_name(GTK_ACTIONABLE(new_tab),g_intern_static_string("app.new.tab"));
-
-		gtk_widget_set_margin_start(new_tab,6);
-		gtk_widget_set_margin_end(new_tab,6);
-		gtk_widget_set_margin_bottom(new_tab,0);
-		gtk_widget_set_valign(new_tab,GTK_ALIGN_END);
-
-		gtk_button_set_image_position(GTK_BUTTON(new_tab),GTK_POS_BOTTOM);
-		gtk_widget_show_all(new_tab);
-		gtk_notebook_set_action_widget(widget->notebook,new_tab,GTK_PACK_START);
-	}
-	*/
 
 	// Create boxes
 	GtkBox * hBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0));
@@ -836,41 +877,6 @@ void pw3270_application_window_set_active_terminal(GtkWidget *widget, GtkWidget 
 
 		}
 	}
-
-}
-
-GSettings *pw3270_application_window_settings_new() {
-
-#ifdef DEBUG
-
-	GError * error = NULL;
-	GSettingsSchemaSource * source =
-	    g_settings_schema_source_new_from_directory(
-	        ".",
-	        NULL,
-	        TRUE,
-	        &error
-	    );
-
-	g_assert_no_error(error);
-
-	GSettingsSchema * schema =
-	    g_settings_schema_source_lookup(
-	        source,
-	        "br.com.bb." G_STRINGIFY(PRODUCT_NAME) ".window",
-	        TRUE);
-
-	GSettings * settings = g_settings_new_full(schema, NULL, NULL);
-
-	g_settings_schema_source_unref(source);
-
-#else
-
-	GSettings * settings = g_settings_new("br.com.bb." G_STRINGIFY(PRODUCT_NAME) ".window");
-
-#endif // DEBUG
-
-	return settings;
 
 }
 

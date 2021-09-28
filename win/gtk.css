@@ -1,7 +1,13 @@
-/* Disable F10 */
 @binding-set NoKeyboardNavigation {
-     unbind "<shift>F10"
-     unbind "F10"
+
+	/* Disable F10 */
+	unbind "<shift>F10"
+	unbind "F10"
+
+	/* Disable Print-Screen */ 
+	unbind "<shift>Print"
+	unbind "Print"
+
 }
 
 * {

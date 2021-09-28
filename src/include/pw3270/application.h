@@ -37,6 +37,7 @@
 #define PW3270_APPLICATION_H_INCLUDED
 
 #include <gtk/gtk.h>
+#include <lib3270.h>
 
 G_BEGIN_DECLS
 
@@ -64,15 +65,18 @@ typedef struct _pw3270Application        pw3270Application;
 
 GType			  pw3270Application_get_type();
 GtkApplication	* pw3270_application_new(const gchar *application_id, GApplicationFlags flags);
+void			  pw3270_application_open_file(GtkApplication *application, GtkWindow **window, GFile *file);
 
 /// @brief Get application settings.
 /// @param app	The pw3270 application object.
 /// @return The internal settings object (Do not unref it).
+GSettings		* pw3270_application_settings_new();
 GSettings		* pw3270_application_get_settings(GApplication *app);
 GList			* pw3270_application_get_keypad_models(GApplication *app);
 
 void			  pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type);
 PW3270_UI_STYLE	  pw3270_application_get_ui_style(GApplication *app);
+void			  pw3270_application_set_log_filename(GApplication *app, const gchar *filename);
 
 // Plugins
 void			  pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data);
@@ -87,8 +91,6 @@ GtkBuilder		* pw3270_application_get_builder(const gchar *name);
 
 void			  gtk_container_remove_all(GtkContainer *container);
 
-gboolean		  pw3270_application_allow_tabs(GApplication *application);
-
 // Actions
 void pw3270_application_print_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
 void pw3270_application_save_copy_activated(GAction *action, GVariant *parameter, GtkWidget *terminal);
@@ -96,6 +98,9 @@ void pw3270_application_save_copy_activated(GAction *action, GVariant *parameter
 // Settings
 GtkWidget * pw3270_header_settings_new();
 
+// Tools
+H3270			* pw3270_get_active_session();
+GtkWidget		* pw3270_get_active_terminal();
 
 G_END_DECLS
 

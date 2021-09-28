@@ -57,11 +57,6 @@ static gboolean	quit_signal(GtkApplication *app) {
 }
 #endif // G_OS_UNIX
 
-static void g_log_to_lib3270(const gchar *log_domain,GLogLevelFlags G_GNUC_UNUSED(log_level),const gchar *message,gpointer G_GNUC_UNUSED(user_data)) {
-	debug("%s",message);
-	lib3270_write_log(NULL,log_domain ? log_domain : G_STRINGIFY(PRODUCT_NAME),"%s",message);
-}
-
 int main (int argc, char **argv) {
 
 	int status = -1;
@@ -85,8 +80,6 @@ int main (int argc, char **argv) {
 		bindtextdomain( PACKAGE_NAME, locdir );
 	}
 #endif // _WIN32
-
-	g_log_set_default_handler(g_log_to_lib3270,NULL);
 
 	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
 	textdomain(PACKAGE_NAME);
