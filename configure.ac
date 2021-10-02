@@ -147,6 +147,7 @@ AC_PATH_TOOL([APPSTREAMCLI],[appstreamcli], [no])
 AC_PATH_TOOL([STRIP], [strip], [true])
 
 AC_PATH_TOOL([DESKTOP_INSTALL],[desktop-file-install],[no])
+AC_PATH_TOOL([GLIB_SCHEMA_COMPILER],[glib-compile-schemas],[false])
 
 PKG_CHECK_EXISTS
 

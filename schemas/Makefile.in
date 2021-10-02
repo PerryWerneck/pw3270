@@ -48,13 +48,14 @@ BINDIR=$(BASEDIR)/.bin
 MKDIR=@MKDIR_P@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
+GLIB_SCHEMA_COMPILER=@GLIB_SCHEMA_COMPILER@
 
 #---[ Install Targets ]------------------------------------------------------------------
 
 all:
 	# Compile schemas to check if they're valid
-	@glib-compile-schemas \
-		--targetdir=$(BINDIR) \
+	@$(GLIB_SCHEMA_COMPILER) \
+		--dry-run \
 		$(BASEDIR)/schemas/@OSNAME@
 
 install: \
@@ -65,9 +66,10 @@ install: \
 		$(BASEDIR)/schemas/@OSNAME@/application.gschema.xml \
 		$(DESTDIR)/$(schemadir)/$(PRODUCT_NAME)-application.gschema.xml
 		
-
 	@$(INSTALL_DATA) \
 		$(BASEDIR)/schemas/@OSNAME@/window.gschema.xml \
 		$(DESTDIR)/$(schemadir)/$(PRODUCT_NAME)-window.gschema.xml
 
+	@$(GLIB_SCHEMA_COMPILER) \
+		$(DESTDIR)/$(schemadir)
 
