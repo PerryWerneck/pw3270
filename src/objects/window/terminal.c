@@ -43,6 +43,7 @@
 #include <v3270/keyfile.h>
 #include <v3270/print.h>
 #include <lib3270/os.h>
+#include <pw3270/application.h>
 
 static void destroy(GtkWidget *terminal, gpointer G_GNUC_UNUSED(dunno)) {
 	v3270_key_file_close(terminal);
@@ -202,6 +203,12 @@ GtkWidget * pw3270_terminal_new(const gchar *session_file) {
 
 		g_error_free(error);
 	}
+
+	pw3270_application_plugin_call(
+	    g_application_get_default(),
+	    "pw3270_plugin_setup_terminal",
+	    terminal
+	);
 
 	return terminal;
 }
