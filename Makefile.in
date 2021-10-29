@@ -234,7 +234,7 @@ install-%: \
 	@$(MAKE) \
 		-C `dirname $<` \
 		DESTDIR=$(DESTDIR) \
-		prefix=$(prefix) \		
+		prefix=$(prefix) \
 		install
 
 %.ico: \
