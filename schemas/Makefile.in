@@ -53,6 +53,7 @@ INSTALL_DATA=@INSTALL_DATA@
 
 all:
 	# Compile schemas to check if they're valid
+	@$(MKDIR) $(BINDIR)
 	@glib-compile-schemas \
 		--targetdir=$(BINDIR) \
 		$(BASEDIR)/schemas/@OSNAME@
