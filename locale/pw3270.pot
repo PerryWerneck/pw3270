@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-01 23:55-0300\n"
+"POT-Creation-Date: 2021-11-12 00:10-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "32 bits Windows"
 msgstr ""
 
-#: src/objects/actions/save.c:166 src/objects/os/windows/savedesktopicon.c:222
+#: src/objects/actions/save.c:166 src/objects/os/linux/savedesktopicon.c:267
 msgid "3270 session files"
 msgstr ""
 
@@ -73,7 +73,7 @@ msgstr ""
 msgid "All files"
 msgstr ""
 
-#: ui/window.xml:183 ui/application.xml:251
+#: ui/window.xml:163 ui/application.xml:251
 msgid "Append to copy"
 msgstr ""
 
@@ -125,25 +125,21 @@ msgstr ""
 msgid "Bottom"
 msgstr ""
 
-#: src/objects/application/actions/open.c:104 src/objects/window/terminal.c:142
-#: src/objects/window/terminal.c:196
+#: src/objects/application/actions/open.c:104 src/objects/window/terminal.c:143
+#: src/objects/window/terminal.c:197
 msgid "Can't load session file"
 msgstr ""
 
-#: src/objects/os/windows/open.c:133
-msgid "Can't load session preferences"
-msgstr ""
-
-#: src/objects/settings/gsettings.c:123
+#: src/objects/settings/gsettings.c:128
 msgid "Can't load system settings"
 msgstr ""
 
-#: src/objects/application/actions/open.c:99 src/objects/window/terminal.c:191
+#: src/objects/application/actions/open.c:99 src/objects/window/terminal.c:192
 #, c-format
 msgid "Can't use \"%s\""
 msgstr ""
 
-#: src/objects/window/terminal.c:137
+#: src/objects/window/terminal.c:138
 msgid "Can't use default session file"
 msgstr ""
 
@@ -193,6 +189,10 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
+#: src/objects/os/linux/savedesktopicon.c:101
+msgid "Comment"
+msgstr ""
+
 #: src/objects/window/actions/connect.c:59
 msgid "Connect"
 msgstr ""
@@ -217,19 +217,19 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: ui/window.xml:173
+#: ui/window.xml:178
 msgid "Copy as HTML"
 msgstr ""
 
-#: ui/window.xml:178
+#: ui/window.xml:183
 msgid "Copy as image"
 msgstr ""
 
-#: ui/window.xml:168 ui/application.xml:246
+#: ui/window.xml:173 ui/application.xml:246
 msgid "Copy as table"
 msgstr ""
 
-#: ui/window.xml:163 ui/application.xml:241
+#: ui/window.xml:168 ui/application.xml:241
 msgid "Copy as text"
 msgstr ""
 
@@ -237,7 +237,7 @@ msgstr ""
 msgid "Copyright © 2008 Banco do Brasil S.A."
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:107
+#: src/objects/os/linux/savedesktopicon.c:114
 msgid "Create shortcut for the current session"
 msgstr ""
 
@@ -263,10 +263,6 @@ msgstr ""
 
 #: ui/window.xml:207 ui/window.xml:349 ui/application.xml:314
 msgid "Delete Field"
-msgstr ""
-
-#: src/objects/os/windows/savedesktopicon.c:80
-msgid "Description"
 msgstr ""
 
 #: ui/window.xml:280 ui/window.xml:478
@@ -318,16 +314,8 @@ msgstr ""
 msgid "Erase to end of line"
 msgstr ""
 
-#: src/objects/os/windows/open.c:140
-msgid "Error starting session"
-msgstr ""
-
 #: ui/application.xml:352
 msgid "Field attributes"
-msgstr ""
-
-#: src/objects/os/windows/savedesktopicon.c:219
-msgid "File for session preferences"
 msgstr ""
 
 #: ui/application.xml:454
@@ -336,6 +324,10 @@ msgstr ""
 
 #: ui/window.xml:251 ui/window.xml:427 ui/window.xml:522
 msgid "Full screen"
+msgstr ""
+
+#: src/objects/os/linux/savedesktopicon.c:94
+msgid "Generic name"
 msgstr ""
 
 #: ui/application.xml:36 ui/application.xml:534
@@ -347,7 +339,7 @@ msgid "Host properties"
 msgstr ""
 
 #: src/objects/application/actions/about.c:111 src/objects/window/window.c:602
-#: src/objects/os/windows/savedesktopicon.c:269
+#: src/objects/os/linux/savedesktopicon.c:102
 msgid "IBM 3270 Terminal emulator"
 msgstr ""
 
@@ -575,7 +567,7 @@ msgstr ""
 msgid "Paste with left margin"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:74
+#: src/objects/os/linux/savedesktopicon.c:71
 msgid "Path for the new shortcut"
 msgstr ""
 
@@ -644,12 +636,16 @@ msgstr ""
 msgid "Save session preferences"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:106
+#: src/objects/os/linux/savedesktopicon.c:113
 msgid "Save session shortcut"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:184
-msgid "Save to windows shortcut"
+#: src/objects/os/linux/savedesktopicon.c:264
+msgid "Save to session filename"
+msgstr ""
+
+#: src/objects/os/linux/savedesktopicon.c:236
+msgid "Save to shortcut file"
 msgstr ""
 
 #: ui/window.xml:528 ui/application.xml:400
@@ -702,7 +698,7 @@ msgstr ""
 msgid "Session Trace"
 msgstr ""
 
-#: src/objects/actions/save.c:63 src/objects/os/windows/savedesktopicon.c:94
+#: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
 msgid "Session file"
 msgstr ""
 
@@ -714,7 +710,7 @@ msgstr ""
 msgid "Session in new window"
 msgstr ""
 
-#: src/objects/actions/save.c:56 src/objects/os/windows/savedesktopicon.c:86
+#: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
 msgid "Session name"
 msgstr ""
 
@@ -747,12 +743,16 @@ msgstr ""
 msgid "Setup toolbar"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:73
+#: src/objects/os/linux/savedesktopicon.c:70
 msgid "Shortcut file"
 msgstr ""
 
 #: ui/window.xml:98 ui/application.xml:158
 msgid "Shortcut for this session"
+msgstr ""
+
+#: src/objects/os/linux/savedesktopicon.c:63
+msgid "Shortcut name"
 msgstr ""
 
 #: ui/application.xml:494
@@ -773,6 +773,10 @@ msgstr ""
 
 #: ui/window.xml:408 ui/application.xml:504
 msgid "Smart paste"
+msgstr ""
+
+#: src/objects/os/linux/savedesktopicon.c:239
+msgid "Standard desktop files"
 msgstr ""
 
 #: src/objects/settings/actionview.c:68
@@ -800,7 +804,7 @@ msgstr ""
 msgid "System default"
 msgstr ""
 
-#: src/objects/settings/gsettings.c:128
+#: src/objects/settings/gsettings.c:133
 msgid "System settings error"
 msgstr ""
 
@@ -844,7 +848,7 @@ msgstr ""
 msgid "The file to save the current session preferences"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:95
+#: src/objects/os/linux/savedesktopicon.c:86
 msgid "The file with the session preferences for this shortcut"
 msgstr ""
 
@@ -884,7 +888,7 @@ msgstr ""
 msgid "The position of the keypad"
 msgstr ""
 
-#: src/objects/actions/save.c:57 src/objects/os/windows/savedesktopicon.c:88
+#: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
 msgid "The session name used in the window/tab title (empty for default)"
 msgstr ""
 
@@ -961,15 +965,10 @@ msgstr ""
 msgid "UI Type"
 msgstr ""
 
-#: src/objects/settings/gsettings.c:126
+#: src/objects/settings/gsettings.c:131
 msgid ""
 "Unable to initialize system settings. Application may crash in unexpected "
 "ways"
-msgstr ""
-
-#: src/objects/os/windows/open.c:137
-#, c-format
-msgid "Unable to load session preferences from '%s'"
 msgstr ""
 
 #: ui/window.xml:272 ui/application.xml:290
@@ -1003,16 +1002,12 @@ msgstr ""
 msgid "Window with default session"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:187
-msgid "Windows shortcuts"
-msgstr ""
-
 #: src/objects/settings/dialog.c:79
 msgid "_Apply"
 msgstr ""
 
 #: src/objects/actions/save.c:102 src/objects/settings/dialog.c:78
-#: src/objects/os/windows/savedesktopicon.c:132
+#: src/objects/os/linux/savedesktopicon.c:174
 msgid "_Cancel"
 msgstr ""
 
@@ -1056,7 +1051,7 @@ msgstr ""
 msgid "_Rename session"
 msgstr ""
 
-#: src/objects/actions/save.c:103 src/objects/os/windows/savedesktopicon.c:133
+#: src/objects/actions/save.c:103 src/objects/os/linux/savedesktopicon.c:175
 msgid "_Save"
 msgstr ""
 

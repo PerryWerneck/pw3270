@@ -290,47 +290,47 @@ install-application: \
 	install-icons
 
 	@$(MKDIR) \
-		$(DESTDIR)/$(libdir)/$(PRODUCT_NAME)-plugins
+		$(DESTDIR)$(libdir)/$(PRODUCT_NAME)-plugins
 
 	@$(MKDIR) \
-		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/ui
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/ui
 
 	@$(INSTALL_DATA) \
 		ui/*.xml \
-		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/ui
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/ui
 
 	@$(MKDIR) \
-		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/keypad
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/keypad
 
 install-linux-application: \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
 
 	@$(MKDIR) \
-		$(DESTDIR)/$(bindir)
+		$(DESTDIR)$(bindir)
 
 	@$(INSTALL_PROGRAM) \
 		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
-		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
+		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
 
 install-windows-application: \
 	strip
 
 	@$(MKDIR) \
-		$(DESTDIR)/$(bindir)
+		$(DESTDIR)$(bindir)
 
 	@$(INSTALL_PROGRAM) \
 		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
-		$(DESTDIR)/$(bindir)/$(PRODUCT_NAME)@EXEEXT@
+		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
 install-icons:
 
 	@$(MKDIR) \
-		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/icons
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons
 
 	@$(INSTALL_DATA) \
 		icons/*.svg \
-		$(DESTDIR)/$(datarootdir)/$(PRODUCT_NAME)/icons
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons
 
 #---[ Misc Targets ]---------------------------------------------------------------------
 
