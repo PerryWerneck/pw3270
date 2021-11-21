@@ -33,6 +33,7 @@
 #include <v3270/settings.h>
 #include <v3270/dialogs.h>
 
+/*
 static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
 
 GAction * pw3270_action_host_properties_new(void) {
@@ -68,4 +69,5 @@ GtkWidget * factory(V3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *termina
 	return dialog;
 
 }
+*/
 

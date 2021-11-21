@@ -380,11 +380,6 @@
 
 			<attribute name='label' translatable='yes'>Settings</attribute>
 
-			<!-- item>
-				<attribute name="label" translatable="yes">Colors</attribute>
-				<attribute name="action">win.set.colors</attribute>
-			</item -->
-
 			<item>
 				<attribute name="label" translatable="yes">Application</attribute>
 				<attribute name="action">app.preferences</attribute>
