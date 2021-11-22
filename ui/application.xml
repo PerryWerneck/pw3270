@@ -386,9 +386,24 @@
 			</item>
 
 			<item>
+				<attribute name="label" translatable="yes">Keyboard accelerators</attribute>
+				<attribute name="action">win.dialog-keyboard</attribute>
+			</item>
+
+			<item>
+				<attribute name="label" translatable="yes">Clipboard</attribute>
+				<attribute name="action">win.dialog-clipboard</attribute>
+			</item>
+			
+			<item>
+				<attribute name="label" translatable="yes">Terminal colors</attribute>
+				<attribute name="action">win.dialog-colors</attribute>
+			</item>
+			
+			<!-- item>
 				<attribute name="label" translatable="yes">Current session</attribute>
 				<attribute name="action">win.session.properties</attribute>
-			</item>
+			</item -->
 
 			<submenu>
 

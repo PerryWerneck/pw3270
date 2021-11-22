@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-12 00:10-0300\n"
+"POT-Creation-Date: 2021-11-22 02:04-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/objects/application/application.c:222
+#: src/objects/application/application.c:208
 #, c-format
 msgid "\"%s\" is not a valid user interface name"
 msgstr ""
@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 
 #: src/objects/application/actions/about.c:209 ui/application.xml:39
-#: ui/application.xml:537
+#: ui/application.xml:547
 msgid "About PW3270"
 msgstr ""
 
@@ -61,11 +61,11 @@ msgstr ""
 msgid "Action Name"
 msgstr ""
 
-#: src/objects/window/window.c:243
+#: src/objects/window/window.c:233
 msgid "Action Names"
 msgstr ""
 
-#: ui/window.xml:389 ui/window.xml:504 ui/application.xml:509
+#: ui/window.xml:389 ui/window.xml:504 ui/application.xml:519
 msgid "Alert sound"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Apple version"
 msgstr ""
 
-#: ui/window.xml:137 ui/application.xml:389
+#: ui/window.xml:137 ui/application.xml:384
 msgid "Application"
 msgstr ""
 
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: ui/application.xml:484
+#: ui/application.xml:494
 msgid "Auto-Reconnect"
 msgstr ""
 
@@ -109,15 +109,15 @@ msgstr ""
 msgid "Based on X3270 from"
 msgstr ""
 
-#: ui/window.xml:418 ui/application.xml:474
+#: ui/window.xml:418 ui/application.xml:484
 msgid "Blank Fill"
 msgstr ""
 
-#: ui/application.xml:439
+#: ui/application.xml:449
 msgid "Blinking Cursor"
 msgstr ""
 
-#: ui/application.xml:489
+#: ui/application.xml:499
 msgid "Bold"
 msgstr ""
 
@@ -147,10 +147,6 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/objects/window/actions/setcolors.c:46
-msgid "Change terminal colors"
-msgstr ""
-
 #: src/objects/application/actions/preferences.c:78
 msgid "Change the application preferences"
 msgstr ""
@@ -159,12 +155,16 @@ msgstr ""
 msgid "Change the position of the title bar icons"
 msgstr ""
 
-#: src/objects/window/actions/sessionproperties.c:47
+#: src/objects/window/actions/sessionproperties.c:37
 msgid "Change the preferences for the active session"
 msgstr ""
 
 #: ui/window.xml:197 ui/window.xml:339 ui/application.xml:304
 msgid "Clear"
+msgstr ""
+
+#: ui/application.xml:394
+msgid "Clipboard"
 msgstr ""
 
 #: ui/window.xml:89 ui/window.xml:126 ui/application.xml:149
@@ -185,10 +185,6 @@ msgstr ""
 msgid "Close window"
 msgstr ""
 
-#: src/objects/window/actions/setcolors.c:45
-msgid "Colors"
-msgstr ""
-
 #: src/objects/os/linux/savedesktopicon.c:101
 msgid "Comment"
 msgstr ""
@@ -197,7 +193,7 @@ msgstr ""
 msgid "Connect"
 msgstr ""
 
-#: ui/application.xml:434
+#: ui/application.xml:444
 msgid "Connect on startup"
 msgstr ""
 
@@ -205,7 +201,7 @@ msgstr ""
 msgid "Connect to host"
 msgstr ""
 
-#: src/objects/window/window.c:813 src/objects/window/page.c:218
+#: src/objects/window/window.c:803 src/objects/window/page.c:218
 msgid "Connected to host"
 msgstr ""
 
@@ -241,7 +237,7 @@ msgstr ""
 msgid "Create shortcut for the current session"
 msgstr ""
 
-#: ui/window.xml:374 ui/application.xml:459
+#: ui/window.xml:374 ui/application.xml:469
 msgid "Cross hair cursor"
 msgstr ""
 
@@ -253,7 +249,7 @@ msgstr ""
 msgid "Current screen"
 msgstr ""
 
-#: ui/window.xml:142 ui/application.xml:394
+#: ui/window.xml:142
 msgid "Current session"
 msgstr ""
 
@@ -269,12 +265,12 @@ msgstr ""
 msgid "Disconnect"
 msgstr ""
 
-#: src/objects/window/window.c:813 src/objects/window/window.c:840
+#: src/objects/window/window.c:803 src/objects/window/window.c:830
 #: src/objects/window/page.c:207
 msgid "Disconnected from host"
 msgstr ""
 
-#: ui/window.xml:401 ui/window.xml:517 ui/application.xml:524
+#: ui/window.xml:401 ui/window.xml:517 ui/application.xml:534
 msgid "Dynamic font spacing"
 msgstr ""
 
@@ -318,7 +314,7 @@ msgstr ""
 msgid "Field attributes"
 msgstr ""
 
-#: ui/application.xml:454
+#: ui/application.xml:464
 msgid "Full Screen"
 msgstr ""
 
@@ -330,15 +326,11 @@ msgstr ""
 msgid "Generic name"
 msgstr ""
 
-#: ui/application.xml:36 ui/application.xml:534
+#: ui/application.xml:36 ui/application.xml:544
 msgid "Help"
 msgstr ""
 
-#: src/objects/window/actions/hostproperties.c:45
-msgid "Host properties"
-msgstr ""
-
-#: src/objects/application/actions/about.c:111 src/objects/window/window.c:602
+#: src/objects/application/actions/about.c:111 src/objects/window/window.c:592
 #: src/objects/os/linux/savedesktopicon.c:102
 msgid "IBM 3270 Terminal emulator"
 msgstr ""
@@ -399,8 +391,12 @@ msgstr ""
 msgid "Itens"
 msgstr ""
 
-#: ui/application.xml:499
+#: ui/application.xml:509
 msgid "Keep selected"
+msgstr ""
+
+#: ui/application.xml:389
+msgid "Keyboard accelerators"
 msgstr ""
 
 #: src/objects/keypad/model.c:103
@@ -463,27 +459,27 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: ui/window.xml:531 ui/application.xml:403
+#: ui/window.xml:531 ui/application.xml:413
 msgid "Model 2 - 80x24"
 msgstr ""
 
-#: ui/window.xml:536 ui/application.xml:408
+#: ui/window.xml:536 ui/application.xml:418
 msgid "Model 3 - 80x32"
 msgstr ""
 
-#: ui/window.xml:541 ui/application.xml:413
+#: ui/window.xml:541 ui/application.xml:423
 msgid "Model 4 - 80x43"
 msgstr ""
 
-#: ui/window.xml:546 ui/application.xml:418
+#: ui/window.xml:546 ui/application.xml:428
 msgid "Model 5 - 132x27"
 msgstr ""
 
-#: ui/window.xml:396 ui/application.xml:444
+#: ui/window.xml:396 ui/application.xml:454
 msgid "Monocase"
 msgstr ""
 
-#: ui/application.xml:519
+#: ui/application.xml:529
 msgid "Network keep alive"
 msgstr ""
 
@@ -543,7 +539,7 @@ msgstr ""
 msgid "Open session on the active terminal"
 msgstr ""
 
-#: ui/window.xml:227 ui/window.xml:369 ui/window.xml:514 ui/application.xml:431
+#: ui/window.xml:227 ui/window.xml:369 ui/window.xml:514 ui/application.xml:441
 msgid "Options"
 msgstr ""
 
@@ -563,7 +559,7 @@ msgstr ""
 msgid "Paste next"
 msgstr ""
 
-#: ui/window.xml:413 ui/application.xml:469
+#: ui/window.xml:413 ui/application.xml:479
 msgid "Paste with left margin"
 msgstr ""
 
@@ -608,7 +604,7 @@ msgstr ""
 msgid "Reselect"
 msgstr ""
 
-#: ui/window.xml:384 ui/application.xml:464
+#: ui/window.xml:384 ui/application.xml:474
 msgid "Resize on alternate screen"
 msgstr ""
 
@@ -648,7 +644,7 @@ msgstr ""
 msgid "Save to shortcut file"
 msgstr ""
 
-#: ui/window.xml:528 ui/application.xml:400
+#: ui/window.xml:528 ui/application.xml:410
 msgid "Screen size"
 msgstr ""
 
@@ -660,7 +656,7 @@ msgstr ""
 msgid "Select all"
 msgstr ""
 
-#: ui/window.xml:232 ui/application.xml:479
+#: ui/window.xml:232 ui/application.xml:489
 msgid "Select by rectangles"
 msgstr ""
 
@@ -714,16 +710,16 @@ msgstr ""
 msgid "Session name"
 msgstr ""
 
-#: src/objects/window/actions/sessionproperties.c:46 ui/window.xml:103
+#: src/objects/window/actions/sessionproperties.c:36 ui/window.xml:103
 #: ui/window.xml:584 ui/application.xml:163
 msgid "Session preferences"
 msgstr ""
 
-#: src/objects/application/application.c:241
+#: src/objects/application/application.c:227
 msgid "Set default log file name"
 msgstr ""
 
-#: src/objects/application/application.c:240
+#: src/objects/application/application.c:226
 msgid "Set the user-interface type"
 msgstr ""
 
@@ -755,7 +751,7 @@ msgstr ""
 msgid "Shortcut name"
 msgstr ""
 
-#: ui/application.xml:494
+#: ui/application.xml:504
 msgid "Show Underline"
 msgstr ""
 
@@ -771,7 +767,7 @@ msgstr ""
 msgid "Small"
 msgstr ""
 
-#: ui/window.xml:408 ui/application.xml:504
+#: ui/window.xml:408 ui/application.xml:514
 msgid "Smart paste"
 msgstr ""
 
@@ -820,7 +816,11 @@ msgstr ""
 msgid "Tab with default session"
 msgstr ""
 
-#: ui/application.xml:426
+#: ui/application.xml:399
+msgid "Terminal colors"
+msgstr ""
+
+#: ui/application.xml:436
 msgid "Terminal font"
 msgstr ""
 
@@ -840,7 +840,7 @@ msgstr ""
 msgid "The action tooltip"
 msgstr ""
 
-#: src/objects/application/application.c:170
+#: src/objects/application/application.c:156
 msgid "The code of the User interface type"
 msgstr ""
 
@@ -860,7 +860,7 @@ msgstr ""
 msgid "The name of associated action"
 msgstr ""
 
-#: src/objects/window/window.c:244
+#: src/objects/window/window.c:234
 msgid "The name of the actions in the header bar"
 msgstr ""
 
@@ -957,11 +957,11 @@ msgstr ""
 msgid "Trace"
 msgstr ""
 
-#: ui/window.xml:499 ui/application.xml:449
+#: ui/window.xml:499 ui/application.xml:459
 msgid "Track Cursor"
 msgstr ""
 
-#: src/objects/application/application.c:169
+#: src/objects/application/application.c:155
 msgid "UI Type"
 msgstr ""
 
@@ -980,7 +980,7 @@ msgstr ""
 msgid "Unstable version %s-%s"
 msgstr ""
 
-#: ui/window.xml:379 ui/application.xml:514
+#: ui/window.xml:379 ui/application.xml:524
 msgid "Use +/- for field navigation"
 msgstr ""
 
