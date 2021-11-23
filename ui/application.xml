@@ -386,6 +386,11 @@
 			</item>
 
 			<item>
+				<attribute name="label" translatable="yes">Host and Emulation settings</attribute>
+				<attribute name="action">win.dialog-host</attribute>
+			</item>
+
+			<item>
 				<attribute name="label" translatable="yes">Keyboard accelerators</attribute>
 				<attribute name="action">win.dialog-keyboard</attribute>
 			</item>

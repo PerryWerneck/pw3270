@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-22 02:04-0300\n"
+"POT-Creation-Date: 2021-11-22 22:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "32 bits Windows"
 msgstr ""
 
-#: src/objects/actions/save.c:166 src/objects/os/linux/savedesktopicon.c:267
+#: src/objects/actions/save.c:166 src/objects/os/windows/savedesktopicon.c:222
 msgid "3270 session files"
 msgstr ""
 
@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 
 #: src/objects/application/actions/about.c:209 ui/application.xml:39
-#: ui/application.xml:547
+#: ui/application.xml:552
 msgid "About PW3270"
 msgstr ""
 
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Action Names"
 msgstr ""
 
-#: ui/window.xml:389 ui/window.xml:504 ui/application.xml:519
+#: ui/window.xml:389 ui/window.xml:504 ui/application.xml:524
 msgid "Alert sound"
 msgstr ""
 
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: ui/application.xml:494
+#: ui/application.xml:499
 msgid "Auto-Reconnect"
 msgstr ""
 
@@ -109,15 +109,15 @@ msgstr ""
 msgid "Based on X3270 from"
 msgstr ""
 
-#: ui/window.xml:418 ui/application.xml:484
+#: ui/window.xml:418 ui/application.xml:489
 msgid "Blank Fill"
 msgstr ""
 
-#: ui/application.xml:449
+#: ui/application.xml:454
 msgid "Blinking Cursor"
 msgstr ""
 
-#: ui/application.xml:499
+#: ui/application.xml:504
 msgid "Bold"
 msgstr ""
 
@@ -128,6 +128,10 @@ msgstr ""
 #: src/objects/application/actions/open.c:104 src/objects/window/terminal.c:143
 #: src/objects/window/terminal.c:197
 msgid "Can't load session file"
+msgstr ""
+
+#: src/objects/os/windows/open.c:133
+msgid "Can't load session preferences"
 msgstr ""
 
 #: src/objects/settings/gsettings.c:128
@@ -163,7 +167,7 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: ui/application.xml:394
+#: ui/application.xml:399
 msgid "Clipboard"
 msgstr ""
 
@@ -185,15 +189,11 @@ msgstr ""
 msgid "Close window"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:101
-msgid "Comment"
-msgstr ""
-
 #: src/objects/window/actions/connect.c:59
 msgid "Connect"
 msgstr ""
 
-#: ui/application.xml:444
+#: ui/application.xml:449
 msgid "Connect on startup"
 msgstr ""
 
@@ -233,11 +233,11 @@ msgstr ""
 msgid "Copyright © 2008 Banco do Brasil S.A."
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:114
+#: src/objects/os/windows/savedesktopicon.c:107
 msgid "Create shortcut for the current session"
 msgstr ""
 
-#: ui/window.xml:374 ui/application.xml:469
+#: ui/window.xml:374 ui/application.xml:474
 msgid "Cross hair cursor"
 msgstr ""
 
@@ -261,6 +261,10 @@ msgstr ""
 msgid "Delete Field"
 msgstr ""
 
+#: src/objects/os/windows/savedesktopicon.c:80
+msgid "Description"
+msgstr ""
+
 #: ui/window.xml:280 ui/window.xml:478
 msgid "Disconnect"
 msgstr ""
@@ -270,7 +274,7 @@ msgstr ""
 msgid "Disconnected from host"
 msgstr ""
 
-#: ui/window.xml:401 ui/window.xml:517 ui/application.xml:534
+#: ui/window.xml:401 ui/window.xml:517 ui/application.xml:539
 msgid "Dynamic font spacing"
 msgstr ""
 
@@ -310,11 +314,19 @@ msgstr ""
 msgid "Erase to end of line"
 msgstr ""
 
+#: src/objects/os/windows/open.c:140
+msgid "Error starting session"
+msgstr ""
+
 #: ui/application.xml:352
 msgid "Field attributes"
 msgstr ""
 
-#: ui/application.xml:464
+#: src/objects/os/windows/savedesktopicon.c:219
+msgid "File for session preferences"
+msgstr ""
+
+#: ui/application.xml:469
 msgid "Full Screen"
 msgstr ""
 
@@ -322,16 +334,16 @@ msgstr ""
 msgid "Full screen"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:94
-msgid "Generic name"
-msgstr ""
-
-#: ui/application.xml:36 ui/application.xml:544
+#: ui/application.xml:36 ui/application.xml:549
 msgid "Help"
 msgstr ""
 
+#: ui/application.xml:389
+msgid "Host and Emulation settings"
+msgstr ""
+
 #: src/objects/application/actions/about.c:111 src/objects/window/window.c:592
-#: src/objects/os/linux/savedesktopicon.c:102
+#: src/objects/os/windows/savedesktopicon.c:269
 msgid "IBM 3270 Terminal emulator"
 msgstr ""
 
@@ -391,11 +403,11 @@ msgstr ""
 msgid "Itens"
 msgstr ""
 
-#: ui/application.xml:509
+#: ui/application.xml:514
 msgid "Keep selected"
 msgstr ""
 
-#: ui/application.xml:389
+#: ui/application.xml:394
 msgid "Keyboard accelerators"
 msgstr ""
 
@@ -459,27 +471,27 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: ui/window.xml:531 ui/application.xml:413
+#: ui/window.xml:531 ui/application.xml:418
 msgid "Model 2 - 80x24"
 msgstr ""
 
-#: ui/window.xml:536 ui/application.xml:418
+#: ui/window.xml:536 ui/application.xml:423
 msgid "Model 3 - 80x32"
 msgstr ""
 
-#: ui/window.xml:541 ui/application.xml:423
+#: ui/window.xml:541 ui/application.xml:428
 msgid "Model 4 - 80x43"
 msgstr ""
 
-#: ui/window.xml:546 ui/application.xml:428
+#: ui/window.xml:546 ui/application.xml:433
 msgid "Model 5 - 132x27"
 msgstr ""
 
-#: ui/window.xml:396 ui/application.xml:454
+#: ui/window.xml:396 ui/application.xml:459
 msgid "Monocase"
 msgstr ""
 
-#: ui/application.xml:529
+#: ui/application.xml:534
 msgid "Network keep alive"
 msgstr ""
 
@@ -539,7 +551,7 @@ msgstr ""
 msgid "Open session on the active terminal"
 msgstr ""
 
-#: ui/window.xml:227 ui/window.xml:369 ui/window.xml:514 ui/application.xml:441
+#: ui/window.xml:227 ui/window.xml:369 ui/window.xml:514 ui/application.xml:446
 msgid "Options"
 msgstr ""
 
@@ -559,11 +571,11 @@ msgstr ""
 msgid "Paste next"
 msgstr ""
 
-#: ui/window.xml:413 ui/application.xml:479
+#: ui/window.xml:413 ui/application.xml:484
 msgid "Paste with left margin"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:71
+#: src/objects/os/windows/savedesktopicon.c:74
 msgid "Path for the new shortcut"
 msgstr ""
 
@@ -604,7 +616,7 @@ msgstr ""
 msgid "Reselect"
 msgstr ""
 
-#: ui/window.xml:384 ui/application.xml:474
+#: ui/window.xml:384 ui/application.xml:479
 msgid "Resize on alternate screen"
 msgstr ""
 
@@ -632,19 +644,15 @@ msgstr ""
 msgid "Save session preferences"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:113
+#: src/objects/os/windows/savedesktopicon.c:106
 msgid "Save session shortcut"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:264
-msgid "Save to session filename"
+#: src/objects/os/windows/savedesktopicon.c:184
+msgid "Save to windows shortcut"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:236
-msgid "Save to shortcut file"
-msgstr ""
-
-#: ui/window.xml:528 ui/application.xml:410
+#: ui/window.xml:528 ui/application.xml:415
 msgid "Screen size"
 msgstr ""
 
@@ -656,7 +664,7 @@ msgstr ""
 msgid "Select all"
 msgstr ""
 
-#: ui/window.xml:232 ui/application.xml:489
+#: ui/window.xml:232 ui/application.xml:494
 msgid "Select by rectangles"
 msgstr ""
 
@@ -694,7 +702,7 @@ msgstr ""
 msgid "Session Trace"
 msgstr ""
 
-#: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
+#: src/objects/actions/save.c:63 src/objects/os/windows/savedesktopicon.c:94
 msgid "Session file"
 msgstr ""
 
@@ -706,7 +714,7 @@ msgstr ""
 msgid "Session in new window"
 msgstr ""
 
-#: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
+#: src/objects/actions/save.c:56 src/objects/os/windows/savedesktopicon.c:86
 msgid "Session name"
 msgstr ""
 
@@ -739,7 +747,7 @@ msgstr ""
 msgid "Setup toolbar"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:70
+#: src/objects/os/windows/savedesktopicon.c:73
 msgid "Shortcut file"
 msgstr ""
 
@@ -747,11 +755,7 @@ msgstr ""
 msgid "Shortcut for this session"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:63
-msgid "Shortcut name"
-msgstr ""
-
-#: ui/application.xml:504
+#: ui/application.xml:509
 msgid "Show Underline"
 msgstr ""
 
@@ -767,12 +771,8 @@ msgstr ""
 msgid "Small"
 msgstr ""
 
-#: ui/window.xml:408 ui/application.xml:514
+#: ui/window.xml:408 ui/application.xml:519
 msgid "Smart paste"
-msgstr ""
-
-#: src/objects/os/linux/savedesktopicon.c:239
-msgid "Standard desktop files"
 msgstr ""
 
 #: src/objects/settings/actionview.c:68
@@ -816,11 +816,11 @@ msgstr ""
 msgid "Tab with default session"
 msgstr ""
 
-#: ui/application.xml:399
+#: ui/application.xml:404
 msgid "Terminal colors"
 msgstr ""
 
-#: ui/application.xml:436
+#: ui/application.xml:441
 msgid "Terminal font"
 msgstr ""
 
@@ -848,7 +848,7 @@ msgstr ""
 msgid "The file to save the current session preferences"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:86
+#: src/objects/os/windows/savedesktopicon.c:95
 msgid "The file with the session preferences for this shortcut"
 msgstr ""
 
@@ -888,7 +888,7 @@ msgstr ""
 msgid "The position of the keypad"
 msgstr ""
 
-#: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
+#: src/objects/actions/save.c:57 src/objects/os/windows/savedesktopicon.c:88
 msgid "The session name used in the window/tab title (empty for default)"
 msgstr ""
 
@@ -957,7 +957,7 @@ msgstr ""
 msgid "Trace"
 msgstr ""
 
-#: ui/window.xml:499 ui/application.xml:459
+#: ui/window.xml:499 ui/application.xml:464
 msgid "Track Cursor"
 msgstr ""
 
@@ -971,6 +971,11 @@ msgid ""
 "ways"
 msgstr ""
 
+#: src/objects/os/windows/open.c:137
+#, c-format
+msgid "Unable to load session preferences from '%s'"
+msgstr ""
+
 #: ui/window.xml:272 ui/application.xml:290
 msgid "Unselect"
 msgstr ""
@@ -980,7 +985,7 @@ msgstr ""
 msgid "Unstable version %s-%s"
 msgstr ""
 
-#: ui/window.xml:379 ui/application.xml:524
+#: ui/window.xml:379 ui/application.xml:529
 msgid "Use +/- for field navigation"
 msgstr ""
 
@@ -1002,12 +1007,16 @@ msgstr ""
 msgid "Window with default session"
 msgstr ""
 
+#: src/objects/os/windows/savedesktopicon.c:187
+msgid "Windows shortcuts"
+msgstr ""
+
 #: src/objects/settings/dialog.c:79
 msgid "_Apply"
 msgstr ""
 
 #: src/objects/actions/save.c:102 src/objects/settings/dialog.c:78
-#: src/objects/os/linux/savedesktopicon.c:174
+#: src/objects/os/windows/savedesktopicon.c:132
 msgid "_Cancel"
 msgstr ""
 
@@ -1051,7 +1060,7 @@ msgstr ""
 msgid "_Rename session"
 msgstr ""
 
-#: src/objects/actions/save.c:103 src/objects/os/linux/savedesktopicon.c:175
+#: src/objects/actions/save.c:103 src/objects/os/windows/savedesktopicon.c:133
 msgid "_Save"
 msgstr ""
 
