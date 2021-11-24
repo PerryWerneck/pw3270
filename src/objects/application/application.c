@@ -311,6 +311,20 @@ static void pw3270Application_init(pw3270Application *app) {
 
 			}
 
+
+		}
+
+		// Initialize plugins
+		{
+			GSList * item;
+			void (*call)(GtkApplication *application);
+
+			for(item = app->plugins; item; item = g_slist_next(item)) {
+				if(g_module_symbol((GModule *) item->data, "pw3270_plugin_set_application", (gpointer *) &call)) {
+					call(GTK_APPLICATION(app));
+				}
+			}
+
 		}
 
 	}
