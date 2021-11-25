@@ -27,6 +27,7 @@
 enum {
 	PROP_ZERO,
 	PROP_UI_STYLE,
+	PROP_LOGFILE,
 
 	NUM_PROPERTIES
 };
@@ -61,6 +62,10 @@ static void get_property(GObject *object, guint prop_id, GValue *value, GParamSp
 		g_value_set_uint(value,pw3270_application_get_ui_style(G_APPLICATION(object)));
 		break;
 
+	case PROP_LOGFILE:
+		g_value_set_string(value,pw3270_application_get_log_filename(G_APPLICATION(object)));
+		break;
+
 	default:
 		g_assert_not_reached ();
 	}
@@ -72,6 +77,10 @@ static void set_property(GObject *object, guint prop_id, const GValue *value, GP
 	switch (prop_id) {
 	case PROP_UI_STYLE:
 		pw3270_application_set_ui_style(G_APPLICATION(object),g_value_get_uint(value));
+		break;
+
+	case PROP_LOGFILE:
+		pw3270_application_set_log_filename(G_APPLICATION(object),g_value_get_string(value));
 		break;
 
 	default:
@@ -164,6 +173,14 @@ static void pw3270Application_class_init(pw3270ApplicationClass *klass) {
 	        G_PARAM_READABLE|G_PARAM_WRITABLE
 	    );
 
+	props[PROP_LOGFILE] =
+		g_param_spec_string(
+			"logfile",
+			_("Log name"),
+			_("The full path of the default log file"),
+			NULL,
+			G_PARAM_READABLE|G_PARAM_WRITABLE
+		);
 
 	g_object_class_install_properties(object_class, NUM_PROPERTIES, props);
 
@@ -588,6 +605,11 @@ static int loghandler(const H3270 G_GNUC_UNUSED(*hSession), pw3270Application *a
 	}
 
 	return 0;
+}
+
+const gchar	* pw3270_application_get_log_filename(GApplication *app) {
+	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
+	return PW3270_APPLICATION(app)->logfile;
 }
 
 void pw3270_application_set_log_filename(GApplication *app, const gchar *filename) {
