@@ -25,6 +25,8 @@ For the supported distributions get the install repositories and instructions fr
 
 ### Windows
 
+Updated windows installers are available on Dropbox, google drive and one drive.
+
 [<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/dropbox.svg" alt="Get from dropbox" height="80px">](https://www.dropbox.com/sh/2qy3s6b5s4o4bws/AAAubHE8SBG7r6CJSKPflKN0a?dl=0)
 [<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/googledrive.svg" alt="Get from google drive" height="80px">](https://drive.google.com/drive/folders/1tmtKzGujLVvnIV_knWQXl_TBEC3_9ucL?usp=sharing)
 [<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/microsoftonedrive.svg" alt="Get from Microsoft One Drive" height="80px">](https://onedrive.live.com/?id=D8B46DA0372A6F1A%212208&cid=D8B46DA0372A6F1A)
