@@ -231,7 +231,11 @@ $(OBJDIR)/schemas/%.xml:\
 install-%: \
 	%/Makefile
 
-	@$(MAKE) -C `dirname $<` DESTDIR=$(DESTDIR) install
+	@$(MAKE) \
+		-C `dirname $<` \
+		DESTDIR=$(DESTDIR) \
+		prefix=$(prefix) \
+		install
 
 %.ico: \
 	branding/%.svg
