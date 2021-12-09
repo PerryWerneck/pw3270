@@ -34,9 +34,10 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 datarootdir=@datarootdir@
 bindir=@bindir@
+srcdir=@srcdir@
 
-BASEDIR=@BASEDIR@
-BINDIR=$(BASEDIR)/.bin
+BUILDDIR=@BUILDDIR@
+BINDIR=$(BUILDDIR)/.bin
 
 MKDIR=@MKDIR_P@
 INSTALL=@INSTALL@
@@ -57,7 +58,7 @@ APPSTREAMCLI=@APPSTREAMCLI@
 	@$(CONVERT) -density 384 -background transparent $< -define icon:auto-resize -colors 256 $@
 
 $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/%.svg: \
-	%.svg
+	$(srcdir)/%.svg
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
@@ -71,7 +72,7 @@ endif
 	@chmod 644 $@
 
 $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.svg: \
-	$(PRODUCT_NAME).svg
+	$(srcdir)/$(PRODUCT_NAME).svg
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`
@@ -85,7 +86,7 @@ endif
 	@chmod 644 $@
 
 $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/%.svg: \
-	%.svg
+	$(srcdir)/%.svg
 
 	@echo $@ ...
 	@$(MKDIR) `dirname $@`

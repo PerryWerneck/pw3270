@@ -88,15 +88,6 @@ BINRLS=$(BINDIR)/Release
 
 #---[ Rules ]----------------------------------------------------------------------------
 
-DEPENDS= \
-	Makefile \
-	src/include/*.h \
-	src/include/pw3270/*.h \
-	src/objects/toolbar/private.h \
-	src/objects/window/private.h \
-	src/objects/actions/private.h \
-	src/main/private.h
-
 CFLAGS= \
 	@CFLAGS@ \
 	-g \
@@ -117,9 +108,8 @@ LDFLAGS= \
 #---[ Debug Rules ]----------------------------------------------------------------------
 
 $(OBJDBG)/%.o: \
-	%.c \
-	$(DEPENDS)
-
+	%.c
+	
 	@echo $< ...
 	@$(MKDIR) $(@D)
 
@@ -152,8 +142,7 @@ gschemas.compiled: \
 #---[ Release Rules ]--------------------------------------------------------------------
 
 $(OBJRLS)/%.o: \
-	%.c \
-	$(DEPENDS)
+	%.c
 
 	@echo $< ...
 	@$(MKDIR) $(dir $@)
