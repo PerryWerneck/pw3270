@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<moduleset>
+
+	<include href="https://gitlab.gnome.org/GNOME/gtk-osx/raw/master/modulesets-stable/gtk-osx.modules" />
+	<include href="https://raw.githubusercontent.com/PerryWerneck/libv3270/macos/mac/libv3270.modules" />
+		
+	<repository type="git" name="github.com" href="git://github.com/"/>
+
+	<autotools id="pw3270">
+		<branch repo="github.com" module="PerryWerneck/pw3270" revision="macos" />
+		<dependencies>
+			<dep package="meta-gtk-osx-bootstrap" />
+			<dep package="glib" />
+			<dep package="gtk+-3.0" />
+			<dep package="gdk-pixbuf" />
+			<dep package="gtk-mac-integration" />
+			<dep package="adwaita-icon-theme" />
+			<dep package="hicolor-icon-theme" />
+			<dep package="lib3270"/>
+			<dep package="libv3270"/>
+		</dependencies>
+	</autotools>
+  	
+</moduleset>
+
