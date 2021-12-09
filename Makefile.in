@@ -1,28 +1,34 @@
+# SPDX-License-Identifier: LGPL-3.0-or-later
 #
-# "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
-# (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
-# aplicativos mainframe. Registro no INPI sob o nome G3270.
+# Copyright (C) 2008 Banco do Brasil S.A.
 #
-# Copyright (C) <2008> <Banco do Brasil S.A.>
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
-# os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
-# Free Software Foundation.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
-# GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
-# A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
-# obter mais detalhes.
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
-# programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
-# Place, Suite 330, Boston, MA, 02111-1307, USA
-#
-# Contatos:
-#
-# perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
-# erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
-#
+
+#---[ Paths ]----------------------------------------------------------------------------
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+srcdir=@srcdir@
+sbindir=@sbindir@
+libdir=@libdir@
+includedir=@includedir@
+datarootdir=@datarootdir@
+localedir=@localedir@
+docdir=@docdir@
+sysconfdir=@sysconfdir@
 
 #---[ Configuration ]--------------------------------------------------------------------
 
@@ -30,24 +36,24 @@ PACKAGE_NAME=@PACKAGE_NAME@
 PRODUCT_NAME=@PRODUCT_NAME@
 
 SOURCES= \
-	$(wildcard src/objects/actions/*.c) \
-	$(wildcard src/objects/application/*.c) \
-	$(wildcard src/objects/application/actions/*.c) \
-	$(wildcard src/objects/window/*.c) \
-	$(wildcard src/objects/window/actions/*.c) \
-	$(wildcard src/objects/terminal/*.c) \
-	$(wildcard src/objects/toolbar/*.c) \
-	$(wildcard src/objects/settings/*.c) \
-	$(wildcard src/objects/os/@OSNAME@/*.c) \
-	$(wildcard src/main/*.c) \
-	$(wildcard src/tools/*.c) \
-	$(wildcard src/main/@OSNAME@/*.c) \
-	$(wildcard src/main/@OSNAME@/*.rc) \
-	$(wildcard src/objects/keypad/*.c)
+	$(wildcard $(srcdir)/src/objects/actions/*.c) \
+	$(wildcard $(srcdir)/src/objects/application/*.c) \
+	$(wildcard $(srcdir)/src/objects/application/actions/*.c) \
+	$(wildcard $(srcdir)/src/objects/window/*.c) \
+	$(wildcard $(srcdir)/src/objects/window/actions/*.c) \
+	$(wildcard $(srcdir)/src/objects/terminal/*.c) \
+	$(wildcard $(srcdir)/src/objects/toolbar/*.c) \
+	$(wildcard $(srcdir)/src/objects/settings/*.c) \
+	$(wildcard $(srcdir)/src/objects/os/@OSNAME@/*.c) \
+	$(wildcard $(srcdir)/src/main/*.c) \
+	$(wildcard $(srcdir)/src/tools/*.c) \
+	$(wildcard $(srcdir)/src/main/@OSNAME@/*.c) \
+	$(wildcard $(srcdir)/src/main/@OSNAME@/*.rc) \
+	$(wildcard $(srcdir)/src/objects/keypad/*.c)
 
 SCHEMAS= \
-	$(wildcard schemas/@OSNAME@/*.gschema.xml) \
-	$(wildcard schemas/common/*.gschema.xml)
+	$(wildcard $(srcdir)/schemas/@OSNAME@/*.gschema.xml) \
+	$(wildcard $(srcdir)/schemas/common/*.gschema.xml)
 
 #---[ Tools ]----------------------------------------------------------------------------
 
@@ -66,28 +72,17 @@ VALGRIND=@VALGRIND@
 CONVERT=@CONVERT@
 STRIP=@STRIP@
 
-#---[ Paths ]----------------------------------------------------------------------------
+#---[ Build Paths ]----------------------------------------------------------------------
 
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-bindir=@bindir@
-sbindir=@sbindir@
-libdir=@libdir@
-includedir=@includedir@
-datarootdir=@datarootdir@
-localedir=@localedir@
-docdir=@docdir@
-sysconfdir=@sysconfdir@
+BUILDDIR=@BUILDDIR@
 
-BASEDIR=@BASEDIR@
+POTDIR=$(BUILDDIR)/.pot
 
-POTDIR=$(BASEDIR)/.pot
-
-OBJDIR=$(BASEDIR)/.obj/$(PACKAGE_NAME)
+OBJDIR=$(BUILDDIR)/.obj/$(PACKAGE_NAME)
 OBJDBG=$(OBJDIR)/Debug
 OBJRLS=$(OBJDIR)/Release
 
-BINDIR=$(BASEDIR)/.bin
+BINDIR=$(BUILDDIR)/.bin
 BINDBG=$(BINDIR)/Debug
 BINRLS=$(BINDIR)/Release
 
@@ -106,6 +101,7 @@ CFLAGS= \
 	@CFLAGS@ \
 	-g \
 	-Isrc/include \
+	-I$(srcdir)/src/include \
 	-DBUILD_DATE=`date +%Y%m%d` \
 	@LIBV3270_CFLAGS@ \
 	@GTK_CFLAGS@
@@ -216,14 +212,14 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 	@$(MKDIR) $(@D)
 	@touch $@
 
-$(OBJDIR)/schemas/%.xml:\
-	schemas/@OSNAME@/%.xml
+$(OBJDIR)/schemas/%.xml: \
+	$(srcdir)/schemas/@OSNAME@/%.xml
 
 	@$(MKDIR) $(@D)
 	@cp "$^" "$@"
 
 $(OBJDIR)/schemas/%.xml:\
-	schemas/common/%.xml
+	$(srcdir)/schemas/common/%.xml
 
 	@$(MKDIR) $(@D)
 	@cp "$^" "$@"
@@ -238,7 +234,7 @@ install-%: \
 		install
 
 %.ico: \
-	branding/%.svg
+	$(srcdir)/branding/%.svg
 
 	@echo $@ ...
 	@$(MKDIR) $(@D)
@@ -300,7 +296,7 @@ install-application: \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/ui
 
 	@$(INSTALL_DATA) \
-		ui/*.xml \
+		$(srcdir)/ui/*.xml \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/ui
 
 	@$(MKDIR) \
@@ -333,14 +329,14 @@ install-icons:
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons
 
 	@$(INSTALL_DATA) \
-		icons/*.svg \
+		$(srcdir)/icons/*.svg \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons
 
 #---[ Misc Targets ]---------------------------------------------------------------------
 
 locale/$(PACKAGE_NAME).pot: \
 	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) \
-	$(foreach SRC, $(basename $(wildcard ui/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot)
+	$(foreach SRC, $(basename $(wildcard $(srcdir)/ui/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot)
 
 	@rm -f $@
 	@$(MKDIR) $(@D)
@@ -368,7 +364,6 @@ run: \
 
 	@G_DEBUG=fatal-warnings \
 		$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@
-
 
 run-inspector: \
 	$(BINDBG)/$(PACKAGE_NAME)@EXEEXT@ \
@@ -401,7 +396,7 @@ clean: \
 	cleanDebug \
 	cleanRelease
 
-	@rm -fr $(BASEDIR)/.tmp/$(PACKAGE_NAME)
+	@rm -fr $(BUILDDIR)/.tmp/$(PACKAGE_NAME)
 	@rm -fr $(POTDIR)/$(PACKAGE_NAME)
 	@rm -fr src/include/marshal
 	@rm -f $(PRODUCT_NAME).ico
