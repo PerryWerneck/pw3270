@@ -40,6 +40,9 @@ AC_CONFIG_HEADER([src/include/config.h])
 dnl Initialise automake stuff.
 AM_INIT_AUTOMAKE
 
+dnl Set gettext version
+AM_GNU_GETTEXT_VERSION([0.14])
+
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_SED
@@ -90,6 +93,17 @@ case "$host" in
 
 		;;
 
+	*-apple-darwin*)
+		app_cv_osname="macos"
+		app_rls_ldflags=""
+
+		CFLAGS="$CFLAGS -pthread"
+		LDFLAGS="$LDFLAGS -pthread"
+
+		AC_CONFIG_FILES(schemas/macos/application.gschema.xml)
+		AC_CONFIG_FILES(schemas/macos/window.gschema.xml)
+		;;
+
  	*)
 		app_cv_osname="linux"
 		app_rls_ldflags=""
@@ -97,9 +111,6 @@ case "$host" in
 		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir)"
 		LDFLAGS="$LDFLAGS -pthread"
 
-		app_cv_static='no'
-
-		# Windows and linux doesn't use the same window defaults.
 		AC_CONFIG_FILES(schemas/linux/application.gschema.xml)
 		AC_CONFIG_FILES(schemas/linux/window.gschema.xml)
 
