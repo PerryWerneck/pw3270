@@ -52,8 +52,8 @@ SOURCES= \
 	$(wildcard $(srcdir)/src/objects/keypad/*.c)
 
 SCHEMAS= \
-	$(wildcard $(srcdir)/schemas/@OSNAME@/*.gschema.xml) \
-	$(wildcard $(srcdir)/schemas/common/*.gschema.xml)
+	$(wildcard schemas/@OSNAME@/*.gschema.xml) \
+	$(wildcard schemas/common/*.gschema.xml)
 
 #---[ Tools ]----------------------------------------------------------------------------
 
@@ -135,6 +135,8 @@ $(OBJDBG)/%.o: \
 gschemas.compiled: \
 	$(foreach SCHEMA, $(notdir $(SCHEMAS)), $(OBJDIR)/schemas/$(SCHEMA))
 
+	@$(MKDIR) $(OBJDIR)/schemas
+
 	@glib-compile-schemas \
 		--targetdir=$(@D) \
 		$(OBJDIR)/schemas
@@ -202,7 +204,7 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 	@touch $@
 
 $(OBJDIR)/schemas/%.xml: \
-	$(srcdir)/schemas/@OSNAME@/%.xml
+	schemas/@OSNAME@/%.xml
 
 	@$(MKDIR) $(@D)
 	@cp "$^" "$@"
