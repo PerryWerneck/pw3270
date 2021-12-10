@@ -153,6 +153,11 @@ install-linux: \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons/$(PRODUCT_NAME)-symbolic.svg \
 		$(DESTDIR)$(datarootdir)/icons/$(APPLICATION_ID)-symbolic.svg
 
+install-macos: \
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.svg \
+	$(DESTDIR)$(bindir)/$(PRODUCT_NAME).ico
+
 install-windows: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.svg \
