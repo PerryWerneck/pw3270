@@ -59,12 +59,15 @@ gschemas.compiled
 *.gschema.xml
 metainfo.xml
 *.metainfo.xml
-
 *.[0-9]
-
 *.3270
 macos/**/*.app
 mime.xml
 *.patch
 *.orig
 *.rej
+ABOUT-NLS
+intl
+m4
+po
+
