@@ -105,7 +105,7 @@ static const struct _entry {
 
 };
 
-GAction * pw3270_action_save_desktop_icon_new(void) {
+GAction * pw3270_action_save_session_shortcut_new(void) {
 
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
@@ -116,40 +116,6 @@ GAction * pw3270_action_save_desktop_icon_new(void) {
 	return G_ACTION(action);
 
 }
-
-/*
-static gchar * get_filename(GtkWidget *terminal) {
-
-	g_autofree gchar * defname = v3270_keyfile_get_default_filename();
-const gchar * current = v3270_key_file_get_filename(terminal);
-
-// If is not the default name, return it.
-if(strcmp(defname,current)) {
-	return g_strdup(current);
-}
-
-// It's the default one, create a new one on the user_config dir
-g_autofree gchar * config_path = v3270_key_file_get_default_path(terminal);
-
-// Use the hostname
-const char * hostname = lib3270_host_get_name(v3270_get_session(terminal));
-if(!hostname) {
-	hostname = G_STRINGIFY(PRODUCT_NAME);
-}
-
-// Build the filename
-gchar *filename = g_strconcat(config_path,G_DIR_SEPARATOR_S,hostname,".3270",NULL);
-
-unsigned int index = 0;
-while(g_file_test(filename,G_FILE_TEST_EXISTS)) {
-	g_free(filename);
-	filename = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s.%u.3270",config_path,hostname,++index);
-}
-
-return filename;
-
-}
-*/
 
 GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 

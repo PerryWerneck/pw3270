@@ -501,22 +501,18 @@ static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 		size_t ix;
 
 		GAction * actions[] = {
-//			pw3270_action_host_properties_new(),
 			pw3270_action_session_properties_new(),
-//			pw3270_set_color_action_new(),
-
 			pw3270_action_save_session_preferences_new(),
-
 			pw3270_file_transfer_action_new(),
-
 			pw3270_action_window_close_new(),
-
 			pw3270_action_connect_new(),
 
 			v3270_pfkey_action_new(),
 			v3270_pakey_action_new(),
 
-			pw3270_action_save_desktop_icon_new(),
+#ifndef __APPLE__
+			pw3270_action_save_session_shortcut_new(),
+#endif // __APPLE__
 
 		};
 
@@ -535,10 +531,12 @@ static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 	//
 	// Bind properties
 	//
+#ifndef __APPLE__
 	g_action_map_add_action(
 	    G_ACTION_MAP(widget),
 	    G_ACTION(g_property_action_new("menubar", widget, "show-menubar"))
 	);
+#endif // !__APPLE__
 
 	g_settings_bind(
 	    settings,
@@ -640,15 +638,19 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 #endif // DEBUG
 
 		if(style == PW3270_UI_STYLE_AUTOMATIC) {
-
-#ifdef G_OS_UNIX
+#if defined(__APPLE__)
+			style = PW3270_UI_STYLE_GNOME;
+			g_settings_set_int(settings,"header-icon-type",1);
+#elif defined( G_OS_UNIX )
 			style = PW3270_UI_STYLE_GNOME;
 			g_settings_set_boolean(settings,"menubar-visible",FALSE);
 			g_settings_set_int(settings,"header-icon-type",1);
-#else
+#elif defined( G_OS_WIN32 )
 			style = PW3270_UI_STYLE_CLASSICAL;
 			g_settings_set_boolean(settings,"menubar-visible",TRUE);
 			g_settings_set_int(settings,"header-icon-type",0);
+#else
+			#error Unsupported platform
 #endif // G_OS_UNIX
 
 			g_settings_set_boolean(settings,"toolbar-visible",TRUE);
@@ -692,6 +694,7 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 
 		}
 
+#ifndef __APPLE__
 		g_settings_bind(
 		    settings,
 		    "menubar-visible",
@@ -699,6 +702,7 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 		    "show-menubar",
 		    G_SETTINGS_BIND_DEFAULT
 		);
+#endif // !__APPLE__
 
 	}
 

@@ -68,12 +68,6 @@
       <description></description>
     </key>
 
-    <key name="menubar-visible" type="b">
-      <default>false</default>
-      <summary>The menubar visible state</summary>
-      <description></description>
-    </key>
-
     <key name="toolbar-style" type="i">
       <default>-1</default>
       <summary>How to draw the toolbar.</summary>

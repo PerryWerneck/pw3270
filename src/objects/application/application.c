@@ -204,13 +204,17 @@ static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gcha
 
 		g_settings_set_uint(app_settings,"ui-style",PW3270_UI_STYLE_GNOME);
 		g_settings_set_boolean(win_settings,"toolbar-visible",TRUE);
+#ifndef __APPLE__
 		g_settings_set_boolean(win_settings,"menubar-visible",FALSE);
+#endif // __APPLE__
 
 	} else if(!g_ascii_strcasecmp(value,"classic")) {
 
 		g_settings_set_uint(app_settings,"ui-style",PW3270_UI_STYLE_CLASSICAL);
 		g_settings_set_boolean(win_settings,"toolbar-visible",TRUE);
+#ifndef __APPLE__
 		g_settings_set_boolean(win_settings,"menubar-visible",TRUE);
+#endif // __APPLE__
 
 	} else if(!g_ascii_strcasecmp(value,"default")) {
 

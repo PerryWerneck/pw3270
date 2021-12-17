@@ -98,7 +98,7 @@ static const struct _entry {
 
 };
 
-GAction * pw3270_action_save_desktop_icon_new(void) {
+GAction * pw3270_action_save_session_shortcut_new(void) {
 
 	V3270SimpleAction * action = v3270_dialog_action_new(factory);
 
