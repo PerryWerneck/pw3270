@@ -240,9 +240,27 @@ static void pw3270Application_init(pw3270Application *app) {
 
 	static GOptionEntry cmd_options[] = {
 
-		{ "user-interface", 'U', 0, G_OPTION_ARG_CALLBACK,	&on_user_interface, N_( "Set the user-interface type" ),  NULL },
-		{ "logfile",		'l', 0, G_OPTION_ARG_CALLBACK,	&on_logfile, N_( "Set default log file name" ),  NULL },
-		{ NULL }
+		{
+			"user-interface",
+			'U',
+			0,
+			G_OPTION_ARG_CALLBACK,
+			&on_user_interface,
+			N_( "Set the user-interface type" ),
+			NULL
+		},
+		{
+			"logfile",
+			'l',
+			0,
+			G_OPTION_ARG_CALLBACK,
+			&on_logfile,
+			N_( "Set default log file name" ),
+			NULL
+		},
+		{
+			NULL
+		}
 
 	};
 
