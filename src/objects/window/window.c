@@ -531,7 +531,9 @@ static void pw3270ApplicationWindow_init(pw3270ApplicationWindow *widget) {
 	//
 	// Bind properties
 	//
-#ifndef __APPLE__
+#ifdef __APPLE__
+	gtk_application_window_set_show_menubar(GTK_APPLICATION_WINDOW(widget),TRUE);
+#else
 	g_action_map_add_action(
 	    G_ACTION_MAP(widget),
 	    G_ACTION(g_property_action_new("menubar", widget, "show-menubar"))
