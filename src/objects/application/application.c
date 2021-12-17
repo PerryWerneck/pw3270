@@ -175,6 +175,7 @@ static void pw3270Application_class_init(pw3270ApplicationClass *klass) {
 
 }
 
+#ifndef __APPLE__
 static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
 
 	g_autoptr(GSettings) app_settings = pw3270_application_settings_new();
@@ -193,17 +194,13 @@ static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gcha
 
 		g_settings_set_uint(app_settings,"ui-style",PW3270_UI_STYLE_GNOME);
 		g_settings_set_boolean(win_settings,"toolbar-visible",TRUE);
-#ifndef __APPLE__
 		g_settings_set_boolean(win_settings,"menubar-visible",FALSE);
-#endif // __APPLE__
 
 	} else if(!g_ascii_strcasecmp(value,"classic")) {
 
 		g_settings_set_uint(app_settings,"ui-style",PW3270_UI_STYLE_CLASSICAL);
 		g_settings_set_boolean(win_settings,"toolbar-visible",TRUE);
-#ifndef __APPLE__
 		g_settings_set_boolean(win_settings,"menubar-visible",TRUE);
-#endif // __APPLE__
 
 	} else if(!g_ascii_strcasecmp(value,"default")) {
 
@@ -223,6 +220,7 @@ static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gcha
 	return TRUE;
 
 }
+#endif // __APPLE__
 
 static gboolean on_logfile(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError G_GNUC_UNUSED(**error)) {
 	pw3270_application_set_log_filename(g_application_get_default(),value);
@@ -232,7 +230,7 @@ static gboolean on_logfile(const gchar G_GNUC_UNUSED(*option), const gchar *valu
 static void pw3270Application_init(pw3270Application *app) {
 
 	static GOptionEntry cmd_options[] = {
-
+#ifndef __APPLE__
 		{
 			"user-interface",
 			'U',
@@ -242,6 +240,7 @@ static void pw3270Application_init(pw3270Application *app) {
 			N_( "Set the user-interface type" ),
 			NULL
 		},
+#endif // __APPLE__
 		{
 			"logfile",
 			'l',
@@ -293,7 +292,6 @@ static void pw3270Application_init(pw3270Application *app) {
 		lib3270_autoptr(char) plugin_path = lib3270_build_data_filename("plugins",NULL);
 		pw3270_load_plugins_from_path(app, plugin_path);
 	}
-
 #else
 	//
 	// Setup linux UI
@@ -568,7 +566,7 @@ PW3270_UI_STYLE pw3270_application_get_ui_style(GApplication *app) {
 
 #ifdef __APPLE__
 	return PW3270_UI_STYLE_GNOME;
-#else 
+#else
 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),PW3270_UI_STYLE_CLASSICAL);
 	return PW3270_APPLICATION(app)->ui_style;
 #endif // __APPLE__

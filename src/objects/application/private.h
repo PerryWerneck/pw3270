@@ -50,7 +50,9 @@
 	#include <gtkosxapplication.h>
 #endif // __APPLE__
 
-typedef struct _pw3270Application {
+#include <pw3270/application.h>
+
+struct _pw3270Application {
 #ifdef __APPLE__
 	GtkosxApplication parent;
 #else
@@ -63,7 +65,7 @@ typedef struct _pw3270Application {
 	gchar 		* logfile;
 	GSList		* plugins;		///< @brief Handlers of the loaded plugins.
 
-} pw3270Application;
+};
 
 struct _pw3270ApplicationClass {
 	GtkApplicationClass parent_class;
