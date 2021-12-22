@@ -474,16 +474,7 @@ void startup(GApplication *application) {
 	//
 	// Setup application menus
 	//
-	GtkBuilder * builder;
-#ifdef DEBUG
-	builder = gtk_builder_new_from_file("ui/application.xml");
-#else
-	{
-		lib3270_autoptr(char) build_file = lib3270_build_data_filename("ui","application.xml",NULL);
-		builder = gtk_builder_new_from_file(build_file);
-	}
-#endif // DEBUG
-
+	g_autoptr(GtkBuilder) builder = pw3270_application_builder_new(application);
 
 	//
 	// Load keypad models
@@ -514,10 +505,6 @@ void startup(GApplication *application) {
 		gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
 
 	gtk_application_set_menubar(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "menubar")));
-
-	pw3270_load_placeholders(application, builder);
-
-	g_object_unref(builder);
 
 }
 

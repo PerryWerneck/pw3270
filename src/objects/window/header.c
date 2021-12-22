@@ -47,24 +47,21 @@ void pw3270_window_set_header_action_names(GtkWidget *window, const gchar *actio
 		size_t ix;
 		gchar ** header_blocks = g_strsplit(action_names,":",-1);
 
-		g_autoptr(GtkBuilder) builder = pw3270_application_get_builder("window.xml");
+		g_autoptr(GtkBuilder) builder = pw3270_application_builder_new(g_application_get_default());
 
 		if(!gtk_application_prefers_app_menu(GTK_APPLICATION(g_application_get_default()))) {
 
 			// No application menu, add view and help sections to open menu.
-
-			g_autoptr(GtkBuilder) app_builder = pw3270_application_get_builder("application.xml");
-
 			g_menu_append_section(
 			    G_MENU(gtk_builder_get_object(builder,"open-menu")),
 			    NULL,
-			    G_MENU_MODEL(gtk_builder_get_object(app_builder,"help-menu-placeholder"))
+			    G_MENU_MODEL(gtk_builder_get_object(builder,"help-menu-placeholder"))
 			);
 
 			g_menu_append_submenu(
 			    G_MENU(gtk_builder_get_object(builder,"preferences-menu")),
 			    _("View"),
-			    G_MENU_MODEL(gtk_builder_get_object(app_builder,"view-menu-placeholder"))
+			    G_MENU_MODEL(gtk_builder_get_object(builder,"view-menu-placeholder"))
 			);
 
 		}

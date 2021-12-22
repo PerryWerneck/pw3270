@@ -35,7 +35,7 @@ sysconfdir=@sysconfdir@
 PACKAGE_NAME=@PACKAGE_NAME@
 PRODUCT_NAME=@PRODUCT_NAME@
 
-SOURCES= \
+COMMON_SOURCES= \
 	$(wildcard $(srcdir)/src/objects/actions/*.c) \
 	$(wildcard $(srcdir)/src/objects/application/*.c) \
 	$(wildcard $(srcdir)/src/objects/application/actions/*.c) \
@@ -44,12 +44,15 @@ SOURCES= \
 	$(wildcard $(srcdir)/src/objects/terminal/*.c) \
 	$(wildcard $(srcdir)/src/objects/toolbar/*.c) \
 	$(wildcard $(srcdir)/src/objects/settings/*.c) \
-	$(wildcard $(srcdir)/src/objects/os/@OSNAME@/*.c) \
 	$(wildcard $(srcdir)/src/main/*.c) \
 	$(wildcard $(srcdir)/src/tools/*.c) \
+	$(wildcard $(srcdir)/src/objects/keypad/*.c) \
+
+SOURCES= \
+	$(COMMON_SOURCES) \
+	$(wildcard $(srcdir)/src/objects/os/@OSNAME@/*.c) \
 	$(wildcard $(srcdir)/src/main/@OSNAME@/*.c) \
-	$(wildcard $(srcdir)/src/main/@OSNAME@/*.rc) \
-	$(wildcard $(srcdir)/src/objects/keypad/*.c)
+	$(wildcard $(srcdir)/src/main/@OSNAME@/*.rc)
 
 SCHEMAS= \
 	$(wildcard $(srcdir)/schemas/@OSNAME@/*.gschema.xml) \
@@ -281,12 +284,9 @@ install-application: \
 	@$(MKDIR) \
 		$(DESTDIR)$(libdir)/$(PRODUCT_NAME)-plugins
 
-	@$(MKDIR) \
-		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/ui
-
 	@$(INSTALL_DATA) \
-		$(srcdir)/ui/*.xml \
-		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/ui
+		$(srcdir)/ui/@OSNAME@.ui.xml \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME).ui.xml
 
 	@$(MKDIR) \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/keypad
@@ -324,7 +324,10 @@ install-icons:
 #---[ Misc Targets ]---------------------------------------------------------------------
 
 locale/$(PACKAGE_NAME).pot: \
-	$(foreach SRC, $(basename $(SOURCES)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) \
+	$(foreach SRC, $(basename $(COMMON_SOURCES)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) \
+	$(foreach SRC, $(basename $($(wildcard $(srcdir)/src/objects/os/linux/*.c))), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).linux.pot) \
+	$(foreach SRC, $(basename $($(wildcard $(srcdir)/src/objects/os/windows/*.c))), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).windows.pot) \
+	$(foreach SRC, $(basename $($(wildcard $(srcdir)/src/objects/os/macos/*.c))), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).macos.pot) \
 	$(foreach SRC, $(basename $(wildcard $(srcdir)/ui/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot)
 
 	@rm -f $@

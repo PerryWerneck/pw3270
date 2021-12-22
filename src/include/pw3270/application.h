@@ -90,7 +90,7 @@ void			  pw3270_application_plugin_call(GApplication *app, const gchar *method, 
 GSList			* pw3270_application_get_plugins(GApplication *app);
 
 // Tools
-GtkBuilder		* pw3270_application_get_builder(const gchar *name);
+GtkBuilder		* pw3270_application_builder_new(GApplication *application);
 
 void			  gtk_container_remove_all(GtkContainer *container);
 

@@ -608,8 +608,7 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 	//
 	// Get builder
 	//
-	g_autoptr(GtkBuilder) builder = pw3270_application_get_builder("window.xml");
-	pw3270_load_placeholders(G_APPLICATION(application), builder);
+	g_autoptr(GtkBuilder) builder = pw3270_application_builder_new(G_APPLICATION(application));
 
 	// Load popup menus.
 	const gchar * popup_menus[PW3270_APP_WINDOW_POPUP_COUNT] = {
