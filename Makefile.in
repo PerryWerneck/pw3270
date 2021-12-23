@@ -286,7 +286,7 @@ install-application: \
 
 	@$(INSTALL_DATA) \
 		$(srcdir)/ui/@OSNAME@.ui.xml \
-		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME).ui.xml
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).ui.xml
 
 	@$(MKDIR) \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/keypad
