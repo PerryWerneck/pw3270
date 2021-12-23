@@ -18,6 +18,8 @@
  */
 
  #include "private.h"
+ #include <pw3270/application.h>
+ #include <pw3270/keypad.h>
 
  static GMenu * get_keypad_menu(GApplication *application) {
 
@@ -49,6 +51,11 @@
 #elif defined(G_OS_UNIX)
 
 	static const char * filename = "ui/linux.ui.xml";
+
+#elif defined(G_OS_WIN32)
+
+	static const char * filename = "ui/windows.ui.xml";
+
 
 #else
 
