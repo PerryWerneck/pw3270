@@ -170,7 +170,7 @@ $(OBJRLS)/%.o: \
 
 #---[ Misc Rules ]-----------------------------------------------------------------------
 
-$(POTDIR)/$(PACKAGE_NAME)/%.pot: \
+$(POTDIR)/%.pot: \
 	%.c
 
 	@echo $(notdir $@) ...
@@ -186,7 +186,7 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 		$<
 	@touch $@
 
-$(POTDIR)/$(PACKAGE_NAME)/%.pot: \
+$(POTDIR)/%.pot: \
 	%.xml
 
 	@echo $(notdir $@) ...
@@ -197,7 +197,7 @@ $(POTDIR)/$(PACKAGE_NAME)/%.pot: \
 		$<
 	@touch $@
 
-$(POTDIR)/$(PACKAGE_NAME)/%.pot: \
+$(POTDIR)/%.pot: \
 	%.rc
 
 	@echo $< ...
@@ -324,11 +324,11 @@ install-icons:
 #---[ Misc Targets ]---------------------------------------------------------------------
 
 locale/$(PACKAGE_NAME).pot: \
-	$(foreach SRC, $(basename $(COMMON_SOURCES)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot) \
-	$(foreach SRC, $(basename $($(wildcard $(srcdir)/src/objects/os/linux/*.c))), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).linux.pot) \
-	$(foreach SRC, $(basename $($(wildcard $(srcdir)/src/objects/os/windows/*.c))), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).windows.pot) \
-	$(foreach SRC, $(basename $($(wildcard $(srcdir)/src/objects/os/macos/*.c))), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).macos.pot) \
-	$(foreach SRC, $(basename $(wildcard $(srcdir)/ui/*.xml)), $(POTDIR)/$(PACKAGE_NAME)/$(SRC).pot)
+	$(foreach SRC, $(basename $(COMMON_SOURCES)), $(POTDIR)/$(SRC).pot) \
+	$(foreach SRC, $(basename $(wildcard $(srcdir)/src/objects/os/linux/*.c)), $(POTDIR)/$(SRC).pot) \
+	$(foreach SRC, $(basename $(wildcard $(srcdir)/src/objects/os/windows/*.c)), $(POTDIR)/$(SRC).pot) \
+	$(foreach SRC, $(basename $(wildcard $(srcdir)/src/objects/os/macos/*.c)), $(POTDIR)/$(SRC).pot) \
+	$(foreach SRC, $(basename $(wildcard $(srcdir)/ui/*.xml)), $(POTDIR)/$(SRC).pot)
 
 	@rm -f $@
 	@$(MKDIR) $(@D)

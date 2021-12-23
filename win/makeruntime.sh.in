@@ -45,9 +45,9 @@ GTK_VERSION="gtk+-@GTK_VERSION@"
 GTK_PREFIX=$($PKG_CONFIG --variable=prefix ${GTK_VERSION})
 GDK_LOADERS=$(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0 | sed -e "s@${prefix}@@g")
 
-TARGET="@BASEDIR@/.bin/runtime"
-BINDIR="@BASEDIR@/.bin/Release/"
-SCHEMADIR="@BASEDIR@/schemas/"
+TARGET="@BUILDDIR@/.bin/runtime"
+BINDIR="@BUILDDIR@/.bin/Release/"
+SCHEMADIR="@BUILDDIR@/schemas/"
 
 # Change to bin path
 mkdir -p ${TARGET}

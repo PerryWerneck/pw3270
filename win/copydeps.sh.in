@@ -2,7 +2,7 @@
 myDIR=$(dirname $(readlink -f $0))
 
 # Updated by ./configure
-BASEDIR=@BASEDIR@
+BUILDDIR=@BUILDDIR@
 prefix=@prefix@
 
 # Crio diretório temporário
@@ -79,8 +79,8 @@ libs_to_exclude="
 #
 # Fico em loop montando dependências
 #
-APPLICATION_PATH=${BASEDIR}/.bin/Release
-RUNTIME_PATH=${BASEDIR}/.bin/runtime
+APPLICATION_PATH=${BUILDDIR}/.bin/Release
+RUNTIME_PATH=${BUILDDIR}/.bin/runtime
 
 mkdir -p ${RUNTIME_PATH}
 

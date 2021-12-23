@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-22 20:45-0300\n"
-"PO-Revision-Date: 2021-11-22 22:00-0300\n"
+"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"PO-Revision-Date: 2021-12-23 01:36-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -37,7 +37,8 @@ msgstr "Linux 32 bits"
 msgid "32 bits Windows"
 msgstr "Windows 32 bits"
 
-#: src/objects/actions/save.c:166
+#: src/objects/actions/save.c:166 src/objects/os/linux/savedesktopicon.c:267
+#: src/objects/os/windows/savedesktopicon.c:222
 msgid "3270 session files"
 msgstr "Arquivos de sessão TN3270"
 
@@ -139,6 +140,10 @@ msgstr "Em baixo"
 msgid "Can't load session file"
 msgstr "Não foi possível carregar arquivo de sessão"
 
+#: src/objects/os/windows/open.c:133
+msgid "Can't load session preferences"
+msgstr "Não foi possível carregar preferências da sessão"
+
 #: src/objects/settings/gsettings.c:128
 msgid "Can't load system settings"
 msgstr "Não foi possível carregar configurações de sistema"
@@ -198,6 +203,10 @@ msgstr "Fechar a janela"
 msgid "Close window"
 msgstr "Fechar janela"
 
+#: src/objects/os/linux/savedesktopicon.c:101
+msgid "Comment"
+msgstr "Comentário"
+
 #: src/objects/window/actions/connect.c:59
 msgid "Connect"
 msgstr "Conectar"
@@ -245,6 +254,11 @@ msgstr "Copiar como texto"
 msgid "Copyright © 2008 Banco do Brasil S.A."
 msgstr "Copyright © 2008 Banco do Brasil S.A."
 
+#: src/objects/os/linux/savedesktopicon.c:114
+#: src/objects/os/windows/savedesktopicon.c:107
+msgid "Create shortcut for the current session"
+msgstr "Criar atalho para a sessão atual."
+
 #: ui/windows.ui.xml:475 ui/windows.ui.xml:902 ui/linux.ui.xml:475
 #: ui/linux.ui.xml:902
 msgid "Cross hair cursor"
@@ -273,6 +287,10 @@ msgstr "Recortar"
 #: ui/linux.ui.xml:315 ui/linux.ui.xml:735 ui/linux.ui.xml:877
 msgid "Delete Field"
 msgstr "Apagar campo"
+
+#: src/objects/os/windows/savedesktopicon.c:80
+msgid "Description"
+msgstr "Descrição"
 
 #: ui/windows.ui.xml:808 ui/windows.ui.xml:1006 ui/linux.ui.xml:808
 #: ui/linux.ui.xml:1006
@@ -328,9 +346,17 @@ msgstr "Apagar até o final do campo"
 msgid "Erase to end of line"
 msgstr "Apagar até o final da linha"
 
+#: src/objects/os/windows/open.c:140
+msgid "Error starting session"
+msgstr "Erro iniciando sessão"
+
 #: ui/windows.ui.xml:353 ui/linux.ui.xml:353
 msgid "Field attributes"
 msgstr "Atributos de campo"
+
+#: src/objects/os/windows/savedesktopicon.c:219
+msgid "File for session preferences"
+msgstr "Arquivo para preferências da sessão"
 
 #: ui/windows.ui.xml:470 ui/linux.ui.xml:470
 msgid "Full Screen"
@@ -340,6 +366,10 @@ msgstr "Tela cheia"
 #: ui/linux.ui.xml:779 ui/linux.ui.xml:955 ui/linux.ui.xml:1050
 msgid "Full screen"
 msgstr "Tela cheia"
+
+#: src/objects/os/linux/savedesktopicon.c:94
+msgid "Generic name"
+msgstr "Nome genérico"
 
 #: ui/windows.ui.xml:37 ui/windows.ui.xml:550 ui/linux.ui.xml:37
 #: ui/linux.ui.xml:550
@@ -351,6 +381,8 @@ msgid "Host and Emulation settings"
 msgstr "Configuração de servidor e emulação"
 
 #: src/objects/application/actions/about.c:111 src/objects/window/window.c:592
+#: src/objects/os/linux/savedesktopicon.c:102
+#: src/objects/os/windows/savedesktopicon.c:269
 msgid "IBM 3270 Terminal emulator"
 msgstr "Emulador de terminal IBM 3270"
 
@@ -434,7 +466,7 @@ msgstr "Altura do painel em linhas"
 msgid "Keypad width in columns"
 msgstr "Largura do painel em colunas"
 
-#: src/main/builder.c:111
+#: src/main/builder.c:118
 msgid "Keypads"
 msgstr "Painéis"
 
@@ -459,9 +491,8 @@ msgid "List of the available and unpacked actions"
 msgstr "Lista de ações disponíveis ainda não empacotadas"
 
 #: src/objects/application/application.c:179
-#, fuzzy
 msgid "Log name"
-msgstr "Nome do modelo"
+msgstr "Nome do arquivo de log"
 
 #: ui/windows.ui.xml:72 ui/linux.ui.xml:72
 msgid "Main Menu"
@@ -598,6 +629,11 @@ msgstr "Colar próximo"
 msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
+#: src/objects/os/linux/savedesktopicon.c:71
+#: src/objects/os/windows/savedesktopicon.c:74
+msgid "Path for the new shortcut"
+msgstr "Caminho para o novo atalho"
+
 #: src/objects/toolbar/models.c:125
 msgid "Position"
 msgstr "Posição"
@@ -668,6 +704,23 @@ msgstr "Salvar seleção"
 msgid "Save session preferences"
 msgstr "Salvar preferências da sessão"
 
+#: src/objects/os/linux/savedesktopicon.c:113
+#: src/objects/os/windows/savedesktopicon.c:106
+msgid "Save session shortcut"
+msgstr "Salvar atalho para a sessão"
+
+#: src/objects/os/linux/savedesktopicon.c:264
+msgid "Save to session filename"
+msgstr "Salvar para arquivo de sessão"
+
+#: src/objects/os/linux/savedesktopicon.c:236
+msgid "Save to shortcut file"
+msgstr "Salvar para arquivo de atalho"
+
+#: src/objects/os/windows/savedesktopicon.c:184
+msgid "Save to windows shortcut"
+msgstr "Salvar para atalho windows"
+
 #: ui/windows.ui.xml:416 ui/windows.ui.xml:1056 ui/linux.ui.xml:416
 #: ui/linux.ui.xml:1056
 msgid "Screen size"
@@ -725,7 +778,8 @@ msgstr "Sessão"
 msgid "Session Trace"
 msgstr "Trace da sessão"
 
-#: src/objects/actions/save.c:63
+#: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
+#: src/objects/os/windows/savedesktopicon.c:94
 msgid "Session file"
 msgstr "Arquivo de sessão"
 
@@ -739,7 +793,8 @@ msgstr "Sessão em nova aba"
 msgid "Session in new window"
 msgstr "Sessão em nova janela"
 
-#: src/objects/actions/save.c:56
+#: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
+#: src/objects/os/windows/savedesktopicon.c:86
 msgid "Session name"
 msgstr "Nome da sessão"
 
@@ -773,10 +828,19 @@ msgstr "Configurar barra de título"
 msgid "Setup toolbar"
 msgstr "Configurar barra de ferramentas"
 
+#: src/objects/os/linux/savedesktopicon.c:70
+#: src/objects/os/windows/savedesktopicon.c:73
+msgid "Shortcut file"
+msgstr "Arquivo de atalho"
+
 #: ui/windows.ui.xml:159 ui/windows.ui.xml:626 ui/linux.ui.xml:159
 #: ui/linux.ui.xml:626
 msgid "Shortcut for this session"
 msgstr "Atalho para essa sessão"
+
+#: src/objects/os/linux/savedesktopicon.c:63
+msgid "Shortcut name"
+msgstr "Nome do atalho"
 
 #: ui/windows.ui.xml:510 ui/linux.ui.xml:510
 msgid "Show Underline"
@@ -798,6 +862,10 @@ msgstr "Pequeno"
 #: ui/linux.ui.xml:936
 msgid "Smart paste"
 msgstr "Colar inteligente"
+
+#: src/objects/os/linux/savedesktopicon.c:239
+msgid "Standard desktop files"
+msgstr "Arquivo de atalho padrão"
 
 #: src/objects/settings/actionview.c:68
 msgid "Start"
@@ -873,10 +941,14 @@ msgstr "Código identificando o tipo de interface do usuário"
 msgid "The file to save the current session preferences"
 msgstr "O arquivo com as preferências da sessão atual"
 
+#: src/objects/os/linux/savedesktopicon.c:86
+#: src/objects/os/windows/savedesktopicon.c:95
+msgid "The file with the session preferences for this shortcut"
+msgstr "O arquivo com as preferências da sessão para esse atalho"
+
 #: src/objects/application/application.c:180
-#, fuzzy
 msgid "The full path of the default log file"
-msgstr "Caminho completo do arquivo local"
+msgstr "Caminho completo do arquivo default"
 
 #: src/objects/actions/abstract.c:110
 msgid "The label for the action"
@@ -914,7 +986,8 @@ msgstr "O nome usado para ativar a ação"
 msgid "The position of the keypad"
 msgstr "A posição do painel"
 
-#: src/objects/actions/save.c:57
+#: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
+#: src/objects/os/windows/savedesktopicon.c:88
 msgid "The session name used in the window/tab title (empty for default)"
 msgstr ""
 "O nome da sessão usada no título da janela/aba. Vazio para usar o valor "
@@ -1003,6 +1076,11 @@ msgstr ""
 "Não foi possível iniciar configuração de sistema. Aplicação pode falhar de "
 "forma inesperada"
 
+#: src/objects/os/windows/open.c:137
+#, c-format
+msgid "Unable to load session preferences from '%s'"
+msgstr "Incapaz de ler preferências de sessa de '%s'"
+
 #: ui/windows.ui.xml:291 ui/windows.ui.xml:800 ui/linux.ui.xml:291
 #: ui/linux.ui.xml:800
 msgid "Unselect"
@@ -1038,11 +1116,17 @@ msgstr "Portal do Software Público Brasileiro"
 msgid "Window with default session"
 msgstr "Janela com sessão padrão"
 
+#: src/objects/os/windows/savedesktopicon.c:187
+msgid "Windows shortcuts"
+msgstr "Atalhos windows"
+
 #: src/objects/settings/dialog.c:79
 msgid "_Apply"
 msgstr "_Aplicar"
 
 #: src/objects/actions/save.c:102 src/objects/settings/dialog.c:78
+#: src/objects/os/linux/savedesktopicon.c:174
+#: src/objects/os/windows/savedesktopicon.c:132
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1090,7 +1174,8 @@ msgstr "_Preferências"
 msgid "_Rename session"
 msgstr "Renomear sessão"
 
-#: src/objects/actions/save.c:103
+#: src/objects/actions/save.c:103 src/objects/os/linux/savedesktopicon.c:175
+#: src/objects/os/windows/savedesktopicon.c:133
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -1537,9 +1622,6 @@ msgstr "translator-credits"
 #~ msgid "Can't load plugin %s"
 #~ msgstr "Não foi possível carregar plugin %s"
 
-#~ msgid "Can't load session preferences"
-#~ msgstr "Não foi possível carregar preferências da sessão"
-
 #~ msgid "Can't open \"%s\""
 #~ msgstr "Não foi possível abrir %s"
 
@@ -1764,9 +1846,6 @@ msgstr "translator-credits"
 #~ msgid "Command to execute"
 #~ msgstr "Comando a executar"
 
-#~ msgid "Comment"
-#~ msgstr "Comentário"
-
 #~ msgid "Complete"
 #~ msgstr "Completo"
 
@@ -1790,9 +1869,6 @@ msgstr "translator-credits"
 
 #~ msgid "Copiar tudo"
 #~ msgstr "Copiar tudo"
-
-#~ msgid "Create shortcut for the current session"
-#~ msgstr "Criar atalho para a sessão atual."
 
 #~ msgid "Creates a file with fixed-length records."
 #~ msgstr "Cria arquivo com registros de tamanho fixo."
@@ -1878,9 +1954,6 @@ msgstr "translator-credits"
 
 #~ msgid "Default host URL"
 #~ msgstr "URL parão para acesso ao host"
-
-#~ msgid "Description"
-#~ msgstr "Descrição"
 
 #~ msgid "Description of the current security state"
 #~ msgstr "Descrição do estado de segurança atual"
@@ -1989,9 +2062,6 @@ msgstr "translator-credits"
 #~ msgid "Error resolving %s: %s"
 #~ msgstr "Erro ao resolver %s: %s"
 
-#~ msgid "Error starting session"
-#~ msgstr "Erro iniciando sessão"
-
 #~ msgid "Error while reading or writing to host disk: file transfer canceled"
 #~ msgstr "Erro ao ler ou gravar no host: Transferência cancelada"
 
@@ -2030,9 +2100,6 @@ msgstr "translator-credits"
 
 #~ msgid "File _Format"
 #~ msgstr "_Formato do arquivo"
-
-#~ msgid "File for session preferences"
-#~ msgstr "Arquivo para preferências da sessão"
 
 #~ msgid "File name"
 #~ msgstr "Nome do arquivo"
@@ -2106,9 +2173,6 @@ msgstr "translator-credits"
 
 #~ msgid "GTK Version mismatch"
 #~ msgstr "Divergência de versão GTK"
-
-#~ msgid "Generic name"
-#~ msgstr "Nome genérico"
 
 #~ msgid "Get transfer queue from an external XML file"
 #~ msgstr "Obtém a fila de transferência de um arquivo XML externo"
@@ -2712,9 +2776,6 @@ msgstr "translator-credits"
 #~ msgid "Path for plugin files"
 #~ msgstr "Caminho para os arquivos de plugin"
 
-#~ msgid "Path for the new shortcut"
-#~ msgstr "Caminho para o novo atalho"
-
 #~ msgid "Path length constraint exceeded"
 #~ msgstr "Path length constraint exceeded"
 
@@ -3093,20 +3154,8 @@ msgstr "translator-credits"
 #~ msgid "Save selected area."
 #~ msgstr "Salvar área selecionada"
 
-#~ msgid "Save session shortcut"
-#~ msgstr "Salvar atalho para a sessão"
-
 #~ msgid "Save terminal contents"
 #~ msgstr "Salvar conteúdo da tela"
-
-#~ msgid "Save to session filename"
-#~ msgstr "Salvar para arquivo de sessão"
-
-#~ msgid "Save to shortcut file"
-#~ msgstr "Salvar para arquivo de atalho"
-
-#~ msgid "Save to windows shortcut"
-#~ msgstr "Salvar para atalho windows"
 
 #~ msgid "Save trace to file"
 #~ msgstr "Salvar trace para arquivo"
@@ -3251,12 +3300,6 @@ msgstr "translator-credits"
 #~ msgid "Set toggles ON"
 #~ msgstr "Ativa toggles"
 
-#~ msgid "Shortcut file"
-#~ msgstr "Arquivo de atalho"
-
-#~ msgid "Shortcut name"
-#~ msgstr "Nome do atalho"
-
 #~ msgid "Show test pattern"
 #~ msgstr "Mostrar padrão de teste"
 
@@ -3343,9 +3386,6 @@ msgstr "translator-credits"
 
 #~ msgid "Speed:"
 #~ msgstr "Velocidade:"
-
-#~ msgid "Standard desktop files"
-#~ msgstr "Arquivo de atalho padrão"
 
 #~ msgid "Start download."
 #~ msgstr "Iniciar recebimento."
@@ -3578,9 +3618,6 @@ msgstr "translator-credits"
 
 #~ msgid "The file transfer operation has been successfully completed."
 #~ msgstr "A transferência de arquivos terminou com sucesso."
-
-#~ msgid "The file with the session preferences for this shortcut"
-#~ msgstr "O arquivo com as preferências da sessão para esse atalho"
 
 #~ msgid "The height %d is less than model %d rows (%d)"
 #~ msgstr "A altura %d é menor que o número de linhas do modelo %d (%d)"
@@ -3839,10 +3876,6 @@ msgstr "translator-credits"
 #~ msgid "Unable to load from file"
 #~ msgstr "Não foi possível ler do arquivo"
 
-#, c-format
-#~ msgid "Unable to load session preferences from '%s'"
-#~ msgstr "Incapaz de ler preferências de sessa de '%s'"
-
 #~ msgid "Unable to paste formatted data"
 #~ msgstr "Incapaz de colar texto formatado"
 
@@ -4012,9 +4045,6 @@ msgstr "translator-credits"
 
 #~ msgid "Windows error was \"%s\" (%u)"
 #~ msgstr "Erro windows foi \"%s\" (%u)"
-
-#~ msgid "Windows shortcuts"
-#~ msgstr "Atalhos windows"
 
 #~ msgid "Wrap around"
 #~ msgstr "Wrap around"
