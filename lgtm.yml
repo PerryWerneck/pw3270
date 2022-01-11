@@ -22,25 +22,28 @@ extraction:
 
     configure:
       command:
-        - export PRE_REQS_DIR="$(readlink -f .)/pre-reqs"
+        - export BUILD_DIR=$(readlink -f .)
+        - export PRE_REQS_DIR="${BUILD_DIR}/pre-reqs"
         - mkdir -p "${PRE_REQS_DIR}/src"
         - git clone https://github.com/PerryWerneck/lib3270.git "${PRE_REQS_DIR}/src/lib3270"
-        - ${PRE_REQS_DIR}/src/lib3270/autogen.sh --prefix=/usr
+        - cd ${PRE_REQS_DIR}/src/lib3270
+        - ./autogen.sh --prefix=/usr
         - make -C ${PRE_REQS_DIR}/src/lib3270 all
         - make DESTDIR=${PRE_REQS_DIR} -C ${PRE_REQS_DIR}/src/lib3270 install
+        - cd ${BUILD_DIR}
         - export LIB3270_CFLAGS="-DLIB3270_NAME=3270 -DLIB3270_REVISION=00000000 -I${PRE_REQS_DIR}/usr/include"
         - export LIB3270_LIBS="-L${PRE_REQS_DIR}/usr/lib -l3270"
 
         - git clone https://github.com/PerryWerneck/libv3270.git "${PRE_REQS_DIR}/src/libv3270"
-        - ${PRE_REQS_DIR}/src/libv3270/autogen.sh --prefix=/usr
-        - cat ${PRE_REQS_DIR}/src/libv3270/Makefile
+        - cd ${PRE_REQS_DIR}/src/libv3270
+        - ./autogen.sh --prefix=/usr
         - make -C ${PRE_REQS_DIR}/src/libv3270 all
         - make DESTDIR=${PRE_REQS_DIR} -C ${PRE_REQS_DIR}/src/libv3270 install
+        - cd ${BUILD_DIR}
         - export LIBV3270_CFLAGS="-DLIB3270_NAME=3270 -DLIB3270_REVISION=00000000 -I${PRE_REQS_DIR}/usr/include"
         - export LIBV3270_LIBS="-Wl,-rpath,${PRE_REQS_DIR}/usr/lib -L${PRE_REQS_DIR}/usr/lib -lv3270 -l3270"
 
         - ./autogen.sh --prefix=/usr
-        - cat Makefile
 
     index:
       build_command:
