@@ -1,34 +1,20 @@
+/* SPDX-License-Identifier: LGPL-3.0-or-later */
+
 /*
- * "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
- * (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
- * aplicativos mainframe. Registro no INPI sob o nome G3270.
+ * Copyright (C) 2008 Banco do Brasil S.A.
  *
- * Copyright (C) <2008> <Banco do Brasil S.A.>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
- * os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
- * Free Software Foundation.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
- * GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
- * A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
- * obter mais detalhes.
- *
- * Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
- * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
- * St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- * Este programa está nomeado como - e possui - linhas de código.
- *
- * Contatos:
- *
- * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
- * erico.mendonca@gmail.com	(Erico Mascarenhas Mendonça)
- *
- * References:
- *
- * https://fossies.org/linux/gtk+/examples/plugman.c
- *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include "private.h"
@@ -41,6 +27,7 @@
 enum {
 	PROP_ZERO,
 	PROP_UI_STYLE,
+	PROP_LOGFILE,
 
 	NUM_PROPERTIES
 };
@@ -75,6 +62,10 @@ static void get_property(GObject *object, guint prop_id, GValue *value, GParamSp
 		g_value_set_uint(value,pw3270_application_get_ui_style(G_APPLICATION(object)));
 		break;
 
+	case PROP_LOGFILE:
+		g_value_set_string(value,pw3270_application_get_log_filename(G_APPLICATION(object)));
+		break;
+
 	default:
 		g_assert_not_reached ();
 	}
@@ -86,6 +77,10 @@ static void set_property(GObject *object, guint prop_id, const GValue *value, GP
 	switch (prop_id) {
 	case PROP_UI_STYLE:
 		pw3270_application_set_ui_style(G_APPLICATION(object),g_value_get_uint(value));
+		break;
+
+	case PROP_LOGFILE:
+		pw3270_application_set_log_filename(G_APPLICATION(object),g_value_get_string(value));
 		break;
 
 	default:
@@ -178,6 +173,14 @@ static void pw3270Application_class_init(pw3270ApplicationClass *klass) {
 	        G_PARAM_READABLE|G_PARAM_WRITABLE
 	    );
 
+	props[PROP_LOGFILE] =
+		g_param_spec_string(
+			"logfile",
+			_("Log name"),
+			_("The full path of the default log file"),
+			NULL,
+			G_PARAM_READABLE|G_PARAM_WRITABLE
+		);
 
 	g_object_class_install_properties(object_class, NUM_PROPERTIES, props);
 
@@ -237,9 +240,27 @@ static void pw3270Application_init(pw3270Application *app) {
 
 	static GOptionEntry cmd_options[] = {
 
-		{ "user-interface", 'U', 0, G_OPTION_ARG_CALLBACK,	&on_user_interface, N_( "Set the user-interface type" ),  NULL },
-		{ "logfile",		'l', 0, G_OPTION_ARG_CALLBACK,	&on_logfile, N_( "Set default log file name" ),  NULL },
-		{ NULL }
+		{
+			"user-interface",
+			'U',
+			0,
+			G_OPTION_ARG_CALLBACK,
+			&on_user_interface,
+			N_( "Set the user-interface type" ),
+			NULL
+		},
+		{
+			"logfile",
+			'l',
+			0,
+			G_OPTION_ARG_CALLBACK,
+			&on_logfile,
+			N_( "Set default log file name" ),
+			NULL
+		},
+		{
+			NULL
+		}
 
 	};
 
@@ -323,6 +344,20 @@ static void pw3270Application_init(pw3270Application *app) {
 				g_warning("Can't load plugins from %s: %s",path,err->message);
 				g_error_free(err);
 
+			}
+
+
+		}
+
+		// Initialize plugins
+		{
+			GSList * item;
+			void (*call)(GtkApplication *application);
+
+			for(item = app->plugins; item; item = g_slist_next(item)) {
+				if(g_module_symbol((GModule *) item->data, "pw3270_plugin_set_application", (gpointer *) &call)) {
+					call(GTK_APPLICATION(app));
+				}
 			}
 
 		}
@@ -439,16 +474,7 @@ void startup(GApplication *application) {
 	//
 	// Setup application menus
 	//
-	GtkBuilder * builder;
-#ifdef DEBUG
-	builder = gtk_builder_new_from_file("ui/application.xml");
-#else
-	{
-		lib3270_autoptr(char) build_file = lib3270_build_data_filename("ui","application.xml",NULL);
-		builder = gtk_builder_new_from_file(build_file);
-	}
-#endif // DEBUG
-
+	g_autoptr(GtkBuilder) builder = pw3270_application_builder_new(application);
 
 	//
 	// Load keypad models
@@ -479,10 +505,6 @@ void startup(GApplication *application) {
 		gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
 
 	gtk_application_set_menubar(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "menubar")));
-
-	pw3270_load_placeholders(application, builder);
-
-	g_object_unref(builder);
 
 }
 
@@ -588,6 +610,11 @@ static int loghandler(const H3270 G_GNUC_UNUSED(*hSession), pw3270Application *a
 	}
 
 	return 0;
+}
+
+const gchar	* pw3270_application_get_log_filename(GApplication *app) {
+	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
+	return PW3270_APPLICATION(app)->logfile;
 }
 
 void pw3270_application_set_log_filename(GApplication *app, const gchar *filename) {

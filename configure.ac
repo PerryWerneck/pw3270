@@ -1,28 +1,19 @@
+dnl SPDX-License-Identifier: LGPL-3.0-or-later
 dnl
-dnl Software pw3270, desenvolvido com base nos códigos fontes do  C3270  e  X3270
-dnl (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
-dnl aplicativos mainframe. Registro no INPI sob o nome G3270.
+dnl Copyright (C) 2008 Banco do Brasil S.A.
 dnl
-dnl Copyright (C) <2008> <Banco do Brasil S.A.>
+dnl This program is free software: you can redistribute it and/or modify
+dnl it under the terms of the GNU Lesser General Public License as published
+dnl by the Free Software Foundation, either version 3 of the License, or
+dnl (at your option) any later version.
 dnl
-dnl Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
-dnl os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
-dnl Free Software Foundation.
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
 dnl
-dnl Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
-dnl GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
-dnl A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
-dnl obter mais detalhes.
-dnl
-dnl Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
-dnl programa;  se  não, escreva para a Free Software Foundation, Inc., 59 Temple
-
-dnl Place, Suite 330, Boston, MA, 02111-1307, USA
-dnl
-dnl Contatos:
-dnl
-dnl perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
-dnl erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
+dnl You should have received a copy of the GNU Lesser General Public License
+dnl along with this program.  If not, see <https://www.gnu.org/licenses/>.
 dnl
 
 dnl Process this file with autoconf to produce a configure script.
@@ -147,6 +138,7 @@ AC_PATH_TOOL([APPSTREAMCLI],[appstreamcli], [no])
 AC_PATH_TOOL([STRIP], [strip], [true])
 
 AC_PATH_TOOL([DESKTOP_INSTALL],[desktop-file-install],[no])
+AC_PATH_TOOL([GLIB_SCHEMA_COMPILER],[glib-compile-schemas],[false])
 
 PKG_CHECK_EXISTS
 
@@ -267,7 +259,7 @@ dnl Directory config
 dnl ---------------------------------------------------------------------------
 
 AC_ARG_WITH([build-dir], [AS_HELP_STRING([--with-build-dir], [Setup build path])], [ app_cv_buildir="$withval" ],[ app_cv_buildir="$ac_pwd" ])
-AC_SUBST(BASEDIR,$app_cv_buildir)
+AC_SUBST(BUILDDIR,$app_cv_buildir)
 
 dnl ---------------------------------------------------------------------------
 dnl Configure which files to generate.

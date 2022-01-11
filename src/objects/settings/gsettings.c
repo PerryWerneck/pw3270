@@ -99,14 +99,19 @@
 
 		} else {
 
+#ifdef DEBUG
 			g_message("Can't find '%s' loading from default path",filename);
+#endif // DEBUG
 			settings = g_settings_new(schema_id);
 
 		}
 	}
 #else
 
+#ifdef DEBUG
 	g_message("Loading '%s' from default path","gschemas.compiled");
+#endif // DEBUG
+
 	settings = g_settings_new(schema_id);
 
 #endif // DEBUG

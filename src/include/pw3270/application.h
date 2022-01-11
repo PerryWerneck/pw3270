@@ -76,7 +76,10 @@ GList			* pw3270_application_get_keypad_models(GApplication *app);
 
 void			  pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type);
 PW3270_UI_STYLE	  pw3270_application_get_ui_style(GApplication *app);
+
 void			  pw3270_application_set_log_filename(GApplication *app, const gchar *filename);
+const gchar		* pw3270_application_get_log_filename(GApplication *app);
+
 
 // Plugins
 void			  pw3270_application_plugin_foreach(GApplication *app, GFunc func, gpointer user_data);
@@ -87,7 +90,7 @@ void			  pw3270_application_plugin_call(GApplication *app, const gchar *method, 
 GSList			* pw3270_application_get_plugins(GApplication *app);
 
 // Tools
-GtkBuilder		* pw3270_application_get_builder(const gchar *name);
+GtkBuilder		* pw3270_application_builder_new(GApplication *application);
 
 void			  gtk_container_remove_all(GtkContainer *container);
 

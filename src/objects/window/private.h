@@ -68,10 +68,10 @@ struct _pw3270ApplicationWindow {
 	GList		* keypads;		///< @brief Keypads.
 
 	struct {
-		int width;				///< @brief Window width.
-		int height;				///< @brief Window height.
-		int is_maximized : 1;	///< @brief Non zero if window is maximized.
-		int is_fullscreen : 1;	///< @brief Non zero if window is fullscreen.
+		int width;						///< @brief Window width.
+		int height;						///< @brief Window height.
+		unsigned int is_maximized : 1;	///< @brief Non zero if window is maximized.
+		unsigned int is_fullscreen : 1;	///< @brief Non zero if window is fullscreen.
 	} state;
 
 	GtkWidget	* popups[PW3270_APP_WINDOW_POPUP_COUNT];

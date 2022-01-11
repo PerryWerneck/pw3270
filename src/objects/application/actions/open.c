@@ -75,11 +75,11 @@ static void open_window(GtkWidget *dialog, gint response_id, GtkApplication *app
 
 }
 
-static void open_session(GtkWidget *dialog, gint response_id, GtkApplication *application) {
+static void open_session(GtkWidget *file_chooser, gint response_id, GtkApplication *application) {
 
 	if(response_id == GTK_RESPONSE_OK) {
 
-		g_autofree gchar * file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		g_autofree gchar * file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_chooser));
 
 		if(file_name) {
 			GError * error = NULL;
@@ -121,7 +121,7 @@ static void open_session(GtkWidget *dialog, gint response_id, GtkApplication *ap
 
 	}
 
-	gtk_widget_destroy(dialog);
+	gtk_widget_destroy(file_chooser);
 
 }
 

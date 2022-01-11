@@ -27,6 +27,7 @@
  *
  */
 
+/*
 #include "../private.h"
 #include <pw3270/window.h>
 #include <pw3270/actions.h>
@@ -55,4 +56,5 @@ GtkWidget * factory(V3270SimpleAction G_GNUC_UNUSED(*action), GtkWidget *termina
 	gtk_widget_show_all(dialog);
 	return dialog;
 }
+*/
 

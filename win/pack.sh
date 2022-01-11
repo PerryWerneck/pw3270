@@ -614,32 +614,18 @@ copy_install_file() {
 		cp -v "${1}" "${FILENAME}"
 	fi
 	
-	if [ -d ~/public_html/win/${PRODUCT_NAME} ]; then
+	if [ ! -z "${XDG_PUBLICSHARE_DIR}" ] && [ -d "${XDG_PUBLICSHARE_DIR}/win/${PRODUCT_NAME}" ]; then
 
-		mkdir -p "~/public_html/win/${TARGET_PATH}"
+		mkdir -p "${XDG_PUBLICSHARE_DIR}/win/${TARGET_PATH}"	
 		if [ "$?" != "0" ]; then
-			failed "Can't create ~/public_html/win/${TARGET_PATH}"
+			failed "Can't create ${XDG_PUBLICSHARE_DIR}/win/${TARGET_PATH}"
 		fi
 
 		if [ "${CLEAR_TARGET_PATH}" == "1" ]; then
-			rm -fr ~/public_html/win/${TARGET_PATH}/*
+			rm -fr ${XDG_PUBLICSHARE_DIR}/win/${TARGET_PATH}/*
 		fi
 
-		ln -f -v "${FILENAME}" ~/public_html/win/${TARGET_PATH}
-	fi
-
-	if [ ! -z "${XDG_PUBLICSHARE_DIR}" ] && [ -d "${XDG_PUBLICSHARE_DIR}/${PRODUCT_NAME}" ]; then
-
-		mkdir -p "${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}"	
-		if [ "$?" != "0" ]; then
-			failed "Can't create ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}"
-		fi
-
-		if [ "${CLEAR_TARGET_PATH}" == "1" ]; then
-			rm -fr ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}/*
-		fi
-
-		ln -f -v "${FILENAME}" ${XDG_PUBLICSHARE_DIR}/${TARGET_PATH}
+		ln -f -v "${FILENAME}" ${XDG_PUBLICSHARE_DIR}/win/${TARGET_PATH}
 
 	fi
 
