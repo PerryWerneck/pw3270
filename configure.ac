@@ -67,6 +67,7 @@ case "$host" in
 		AC_SUBST(WIN32_FILE_VERSION,$app_win32_file_version)
 
 		AC_CONFIG_FILES(src/main/windows/resources.rc)
+		AC_CONFIG_FILES(src/main/windows/app-manifest.xml)
 
 		# Windows and linux doesn't use the same defaults.
 		AC_CONFIG_FILES(schemas/windows/application.gschema.xml)

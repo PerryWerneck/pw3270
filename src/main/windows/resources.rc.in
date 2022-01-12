@@ -1,6 +1,12 @@
 #include <windows.h>
 
+#pragma code_page( 65001 )  // UTF-8
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
 1 ICON @PRODUCT_NAME@.ico
+
+CREATEPROCESS_MANIFEST_RESOURCE_ID      RT_MANIFEST "app-manifest.xml"
 
 VS_VERSION_INFO VERSIONINFO
 FILEVERSION     @WIN32_FILE_VERSION@
@@ -15,7 +21,7 @@ BEGIN
 			VALUE "FileDescription",	"@PACKAGE_DESCRIPTION@\0"
 			VALUE "CompanyName",		"Banco do Brasil S/A.\0"
 			VALUE "FileVersion",		"@WIN32_VERSION@\0"
-            		VALUE "LegalCopyright",		"(C) 2017 Banco do Brasil S/A. All Rights Reserved\0"
+            VALUE "LegalCopyright",		"(C) 2017 Banco do Brasil S/A. All Rights Reserved\0"
 			VALUE "OriginalFilename",	"@PRODUCT_NAME@.exe\0"
 			VALUE "ProductName",		"@PRODUCT_NAME@\0"
 			VALUE "ProductVersion",		"@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@\0"
