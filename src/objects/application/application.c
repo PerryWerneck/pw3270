@@ -34,26 +34,15 @@ enum {
 
 static GParamSpec * props[NUM_PROPERTIES];
 
-struct _pw3270ApplicationClass {
-	GtkApplicationClass parent_class;
-};
-
-struct _pw3270Application {
-	GtkApplication parent;
-
-	GSettings	* settings;
-	GList		* keypads;
-	gchar 		* logfile;
-	GSList		* plugins;		///< @brief Handlers of the loaded plugins.
-	PW3270_UI_STYLE	ui_style;
-
-};
-
 static void 	startup(GApplication * application);
 static void 	activate(GApplication * application);
 static void		finalize(GObject *object);
 
-G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
+#ifdef __APPLE__
+	G_DEFINE_TYPE(pw3270Application, pw3270Application, GTKOSX_TYPE_APPLICATION);
+#else
+	G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
+#endif // __APPLE__
 
 static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
@@ -186,6 +175,7 @@ static void pw3270Application_class_init(pw3270ApplicationClass *klass) {
 
 }
 
+#ifndef __APPLE__
 static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError **error) {
 
 	g_autoptr(GSettings) app_settings = pw3270_application_settings_new();
@@ -230,6 +220,7 @@ static gboolean on_user_interface(const gchar G_GNUC_UNUSED(*option), const gcha
 	return TRUE;
 
 }
+#endif // __APPLE__
 
 static gboolean on_logfile(const gchar G_GNUC_UNUSED(*option), const gchar *value, gpointer G_GNUC_UNUSED(dunno), GError G_GNUC_UNUSED(**error)) {
 	pw3270_application_set_log_filename(g_application_get_default(),value);
@@ -239,7 +230,7 @@ static gboolean on_logfile(const gchar G_GNUC_UNUSED(*option), const gchar *valu
 static void pw3270Application_init(pw3270Application *app) {
 
 	static GOptionEntry cmd_options[] = {
-
+#ifndef __APPLE__
 		{
 			"user-interface",
 			'U',
@@ -249,6 +240,7 @@ static void pw3270Application_init(pw3270Application *app) {
 			N_( "Set the user-interface type" ),
 			NULL
 		},
+#endif // __APPLE__
 		{
 			"logfile",
 			'l',
@@ -266,41 +258,61 @@ static void pw3270Application_init(pw3270Application *app) {
 
 	g_application_add_main_option_entries(G_APPLICATION(app), cmd_options);
 
-#ifdef _WIN32
-	app->ui_style = PW3270_UI_STYLE_CLASSICAL;
-#else
-	app->ui_style = PW3270_UI_STYLE_AUTOMATIC;
-#endif // _WIN32
-
-	// Get settings
 	app->settings = pw3270_application_settings_new();
 
-	// Bind properties
-	if(app->settings) {
-
-		g_object_ref_sink(G_OBJECT(app->settings));
-
-#ifdef _WIN32
-		{
-			// https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
-			int gtk_csd = g_settings_get_int(app->settings,"gtk-csd");
-			if(gtk_csd != -1) {
-				g_autofree gchar * env = g_strdup_printf("GTK_CSD=%d",gtk_csd);
-				putenv(env);
-			}
+#if defined(_WIN32)
+	//
+	// Setup windows UI
+	//
+	app->ui_style = PW3270_UI_STYLE_CLASSICAL;
+	{
+		// https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
+		int gtk_csd = g_settings_get_int(app->settings,"gtk-csd");
+		if(gtk_csd != -1) {
+			g_autofree gchar * env = g_strdup_printf("GTK_CSD=%d",gtk_csd);
+			putenv(env);
 		}
-#endif // _WIN32
+	}
 
+	if(app->settings) {
+		g_object_ref_sink(G_OBJECT(app->settings));
 		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
 	}
 
+	{
+		lib3270_autoptr(char) plugin_path = lib3270_build_data_filename("plugins",NULL);
+		pw3270_load_plugins_from_path(app, plugin_path);
+	}
+
+#elif defined(__APPLE__)
+	//
+	// Setup Apple UI
+	//
+	{
+		lib3270_autoptr(char) plugin_path = lib3270_build_data_filename("plugins",NULL);
+		pw3270_load_plugins_from_path(app, plugin_path);
+	}
+#else
+	//
+	// Setup linux UI
+	//
+	app->ui_style = PW3270_UI_STYLE_AUTOMATIC;
+	app->settings = pw3270_application_settings_new();
+	if(app->settings) {
+		g_object_ref_sink(G_OBJECT(app->settings));
+		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
+	}
+
+	pw3270_load_plugins_from_path(app, G_STRINGIFY(LIBDIR) G_DIR_SEPARATOR_S G_STRINGIFY(PRODUCT_NAME) "-plugins");
+
+#endif // _WIN32
+
+	/*
+
+		FIX-ME: Move to other place.
+
 	// Get plugins.
 	{
-#ifdef _WIN32
-		lib3270_autoptr(char) path = lib3270_build_data_filename("plugins",NULL);
-#else
-		const gchar * path = G_STRINGIFY(LIBDIR) G_DIR_SEPARATOR_S G_STRINGIFY(PRODUCT_NAME) "-plugins";
-#endif // _WIN32
 
 		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
 
@@ -349,17 +361,19 @@ static void pw3270Application_init(pw3270Application *app) {
 
 		}
 
-		// Initialize plugins
-		{
-			GSList * item;
-			void (*call)(GtkApplication *application);
 
-			for(item = app->plugins; item; item = g_slist_next(item)) {
-				if(g_module_symbol((GModule *) item->data, "pw3270_plugin_set_application", (gpointer *) &call)) {
-					call(GTK_APPLICATION(app));
-				}
+	}
+	*/
+
+	// Initialize plugins
+	{
+		GSList * item;
+		void (*call)(GtkApplication *application);
+
+		for(item = app->plugins; item; item = g_slist_next(item)) {
+			if(g_module_symbol((GModule *) item->data, "pw3270_plugin_set_application", (gpointer *) &call)) {
+				call(GTK_APPLICATION(app));
 			}
-
 		}
 
 	}
@@ -520,6 +534,7 @@ void activate(GApplication *application) {
 
 void pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type) {
 
+#ifndef __APPLE__
 	g_return_if_fail(PW3270_IS_APPLICATION(app));
 
 	pw3270Application * application = PW3270_APPLICATION(app);
@@ -530,12 +545,18 @@ void pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type) {
 	application->ui_style = type;
 	g_object_notify_by_pspec(G_OBJECT(app), props[PROP_UI_STYLE]);
 
+#endif // !__APPLE
+
 }
 
 PW3270_UI_STYLE pw3270_application_get_ui_style(GApplication *app) {
 
+#ifdef __APPLE__
+	return PW3270_UI_STYLE_GNOME;
+#else
 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),PW3270_UI_STYLE_CLASSICAL);
 	return PW3270_APPLICATION(app)->ui_style;
+#endif // __APPLE__
 
 }
 

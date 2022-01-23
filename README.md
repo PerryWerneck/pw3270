@@ -86,7 +86,9 @@ Updated windows installers are available on Dropbox, google drive and one drive.
 	```
 
 
-## Building for macOS (using homebrew)
+## Building for macOS 
+
+### Using homebrew
 
 1. Build and install [libv3270](../../../libv3270)
 
@@ -109,4 +111,17 @@ Updated windows installers are available on Dropbox, google drive and one drive.
 	$ cd macos
 	$ ./bundle
 	````
+	
+### Using jhbuild
+
+1. Install jhbuild and GTK-OSX
+
+	https://wiki.gnome.org/Projects/GTK/OSX/Building
+	
+2. build
+
+	```shell
+	jhbuild --moduleset=https://raw.githubusercontent.com/PerryWerneck/pw3270/macos/mac/pw3270.modules build pw3270
+	```
+
 

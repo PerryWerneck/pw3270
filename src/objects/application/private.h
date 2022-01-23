@@ -46,9 +46,37 @@
 #include <lib3270.h>
 #include <lib3270/log.h>
 
+#ifdef __APPLE__
+	#include <gtkosxapplication.h>
+#endif // __APPLE__
+
+#include <pw3270/application.h>
+
+struct _pw3270Application {
+#ifdef __APPLE__
+	GtkosxApplication parent;
+#else
+	GtkApplication parent;
+	PW3270_UI_STYLE	ui_style;
+#endif // __APPLE__
+
+	GSettings	* settings;
+	GList		* keypads;
+	gchar 		* logfile;
+	GSList		* plugins;		///< @brief Handlers of the loaded plugins.
+
+};
+
+struct _pw3270ApplicationClass {
+	GtkApplicationClass parent_class;
+};
+
+
 G_GNUC_INTERNAL void		  pw3270_application_open(GApplication * application, GFile **files, gint n_files, const gchar *hint);
 
 G_GNUC_INTERNAL GtkWidget	* pw3270_terminal_new(const gchar *session_file);
+
+G_GNUC_INTERNAL void		  pw3270_load_plugins_from_path(pw3270Application *app, const char *path);
 
 // Actions
 G_GNUC_INTERNAL GAction * pw3270_about_action_new();
