@@ -46,17 +46,11 @@
 #include <lib3270.h>
 #include <lib3270/log.h>
 
-#ifdef __APPLE__
-	#include <gtkosxapplication.h>
-#endif // __APPLE__
-
 #include <pw3270/application.h>
 
 struct _pw3270Application {
-#ifdef __APPLE__
-	GtkosxApplication parent;
-#else
 	GtkApplication parent;
+#ifndef __APPLE__
 	PW3270_UI_STYLE	ui_style;
 #endif // __APPLE__
 

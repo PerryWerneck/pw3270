@@ -241,7 +241,7 @@ case "$host" in
 		;;
 
 	*-apple-darwin*)
-		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0 gtk-mac-integration-gtk3], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
+		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
 		;;
 
  	*)
