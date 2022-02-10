@@ -38,11 +38,7 @@ static void 	startup(GApplication * application);
 static void 	activate(GApplication * application);
 static void		finalize(GObject *object);
 
-#ifdef __APPLE__
-	G_DEFINE_TYPE(pw3270Application, pw3270Application, GTKOSX_TYPE_APPLICATION);
-#else
-	G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
-#endif // __APPLE__
+G_DEFINE_TYPE(pw3270Application, pw3270Application, GTK_TYPE_APPLICATION);
 
 static void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
