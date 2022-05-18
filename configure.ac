@@ -133,7 +133,7 @@ dnl ---------------------------------------------------------------------------
 
 AC_PATH_TOOL([AR], [ar], [ar])
 AC_PATH_TOOL([CONVERT], [convert], [no])
-dnl AC_PATH_TOOL([OPTIPNG],[optipng],[no])
+AC_PATH_TOOL([OPTIPNG],[optipng],[no])
 AC_PATH_TOOL([ZIP],[zip],[no])
 AC_PATH_TOOL([DLLTOOL],[dlltool],[no])
 AC_PATH_TOOL([WINDRES], [windres], [no])

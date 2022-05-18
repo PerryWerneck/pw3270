@@ -240,6 +240,16 @@ install-%: \
 		-colors 256 \
 		$@
 
+%.png: \
+	$(srcdir)/branding/%.svg
+
+	@echo $@ ...
+	@$(MKDIR) $(@D)
+	@$(CONVERT) \
+		+antialias \
+		-background transparent \
+		$< \
+		$@
 
 #---[ Release Targets ]------------------------------------------------------------------
 
@@ -314,6 +324,7 @@ install-macos-application: \
 		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
 install-windows-application: \
+	$(PRODUCT_NAME).png \
 	strip
 
 	@$(MKDIR) \
@@ -322,6 +333,13 @@ install-windows-application: \
 	@$(INSTALL_PROGRAM) \
 		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
 		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
+
+	@$(MKDIR) \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)
+
+	@$(INSTALL_DATA) \
+		$(PRODUCT_NAME).png \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png
 
 install-icons:
 

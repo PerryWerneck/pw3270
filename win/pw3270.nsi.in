@@ -110,6 +110,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.svg"					"share\@PRODUCT_NAME@\@PRODUCT_NAME@-logo.svg"
 		file "/oname=$INSTDIR\@PRODUCT_NAME@.svg"						"share\@PRODUCT_NAME@\@PRODUCT_NAME@.svg"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.png"						"share\@PRODUCT_NAME@\@PRODUCT_NAME@.png"
 
 		# Schema
 		CreateDirectory "$INSTDIR\schemas"
@@ -177,7 +178,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"				"InstallLocation"	"$INSTDIR"
 
 		# Customized options
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoconnect"		0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoconnect"			0x00000001
 		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"blankfill"             0x00000000
 		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"bold"                  0x00000000
 		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"keepselected"          0x00000001
