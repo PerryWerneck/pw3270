@@ -387,6 +387,13 @@ SectionEnd
 
 Function .onInit
 
+	#---[ Check if already installed ]--------------------------------------------------------------------
+
+	${If} ${FileExists} "$INSTDIR\@PRODUCT_NAME@.exe"
+		MessageBox MB_OK|MB_ICONEXCLAMATION "@PRODUCT_NAME@ is already installed. Please uninstall it first" /SD IDOK
+		Abort
+	${EndIf}
+
 	#---[ Check SDK Command line option ]-----------------------------------------------------------------
 
 !ifdef WITHSDK
