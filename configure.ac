@@ -40,6 +40,9 @@ AC_CONFIG_HEADER([src/include/config.h])
 dnl Initialise automake stuff.
 AM_INIT_AUTOMAKE
 
+dnl Set gettext version
+AM_GNU_GETTEXT_VERSION([0.14])
+
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_SED
@@ -67,6 +70,7 @@ case "$host" in
 		AC_SUBST(WIN32_FILE_VERSION,$app_win32_file_version)
 
 		AC_CONFIG_FILES(src/main/windows/resources.rc)
+		AC_CONFIG_FILES(src/main/windows/app-manifest.xml)
 
 		# Windows and linux doesn't use the same defaults.
 		AC_CONFIG_FILES(schemas/windows/application.gschema.xml)
@@ -90,6 +94,17 @@ case "$host" in
 
 		;;
 
+	*-apple-darwin*)
+		app_cv_osname="macos"
+		app_rls_ldflags=""
+
+		CFLAGS="$CFLAGS -pthread"
+		LDFLAGS="$LDFLAGS -pthread"
+
+		AC_CONFIG_FILES(schemas/macos/application.gschema.xml)
+		AC_CONFIG_FILES(schemas/macos/window.gschema.xml)
+		;;
+
  	*)
 		app_cv_osname="linux"
 		app_rls_ldflags=""
@@ -97,9 +112,6 @@ case "$host" in
 		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir)"
 		LDFLAGS="$LDFLAGS -pthread"
 
-		app_cv_static='no'
-
-		# Windows and linux doesn't use the same window defaults.
 		AC_CONFIG_FILES(schemas/linux/application.gschema.xml)
 		AC_CONFIG_FILES(schemas/linux/window.gschema.xml)
 
@@ -121,7 +133,7 @@ dnl ---------------------------------------------------------------------------
 
 AC_PATH_TOOL([AR], [ar], [ar])
 AC_PATH_TOOL([CONVERT], [convert], [no])
-dnl AC_PATH_TOOL([OPTIPNG],[optipng],[no])
+AC_PATH_TOOL([OPTIPNG],[optipng],[no])
 AC_PATH_TOOL([ZIP],[zip],[no])
 AC_PATH_TOOL([DLLTOOL],[dlltool],[no])
 AC_PATH_TOOL([WINDRES], [windres], [no])
@@ -223,7 +235,19 @@ dnl ---------------------------------------------------------------------------
 
 GLIB_GSETTINGS
 
-PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
+case "$host" in
+	*-mingw32|*-pc-msys)
+		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
+		;;
+
+	*-apple-darwin*)
+		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
+		;;
+
+ 	*)
+		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
+
+esac
 
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)

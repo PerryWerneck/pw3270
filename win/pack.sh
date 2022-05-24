@@ -231,6 +231,7 @@ buildLibrary()
 			CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 			CXXFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 			LDFLAGS="-L${WORKDIR}/build/${ARCH}" \
+			CACHE_FILE=${cache} \
 				${PROJECTDIR}/win/configure.${1}
 
 		else
@@ -239,6 +240,7 @@ buildLibrary()
 				CFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 				CXXFLAGS="-I${WORKDIR}/build/${ARCH}/include" \
 				LDFLAGS="-L${WORKDIR}/build/${ARCH}/lib" \
+				--cache-file=${cache} \
 				--host=${host} \
 				--prefix=${prefix} \
 				--with-product-name="${PRODUCT_NAME}" \

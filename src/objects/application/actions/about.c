@@ -46,6 +46,21 @@ static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication *
 
 	// Get application logo
 	{
+		static const char * names[] = {
+				G_STRINGIFY(PRODUCT_NAME) "-about.svg",
+				G_STRINGIFY(PRODUCT_NAME) "-logo.svg",
+				G_STRINGIFY(PRODUCT_NAME) ".svg",
+				G_STRINGIFY(PRODUCT_NAME) "-logo.png",
+				G_STRINGIFY(PRODUCT_NAME) ".png",
+
+				G_STRINGIFY(PACKAGE_NAME) "-about.svg",
+				G_STRINGIFY(PACKAGE_NAME) "-logo.svg",
+				G_STRINGIFY(PACKAGE_NAME) ".svg",
+				G_STRINGIFY(PACKAGE_NAME) "-logo.png",
+				G_STRINGIFY(PACKAGE_NAME) ".png",
+		};
+
+		/*
 #ifdef DEBUG
 		static const char * logo = "./branding/" G_STRINGIFY(PRODUCT_NAME) "-logo.svg";
 		static const char * icon = "./branding/" G_STRINGIFY(PRODUCT_NAME) ".svg";
@@ -58,18 +73,26 @@ static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication *
 			logo,
 			icon
 		};
+		*/
 
 		size_t ix;
 
-		for(ix = 0; ix < G_N_ELEMENTS(imgs); ix++) {
+		for(ix = 0; ix < G_N_ELEMENTS(names); ix++) {
 
-			if(!g_file_test(imgs[ix],G_FILE_TEST_IS_REGULAR))
+#ifdef DEBUG
+			g_autofree gchar * filename = g_build_filename(".","branding",names[ix],NULL);
+			debug("Searching for '%s'",filename);
+#else
+			lib3270_autoptr(char) filename = lib3270_build_data_filename(names[ix],NULL);
+#endif // DEBUG
+
+			if(!g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 				continue;
 
 			GError * error	= NULL;
-			g_autoptr(GdkPixbuf) pix = gdk_pixbuf_new_from_file_at_size(imgs[ix],-1,150,&error);
+			g_autoptr(GdkPixbuf) pix = gdk_pixbuf_new_from_file_at_size(filename,-1,150,&error);
 			if(error) {
-				g_warning("Can't load \"%s\": %s",imgs[ix],error->message);
+				g_warning("Can't load \"%s\": %s",filename,error->message);
 				g_error_free(error);
 				continue;
 			}

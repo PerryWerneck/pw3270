@@ -94,6 +94,7 @@ GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal) {
 	               ));
 
 
+	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(gtk_widget_get_toplevel(terminal)));
 	gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
 	gtk_window_set_title(GTK_WINDOW(dialog),action->label);
 

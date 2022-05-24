@@ -55,8 +55,8 @@ SOURCES= \
 	$(wildcard $(srcdir)/src/main/@OSNAME@/*.rc)
 
 SCHEMAS= \
-	$(wildcard $(srcdir)/schemas/@OSNAME@/*.gschema.xml) \
-	$(wildcard $(srcdir)/schemas/common/*.gschema.xml)
+	$(wildcard schemas/@OSNAME@/*.gschema.xml) \
+	$(wildcard schemas/common/*.gschema.xml)
 
 #---[ Tools ]----------------------------------------------------------------------------
 
@@ -138,6 +138,8 @@ $(OBJDBG)/%.o: \
 gschemas.compiled: \
 	$(foreach SCHEMA, $(notdir $(SCHEMAS)), $(OBJDIR)/schemas/$(SCHEMA))
 
+	@$(MKDIR) $(OBJDIR)/schemas
+
 	@glib-compile-schemas \
 		--targetdir=$(@D) \
 		$(OBJDIR)/schemas
@@ -205,7 +207,7 @@ $(POTDIR)/%.pot: \
 	@touch $@
 
 $(OBJDIR)/schemas/%.xml: \
-	$(srcdir)/schemas/@OSNAME@/%.xml
+	schemas/@OSNAME@/%.xml
 
 	@$(MKDIR) $(@D)
 	@cp "$^" "$@"
@@ -238,6 +240,16 @@ install-%: \
 		-colors 256 \
 		$@
 
+%.png: \
+	$(srcdir)/branding/%.svg
+
+	@echo $@ ...
+	@$(MKDIR) $(@D)
+	@$(CONVERT) \
+		+antialias \
+		-background transparent \
+		$< \
+		$@
 
 #---[ Release Targets ]------------------------------------------------------------------
 
@@ -301,8 +313,18 @@ install-linux-application: \
 		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
 		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
+install-macos-application: \
+	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
+
+	@$(MKDIR) \
+		$(DESTDIR)$(bindir)
+
+	@$(INSTALL_PROGRAM) \
+		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
+		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
 install-windows-application: \
+	$(PRODUCT_NAME).png \
 	strip
 
 	@$(MKDIR) \
@@ -311,6 +333,13 @@ install-windows-application: \
 	@$(INSTALL_PROGRAM) \
 		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
 		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
+
+	@$(MKDIR) \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)
+
+	@$(INSTALL_DATA) \
+		$(PRODUCT_NAME).png \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png
 
 install-icons:
 

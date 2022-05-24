@@ -110,6 +110,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.svg"					"share\@PRODUCT_NAME@\@PRODUCT_NAME@-logo.svg"
 		file "/oname=$INSTDIR\@PRODUCT_NAME@.svg"						"share\@PRODUCT_NAME@\@PRODUCT_NAME@.svg"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.png"						"share\@PRODUCT_NAME@\@PRODUCT_NAME@.png"
 
 		# Schema
 		CreateDirectory "$INSTDIR\schemas"
@@ -132,8 +133,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		# UI definition files
 		CreateDirectory "$INSTDIR\ui"
-		file "/oname=$INSTDIR\ui\application.xml" 	"share\@PRODUCT_NAME@\ui\application.xml"
-		file "/oname=$INSTDIR\ui\window.xml" 		"share\@PRODUCT_NAME@\ui\window.xml"
+		file "/oname=$INSTDIR\@PRODUCT_NAME@.ui.xml" 	"share\@PRODUCT_NAME@\@PRODUCT_NAME@.ui.xml"
 
 		# Charset definition files
 		CreateDirectory "$INSTDIR\remap"
@@ -178,7 +178,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"				"InstallLocation"	"$INSTDIR"
 
 		# Customized options
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoconnect"		0x00000001
+		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoconnect"			0x00000001
 		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"blankfill"             0x00000000
 		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"bold"                  0x00000000
 		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"keepselected"          0x00000001
@@ -386,6 +386,13 @@ Section "Uninstall"
 SectionEnd
 
 Function .onInit
+
+	#---[ Check if already installed ]--------------------------------------------------------------------
+
+	${If} ${FileExists} "$INSTDIR\@PRODUCT_NAME@.exe"
+		MessageBox MB_OK|MB_ICONEXCLAMATION "@PRODUCT_NAME@ is already installed. Please uninstall it first" /SD IDOK
+		Abort
+	${EndIf}
 
 	#---[ Check SDK Command line option ]-----------------------------------------------------------------
 
