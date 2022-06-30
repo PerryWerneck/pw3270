@@ -427,7 +427,7 @@ void startup(GApplication *application) {
 
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
 
-	GSettings *settings = pw3270_application_get_settings(application);
+//	GSettings *settings = pw3270_application_get_settings(application);
 
 	//
 	// Common actions
@@ -445,14 +445,14 @@ void startup(GApplication *application) {
 	//
 	// Open session actions.
 	//
-	if(g_settings_get_boolean(settings,"allow-open-session-actions")) {
+	if(pw3270_application_get_boolean(application,"allow-open-session-actions",TRUE)) {
 		g_action_map_add_action(G_ACTION_MAP(application),pw3270_open_session_action_new());
 	}
 
 	//
 	// New tab actions
 	//
-	if(g_settings_get_boolean(settings,"allow-new-tab-actions")) {
+	if(pw3270_application_get_boolean(application,"allow-new-tab-actions",TRUE)) {
 
 		GAction * new_tab_actions[] = {
 			pw3270_open_tab_action_new(),
@@ -468,7 +468,7 @@ void startup(GApplication *application) {
 	//
 	// New window actions
 	//
-	if(g_settings_get_boolean(settings,"allow-new-window-actions")) {
+	if(pw3270_application_get_boolean(application,"allow-new-window-actions",TRUE)) {
 
 		GAction * new_window_actions[] = {
 			pw3270_open_window_action_new(),
@@ -557,10 +557,13 @@ PW3270_UI_STYLE pw3270_application_get_ui_style(GApplication *app) {
 }
 
 GSettings * pw3270_application_get_settings(GApplication *app) {
-
 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
 	return PW3270_APPLICATION(app)->settings;
+}
 
+gboolean pw3270_application_get_boolean(GApplication *app, const gchar *option_name, gboolean def) {
+	g_return_val_if_fail(PW3270_IS_APPLICATION(app),def);
+	return g_settings_get_boolean(PW3270_APPLICATION(app)->settings,option_name);
 }
 
 GSList * pw3270_application_get_plugins(GApplication *app) {

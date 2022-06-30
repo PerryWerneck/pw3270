@@ -216,16 +216,20 @@ V3270KeyFile * v3270_key_file_open(GtkWidget *terminal, const gchar *filename, G
 
 	if(!*error) {
 
-		GSettings * settings = pw3270_application_get_settings(g_application_get_default());
+		GApplication *application = g_application_get_default();
 
-		if(settings && g_settings_get_boolean(settings,"update-default-session-file")) {
+		if(pw3270_application_get_boolean(application,"update-default-session-file",TRUE)) {
 
-			g_message("Updating default session file to '%s'",filename);
-			g_settings_set_string(settings,"default-session-file",filename);
+			GSettings * settings = pw3270_application_get_settings(application);
+
+			if(settings) {
+				g_message("Updating default session file to '%s'",filename);
+				g_settings_set_string(settings,"default-session-file",filename);
+			}
 
 		}
 
-		if(settings && g_settings_get_boolean(settings,"add-session-to-recent-manager")) {
+		if(pw3270_application_get_boolean(application,"add-session-to-recent-manager",TRUE)) {
 
 			// new_session->key_file
 			g_autofree gchar * display_name = g_key_file_get_string(new_session->key_file,"terminal","session-name",NULL);
