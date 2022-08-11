@@ -21,7 +21,8 @@
  #include <pw3270/application.h>
  #include <pw3270/keypad.h>
 
- static GMenu * get_keypad_menu(GApplication *application) {
+ /*
+ static GMenu * keypad_menu_new(GApplication *application) {
 
 	GList * keypads = pw3270_application_get_keypad_models(application);
 
@@ -41,6 +42,7 @@
 	return menu;
 
  }
+ */
 
  GtkBuilder * pw3270_application_builder_new(GApplication *application) {
 
@@ -100,11 +102,13 @@
 	//
 	// View options
 	//
-	GMenu * keypad_menu = get_keypad_menu(application);
+	GList * keypads = pw3270_application_get_keypad_models(application);
 
-	if(keypad_menu) {
+	if(keypads) {
 
 		static const gchar * placeholders[] = {
+			"app-menu-view-placeholder",
+			"top-menu-view-placeholder",
 			"view-menu-placeholder",
 			"view-when-offline-placeholder",
 			"view-when-online-placeholder"
@@ -114,13 +118,33 @@
 
 			placeholder = gtk_builder_get_object(builder, placeholders[ix]);
 
-			if(placeholder && G_IS_MENU(placeholder)) {
-				g_menu_append_item(G_MENU(placeholder), g_menu_item_new_submenu(_("Keypads"),G_MENU_MODEL(keypad_menu)));
+			if(placeholder) {
+
+				if(G_IS_MENU(placeholder)) {
+
+					GMenu * menu = g_menu_new();
+
+					// Create keypad items.
+					GList *item;
+					for(item = keypads; item; item = g_list_next(item)) {
+						GObject * model = G_OBJECT(item->data);
+						g_autofree gchar * action_name = g_strconcat("win.keypad.",pw3270_keypad_model_get_name(model),NULL);
+						g_menu_append(menu,pw3270_keypad_model_get_label(model),action_name);
+					}
+
+					g_menu_append_item(G_MENU(placeholder), g_menu_item_new_submenu(_("Keypads"),G_MENU_MODEL(menu)));
+
+					g_object_unref(menu);
+
+				} else {
+
+					g_message("Placeholder '%s' is invalid",placeholders[ix]);
+
+				}
 			}
 
 		}
 
-		g_object_unref(keypad_menu);
 	}
 
 	return builder;

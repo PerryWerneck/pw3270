@@ -482,11 +482,6 @@ void startup(GApplication *application) {
 	}
 
 	//
-	// Setup application menus
-	//
-	g_autoptr(GtkBuilder) builder = pw3270_application_builder_new(application);
-
-	//
 	// Load keypad models
 	//
 	{
@@ -510,6 +505,13 @@ void startup(GApplication *application) {
 			g_message("Can't read %s: %s",keypad_path,error->message);
 		}
 	}
+
+	//
+	// Setup application menus
+	//
+	debug("%s","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+	g_autoptr(GtkBuilder) builder = pw3270_application_builder_new(application);
 
 	if(gtk_application_prefers_app_menu(GTK_APPLICATION(application)))
 		gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
