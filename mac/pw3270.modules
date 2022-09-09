@@ -9,7 +9,7 @@
 	<repository type="git" name="github.com" href="git://github.com/"/>
 
 	<autotools id="pw3270">
-		<branch repo="github.com" module="PerryWerneck/pw3270" revision="macos" />
+		<branch repo="github.com" module="PerryWerneck/pw3270" revision="master" />
 		<dependencies>
 			<dep package="meta-gtk-osx-bootstrap" />
 			<dep package="glib" />
