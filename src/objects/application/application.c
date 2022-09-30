@@ -509,8 +509,6 @@ void startup(GApplication *application) {
 	//
 	// Setup application menus
 	//
-	debug("%s","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
 	g_autoptr(GtkBuilder) builder = pw3270_application_builder_new(application);
 
 	if(gtk_application_prefers_app_menu(GTK_APPLICATION(application)))
