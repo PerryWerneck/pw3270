@@ -72,6 +72,10 @@ void			  pw3270_application_open_file(GtkApplication *application, GtkWindow **w
 /// @return The internal settings object (Do not unref it).
 GSettings		* pw3270_application_settings_new();
 GSettings		* pw3270_application_get_settings(GApplication *app);
+
+/// @brief Get boolean from gsettings.
+gboolean		  pw3270_application_get_boolean(GApplication *app, const gchar *option_name, gboolean def);
+
 GList			* pw3270_application_get_keypad_models(GApplication *app);
 
 void			  pw3270_application_set_ui_style(GApplication *app, PW3270_UI_STYLE type);

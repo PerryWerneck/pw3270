@@ -170,7 +170,7 @@ configure()
 		if [ -x ./autogen.sh ]; then
 			NOCONFIGURE=1 ./autogen.sh
 			if [ "$?" != "0" ]; then
-				failed "Erro em autogen.sh"
+				failed "autogen.sh has failed"
 			fi
 		fi
 	done

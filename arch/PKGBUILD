@@ -34,5 +34,9 @@ build() {
 package() {
   cd $pkgname-$pkgver
   DESTDIR="$pkgdir" make install
+  
+  # Remove compiled schema.
+  rm -f $pkgdir/usr/share/glib-2.0/schemas/gschemas.compiled
+  
 }
 
