@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-18 15:30-0300\n"
+"POT-Creation-Date: 2022-12-14 20:10-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "32 bits Windows"
 msgstr ""
 
-#: src/objects/actions/save.c:166 src/objects/os/linux/savedesktopicon.c:233
+#: src/objects/actions/save.c:167 src/objects/os/linux/savedesktopicon.c:233
 #: src/objects/os/windows/savedesktopicon.c:222
 msgid "3270 session files"
 msgstr ""
@@ -474,7 +474,7 @@ msgstr ""
 msgid "Keypad width in columns"
 msgstr ""
 
-#: src/main/builder.c:118
+#: src/main/builder.c:135
 msgid "Keypads"
 msgstr ""
 
@@ -709,7 +709,7 @@ msgstr ""
 msgid "Save selected"
 msgstr ""
 
-#: src/objects/actions/save.c:75 src/objects/actions/save.c:163
+#: src/objects/actions/save.c:75 src/objects/actions/save.c:164
 msgid "Save session preferences"
 msgstr ""
 
@@ -914,7 +914,7 @@ msgstr ""
 msgid "TN3270 Session Files"
 msgstr ""
 
-#: src/objects/window/keyfile.c:237
+#: src/objects/window/keyfile.c:241
 msgid "TN3270 Session description"
 msgstr ""
 
@@ -1140,7 +1140,7 @@ msgstr ""
 msgid "_Apply"
 msgstr ""
 
-#: src/objects/actions/save.c:102 src/objects/settings/dialog.c:78
+#: src/objects/actions/save.c:103 src/objects/settings/dialog.c:78
 #: src/objects/os/linux/savedesktopicon.c:140
 #: src/objects/os/windows/savedesktopicon.c:132
 msgid "_Cancel"
@@ -1191,7 +1191,7 @@ msgstr ""
 msgid "_Rename session"
 msgstr ""
 
-#: src/objects/actions/save.c:103 src/objects/os/linux/savedesktopicon.c:141
+#: src/objects/actions/save.c:104 src/objects/os/linux/savedesktopicon.c:141
 #: src/objects/os/windows/savedesktopicon.c:133
 msgid "_Save"
 msgstr ""

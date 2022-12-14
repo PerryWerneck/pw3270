@@ -135,15 +135,6 @@ $(OBJDBG)/%.o: \
 	@$(MKDIR) $(@D)
 	@$(WINDRES) $< -O coff -o $@
 
-gschemas.compiled: \
-	$(foreach SCHEMA, $(notdir $(SCHEMAS)), $(OBJDIR)/schemas/$(SCHEMA))
-
-	@$(MKDIR) $(OBJDIR)/schemas
-
-	@glib-compile-schemas \
-		--targetdir=$(@D) \
-		$(OBJDIR)/schemas
-
 #---[ Release Rules ]--------------------------------------------------------------------
 
 $(OBJRLS)/%.o: \
@@ -251,11 +242,14 @@ install-%: \
 		$< \
 		$@
 
-#---[ Release Targets ]------------------------------------------------------------------
+#---[ Main Target ]----------------------------------------------------------------------
 
 all: \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
 	locale
+
+
+#---[ Release Targets ]------------------------------------------------------------------
 
 locale: \
 	locale/$(PACKAGE_NAME).pot
@@ -351,6 +345,15 @@ install-icons:
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons
 
 #---[ Misc Targets ]---------------------------------------------------------------------
+
+gschemas.compiled: \
+	$(foreach SCHEMA, $(notdir $(SCHEMAS)), $(OBJDIR)/schemas/$(SCHEMA))
+
+	@$(MKDIR) $(OBJDIR)/schemas
+
+	@glib-compile-schemas \
+		--targetdir=$(@D) \
+		$(OBJDIR)/schemas
 
 locale/$(PACKAGE_NAME).pot: \
 	$(foreach SRC, $(basename $(COMMON_SOURCES)), $(POTDIR)/$(SRC).pot) \

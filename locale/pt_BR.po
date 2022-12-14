@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-18 15:30-0300\n"
+"POT-Creation-Date: 2022-12-14 20:10-0300\n"
 "PO-Revision-Date: 2021-12-23 01:36-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
@@ -37,7 +37,7 @@ msgstr "Linux 32 bits"
 msgid "32 bits Windows"
 msgstr "Windows 32 bits"
 
-#: src/objects/actions/save.c:166 src/objects/os/linux/savedesktopicon.c:233
+#: src/objects/actions/save.c:167 src/objects/os/linux/savedesktopicon.c:233
 #: src/objects/os/windows/savedesktopicon.c:222
 msgid "3270 session files"
 msgstr "Arquivos de sessão TN3270"
@@ -478,7 +478,7 @@ msgstr "Altura do painel em linhas"
 msgid "Keypad width in columns"
 msgstr "Largura do painel em colunas"
 
-#: src/main/builder.c:118
+#: src/main/builder.c:135
 msgid "Keypads"
 msgstr "Painéis"
 
@@ -713,7 +713,7 @@ msgstr "Salvar tela"
 msgid "Save selected"
 msgstr "Salvar seleção"
 
-#: src/objects/actions/save.c:75 src/objects/actions/save.c:163
+#: src/objects/actions/save.c:75 src/objects/actions/save.c:164
 msgid "Save session preferences"
 msgstr "Salvar preferências da sessão"
 
@@ -918,7 +918,7 @@ msgstr "Erro nas configurações de sistema"
 msgid "TN3270 Session Files"
 msgstr "Arquivos de sessão TN3270"
 
-#: src/objects/window/keyfile.c:237
+#: src/objects/window/keyfile.c:241
 msgid "TN3270 Session description"
 msgstr "Descrição de sessão TN3270"
 
@@ -1148,7 +1148,7 @@ msgstr "Atalhos windows"
 msgid "_Apply"
 msgstr "_Aplicar"
 
-#: src/objects/actions/save.c:102 src/objects/settings/dialog.c:78
+#: src/objects/actions/save.c:103 src/objects/settings/dialog.c:78
 #: src/objects/os/linux/savedesktopicon.c:140
 #: src/objects/os/windows/savedesktopicon.c:132
 msgid "_Cancel"
@@ -1199,7 +1199,7 @@ msgstr "_Preferências"
 msgid "_Rename session"
 msgstr "Renomear sessão"
 
-#: src/objects/actions/save.c:103 src/objects/os/linux/savedesktopicon.c:141
+#: src/objects/actions/save.c:104 src/objects/os/linux/savedesktopicon.c:141
 #: src/objects/os/windows/savedesktopicon.c:133
 msgid "_Save"
 msgstr "_Salvar"
