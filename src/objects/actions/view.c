@@ -45,7 +45,6 @@ enum {
 };
 
 struct ListElement {
-// 	GAction		* action;
 	GdkPixbuf	* pixbuf;
 	gchar		* action_name;
 	gchar		* action_label;

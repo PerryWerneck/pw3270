@@ -184,34 +184,6 @@ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *kla
 	}
 #endif // DEBUG
 
-	/*
-	{
-		gtk_icon_theme_append_search_path(
-		    gtk_icon_theme_get_default(),
-		    "./icons"
-		);
-
-		gchar **paths = NULL;
-		gint n_paths = 0;
-
-		gtk_icon_theme_get_search_path (
-		    gtk_icon_theme_get_default(),
-			&paths,
-			&n_paths
-		);
-
-		gint p;
-		for(p = 0; p < n_paths;p++) {
-			printf("**** [%s]\n",paths[p]);
-		}
-
-	}
-#else
-	{
-	}
-#endif // DEBUG
-	*/
-
 	{
 		GtkWidgetClass *widget = GTK_WIDGET_CLASS(klass);
 		widget->destroy = destroy;
@@ -748,8 +720,6 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 	}
 
 	pw3270_application_window_set_active_terminal(GTK_WIDGET(window),terminal);
-
-	// gtk_window_set_interactive_debugging(TRUE);
 
 	return GTK_WIDGET(window);
 
