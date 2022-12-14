@@ -121,7 +121,7 @@ Updated windows installers are available on Dropbox, google drive and one drive.
 2. build
 
 	```shell
-	jhbuild --moduleset=https://raw.githubusercontent.com/PerryWerneck/pw3270/macos/mac/pw3270.modules build pw3270
+	jhbuild --moduleset=https://raw.githubusercontent.com/PerryWerneck/pw3270/master/mac/pw3270.modules build pw3270
 	```
 
 
