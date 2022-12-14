@@ -128,6 +128,14 @@ AC_SUBST(DLLPREFIX)
 AC_SUBST(DLL_LDFLAGS)
 
 dnl ---------------------------------------------------------------------------
+dnl Check for headers
+dnl ---------------------------------------------------------------------------
+
+AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
+AC_CHECK_FUNC(localtime_r, AC_DEFINE(HAVE_LOCALTIME_R, [], [Do we have localtime_r?]) )
+AC_CHECK_FUNC(strtok_r, AC_DEFINE(HAVE_STRTOK_R, [], [Do we have strtok_r?]) )
+
+dnl ---------------------------------------------------------------------------
 dnl Check for other programs
 dnl ---------------------------------------------------------------------------
 
