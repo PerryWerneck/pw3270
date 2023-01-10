@@ -49,8 +49,8 @@ make clean > $LOGFILE 2>&1 || die "Make clean failure"
 make all  > $LOGFILE 2>&1 || die "Make failure"
 popd
 
-export LIBV3270_CFLAGS="-I./.build/libv3270/src/include"
-export LIBV3270_LIBS="-L./.build/libv3270/.bin/Release -lv3270"
+export LIBV3270_CFLAGS="-I./.build/libv3270/src/include ${LIB3270_CFLAGS}"
+export LIBV3270_LIBS="-L./.build/libv3270/.bin/Release -lv3270 ${LIB3270_LIBS}"
 
 #
 # Build PW3270
