@@ -1,0 +1,24 @@
+name: MSYS2
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  msys2-ucrt64:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: git mingw-w64-ucrt-x86_64-gcc automake autoconf make git pkgconf gettext-devel libtool xz mingw-w64-x86_64-openssl mingw-w64-x86_64-gtk3 mingw-w64-x86_64-imagemagick mingw-w64-x86_64-optipng mingw-w64-x86_64-inkscape
+      - name: CI-Build
+        run: |
+          echo 'Running in MSYS2!'
+          ./win/ci-build.sh
+
