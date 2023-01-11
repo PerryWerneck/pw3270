@@ -5,7 +5,11 @@ on:
       - master
 
 jobs:
+<<<<<<< HEAD
   msys2-ucrt64:
+=======
+  msys2-mingw:
+>>>>>>> master
     runs-on: windows-latest
     defaults:
       run:
@@ -14,11 +18,19 @@ jobs:
       - uses: actions/checkout@v3
       - uses: msys2/setup-msys2@v2
         with:
+<<<<<<< HEAD
           msystem: UCRT64
           update: true
           install: git mingw-w64-ucrt-x86_64-gcc automake autoconf make git pkgconf gettext-devel libtool xz mingw-w64-x86_64-openssl mingw-w64-x86_64-gtk3 mingw-w64-x86_64-imagemagick mingw-w64-x86_64-optipng mingw-w64-x86_64-inkscape mingw-w64-x86_64-gettext
       - name: CI-Build
         run: |
           echo 'Running in MSYS2!'
+=======
+          msystem: mingw64
+          update: true
+          install: xz mingw-w64-x86_64-gcc automake autoconf make git pkgconf mingw-w64-x86_64-gettext gettext-devel mingw-w64-x86_64-openssl libtool mingw-w64-x86_64-gtk3 mingw-w64-x86_64-imagemagick mingw-w64-x86_64-optipng mingw-w64-x86_64-inkscape
+      - name: CI-Build
+        run: |
+>>>>>>> master
           ./win/ci-build.sh
 
