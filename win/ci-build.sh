@@ -33,13 +33,8 @@ pushd  ${myDIR}/.build/lib3270
 ./configure > $LOGFILE 2>&1 || die "Configure failure"
 make clean > $LOGFILE 2>&1 || die "Make clean failure"
 make all  > $LOGFILE 2>&1 || die "Make failure"
+make install  > $LOGFILE 2>&1 || die "Install failure"
 popd
-
-export LIB3270_CFLAGS="-I${myDIR}/.build/lib3270/src/include"
-export LIB3270_LIBS="-L${myDIR}/.build/lib3270/.bin/Release -l3270.delayed"
-
-echo "LIB3270_CFLAGS=${LIB3270_CFLAGS}"
-echo "LIB3270_LIBS=${LIB3270_LIBS}"
 
 #
 # Build LIBV3270
@@ -52,13 +47,8 @@ pushd ${myDIR}/.build/libv3270
 ./configure > $LOGFILE 2>&1 || die "Configure failure"
 make clean > $LOGFILE 2>&1 || die "Make clean failure"
 make all  > $LOGFILE 2>&1 || die "Make failure"
+make install  > $LOGFILE 2>&1 || die "Install failure"
 popd
-
-export LIBV3270_CFLAGS="-I${myDIR}/.build/libv3270/src/include ${LIB3270_CFLAGS}"
-export LIBV3270_LIBS="-L${myDIR}/.build/libv3270/.bin/Release -lv3270 ${LIB3270_LIBS}"
-
-echo "LIBV3270_CFLAGS=${LIBV3270_CFLAGS}"
-echo "LIBV3270_LIBS=${LIBV3270_LIBS}"
 
 #
 # Build PW3270
