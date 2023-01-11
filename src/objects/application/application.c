@@ -23,6 +23,9 @@
 #include <pw3270/actions.h>
 #include <pw3270/keypad.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 enum {
 	PROP_ZERO,
@@ -611,7 +614,12 @@ static int loghandler(const H3270 G_GNUC_UNUSED(*hSession), pw3270Application *a
 		return -1;
 	}
 
-	FILE *f = fopen(app->logfile,"a");
+	int fd = open(app->logfile,O_WRONLY|O_APPEND|O_CREAT,S_IWUSR|S_IRUSR);
+	if(fd < 0) {
+		return -1;
+	}
+
+	FILE *f = fdopen(fd,"a");
 
 	if(f) {
 		time_t ltime = time(0);
