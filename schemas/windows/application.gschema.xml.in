@@ -30,7 +30,7 @@
 
 <schemalist>
 
-  <schema path="/br/com/bb/@PRODUCT_NAME@/" id="br.com.bb.@PRODUCT_NAME@">
+  <schema path="/br/app/@PRODUCT_NAME@/" id="br.app.@PRODUCT_NAME@">
 
     <key name="ui-style" type="u">
       <default>0</default>
