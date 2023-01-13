@@ -30,7 +30,7 @@
 
 <schemalist>
 
-  <schema path="/br/com/bb/@PRODUCT_NAME@/window/" id="br.com.bb.@PRODUCT_NAME@.window">
+  <schema path="/br/app/@PRODUCT_NAME@/window/" id="br.app.@PRODUCT_NAME@.window">
 
     <key name="width" type="i">
       <default>-1</default>
