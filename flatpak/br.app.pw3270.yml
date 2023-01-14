@@ -1,4 +1,4 @@
-app-id: br.eti.werneck.pw3270
+app-id: br.app.pw3270
 runtime: org.gnome.Platform
 sdk: org.gnome.Sdk
 command: pw3270
@@ -7,7 +7,7 @@ finish-args:
   - "--share=ipc"
   - "--socket=fallback-x11"
   - "--socket=wayland"
-  - "--own-name=br.com.bb.pw3270"
+  - "--own-name=br.app.pw3270"
 cleanup:
   - "/include"
   - "/lib/pkgconfig"
