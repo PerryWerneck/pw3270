@@ -23,7 +23,7 @@ modules:
     buildsystem: simple
     build-commands:
       - NOCONFIGURE=1 ./autogen.sh
-      - ./configure --prefix=/app
+      - ./configure --prefix=/app --with-product-id="br.app.pw3270"
       - make all
       - make install
     sources:
