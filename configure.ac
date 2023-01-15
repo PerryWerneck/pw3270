@@ -128,6 +128,14 @@ AC_SUBST(DLLPREFIX)
 AC_SUBST(DLL_LDFLAGS)
 
 dnl ---------------------------------------------------------------------------
+dnl Check for headers
+dnl ---------------------------------------------------------------------------
+
+AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
+AC_CHECK_FUNC(localtime_r, AC_DEFINE(HAVE_LOCALTIME_R, [], [Do we have localtime_r?]) )
+AC_CHECK_FUNC(strtok_r, AC_DEFINE(HAVE_STRTOK_R, [], [Do we have strtok_r?]) )
+
+dnl ---------------------------------------------------------------------------
 dnl Check for other programs
 dnl ---------------------------------------------------------------------------
 
@@ -190,8 +198,7 @@ AC_ARG_WITH([product-name], [AS_HELP_STRING([--with-product-name], [Set product 
 AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product)
 AC_SUBST(PRODUCT_NAME,$app_cv_product)
 
-AC_ARG_WITH([application-id], [AS_HELP_STRING([--application-id], [Set the application ID])], [ app_cv_application_id="$withval" ],[ app_cv_application_id="br.app.$app_cv_product" ])
-
+AC_ARG_WITH([application-id], [AS_HELP_STRING([--application-id], [Set the application ID])], [ app_cv_application_id="$withval" ],[ app_cv_application_id=`pkg-config --variable=product_id lib3270` ])
 AC_DEFINE_UNQUOTED(APPLICATION_ID, $app_cv_application_id)
 AC_SUBST(APPLICATION_ID,$app_cv_application_id)
 

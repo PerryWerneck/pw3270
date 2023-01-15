@@ -165,10 +165,7 @@ void PW3270Action_init(PW3270Action *action) {
 }
 
 void finalize(GObject *object) {
-
-	// PW3270Action * action = PW3270_ACTION(object);
 	G_OBJECT_CLASS(PW3270Action_parent_class)->finalize(object);
-
 }
 
 void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
@@ -215,7 +212,6 @@ void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GN
 }
 
 void set_property(GObject G_GNUC_UNUSED(*object), guint G_GNUC_UNUSED(prop_id), const GValue G_GNUC_UNUSED(*value), GParamSpec G_GNUC_UNUSED(*pspec)) {
-// 	g_message("Action %s property %s is read-only",g_action_get_name(G_ACTION(object)),pspec->name);
 }
 
 static gboolean bg_notify_enabled(GObject *action) {
