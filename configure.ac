@@ -198,7 +198,8 @@ AC_ARG_WITH([product-name], [AS_HELP_STRING([--with-product-name], [Set product 
 AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product)
 AC_SUBST(PRODUCT_NAME,$app_cv_product)
 
-AC_ARG_WITH([application-id], [AS_HELP_STRING([--application-id], [Set the application ID])], [ app_cv_application_id="$withval" ],[ app_cv_application_id=`pkg-config --variable=product_id lib3270` ])
+AC_ARG_WITH([application-id], [AS_HELP_STRING([--application-id], [Set the application ID])], [ app_cv_application_id="$withval" ],[ app_cv_application_id=`pkg-config --variable=product_id lib3270`.terminal ])
+
 AC_DEFINE_UNQUOTED(APPLICATION_ID, $app_cv_application_id)
 AC_SUBST(APPLICATION_ID,$app_cv_application_id)
 
