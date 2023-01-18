@@ -300,7 +300,7 @@ install-application: \
 install-linux-application: \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
 
-	@$(MKDIR) \	
+	@$(MKDIR) \
 		$(DESTDIR)$(bindir)
 
 	@$(INSTALL_PROGRAM) \
