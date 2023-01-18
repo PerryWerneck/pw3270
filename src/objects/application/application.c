@@ -302,7 +302,7 @@ static void pw3270Application_init(pw3270Application *app) {
 		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
 	}
 
-	pw3270_load_plugins_from_path(app, G_STRINGIFY(LIBDIR) G_DIR_SEPARATOR_S G_STRINGIFY(PRODUCT_NAME) "-plugins");
+	pw3270_load_plugins_from_path(app, PLUGIN_DIR);
 
 #endif // _WIN32
 

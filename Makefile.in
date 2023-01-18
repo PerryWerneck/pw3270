@@ -288,7 +288,7 @@ install-application: \
 	install-icons
 
 	@$(MKDIR) \
-		$(DESTDIR)$(libdir)/$(PRODUCT_NAME)-plugins
+		$(DESTDIR)@PLUGIN_DIR@
 
 	@$(INSTALL_DATA) \
 		$(srcdir)/ui/@OSNAME@.ui.xml \
@@ -300,7 +300,7 @@ install-application: \
 install-linux-application: \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@
 
-	@$(MKDIR) \
+	@$(MKDIR) \	
 		$(DESTDIR)$(bindir)
 
 	@$(INSTALL_PROGRAM) \

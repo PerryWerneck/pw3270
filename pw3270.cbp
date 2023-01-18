@@ -46,6 +46,7 @@
 		<Unit filename="schemas/linux/window.gschema.xml.in" />
 		<Unit filename="schemas/windows/application.gschema.xml.in" />
 		<Unit filename="schemas/windows/window.gschema.xml.in" />
+		<Unit filename="src/include/config.h" />
 		<Unit filename="src/include/pw3270.h" />
 		<Unit filename="src/include/pw3270/actions.h" />
 		<Unit filename="src/include/pw3270/application.h" />
@@ -67,6 +68,7 @@
 		<Unit filename="src/main/tools.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/main/windows/resources.rc" />
 		<Unit filename="src/objects/actions/abstract.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -87,6 +89,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/actions/simple.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/actions/testprogram/testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/actions/tools.c">
@@ -116,6 +121,9 @@
 		<Unit filename="src/objects/application/open.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/application/plugins.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/application/private.h" />
 		<Unit filename="src/objects/keypad/attribute.c">
 			<Option compilerVar="CC" />
@@ -130,6 +138,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/keypad/private.h" />
+		<Unit filename="src/objects/keypad/testprogram/testprogram.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/keypad/widget.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -173,6 +184,9 @@
 		<Unit filename="src/objects/toolbar/settings.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/objects/toolbar/testprogram/testprogram.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/toolbar/toolbar.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -208,6 +222,9 @@
 		</Unit>
 		<Unit filename="src/objects/window/private.h" />
 		<Unit filename="src/objects/window/terminal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/objects/window/testprogram/testprogram.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/objects/window/tools.c">

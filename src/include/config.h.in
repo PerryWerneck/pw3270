@@ -1,45 +1,106 @@
-/*
- * "Software G3270, desenvolvido com base nos códigos fontes do WC3270  e  X3270
- * (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
- * aplicativos mainframe. Registro no INPI sob o nome G3270.
- *
- * Copyright (C) <2008> <Banco do Brasil S.A.>
- *
- * Este programa é software livre. Você pode redistribuí-lo e/ou modificá-lo sob
- * os termos da GPL v.2 - Licença Pública Geral  GNU,  conforme  publicado  pela
- * Free Software Foundation.
- *
- * Este programa é distribuído na expectativa de  ser  útil,  mas  SEM  QUALQUER
- * GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou  de  ADEQUAÇÃO
- * A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU para
- * obter mais detalhes.
- *
- * Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este
- * programa; se não, escreva para a Free Software Foundation, Inc., 51 Franklin
- * St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- * Este programa está nomeado como config.h e possui - linhas de código.
- *
- * Contatos:
- *
- * perry.werneck@gmail.com	(Alexandre Perry de Souza Werneck)
- * erico.mendonca@gmail.com	(Erico Mascarenhas de Mendonça)
- *
- */
+/* src/include/config.h.in.  Generated from configure.ac by autoheader.  */
 
-#ifndef PW3270_CONFIG_H_INCLUDED
+/* The application ID */
+#undef APPLICATION_ID
 
-	#define PW3270_CONFIG_H_INCLUDED 1
+/* Are we using the unstable features? */
+#undef ENABLE_UNSTABLE_FEATURES
 
-	#undef PACKAGE_NAME
-	#undef PACKAGE_VERSION
-	#undef PACKAGE_RELEASE
-	#undef PRODUCT_NAME
-	#undef APPLICATION_ID
-	#undef ENABLE_UNSTABLE_FEATURES
-	#undef HAVE_MALLOC_H
-	#undef HAVE_STRTOK_R
-	#undef HAVE_LOCALTIME_R
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
 
-#endif /* PW3270_CONFIG_H_INCLUDED */
+/* Do we have gtk? */
+#undef HAVE_GTK
 
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Do we have libv3270? */
+#undef HAVE_LIBV3270
+
+/* Do we have localtime_r? */
+#undef HAVE_LOCALTIME_R
+
+/* do we have malloc.h? */
+#undef HAVE_MALLOC_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Do we have strtok_r? */
+#undef HAVE_STRTOK_R
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* The tn3270 library name */
+#undef LIBRARY_NAME
+
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
+#undef LT_OBJDIR
+
+/* Name of package */
+#undef PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* The package major release */
+#undef PACKAGE_MAJOR_RELEASE
+
+/* The package major version */
+#undef PACKAGE_MAJOR_VERSION
+
+/* The package minor release */
+#undef PACKAGE_MINOR_RELEASE
+
+/* The package minor version */
+#undef PACKAGE_MINOR_VERSION
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* The package release */
+#undef PACKAGE_RELEASE
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* The product name */
+#undef PLUGIN_DIR
+
+/* The product name */
+#undef PRODUCT_NAME
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Version number of package */
+#undef VERSION

@@ -23,7 +23,7 @@ AC_PREREQ(2.61)
 
 dnl Initialise automake with the package name, version and
 dnl bug-reporting address.
-AC_INIT([pw3270], [5.4], [perry.werneck@gmail.com])
+AC_INIT([pw3270], [5.5], [perry.werneck@gmail.com])
 
 dnl Place auxilliary scripts here.
 AC_CONFIG_AUX_DIR([scripts])
@@ -39,6 +39,8 @@ AC_CONFIG_HEADER([src/include/config.h])
 
 dnl Initialise automake stuff.
 AM_INIT_AUTOMAKE
+
+LT_INIT
 
 dnl Set gettext version
 AM_GNU_GETTEXT_VERSION([0.14])
@@ -171,8 +173,8 @@ AC_SUBST(PACKAGE_DESCRIPTION,"IBM 3270 Terminal emulator")
 app_vrs_major=$(echo $VERSION | cut -d. -f1)
 app_vrs_minor=$(echo $VERSION | cut -d. -f2)
 
-AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_VERSION, $app_vrs_major)
-AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor)
+AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_VERSION, $app_vrs_major, [The package major version])
+AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor, [The package minor version])
 
 AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
 AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
@@ -182,9 +184,9 @@ AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_
 app_rls_major=$(echo $app_cv_release.0.0 | cut -d. -f1)
 app_rls_minor=$(echo $app_cv_release.0.0 | cut -d. -f2)
 
-AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$app_cv_release")
-AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_RELEASE, $app_rls_major)
-AC_DEFINE_UNQUOTED(PACKAGE_MINOR_RELEASE, $app_rls_minor)
+AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$app_cv_release",[The package release])
+AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_RELEASE, $app_rls_major,[The package major release])
+AC_DEFINE_UNQUOTED(PACKAGE_MINOR_RELEASE, $app_rls_minor,[The package minor release])
 
 AC_SUBST(PACKAGE_RELEASE,$app_cv_release)
 AC_SUBST(PACKAGE_MAJOR_RELEASE,$app_rls_major)
@@ -195,13 +197,17 @@ dnl Set application id & product name
 dnl ---------------------------------------------------------------------------
 
 AC_ARG_WITH([product-name], [AS_HELP_STRING([--with-product-name], [Set product name])], [ app_cv_product="$withval" ],[ app_cv_product=`pkg-config --variable=product_name lib3270` ])
-AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product)
+AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product,[The product name])
 AC_SUBST(PRODUCT_NAME,$app_cv_product)
 
 AC_ARG_WITH([application-id], [AS_HELP_STRING([--application-id], [Set the application ID])], [ app_cv_application_id="$withval" ],[ app_cv_application_id=`pkg-config --variable=product_id lib3270`.terminal ])
 
-AC_DEFINE_UNQUOTED(APPLICATION_ID, $app_cv_application_id)
+AC_DEFINE_UNQUOTED(APPLICATION_ID, $app_cv_application_id,[The application ID])
 AC_SUBST(APPLICATION_ID,$app_cv_application_id)
+
+AC_ARG_WITH([plugin-dir], [AS_HELP_STRING([--with-plugin-dir], [The application plugin dir])], [ app_cv_plugin_path="$withval" ],[ app_cv_plugin_path=`pkg-config --variable=plugin_path lib3270` ])
+AC_DEFINE_UNQUOTED(PLUGIN_DIR, "$app_cv_plugin_path", [The product name])
+AC_SUBST(PLUGIN_DIR,$app_cv_plugin_path)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for unstable version
@@ -217,7 +223,7 @@ AC_ARG_ENABLE([unstable],
 ])
 
 if test "$app_cv_unstable" == "yes"; then
-	AC_DEFINE(ENABLE_UNSTABLE_FEATURES)
+	AC_DEFINE(ENABLE_UNSTABLE_FEATURES,,[Are we using the unstable features?])
 	AC_MSG_NOTICE([Enabling unstable features])
 else
 	AC_MSG_NOTICE([Using only stable features])
@@ -228,13 +234,13 @@ dnl ---------------------------------------------------------------------------
 dnl Check for LIBV3270
 dnl ---------------------------------------------------------------------------
 
-PKG_CHECK_MODULES( [LIBV3270], [libv3270], AC_DEFINE(HAVE_LIBV3270), AC_MSG_ERROR([LIBV3270 not present.]))
+PKG_CHECK_MODULES( [LIBV3270], [libv3270], AC_DEFINE(HAVE_LIBV3270,,[Do we have libv3270?]), AC_MSG_ERROR([LIBV3270 not present.]))
 
 AC_SUBST(LIBV3270_LIBS)
 AC_SUBST(LIBV3270_CFLAGS)
 
 AC_ARG_WITH([library-name], [AS_HELP_STRING([--with-library-name], [Set protocol library name])], [ app_cv_library="$withval" ],[ app_cv_library=`pkg-config --variable=library_name lib3270` ])
-AC_DEFINE_UNQUOTED(LIBRARY_NAME, $app_cv_library)
+AC_DEFINE_UNQUOTED(LIBRARY_NAME, $app_cv_library,[The tn3270 library name])
 AC_SUBST(LIBRARY_NAME,$app_cv_library)
 
 dnl ---------------------------------------------------------------------------
@@ -243,19 +249,7 @@ dnl ---------------------------------------------------------------------------
 
 GLIB_GSETTINGS
 
-case "$host" in
-	*-mingw32|*-pc-msys)
-		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
-		;;
-
-	*-apple-darwin*)
-		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
-		;;
-
- 	*)
-		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
-
-esac
+PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK,1,[Do we have gtk?]), AC_MSG_ERROR([GTK not present.]))
 
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)
