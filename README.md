@@ -21,7 +21,7 @@ See more details at https://softwarepublico.gov.br/social/pw3270/
 
 For the supported distributions get the install repositories and instructions from https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270
 
-[![Download on Flathub](https://flathub.org/assets/badges/flathub-badge-en.png | height=80)](https://flathub.org/apps/details/br.app.pw3270.terminal)
+[<img src="[https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/dropbox.svg](https://flathub.org/assets/badges/flathub-badge-en.png)" alt="Download on Flathub" height="80px">]([https://www.dropbox.com/sh/2qy3s6b5s4o4bws/AAAubHE8SBG7r6CJSKPflKN0a?dl=0](https://flathub.org/apps/details/br.app.pw3270.terminal))
 
 ### Windows
 
