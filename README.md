@@ -23,8 +23,7 @@ For the supported distributions get the install repositories and instructions fr
 
 [<img src="https://flathub.org/assets/badges/flathub-badge-en.png" alt="Download from flathub" height="80px">](https://flathub.org/apps/details/br.app.pw3270.terminal)
 
-### Windows[
-](https://flathub.org/apps/details/br.app.pw3270.terminal)
+### Windows
 
 Updated windows installers are available on Dropbox, google drive and one drive.
 
