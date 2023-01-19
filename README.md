@@ -23,7 +23,7 @@ For the supported distributions get the install repositories and instructions fr
 
 [<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/opensuse.svg" alt="OpenSUSE Linux" width="80px">](https://software.opensuse.org/package/pw3270)
 [<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/linux.svg" alt="Linux distribution" height="80px">](https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270)
-[[https://flathub.org/apps/details/br.app.pw3270.terminal|{{https://flathub.org/assets/badges/flathub-badge-en.png|Download on Flathub|width=240,align=middle}}]]
+[![Download on Flathub](https://flathub.org/assets/badges/flathub-badge-en.png)](https://flathub.org/apps/details/br.app.pw3270.terminal)
 
 ### Windows
 
