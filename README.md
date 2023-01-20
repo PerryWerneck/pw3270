@@ -15,12 +15,11 @@ Created originally for Banco do Brasil, it's now an official Brazilian Governmen
 
 ## Installation
 
-[<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/opensuse.svg" alt="OpenSUSE Linux" height="80px">](https://software.opensuse.org/package/pw3270)
-[<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/linux.svg" alt="Linux distribution" height="80px">](https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270)
-
-### Linux (latest and unstable versions)
+### Linux 
 
 For the supported distributions get the install repositories and instructions from https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270
+
+[<img src="https://flathub.org/assets/badges/flathub-badge-en.png" alt="Download from flathub" height="80px">](https://flathub.org/apps/details/br.app.pw3270.terminal)
 
 ### Windows
 

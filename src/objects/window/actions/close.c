@@ -33,15 +33,6 @@
 #include <lib3270.h>
 #include <lib3270/log.h>
 
-/*
-void pw3270_window_close_activated(GSimpleAction G_GNUC_UNUSED(* action), GVariant G_GNUC_UNUSED(*parameter), gpointer window) {
-
-debug("%s(%p)",__FUNCTION__,window);
-gtk_window_close(GTK_WINDOW(window));
-
-}
-*/
-
 static void activate(GAction G_GNUC_UNUSED(*action), GVariant G_GNUC_UNUSED(*parameter), GtkWidget *terminal) {
 
 	debug("%s","Window close action was activated");

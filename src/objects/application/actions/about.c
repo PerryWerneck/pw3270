@@ -60,21 +60,6 @@ static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication *
 				G_STRINGIFY(PACKAGE_NAME) ".png",
 		};
 
-		/*
-#ifdef DEBUG
-		static const char * logo = "./branding/" G_STRINGIFY(PRODUCT_NAME) "-logo.svg";
-		static const char * icon = "./branding/" G_STRINGIFY(PRODUCT_NAME) ".svg";
-#else
-		lib3270_autoptr(char) logo = lib3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) "-logo.svg",NULL);
-		lib3270_autoptr(char) icon = lib3270_build_data_filename("icons", G_STRINGIFY(PRODUCT_NAME) ".svg",NULL);
-#endif // DEBUG
-
-		const char * imgs[] = {
-			logo,
-			icon
-		};
-		*/
-
 		size_t ix;
 
 		for(ix = 0; ix < G_N_ELEMENTS(names); ix++) {

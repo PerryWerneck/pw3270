@@ -79,7 +79,6 @@ static const struct _comboboxes {
 
 struct _PW3270SettingsPage {
 	GtkWidget * views[2];
-//	GtkTreeModel * models[G_N_ELEMENTS(comboboxes)];
 	GtkWidget * combos[G_N_ELEMENTS(comboboxes)];
 };
 

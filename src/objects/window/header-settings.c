@@ -41,39 +41,7 @@ static void apply(GtkWidget *widget, GSettings *settings, PW3270SettingsPage *pa
 
 struct _PW3270SettingsPage {
 	GtkWidget * editor;
-	/*
-	GtkWidget * views[3];
-	GtkTreeModel * model;
-	*/
 };
-
-/*
-static const struct _views {
-const char * label;
-gint left;
-gint top;
-gint height;
-} views[] = {
-{
-	.label = N_("Left"),
-	.left = 0,
-	.top = 0,
-	.height = 4
-},
-{
-	.label = N_("Right"),
-	.left = 0,
-	.top = 6,
-	.height = 4
-},
-{
-	.label = N_("Available"),
-	.left = 2,
-	.top = 0,
-	.height = 10
-}
-};
-*/
 
 /*--[ Implement ]------------------------------------------------------------------------------------*/
 

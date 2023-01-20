@@ -288,7 +288,7 @@ install-application: \
 	install-icons
 
 	@$(MKDIR) \
-		$(DESTDIR)$(libdir)/$(PRODUCT_NAME)-plugins
+		$(DESTDIR)@PLUGIN_DIR@
 
 	@$(INSTALL_DATA) \
 		$(srcdir)/ui/@OSNAME@.ui.xml \

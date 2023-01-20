@@ -21,29 +21,6 @@
  #include <pw3270/application.h>
  #include <pw3270/keypad.h>
 
- /*
- static GMenu * keypad_menu_new(GApplication *application) {
-
-	GList * keypads = pw3270_application_get_keypad_models(application);
-
-	if(!keypads)
-		return NULL;
-
-	GMenu * menu = g_menu_new();
-
-	// Create keypad items.
-	GList *item;
-	for(item = keypads; item; item = g_list_next(item)) {
-		GObject * model = G_OBJECT(item->data);
-		g_autofree gchar * action_name = g_strconcat("win.keypad.",pw3270_keypad_model_get_name(model),NULL);
-		g_menu_append(menu,pw3270_keypad_model_get_label(model),action_name);
-	}
-
-	return menu;
-
- }
- */
-
  GtkBuilder * pw3270_application_builder_new(GApplication *application) {
 
 #if !defined(DEBUG)

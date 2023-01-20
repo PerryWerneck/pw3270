@@ -9,7 +9,7 @@ url="https://portal.softwarepublico.gov.br/social/pw3270/"
 arch=(i686 x86_64)
 license=(GPL)
 depends=()
-makedepends=(autoconf automake make openssl lib3270 gtk3 libv3270 python3 dbus dbus-glib imagemagick optipng)
+makedepends=(autoconf automake make openssl lib3270 gtk3 libv3270 python3 dbus dbus-glib imagemagick optipng gzip)
 checkdepends=()
 
 #groups=(gnome)

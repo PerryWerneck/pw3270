@@ -210,7 +210,6 @@ static void set_property(GObject *menuitem, GObject *widget) {
 		const struct _contents *model = (const struct _contents *) g_object_get_data(menuitem, I_("pw3270_model_data"));
 		const char *name = (const char *) g_object_get_data(menuitem, I_("pw3270_property_name"));
 
-//		debug("%s(%s,%d)",__FUNCTION__,name,model->value);
 		g_object_set(widget,name,model->value,NULL);
 
 	}
