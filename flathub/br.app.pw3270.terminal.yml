@@ -1,6 +1,6 @@
 app-id: br.app.pw3270.terminal
 runtime: org.gnome.Platform
-runtime-version: 43
+runtime-version: '43'
 sdk: org.gnome.Sdk
 command: pw3270
 finish-args:
@@ -8,7 +8,6 @@ finish-args:
   - "--share=ipc"
   - "--socket=fallback-x11"
   - "--socket=wayland"
-  - "--own-name=br.app.pw3270.pw3270.terminal"
 cleanup:
   - "/include"
   - "/lib/pkgconfig"
@@ -22,7 +21,8 @@ cleanup:
 modules:
   - name: lib3270
     buildsystem: autotools
-    config-opts: --with-product-id="br.app.pw3270"
+    config-opts: 
+      - --with-product-id="br.app.pw3270"
     sources:
       - type: git
         tag: "5.4"
