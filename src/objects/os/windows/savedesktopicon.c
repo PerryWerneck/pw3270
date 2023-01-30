@@ -238,7 +238,7 @@ static HRESULT CreateShortCut(const char * pszTargetfile, const char * pszTarget
 
 	HRESULT hRes =
 	    CoCreateInstance(
-	        &CLSID_ShellLink,			// predefined CLSID of the IShellLink object
+	        CLSID_ShellLink,			// predefined CLSID of the IShellLink object
 	        NULL,						// pointer to parent interface if part of aggregate
 	        CLSCTX_INPROC_SERVER,		// caller and called code are in same process
 	        &IID_IShellLink,			// predefined interface of the IShellLink object

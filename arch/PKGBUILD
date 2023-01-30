@@ -8,11 +8,12 @@ pkgdesc="IBM 3270 Terminal emulator for GTK"
 url="https://portal.softwarepublico.gov.br/social/pw3270/"
 arch=(i686 x86_64)
 license=(GPL)
-depends=()
+depends=(libv3270)
+optdepends=('pw3270-plugin-ipc: D-Bus remote control' 'pw3270-keypads: Aditional screen keypads')
 makedepends=(autoconf automake make openssl lib3270 gtk3 libv3270 python3 dbus dbus-glib imagemagick optipng gzip)
 checkdepends=()
 
-#groups=(gnome)
+groups=(gnome)
 
 source=($pkgname-$pkgver.tar.xz)
 sha256sums=('SKIP')
