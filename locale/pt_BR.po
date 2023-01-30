@@ -1,12 +1,12 @@
 #
-# Perry Werneck <perry.werneck@gmail.com>, 2012-2021.
+# Perry Werneck <perry.werneck@gmail.com>, 2012-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-18 12:42-0300\n"
-"PO-Revision-Date: 2021-12-23 01:36-0300\n"
+"PO-Revision-Date: 2023-01-30 20:02-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-Country: BRAZIL\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 3.38.0\n"
+"X-Generator: Gtranslator 40.0\n"
 
 #: src/objects/application/application.c:214
 #, c-format
@@ -1210,7 +1210,7 @@ msgstr "_Exibir"
 
 #: src/objects/application/actions/about.c:190
 msgid "https://github.com/PerryWerneck/pw3270"
-msgstr "https://portal.softwarepublico.gov.br/social/pw3270/"
+msgstr "https://github.com/PerryWerneck/pw3270"
 
 #: src/objects/application/actions/about.c:193
 msgid "translator-credits"
