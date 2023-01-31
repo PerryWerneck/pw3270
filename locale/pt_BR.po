@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-18 12:42-0300\n"
-"PO-Revision-Date: 2023-01-30 20:02-0300\n"
+"POT-Creation-Date: 2023-01-31 11:13-0300\n"
+"PO-Revision-Date: 2023-01-31 11:14-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -38,7 +38,7 @@ msgid "32 bits Windows"
 msgstr "Windows 32 bits"
 
 #: src/objects/actions/save.c:167 src/objects/os/linux/savedesktopicon.c:233
-#: src/objects/os/windows/savedesktopicon.c:222
+#: src/objects/os/windows/savedesktopicon.c:224
 msgid "3270 session files"
 msgstr "Arquivos de sessão TN3270"
 
@@ -260,7 +260,7 @@ msgid "Copyright © 2008 Banco do Brasil S.A."
 msgstr "Copyright © 2008 Banco do Brasil S.A."
 
 #: src/objects/os/linux/savedesktopicon.c:114
-#: src/objects/os/windows/savedesktopicon.c:107
+#: src/objects/os/windows/savedesktopicon.c:109
 #: src/objects/os/macos/savedesktopicon.c:54
 msgid "Create shortcut for the current session"
 msgstr "Criar atalho para a sessão atual."
@@ -295,7 +295,7 @@ msgstr "Recortar"
 msgid "Delete Field"
 msgstr "Apagar campo"
 
-#: src/objects/os/windows/savedesktopicon.c:80
+#: src/objects/os/windows/savedesktopicon.c:82
 msgid "Description"
 msgstr "Descrição"
 
@@ -365,7 +365,7 @@ msgstr "Erro iniciando sessão"
 msgid "Field attributes"
 msgstr "Atributos de campo"
 
-#: src/objects/os/windows/savedesktopicon.c:219
+#: src/objects/os/windows/savedesktopicon.c:221
 msgid "File for session preferences"
 msgstr "Arquivo para preferências da sessão"
 
@@ -394,7 +394,7 @@ msgstr "Configuração de servidor e emulação"
 
 #: src/objects/application/actions/about.c:119 src/objects/window/window.c:564
 #: src/objects/os/linux/savedesktopicon.c:102
-#: src/objects/os/windows/savedesktopicon.c:269
+#: src/objects/os/windows/savedesktopicon.c:271
 msgid "IBM 3270 Terminal emulator"
 msgstr "Emulador de terminal IBM 3270"
 
@@ -643,7 +643,7 @@ msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
 #: src/objects/os/linux/savedesktopicon.c:71
-#: src/objects/os/windows/savedesktopicon.c:74
+#: src/objects/os/windows/savedesktopicon.c:76
 msgid "Path for the new shortcut"
 msgstr "Caminho para o novo atalho"
 
@@ -718,7 +718,7 @@ msgid "Save session preferences"
 msgstr "Salvar preferências da sessão"
 
 #: src/objects/os/linux/savedesktopicon.c:113
-#: src/objects/os/windows/savedesktopicon.c:106
+#: src/objects/os/windows/savedesktopicon.c:108
 #: src/objects/os/macos/savedesktopicon.c:53
 msgid "Save session shortcut"
 msgstr "Salvar atalho para a sessão"
@@ -731,7 +731,7 @@ msgstr "Salvar para arquivo de sessão"
 msgid "Save to shortcut file"
 msgstr "Salvar para arquivo de atalho"
 
-#: src/objects/os/windows/savedesktopicon.c:184
+#: src/objects/os/windows/savedesktopicon.c:186
 msgid "Save to windows shortcut"
 msgstr "Salvar para atalho windows"
 
@@ -796,7 +796,7 @@ msgid "Session Trace"
 msgstr "Trace da sessão"
 
 #: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
-#: src/objects/os/windows/savedesktopicon.c:94
+#: src/objects/os/windows/savedesktopicon.c:96
 msgid "Session file"
 msgstr "Arquivo de sessão"
 
@@ -811,7 +811,7 @@ msgid "Session in new window"
 msgstr "Sessão em nova janela"
 
 #: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
-#: src/objects/os/windows/savedesktopicon.c:86
+#: src/objects/os/windows/savedesktopicon.c:88
 msgid "Session name"
 msgstr "Nome da sessão"
 
@@ -847,7 +847,7 @@ msgid "Setup toolbar"
 msgstr "Configurar barra de ferramentas"
 
 #: src/objects/os/linux/savedesktopicon.c:70
-#: src/objects/os/windows/savedesktopicon.c:73
+#: src/objects/os/windows/savedesktopicon.c:75
 msgid "Shortcut file"
 msgstr "Arquivo de atalho"
 
@@ -960,7 +960,7 @@ msgid "The file to save the current session preferences"
 msgstr "O arquivo com as preferências da sessão atual"
 
 #: src/objects/os/linux/savedesktopicon.c:86
-#: src/objects/os/windows/savedesktopicon.c:95
+#: src/objects/os/windows/savedesktopicon.c:97
 msgid "The file with the session preferences for this shortcut"
 msgstr "O arquivo com as preferências da sessão para esse atalho"
 
@@ -1005,7 +1005,7 @@ msgid "The position of the keypad"
 msgstr "A posição do painel"
 
 #: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
-#: src/objects/os/windows/savedesktopicon.c:88
+#: src/objects/os/windows/savedesktopicon.c:90
 msgid "The session name used in the window/tab title (empty for default)"
 msgstr ""
 "O nome da sessão usada no título da janela/aba. Vazio para usar o valor "
@@ -1133,14 +1133,14 @@ msgstr "Exibir"
 
 #: src/objects/application/actions/about.c:191
 msgid "View this project on github"
-msgstr "Portal do Software Público Brasileiro"
+msgstr "Visite-nos no github"
 
 #: ui/windows.ui.xml:106 ui/windows.ui.xml:568 ui/macos.ui.xml:106
 #: ui/macos.ui.xml:568 ui/linux.ui.xml:106 ui/linux.ui.xml:568
 msgid "Window with default session"
 msgstr "Janela com sessão padrão"
 
-#: src/objects/os/windows/savedesktopicon.c:187
+#: src/objects/os/windows/savedesktopicon.c:189
 msgid "Windows shortcuts"
 msgstr "Atalhos windows"
 
@@ -1150,7 +1150,7 @@ msgstr "_Aplicar"
 
 #: src/objects/actions/save.c:103 src/objects/settings/dialog.c:78
 #: src/objects/os/linux/savedesktopicon.c:140
-#: src/objects/os/windows/savedesktopicon.c:132
+#: src/objects/os/windows/savedesktopicon.c:134
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1200,7 +1200,7 @@ msgid "_Rename session"
 msgstr "Renomear sessão"
 
 #: src/objects/actions/save.c:104 src/objects/os/linux/savedesktopicon.c:141
-#: src/objects/os/windows/savedesktopicon.c:133
+#: src/objects/os/windows/savedesktopicon.c:135
 msgid "_Save"
 msgstr "_Salvar"
 
