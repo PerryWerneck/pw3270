@@ -55,6 +55,8 @@
 #include <v3270/tools.h>
 #include <v3270/keyfile.h>
 #include <v3270/settings.h>
+#include <objidl.h>
+#include <shlguid.h>
 
 static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
 static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
@@ -238,7 +240,7 @@ static HRESULT CreateShortCut(const char * pszTargetfile, const char * pszTarget
 
 	HRESULT hRes =
 	    CoCreateInstance(
-	        CLSID_ShellLink,			// predefined CLSID of the IShellLink object
+	        &CLSID_ShellLink,			// predefined CLSID of the IShellLink object
 	        NULL,						// pointer to parent interface if part of aggregate
 	        CLSCTX_INPROC_SERVER,		// caller and called code are in same process
 	        &IID_IShellLink,			// predefined interface of the IShellLink object
