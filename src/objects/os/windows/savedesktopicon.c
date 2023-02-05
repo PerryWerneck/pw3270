@@ -55,6 +55,8 @@
 #include <v3270/tools.h>
 #include <v3270/keyfile.h>
 #include <v3270/settings.h>
+#include <objidl.h>
+#include <shlguid.h>
 
 static GtkWidget * factory(V3270SimpleAction *action, GtkWidget *terminal);
 static void response(GtkWidget *dialog, gint response_id, GtkWidget *terminal);
