@@ -40,6 +40,8 @@ jobs:
       - name: BuildApp
         run: |
           ./win/ci-build.sh
+      - name: Install pw3270
+        run: make DESTDIR=./.build install
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: PerryWerneck/libipc3270
@@ -59,8 +61,6 @@ jobs:
         run: tar -C ./.build -Jxvf mingw-lib3270.tar.xz
       - name: Unpack libv3270
         run: tar -C ./.build -Jxvf mingw-libv3270.tar.xz
-      - name: Unpack pw3270
-        run: tar -C ./.build -Jxvf mingw-pw3270.tar.xz
       - name: Unpack ipcplugin
         run: tar -C ./.build -Jxvf mingw-pw3270-plugin-ipc.tar.xz
       - name: Unpack ipc3270
