@@ -48,7 +48,7 @@ fi
 if [ -e mingw-libv3270.tar.xz ]; then
 
 	echo "Unpacking libv3270"
-	tar -C / -Jxvf mingw-lib3270.tar.xz 
+	tar -C / -Jxvf mingw-libv3270.tar.xz 
 
 else
 	echo "Building libv3270"
