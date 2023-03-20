@@ -1,0 +1,68 @@
+name: MSYS2
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - winpkg
+
+jobs:
+  msys2-mingw:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oprypin/find-latest-tag@v1
+        id: gettag
+        with:
+          repository: PerryWerneck/pw3270  # The repository to scan.
+          releases-only: true  # We know that all relevant tags have a GitHub release for them.
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          update: true
+          install: xz mingw-w64-x86_64-gcc automake autoconf make git pkgconf mingw-w64-x86_64-gettext gettext-devel mingw-w64-x86_64-openssl libtool mingw-w64-x86_64-gtk3 mingw-w64-x86_64-imagemagick mingw-w64-x86_64-optipng mingw-w64-x86_64-inkscape
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: "PerryWerneck/lib3270"
+          latest: true
+          fileName: "mingw-lib3270.tar.xz"   
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: "PerryWerneck/libv3270"
+          latest: true
+          fileName: "mingw-libv3270.tar.xz"   
+      - name: BuildApp
+        run: |
+          ./win/ci-build.sh
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: "PerryWerneck/libipc3270"
+          latest: true
+          fileName: "mingw-libipc3270.tar.xz"   
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: "PerryWerneck/libhllapi"
+          latest: true
+          fileName: "mingw-hllapi.tar.xz"   
+      - name: MakePackage
+        run: tar -C ./.build -Jxvf mingw-lib3270.tar.xz
+        run: tar -C ./.build -Jxvf mingw-libv3270.tar.xz
+        run: tar -C ./.build -Jxvf mingw-pw3270.tar.xz
+        run: tar -C ./.build -Jxvf mingw-libipc3270.tar.xz
+        run: tar -C ./.build -Jxvf mingw-hllapi.tar.xz
+        run: tar -C ./.build -Jxvf mingw-pw3270.tar.xz
+        run: tar -C ./.build -Jcvf mingw-pw3270-full.tar.xz .
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.gettag.outputs.tag }}
+          artifacts: "mingw-pw3270-full.tar.xz"
+          allowUpdates: true
+          draft: false
+          makeLatest: true
+          omitBody: true
+          omitPrereleaseDuringUpdate: true
+          replacesArtifacts: true

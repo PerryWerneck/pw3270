@@ -1,5 +1,5 @@
-.bin
 .tmp
+.bin
 .obj
 .pot
 *~
@@ -71,4 +71,4 @@ intl
 m4
 po
 app-manifest.xml
-
+libtool
