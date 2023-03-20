@@ -43,19 +43,20 @@ MKDIR=@MKDIR_P@
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
-CONVERT=@CONVERT@
 DESKTOP_INSTALL=@DESKTOP_INSTALL@
 SCOUR=@SCOUR@
 APPSTREAMCLI=@APPSTREAMCLI@
 
+# CONVERT=@CONVERT@
+
 #---[ Rules ]----------------------------------------------------------------------------
 
-%.ico: \
-	$(PRODUCT_NAME).svg
-
-	@echo $@ ...
-	@$(MKDIR) `dirname $@`
-	@$(CONVERT) -density 384 -background transparent $< -define icon:auto-resize -colors 256 $@
+#%.ico: \
+#	%.svg
+#
+#	@echo $@ ...
+#	@$(MKDIR) `dirname $@`
+#	@$(CONVERT) -density 384 -background transparent $< -define icon:auto-resize -colors 256 $@
 
 $(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/%.svg: \
 	$(srcdir)/%.svg
@@ -101,10 +102,9 @@ endif
 
 validate:
 
-ifneq ($(SCOUR),no)
+ifneq ($(APPSTREAMCLI),no)
 	@$(APPSTREAMCLI) validate metainfo.xml
 endif
-
 
 install: \
 	install-@OSNAME@
@@ -159,7 +159,10 @@ install-macos: \
 
 install-windows: \
 	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).svg \
-	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.svg \
-	$(DESTDIR)$(bindir)/$(PRODUCT_NAME).ico
+	$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME)-logo.svg
+	
+	@$(INSTALL_DATA) \
+		$(PRODUCT_NAME).ico \
+		$(DESTDIR)$(bindir)/$(PRODUCT_NAME).ico
 
 

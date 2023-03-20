@@ -72,7 +72,6 @@ MSGCAT=@MSGCAT@
 WINDRES=@WINDRES@
 AR=@AR@
 VALGRIND=@VALGRIND@
-CONVERT=@CONVERT@
 STRIP=@STRIP@
 
 #---[ Build Paths ]----------------------------------------------------------------------
@@ -126,6 +125,13 @@ $(OBJDBG)/%.o: \
 		-Wall -Wextra -fstack-check \
 		-DDEBUG=1 \
 		-o $@ -c $<
+
+%.ico: \
+	$(srcdir)/branding/%.ico
+
+	@echo $< ...
+	@$(MKDIR) $(@D)
+	@cp "$<" "$@"
 
 $(OBJDBG)/%.o: \
 	%.rc \
@@ -217,30 +223,6 @@ install-%: \
 		DESTDIR=$(DESTDIR) \
 		prefix=$(prefix) \
 		install
-
-%.ico: \
-	$(srcdir)/branding/%.svg
-
-	@echo $@ ...
-	@$(MKDIR) $(@D)
-	@$(CONVERT) \
-		-density 384 \
-		-background transparent \
-		$< \
-		-define icon:auto-resize \
-		-colors 256 \
-		$@
-
-%.png: \
-	$(srcdir)/branding/%.svg
-
-	@echo $@ ...
-	@$(MKDIR) $(@D)
-	@$(CONVERT) \
-		+antialias \
-		-background transparent \
-		$< \
-		$@
 
 #---[ Main Target ]----------------------------------------------------------------------
 
