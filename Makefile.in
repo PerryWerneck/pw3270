@@ -300,7 +300,7 @@ install-macos-application: \
 		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
 install-windows-application: \
-	$(PRODUCT_NAME).png \
+	branding/$(PRODUCT_NAME).png \
 	strip
 
 	@$(MKDIR) \
@@ -314,7 +314,7 @@ install-windows-application: \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)
 
 	@$(INSTALL_DATA) \
-		$(PRODUCT_NAME).png \
+		branding/$(PRODUCT_NAME).png \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png
 
 	@$(INSTALL_DATA) \
