@@ -201,7 +201,7 @@ install_schemas() {
 
 		for schema in ${schemas}
 		do
-        	cp -v "${prefix}/share/glib-2.0/schemas" "${buildroot}${prefix}/share/glib-2.0/schemas"
+        	cp -v "${prefix}/share/glib-2.0/schemas/${schema}" "${buildroot}${prefix}/share/glib-2.0/schemas"
 			if [ "$?" != "0" ]; then
 				exit -1
 			fi
