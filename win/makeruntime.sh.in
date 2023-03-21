@@ -124,8 +124,6 @@ install_bin() {
 
 				if [ -e ${prefix}/bin/${FILENAME} ]; then
 
-					echo "${prefix}/bin/${FILENAME}"
-
 					AGAIN=1
 					cp -v "${prefix}/bin/${FILENAME}" "${bindir}/${FILENAME}"
 					if [ "$?" != "0" ]; then
@@ -133,8 +131,6 @@ install_bin() {
 					fi
 
 				elif [ -e ${prefix}/lib/${FILENAME} ]; then
-
-					echo "${prefix}/lib/${FILENAME}"
 
 					AGAIN=1
 					cp -v "${prefix}/lib/${FILENAME}" "${bindir}/${FILENAME}"
@@ -165,5 +161,57 @@ install_bin() {
 
 }
 
+install_locale() {
+
+		
+
+        mkdir -p ${buildroot}${prefix}/share/locale/pt_BR/LC_MESSAGES
+
+        locales="
+                gettext-runtime.mo
+                gettext-tools.mo
+                glib20.mo
+                gtk30.mo
+                gtk30-properties.mo
+        "
+
+        for i in ${locales}; do
+ 
+			find "${prefix}/share/locale" -name ${i}
+
+        done
+
+}
+
+install_locale() {		
+
+        mkdir -p ${buildroot}${prefix}/share/locale/pt_BR/LC_MESSAGES
+
+        locales="
+                gettext-runtime.mo
+                gettext-tools.mo
+                glib20.mo
+                gtk30.mo
+                gtk30-properties.mo
+        "
+
+		FILENAMES=$(mktemp)
+        for i in ${locales}
+		do
+ 			find "${prefix}/share/locale" -name ${i} >> ${FILENAMES}
+		done
+
+		while read FILENAME
+		do
+			mkdir -p $(dirname "${buildroot}${FILENAME}")
+			cp -v "${FILENAME}" "${buildroot}${FILENAME}"
+			if [ "$?" != "0" ]; then
+				exit -1
+			fi
+		done < ${FILENAMES}
+		rm -f ${FILENAMES}
+}
+
 install_bin
+install_locale
 

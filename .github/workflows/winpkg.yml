@@ -40,7 +40,7 @@ jobs:
       - name: BuildApp
         run: ./win/ci-build.sh
       - name: Install pw3270
-        run: make DESTDIR=./.build install
+        run: make DESTDIR=${PWD}/.build install
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: PerryWerneck/libipc3270
