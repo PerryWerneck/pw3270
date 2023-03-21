@@ -68,7 +68,7 @@ jobs:
       - name: Unpack hllapi
         run: tar -C ./.build -Jxvf mingw-hllapi.tar.xz
       - name: MakePackage
-        run: tar -C ./.build -Jcvf mingw-pw3270-full.tar.xz .
+        run: tar -C ./.build/mingw64 -Jcvf mingw-pw3270-full.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
