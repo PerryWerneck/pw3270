@@ -38,8 +38,7 @@ jobs:
           latest: true
           fileName: mingw-libv3270.tar.xz
       - name: BuildApp
-        run: |
-          ./win/ci-build.sh
+        run: ./win/ci-build.sh
       - name: Install pw3270
         run: make DESTDIR=./.build install
       - uses: robinraju/release-downloader@v1.7
@@ -67,7 +66,9 @@ jobs:
         run: tar -C ./.build -Jxvf mingw-libipc3270.tar.xz
       - name: Unpack hllapi
         run: tar -C ./.build -Jxvf mingw-hllapi.tar.xz
-      - name: MakePackage
+      - name: Make Runtime
+        run: /bin/bash ./win/makeruntime.sh
+      - name: Make Package
         run: tar -C ./.build/mingw64 -Jcvf mingw-pw3270-full.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
