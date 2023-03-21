@@ -161,28 +161,6 @@ install_bin() {
 
 }
 
-install_locale() {
-
-		
-
-        mkdir -p ${buildroot}${prefix}/share/locale/pt_BR/LC_MESSAGES
-
-        locales="
-                gettext-runtime.mo
-                gettext-tools.mo
-                glib20.mo
-                gtk30.mo
-                gtk30-properties.mo
-        "
-
-        for i in ${locales}; do
- 
-			find "${prefix}/share/locale" -name ${i}
-
-        done
-
-}
-
 install_locale() {		
 
         mkdir -p ${buildroot}${prefix}/share/locale/pt_BR/LC_MESSAGES
@@ -212,6 +190,69 @@ install_locale() {
 		rm -f ${FILENAMES}
 }
 
+install_schemas() {		
+
+        mkdir -p ${buildroot}${prefix}/share/glib-2.0/schemas
+
+        schemas="
+            org.gtk.Settings.FileChooser.gschema.xml
+			gschema.dtd
+        "
+
+		for schema in ${schemas}
+		do
+        	cp -v "${prefix}/share/glib-2.0/schemas" "${buildroot}${prefix}/share/glib-2.0/schemas"
+			if [ "$?" != "0" ]; then
+				exit -1
+			fi
+		done
+
+		glib-compile-schemas \
+                --targetdir="${buildroot}${prefix}/share/glib-2.0/schemas" \
+                "${buildroot}${prefix}/share/glib-2.0/schemas"
+
+		if [ "$?" != "0" ]; then
+			exit -1
+		fi
+}
+
+install_theme() {		
+
+	mkdir -p "${buildroot}${prefix}/etc"
+	cp -rv "${prefix}/etc/gtk-3.0" "${buildroot}${prefix}/etc"
+	if [ "$?" != "0" ]; then
+		exit -1
+	fi
+
+	# https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
+	mkdir -p ${buildroot}${prefix}/etc/gtk-3.0
+	rm -f ${buildroot}${prefix}/etc/gtk-3.0/settings.ini
+	rm -f ${buildroot}${prefix}/etc/gtk-3.0/gtkrc
+
+	echo "[Settings]" > ${buildroot}${prefix}/etc/gtk-3.0/settings.ini
+	echo "gtk-theme-name=win32" >> ${buildroot}${prefix}/etc/gtk-3.0/settings.ini
+
+	mkdir -p ${buildroot}${prefix}/share/icons
+	if [ "$?" != 0 ]; then
+		echo "Can´t create icons folder"
+		exit -1
+	fi
+
+	cp -rv /usr/share/icons ${buildroot}${prefix}/share/icons
+	if [ "$?" != 0 ]; then
+		echo "Can´t copy ${1} icons"
+		exit -1
+	fi
+
+	#echo "${srcdir}/gtk.css"
+	#if [ -e "${srcdir}/gtk.css" ]; then
+	#	cp "${srcdir}/gtk.css" "${TARGET}/share/themes/Default/gtk-3.0/gtk.css"
+	#fi
+
+}
+
 install_bin
 install_locale
+install_schemas
+install_theme
 
