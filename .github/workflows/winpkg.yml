@@ -26,7 +26,7 @@ jobs:
           update: true
           install: xz mingw-w64-x86_64-gcc automake autoconf make git pkgconf
             mingw-w64-x86_64-gettext gettext-devel mingw-w64-x86_64-openssl
-            libtool mingw-w64-x86_64-gtk3 mingw-w64-x86_64-optipng
+            libtool mingw-w64-x86_64-gtk3 mingw-w64-x86_64-nsis
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: PerryWerneck/lib3270
