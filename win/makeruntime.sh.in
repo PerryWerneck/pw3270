@@ -32,10 +32,16 @@ prefix="@prefix@"
 imgdir=.build
 bindir="${imgdir}/bin"
 
+if [ -z "${WIN_ROOT}" ]; then
+	WIN_ROOT="/c/Windows"
+fi
+
 export LANG=C
 
 install_bin() {
 
+	mkdir -p "${bindir}"
+	
 	AGAIN=1
 	until [ $AGAIN = 0 ]; do
 
@@ -102,6 +108,7 @@ install_bin() {
 			winspool.drv
 			ntdll
 			winhttp
+			hid
 		"
 
 		# Remove system DLLs from list
@@ -135,9 +142,14 @@ install_bin() {
 						exit -1
 					fi
 
+				elif [ -e  "${WIN_ROOT}/System32/${FILENAME}" ]; then
+
+					echo "Ignoring ${WIN_ROOT}/System32/${FILENAME}"
+
 				else 
 
-					echo "Can't find ${FILENAME}"
+					echo "Can't find ${prefix}/bin/${FILENAME} or ${WIN_ROOT}/System32/${FILENAME}"
+					find "${prefix}" -iname "${FILENAME}"
 					exit -1
 
 				fi
