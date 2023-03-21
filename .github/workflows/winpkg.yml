@@ -69,7 +69,7 @@ jobs:
       - name: Make Runtime
         run: /bin/bash ./win/makeruntime.sh
       - name: Make Package
-        run: tar -C ./.build/mingw64 -Jcvf mingw-pw3270-full.tar.xz .
+        run: tar -C ./.build -Jcvf mingw-pw3270-full.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}

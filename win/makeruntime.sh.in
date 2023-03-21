@@ -29,8 +29,8 @@
 srcdir="$(dirname $(dirname $(readlink -f "${0}")))"
 prefix="@prefix@"
 
-imgdir=.build
-bindir="${imgdir}/bin"
+buildroot=.build
+bindir="${buildroot}${prefix}/bin"
 
 if [ -z "${WIN_ROOT}" ]; then
 	WIN_ROOT="/c/Windows"
@@ -41,15 +41,15 @@ export LANG=C
 install_bin() {
 
 	mkdir -p "${bindir}"
-	
+
 	AGAIN=1
 	until [ $AGAIN = 0 ]; do
 
 		SOURCES=$(mktemp)
 		REQUIRES=$(mktemp)
 
-		find "${imgdir}" -iname "*.dll" >	${SOURCES}
-		find "${imgdir}" -iname "*.exe" >>	${SOURCES}
+		find "${buildroot}${prefix}" -iname "*.dll" >	${SOURCES}
+		find "${buildroot}${prefix}" -iname "*.exe" >>	${SOURCES}
 	
 		while read FILENAME
 		do
