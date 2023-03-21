@@ -67,6 +67,8 @@
 		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
 		g_autofree gchar * filename = g_build_filename(appdir,"gschemas.compiled",NULL);
 
+		// TODO: Scan appdir + filename, appdir + /share/glib-2.0/schemas/  
+
 		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR)) {
 
 			GError * error = NULL;
