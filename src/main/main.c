@@ -74,10 +74,19 @@ int main (int argc, char **argv) {
 
 #ifdef _WIN32
 	{
-		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
-		g_autofree gchar * locdir = g_build_filename(appdir,"locale",NULL);
-		debug("Locale from \"%s\"\n",locdir);
-		bindtextdomain( PACKAGE_NAME, locdir );
+		g_autofree gchar * pkgdir = g_win32_get_package_installation_directory_of_module(NULL);
+		{
+			g_autofree gchar * appdir = g_build_filename(pkgdir,"locale",NULL);
+			if(g_file_test(appdir,G_FILE_TEST_IS_DIR)) {
+				bindtextdomain( PACKAGE_NAME, appdir );
+			} else {
+				g_autofree gchar * sysdir = g_build_filename(pkgdir,"share","locale",NULL);
+				if(g_file_test(sysdir,G_FILE_TEST_IS_DIR)) {
+					bindtextdomain( PACKAGE_NAME, sysdir );
+				}
+			}
+
+		}
 	}
 #endif // _WIN32
 
