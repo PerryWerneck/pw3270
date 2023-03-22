@@ -20,12 +20,37 @@
  #include "private.h"
  #include <pw3270/application.h>
  #include <pw3270/keypad.h>
+ #include <pw3270.h>
+
+ gchar * pw3270_build_data_filename(const char *filename) {
+
+		g_autofree gchar * pkgdir = g_win32_get_package_installation_directory_of_module(NULL);
+
+		gchar * path = g_build_filename(pkgdir,filename,NULL);
+		if(g_file_test(path,G_FILE_TEST_IS_REGULAR)) {
+			return path;
+		}
+		g_free(path);
+
+		path = g_build_filename(pkgdir,"share",G_STRINGIFY(PRODUCT_NAME),filename,NULL);
+		if(g_file_test(path,G_FILE_TEST_IS_REGULAR)) {
+			return path;
+		}
+		g_free(path);
+
+		g_error("Cant find '%s'",filename);
+		return NULL;
+ }
 
  GtkBuilder * pw3270_application_builder_new(GApplication *application) {
 
 #if !defined(DEBUG)
 
-	lib3270_autoptr(char) filename = lib3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) ".ui.xml",NULL);
+	#if defined(G_OS_WIN32)
+		g_autofree gchar * filename = pw3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) ".ui.xml");
+	#else
+		lib3270_autoptr(char) filename = lib3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) ".ui.xml",NULL);
+	#endif // G_OS_WIN32
 
 #elif defined(G_OS_UNIX)
 
