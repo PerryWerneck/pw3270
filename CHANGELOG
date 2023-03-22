@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Wed Mar 22 11:05:26 UTC 2023 - perry.werneck@gmail.com
+
+- Update to version 5.5+git20230204:
+  * Updating translation.
+  * Fixing win32 build, adding 'changes' file in windows app.
+  * Updating deb and mingw packages.
+  * Updating _service
+  * Updating translation.
+  * Adding 'CHANGELOG'
+  * Updating deb control files.
+  * Updating schema path on macos bundle script.
+
+-------------------------------------------------------------------
 Thu Apr 07 23:35:08 UTC 2022 - perry.werneck@gmail.com
 
 - Update to version 5.4:
