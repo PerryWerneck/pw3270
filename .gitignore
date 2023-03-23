@@ -1,7 +1,4 @@
-.bin
-.tmp
-.obj
-.pot
+.*
 *~
 *.log
 *.status
@@ -71,4 +68,6 @@ intl
 m4
 po
 app-manifest.xml
+libtool
+
 
