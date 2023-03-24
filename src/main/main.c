@@ -77,12 +77,12 @@ int main (int argc, char **argv) {
 		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
 		g_autofree gchar * locdir = g_build_filename(appdir,"locale",NULL);
 		debug("Locale from \"%s\"\n",locdir);
-		bindtextdomain( PACKAGE_NAME, locdir );
+		bindtextdomain( G_STRINGIFY(PRODUCT_NAME), locdir );
 	}
 #endif // _WIN32
 
-	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
-	textdomain(PACKAGE_NAME);
+	bind_textdomain_codeset(G_STRINGIFY(PRODUCT_NAME), "UTF-8");
+	textdomain(G_STRINGIFY(PRODUCT_NAME));
 
 	// Setup and start application.
 	g_set_application_name(G_STRINGIFY(PRODUCT_NAME));
