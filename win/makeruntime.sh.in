@@ -263,6 +263,6 @@ install_bin
 install_locale
 install_schemas
 install_icons
-install_theme "Adwaita"
+# install_theme "Adwaita"
 
 
