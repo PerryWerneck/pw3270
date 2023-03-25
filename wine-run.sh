@@ -1,9 +1,19 @@
 #!/bin/bash
 
-make Debug
-make gschemas.compiled
+make DESTDIR=${PWD}/.build install 
+if [ "$?" != "0" ]; then
+	exit -1
+fi
 
-cp gschemas.compiled .bin/Debug
+bash ./win/makeruntime.sh 
+if [ "$?" != "0" ]; then
+	exit -1
+fi
 
-wine .bin/Debug/pw3270.exe
+wine .build/usr/x86_64-w64-mingw32/sys-root/mingw/bin/pw3270.exe
+if [ "$?" != "0" ]; then
+	exit -1
+fi
+
+
 

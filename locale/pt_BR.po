@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-22 07:20-0300\n"
+"POT-Creation-Date: 2023-03-25 08:48-0300\n"
 "PO-Revision-Date: 2023-01-31 11:14-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
@@ -474,7 +474,7 @@ msgstr "Altura do painel em linhas"
 msgid "Keypad width in columns"
 msgstr "Largura do painel em colunas"
 
-#: src/main/builder.c:112
+#: src/main/builder.c:137
 msgid "Keypads"
 msgstr "Painéis"
 

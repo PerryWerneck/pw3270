@@ -216,7 +216,7 @@ install_schemas() {
 		fi
 }
 
-install_theme() {		
+install_icons() {		
 
 	mkdir -p "${buildroot}${prefix}/etc"
 	cp -rv "${prefix}/etc/gtk-3.0" "${buildroot}${prefix}/etc"
@@ -244,15 +244,25 @@ install_theme() {
 		exit -1
 	fi
 
-	#echo "${srcdir}/gtk.css"
-	#if [ -e "${srcdir}/gtk.css" ]; then
-	#	cp "${srcdir}/gtk.css" "${TARGET}/share/themes/Default/gtk-3.0/gtk.css"
-	#fi
+	if [ -e "${srcdir}/win/gtk.css" ]; then
+		mkdir -p "${buildroot}${prefix}/share/themes/Default/gtk-3.0"
+		cp "${srcdir}/win/gtk.css" "${buildroot}${prefix}/share/themes/Default/gtk-3.0/gtk.css"
+	fi
 
+}
+
+install_theme() {		
+	cp -rv /usr/share/icons/${1} ${buildroot}${prefix}/share/icons
+	if [ "$?" != 0 ]; then
+		echo "Can´t copy ${1} icons"
+		exit -1
+	fi
 }
 
 install_bin
 install_locale
 install_schemas
-install_theme
+install_icons
+install_theme "Adwaita"
+
 
