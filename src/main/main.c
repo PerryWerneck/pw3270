@@ -79,8 +79,8 @@ int main (int argc, char **argv) {
 	}
 #endif // _WIN32
 
-	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
-	textdomain(PACKAGE_NAME);
+	bind_textdomain_codeset(G_STRINGIFY(PRODUCT_NAME), "UTF-8");
+	textdomain(G_STRINGIFY(PRODUCT_NAME));
 
 	// Setup and start application.
 	g_set_application_name(G_STRINGIFY(PRODUCT_NAME));

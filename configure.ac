@@ -119,7 +119,9 @@ case "$host" in
 
 esac
 
-app_release_date=$(date +%Y-%m-%d)
+DATE_FMT="+%Y-%m-%d"
+SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-$(date +%s)}"
+app_release_date=$(date -u -d "@$SOURCE_DATE_EPOCH" "$DATE_FMT" 2>/dev/null || date -u -r "$SOURCE_DATE_EPOCH" "$DATE_FMT" 2>/dev/null || date -u "$DATE_FMT")
 AC_SUBST(RELEASE_DATE,$app_release_date)
 AC_SUBST(OSNAME,$app_cv_osname)
 AC_SUBST(RLS_LDFLAGS,$app_rls_ldflags)
