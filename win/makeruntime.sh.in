@@ -28,7 +28,9 @@
 # Setup default paths
 srcdir="$(dirname $(dirname $(readlink -f "${0}")))"
 prefix="@prefix@"
-GDK_LOADERS=$(@PKG_CONFIG@ --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0 | sed -e "s@${prefix}@@g")
+GDK_LOADERS=$(@PKG_CONFIG@ --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0)
+GTK_BINARY_VERSION=$(@PKG_CONFIG@ --variable=gtk_binary_version gtk+-3.0)
+GTK_LIBDIR=$(@PKG_CONFIG@ --variable=libdir gtk+-3.0)
 
 buildroot=.build
 bindir="${buildroot}${prefix}/bin"
@@ -269,6 +271,19 @@ install_icons() {
 	
 }
 
+install_loaders() {
+
+	if [ -d "${GDK_LOADERS}" ]; then
+		mkdir -p "${buildroot}/${GDK_LOADERS}"
+		cp -rv "${GDK_LOADERS}/*" "${buildroot}/${GDK_LOADERS}"
+		if [ "$?" != "0" ]; then
+			exit -1
+		fi
+	fi
+
+}
+
+install_loaders
 install_bin
 install_locale
 install_schemas
