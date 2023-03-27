@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -fr ${PWD}/.build
+
 make DESTDIR=${PWD}/.build install 
 if [ "$?" != "0" ]; then
 	exit -1

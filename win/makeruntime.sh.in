@@ -216,7 +216,7 @@ install_schemas() {
 		fi
 }
 
-install_icons() {		
+install_theme() {		
 
 	mkdir -p "${buildroot}${prefix}/etc"
 	cp -rv "${prefix}/etc/gtk-3.0" "${buildroot}${prefix}/etc"
@@ -230,19 +230,7 @@ install_icons() {
 	rm -f ${buildroot}${prefix}/etc/gtk-3.0/gtkrc
 
 	echo "[Settings]" > ${buildroot}${prefix}/etc/gtk-3.0/settings.ini
-	echo "gtk-theme-name=win32" >> ${buildroot}${prefix}/etc/gtk-3.0/settings.ini
-
-	mkdir -p ${buildroot}${prefix}/share/icons
-	if [ "$?" != 0 ]; then
-		echo "Can´t create icons folder"
-		exit -1
-	fi
-
-	cp -rv /usr/share/icons ${buildroot}${prefix}/share/icons
-	if [ "$?" != 0 ]; then
-		echo "Can´t copy ${1} icons"
-		exit -1
-	fi
+	echo "gtk-theme-name=${1}" >> ${buildroot}${prefix}/etc/gtk-3.0/settings.ini
 
 	if [ -e "${srcdir}/win/gtk.css" ]; then
 		mkdir -p "${buildroot}${prefix}/share/themes/Default/gtk-3.0"
@@ -251,18 +239,39 @@ install_icons() {
 
 }
 
-install_theme() {		
-	cp -rv /usr/share/icons/${1} ${buildroot}${prefix}/share/icons
-	if [ "$?" != 0 ]; then
-		echo "Can´t copy ${1} icons"
+install_icons() {
+
+	mkdir -p "${buildroot}${prefix}/share/icons"
+
+	if [ -d "${prefix}/share/icons/${1}" ]; then
+
+		cp -rv "${prefix}/share/icons/${1}" "${buildroot}${prefix}/share/icons"
+		if [ "$?" != 0 ]; then
+			echo "Can´t copy ${1} icons"
+			exit -1
+		fi
+
+	elif [ -d "/usr/share/icons/${1}" ]; then
+
+		cp -rv "/usr/share/icons/${1}" "${buildroot}${prefix}/share/icons"
+		if [ "$?" != 0 ]; then
+			echo "Can´t copy ${1} icons"
+			exit -1
+		fi
+
+	else
+
+		echo "Can´t find ${1} icons"
 		exit -1
+	
 	fi
+	
 }
 
 install_bin
 install_locale
 install_schemas
-install_icons
-# install_theme "Adwaita"
+install_theme "Adwaita"
+install_icons "Adwaita"
 
 
