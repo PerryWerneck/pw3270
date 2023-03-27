@@ -28,6 +28,7 @@
 # Setup default paths
 srcdir="$(dirname $(dirname $(readlink -f "${0}")))"
 prefix="@prefix@"
+GDK_LOADERS=$(@PKG_CONFIG@ --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0 | sed -e "s@${prefix}@@g")
 
 buildroot=.build
 bindir="${buildroot}${prefix}/bin"
