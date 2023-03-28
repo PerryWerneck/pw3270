@@ -107,7 +107,7 @@ case "$host" in
 		app_cv_osname="linux"
 		app_rls_ldflags=""
 
-		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir)"
+		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir) -DDATADIR=\$(datadir)"
 		LDFLAGS="$LDFLAGS -pthread"
 		AC_SUBST(DEFAULT_UI_STYLE,0)
 

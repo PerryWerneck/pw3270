@@ -29,7 +29,7 @@ datarootdir=@datarootdir@
 localedir=@localedir@
 docdir=@docdir@
 sysconfdir=@sysconfdir@
-datadir=$(datarootdir)/@PRODUCT_NAME@
+datadir="$(datarootdir)/@PRODUCT_NAME@"
 
 #---[ Configuration ]--------------------------------------------------------------------
 
@@ -97,7 +97,6 @@ CFLAGS= \
 	-Isrc/include \
 	-I$(srcdir)/src/include \
 	-DBUILD_DATE=`date +%Y%m%d` \
-	-DDATADIR=$(datadir) \
 	@LIBV3270_CFLAGS@ \
 	@GTK_CFLAGS@
 

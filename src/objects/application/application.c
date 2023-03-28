@@ -430,8 +430,6 @@ void startup(GApplication *application) {
 
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
 
-//	GSettings *settings = pw3270_application_get_settings(application);
-
 	//
 	// Common actions
 	//
@@ -524,6 +522,32 @@ void startup(GApplication *application) {
 void activate(GApplication *application) {
 
 	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application),NULL);
+
+	if(!PW3270_APPLICATION(application)->settings) {
+
+		GtkWidget * dialog = gtk_message_dialog_new_with_markup(
+								 NULL,
+								 0,
+								 GTK_MESSAGE_ERROR,
+								 GTK_BUTTONS_CLOSE,
+								 _("Initialization has failed")
+							 );
+
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_("Unable to initialize settings. Application may crash in unexpected ways"));
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_("System settings error"));
+
+		gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
+
+		gtk_widget_show_all(dialog);
+
+		gtk_dialog_run(GTK_DIALOG(dialog));
+
+		gtk_widget_destroy(dialog);
+
+		g_application_quit(G_APPLICATION(application));
+
+	}
 
 	// Present the new window
 	pw3270_window_set_current_page(window,0);
