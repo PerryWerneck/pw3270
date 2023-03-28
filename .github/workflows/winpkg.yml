@@ -8,7 +8,7 @@ on:
     branches:
       - winpkg
 jobs:
-  msys2-mingw:
+  msys2-mingw64:
     runs-on: windows-latest
     defaults:
       run:
@@ -26,7 +26,8 @@ jobs:
           update: true
           install: xz mingw-w64-x86_64-gcc automake autoconf make git pkgconf
             mingw-w64-x86_64-gettext gettext-devel mingw-w64-x86_64-openssl
-            libtool mingw-w64-x86_64-gtk3 mingw-w64-x86_64-nsis
+            libtool mingw-w64-x86_64-gtk3 mingw-w64-x86_64-librsvg mingw-w64-x86_64-gdk-pixbuf2
+            mingw-w64-x86_64-nsis 
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: PerryWerneck/lib3270
@@ -69,11 +70,11 @@ jobs:
       - name: Make Runtime
         run: /bin/bash ./win/makeruntime.sh
       - name: Make Package
-        run: tar -C ./.build -Jcvf mingw-pw3270-full.tar.xz .
+        run: tar -C ./.build -Jcvf mingw64-pw3270-full.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: mingw-pw3270-full.tar.xz
+          artifacts: mingw64-pw3270-full.tar.xz
           allowUpdates: true
           draft: false
           makeLatest: true
