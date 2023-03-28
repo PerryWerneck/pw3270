@@ -20,11 +20,23 @@
  #include <config.h>
  #include <pw3270.h>
 
+ gchar * pw3270_build_data_path(const char *name) {
+
+		gchar * path = g_build_filename(G_STRINGIFY(DATADIR),name,NULL);
+
+		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
+			return path;
+		}
+		g_free(path);
+
+		g_message("Cant find path for '%s'",path);
+		return NULL;
+
+ }
+
  gchar * pw3270_build_data_filename(const char *filename) {
 
 		gchar * path = g_build_filename(G_STRINGIFY(DATADIR),filename,NULL);
-
-		printf("\n\n\n%s\n\n\n",path);
 
 		if(g_file_test(path,G_FILE_TEST_IS_REGULAR)) {
 			return path;

@@ -486,25 +486,33 @@ void startup(GApplication *application) {
 	// Load keypad models
 	//
 	{
-		lib3270_autoptr(char) keypad_path = lib3270_build_data_filename("keypad",NULL);
+		g_autofree gchar *keypad_path = pw3270_build_data_path("keypad");
 
-		g_autoptr(GError) error = NULL;
-		g_autoptr(GDir) dir = g_dir_open(keypad_path,0,&error);
+		if(keypad_path) {
 
-		if(dir) {
+			g_message("Searching for keypads in '%s'",keypad_path);
 
-			const gchar *name = g_dir_read_name(dir);
-			while(!error && name) {
-				g_autofree gchar * path = g_build_filename(keypad_path,name,NULL);
-				app->keypads = pw3270_keypad_model_new_from_xml(app->keypads,path);
-				name = g_dir_read_name(dir);
+			g_autoptr(GError) error = NULL;
+			g_autoptr(GDir) dir = g_dir_open(keypad_path,0,&error);
+
+			if(dir) {
+
+				const gchar *name = g_dir_read_name(dir);
+				while(!error && name) {
+					g_autofree gchar * path = g_build_filename(keypad_path,name,NULL);
+					app->keypads = pw3270_keypad_model_new_from_xml(app->keypads,path);
+					name = g_dir_read_name(dir);
+				}
+
 			}
 
+			if(error) {
+				g_message("Can't read %s: %s",keypad_path,error->message);
+			}
+
+
 		}
 
-		if(error) {
-			g_message("Can't read %s: %s",keypad_path,error->message);
-		}
 	}
 
 	//

@@ -64,6 +64,7 @@ struct _Pw3270SettingsPage {
 
 void gtk_file_chooser_set_pw3270_filters(GtkFileChooser *chooser);
 gchar * pw3270_build_data_filename(const char *filename);
+gchar * pw3270_build_data_path(const char *path);
 
 G_END_DECLS
 

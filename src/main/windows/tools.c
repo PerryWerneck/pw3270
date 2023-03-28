@@ -20,6 +20,27 @@
  #include <config.h>
  #include <pw3270.h>
 
+ gchar * pw3270_build_data_path(const char *name) {
+
+ 		g_autofree gchar * pkgdir = g_win32_get_package_installation_directory_of_module(NULL);
+
+		gchar * path = g_build_filename(pkgdir,name,NULL);
+		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
+			return path;
+		}
+		g_free(path);
+
+		path = g_build_filename(pkgdir,"share",G_STRINGIFY(PRODUCT_NAME),name,NULL);
+		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
+			return path;
+		}
+
+		g_free(path);
+		g_message("Cant find path for '%s'",path);
+		return NULL;
+
+ }
+
  gchar * pw3270_build_data_filename(const char *filename) {
 
  		g_autofree gchar * pkgdir = g_win32_get_package_installation_directory_of_module(NULL);
