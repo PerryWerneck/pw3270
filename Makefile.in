@@ -29,6 +29,7 @@ datarootdir=@datarootdir@
 localedir=@localedir@
 docdir=@docdir@
 sysconfdir=@sysconfdir@
+datadir=$(datarootdir)/@PRODUCT_NAME@
 
 #---[ Configuration ]--------------------------------------------------------------------
 
@@ -55,8 +56,8 @@ SOURCES= \
 	$(wildcard $(srcdir)/src/main/@OSNAME@/*.rc)
 
 SCHEMAS= \
-	$(wildcard schemas/@OSNAME@/*.gschema.xml) \
-	$(wildcard schemas/common/*.gschema.xml)
+	$(wildcard schemas/*.gschema.xml) \
+	$(wildcard schemas/*.gschema.xml)
 
 #---[ Tools ]----------------------------------------------------------------------------
 
@@ -96,6 +97,7 @@ CFLAGS= \
 	-Isrc/include \
 	-I$(srcdir)/src/include \
 	-DBUILD_DATE=`date +%Y%m%d` \
+	-DDATADIR=$(datadir) \
 	@LIBV3270_CFLAGS@ \
 	@GTK_CFLAGS@
 
@@ -204,7 +206,7 @@ $(POTDIR)/%.pot: \
 	@touch $@
 
 $(OBJDIR)/schemas/%.xml: \
-	schemas/@OSNAME@/%.xml
+	schemas/%.xml
 
 	@$(MKDIR) $(@D)
 	@cp "$^" "$@"
