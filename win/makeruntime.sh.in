@@ -276,6 +276,7 @@ install_icons() {
 install_loaders() {
 
 	if [ -d "${prefix}${GDK_LOADERS}" ]; then
+		mkdir -p "${buildroot}/${prefix}${GDK_LOADERS}"
 		cp -rv ${prefix}${GDK_LOADERS}/* "${buildroot}/${prefix}${GDK_LOADERS}"
 		if [ "$?" != "0" ]; then
 			exit -1
