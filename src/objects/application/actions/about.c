@@ -32,6 +32,43 @@
 #include <pw3270/actions.h>
 #include <pw3270/application.h>
 
+static char * find_logo() {
+
+	static const char * names[] = {
+			G_STRINGIFY(PRODUCT_NAME) "-about.svg",
+			G_STRINGIFY(PRODUCT_NAME) "-logo.svg",
+			G_STRINGIFY(PRODUCT_NAME) ".svg",
+			G_STRINGIFY(PRODUCT_NAME) "-about.png",
+			G_STRINGIFY(PRODUCT_NAME) "-logo.png",
+			G_STRINGIFY(PRODUCT_NAME) ".png",
+
+			G_STRINGIFY(PACKAGE_NAME) "-about.svg",
+			G_STRINGIFY(PACKAGE_NAME) "-logo.svg",
+			G_STRINGIFY(PACKAGE_NAME) ".svg",
+			G_STRINGIFY(PACKAGE_NAME) "-about.png",
+			G_STRINGIFY(PACKAGE_NAME) "-logo.png",
+			G_STRINGIFY(PACKAGE_NAME) ".png",
+	};
+
+	size_t ix;
+
+	for(ix = 0; ix < G_N_ELEMENTS(names); ix++) {
+
+		char * filename = lib3270_build_data_filename(names[ix],NULL);
+
+		if(filename) {
+
+			if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
+				return filename;
+			free(filename);
+
+		}
+
+	}
+
+	return NULL;
+}
+
 static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication *application) {
 
 	GtkAboutDialog	* dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
@@ -46,49 +83,18 @@ static GtkWidget * factory(PW3270Action G_GNUC_UNUSED(*action), GtkApplication *
 
 	// Get application logo
 	{
-		static const char * names[] = {
-				G_STRINGIFY(PRODUCT_NAME) "-about.svg",
-				G_STRINGIFY(PRODUCT_NAME) "-logo.svg",
-				G_STRINGIFY(PRODUCT_NAME) ".svg",
-				G_STRINGIFY(PRODUCT_NAME) "-logo.png",
-				G_STRINGIFY(PRODUCT_NAME) ".png",
-
-				G_STRINGIFY(PACKAGE_NAME) "-about.svg",
-				G_STRINGIFY(PACKAGE_NAME) "-logo.svg",
-				G_STRINGIFY(PACKAGE_NAME) ".svg",
-				G_STRINGIFY(PACKAGE_NAME) "-logo.png",
-				G_STRINGIFY(PACKAGE_NAME) ".png",
-		};
-
-		size_t ix;
-
-		for(ix = 0; ix < G_N_ELEMENTS(names); ix++) {
-
-#ifdef DEBUG
-			g_autofree gchar * filename = g_build_filename(".","branding",names[ix],NULL);
-			debug("Searching for '%s'",filename);
-#else
-			lib3270_autoptr(char) filename = lib3270_build_data_filename(names[ix],NULL);
-#endif // DEBUG
-
-			if(!g_file_test(filename,G_FILE_TEST_IS_REGULAR))
-				continue;
-
-			GError * error	= NULL;
-			g_autoptr(GdkPixbuf) pix = gdk_pixbuf_new_from_file_at_size(filename,-1,150,&error);
+		char * logo = find_logo();
+		if(logo) {
+			GError * error  = NULL;
+			g_autoptr(GdkPixbuf) pix = gdk_pixbuf_new_from_file_at_size(logo,-1,150,&error);
 			if(error) {
-				g_warning("Can't load \"%s\": %s",filename,error->message);
+				g_message("Can't load \"%s\": %s",logo,error->message);
 				g_error_free(error);
-				continue;
-			}
-
-			if(pix) {
+			} else {
 				gtk_about_dialog_set_logo(dialog,pix);
-				break;
 			}
-
+			free(logo);
 		}
-
 	}
 
 	// Set version
