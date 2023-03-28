@@ -75,8 +75,6 @@ case "$host" in
 		AC_CONFIG_FILES(src/main/windows/app-manifest.xml)
 
 		# Windows and linux doesn't use the same defaults.
-		AC_CONFIG_FILES(schemas/windows/application.gschema.xml)
-		AC_CONFIG_FILES(schemas/windows/window.gschema.xml)
 		AC_CONFIG_FILES(win/makeruntime.sh)
 		AC_CONFIG_FILES(win/pw3270.nsi)
 
@@ -93,7 +91,7 @@ case "$host" in
 		AC_SUBST(PROGRAMFILES,$app_cv_programfiles)
 		AC_SUBST(WINARCH,$app_cv_winarch)
 		AC_SUBST(NSISREDIR,$app_cv_nsisredir)
-
+		AC_SUBST(DEFAULT_UI_STYLE,0)
 		;;
 
 	*-apple-darwin*)
@@ -102,9 +100,7 @@ case "$host" in
 
 		CFLAGS="$CFLAGS -pthread"
 		LDFLAGS="$LDFLAGS -pthread"
-
-		AC_CONFIG_FILES(schemas/macos/application.gschema.xml)
-		AC_CONFIG_FILES(schemas/macos/window.gschema.xml)
+		AC_SUBST(DEFAULT_UI_STYLE,0)
 		;;
 
  	*)
@@ -113,9 +109,7 @@ case "$host" in
 
 		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir)"
 		LDFLAGS="$LDFLAGS -pthread"
-
-		AC_CONFIG_FILES(schemas/linux/application.gschema.xml)
-		AC_CONFIG_FILES(schemas/linux/window.gschema.xml)
+		AC_SUBST(DEFAULT_UI_STYLE,0)
 
 esac
 
@@ -202,8 +196,15 @@ AC_ARG_WITH([product-name], [AS_HELP_STRING([--with-product-name], [Set product 
 AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product,[The product name])
 AC_SUBST(PRODUCT_NAME,$app_cv_product)
 
-AC_ARG_WITH([application-id], [AS_HELP_STRING([--application-id], [Set the application ID])], [ app_cv_application_id="$withval" ],[ app_cv_application_id=`pkg-config --variable=product_id lib3270`.terminal ])
+AC_ARG_WITH([product-id], [AS_HELP_STRING([--product-id], [Set the product ID])], [ app_cv_product_id="$withval" ],[ app_cv_product_id=`$PKG_CONFIG --variable=product_id lib3270` ])
+AC_DEFINE_UNQUOTED(PRODUCT_ID, $app_cv_product_id,[The product ID])
+AC_SUBST(PRODUCT_ID,$app_cv_product_id)
 
+app_cv_object_path="/"`echo $app_cv_product_id | sed -e "s@\.@/@g"`"/"
+AC_DEFINE_UNQUOTED(PRODUCT_PATH, "$app_cv_object_path",[The schema path])
+AC_SUBST(PRODUCT_PATH,$app_cv_object_path)
+
+AC_ARG_WITH([application-id], [AS_HELP_STRING([--application-id], [Set the application ID])], [ app_cv_application_id="$withval" ],[ app_cv_application_id=$app_cv_product_id.terminal ])
 AC_DEFINE_UNQUOTED(APPLICATION_ID, $app_cv_application_id,[The application ID])
 AC_SUBST(APPLICATION_ID,$app_cv_application_id)
 
@@ -294,7 +295,11 @@ dnl Configure which files to generate.
 dnl ---------------------------------------------------------------------------
 
 AC_CONFIG_FILES(Makefile)
+
+AC_CONFIG_FILES(schemas/application.gschema.xml)
+AC_CONFIG_FILES(schemas/window.gschema.xml)
 AC_CONFIG_FILES(schemas/Makefile)
+
 AC_CONFIG_FILES(locale/Makefile)
 
 AC_CONFIG_FILES(branding/Makefile)

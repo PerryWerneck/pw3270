@@ -96,8 +96,14 @@
 /* The product name */
 #undef PLUGIN_DIR
 
+/* The product ID */
+#undef PRODUCT_ID
+
 /* The product name */
 #undef PRODUCT_NAME
+
+/* The schema path */
+#undef PRODUCT_PATH
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
