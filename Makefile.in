@@ -55,8 +55,8 @@ SOURCES= \
 	$(wildcard $(srcdir)/src/main/@OSNAME@/*.rc)
 
 SCHEMAS= \
-	$(wildcard schemas/@OSNAME@/*.gschema.xml) \
-	$(wildcard schemas/common/*.gschema.xml)
+	$(wildcard schemas/*.gschema.xml) \
+	$(wildcard schemas/*.gschema.xml)
 
 #---[ Tools ]----------------------------------------------------------------------------
 
@@ -198,7 +198,7 @@ $(POTDIR)/%.pot: \
 	@touch $@
 
 $(OBJDIR)/schemas/%.xml: \
-	schemas/@OSNAME@/%.xml
+	schemas/%.xml
 
 	@$(MKDIR) $(@D)
 	@cp "$^" "$@"

@@ -148,9 +148,9 @@
  }
 
  GSettings * pw3270_application_settings_new() {
-	return settings_new("br.app." G_STRINGIFY(PRODUCT_NAME));
- }
+	return settings_new(G_STRINGIFY(PRODUCT_ID));
+ }	
 
  GSettings * pw3270_application_window_settings_new() {
-	return settings_new("br.app." G_STRINGIFY(PRODUCT_NAME) ".window");
+	return settings_new(G_STRINGIFY(PRODUCT_ID) ".window");
  }
