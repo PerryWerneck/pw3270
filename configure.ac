@@ -104,7 +104,7 @@ case "$host" in
 		LDFLAGS="$LDFLAGS -pthread"
 
 		# Windows and unix doesn't use the same defaults.
-		AC_SUBST(DEFAULT_UI_STYLE,0)
+		AC_SUBST(DEFAULT_UI_STYLE,1)
 		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"false")
 		;;
 
@@ -116,7 +116,7 @@ case "$host" in
 		LDFLAGS="$LDFLAGS -pthread"
 
 		# Windows and unix doesn't use the same defaults.
-		AC_SUBST(DEFAULT_UI_STYLE,0)
+		AC_SUBST(DEFAULT_UI_STYLE,1)
 		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"false")
 
 esac

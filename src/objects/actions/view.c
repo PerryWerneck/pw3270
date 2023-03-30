@@ -195,7 +195,6 @@ static GSList * append_action(GSList * list, const gchar *prefix, GAction *actio
 
 	GdkPixbuf * pixbuf = g_action_get_pixbuf(action, GTK_ICON_SIZE_MENU, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 	if(!pixbuf) {
-		debug("Action \"%s\": Doesn't have a pixbuf",g_action_get_name(action));
 		return list;
 	}
 
