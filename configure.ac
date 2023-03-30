@@ -92,6 +92,7 @@ case "$host" in
 		AC_SUBST(WINARCH,$app_cv_winarch)
 		AC_SUBST(NSISREDIR,$app_cv_nsisredir)
 		AC_SUBST(DEFAULT_UI_STYLE,0)
+		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"true")
 		;;
 
 	*-apple-darwin*)
@@ -110,6 +111,7 @@ case "$host" in
 		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir) -DDATADIR=\$(datadir)"
 		LDFLAGS="$LDFLAGS -pthread"
 		AC_SUBST(DEFAULT_UI_STYLE,0)
+		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"false")
 
 esac
 
