@@ -9,6 +9,7 @@ on:
       - winpkg
 jobs:
   msys2-mingw64:
+    name: Publish for Windows 64
     runs-on: windows-latest
     defaults:
       run:
