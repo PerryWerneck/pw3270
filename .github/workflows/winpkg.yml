@@ -59,7 +59,7 @@ jobs:
           latest: true
           fileName: mingw-pw3270-plugin-ipc.tar.xz
       - name: Unpack lib3270
-        run: tar -C ./.build -Jxvf mingw-lib3270.tar.xz
+        run: tar -C ./.build -Jxvf mingw-lib3270.x86_64.tar.xz
       - name: Unpack libv3270
         run: tar -C ./.build -Jxvf mingw-libv3270.tar.xz
       - name: Unpack ipcplugin
