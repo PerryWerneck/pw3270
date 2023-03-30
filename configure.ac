@@ -75,7 +75,7 @@ case "$host" in
 		AC_CONFIG_FILES(src/main/windows/app-manifest.xml)
 
 		# Windows and linux doesn't use the same defaults.
-		AC_CONFIG_FILES(win/makeruntime.sh)
+		AC_CONFIG_FILES(win/bundle)
 		AC_CONFIG_FILES(win/pw3270.nsi)
 
 		if test "$host_cpu" = "x86_64"; then
