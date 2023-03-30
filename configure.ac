@@ -74,7 +74,6 @@ case "$host" in
 		AC_CONFIG_FILES(src/main/windows/resources.rc)
 		AC_CONFIG_FILES(src/main/windows/app-manifest.xml)
 
-		# Windows and linux doesn't use the same defaults.
 		AC_CONFIG_FILES(win/bundle)
 		AC_CONFIG_FILES(win/pw3270.nsi)
 
@@ -91,6 +90,8 @@ case "$host" in
 		AC_SUBST(PROGRAMFILES,$app_cv_programfiles)
 		AC_SUBST(WINARCH,$app_cv_winarch)
 		AC_SUBST(NSISREDIR,$app_cv_nsisredir)
+
+		# Windows and unix doesn't use the same defaults.
 		AC_SUBST(DEFAULT_UI_STYLE,0)
 		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"true")
 		;;
@@ -101,7 +102,10 @@ case "$host" in
 
 		CFLAGS="$CFLAGS -pthread"
 		LDFLAGS="$LDFLAGS -pthread"
+
+		# Windows and unix doesn't use the same defaults.
 		AC_SUBST(DEFAULT_UI_STYLE,0)
+		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"false")
 		;;
 
  	*)
@@ -110,6 +114,8 @@ case "$host" in
 
 		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir) -DDATADIR=\$(datadir)"
 		LDFLAGS="$LDFLAGS -pthread"
+
+		# Windows and unix doesn't use the same defaults.
 		AC_SUBST(DEFAULT_UI_STYLE,0)
 		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"false")
 
@@ -158,6 +164,8 @@ AC_PATH_TOOL([STRIP], [strip], [true])
 
 AC_PATH_TOOL([DESKTOP_INSTALL],[desktop-file-install],[no])
 AC_PATH_TOOL([GLIB_SCHEMA_COMPILER],[glib-compile-schemas],[false])
+
+AC_PATH_TOOL([OPTIPNG], [optipng], [true])
 
 PKG_CHECK_EXISTS
 
