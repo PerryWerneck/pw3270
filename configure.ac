@@ -92,6 +92,7 @@ case "$host" in
 		AC_SUBST(WINARCH,$app_cv_winarch)
 		AC_SUBST(NSISREDIR,$app_cv_nsisredir)
 		AC_SUBST(DEFAULT_UI_STYLE,0)
+		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"true")
 		;;
 
 	*-apple-darwin*)
@@ -107,9 +108,10 @@ case "$host" in
 		app_cv_osname="linux"
 		app_rls_ldflags=""
 
-		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir)"
+		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir) -DDATADIR=\$(datadir)"
 		LDFLAGS="$LDFLAGS -pthread"
 		AC_SUBST(DEFAULT_UI_STYLE,0)
+		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"false")
 
 esac
 
@@ -139,7 +141,6 @@ dnl ---------------------------------------------------------------------------
 
 AC_PATH_TOOL([AR], [ar], [ar])
 AC_PATH_TOOL([CONVERT], [convert], [no])
-AC_PATH_TOOL([OPTIPNG],[optipng],[no])
 AC_PATH_TOOL([ZIP],[zip],[no])
 AC_PATH_TOOL([DLLTOOL],[dlltool],[no])
 AC_PATH_TOOL([WINDRES], [windres], [no])
