@@ -23,16 +23,16 @@ cd ${myDIR}
 rm -fr ${myDIR}/.build
 
 #
-# Unpack lib3270
+# Unpack LIB3270
 #
 echo "Unpacking lib3270"
-tar -C / -Jxf mingw-lib3270.${MSYSTEM_CARCH}.tar.xz > $LOGFILE 2>&1 || die "lib3270 unpack failure"
+tar -C / -Jxf mingw-lib3270.${MSYSTEM_CARCH}.tar.xz  > $LOGFILE 2>&1 || die "Unpack lib3270 failure"
 
 #
-# Unpack libv3270
+# Build LIBV3270
 #
-echo "Unpacking lib3270"
-tar -C / -Jxf mingw-libv3270.${MSYSTEM_CARCH}.tar.xz > $LOGFILE 2>&1 || die "libv3270 unpack failure"
+echo "Unpacking libv3270"
+tar -C / -Jxf mingw-libv3270.tar.xz  > $LOGFILE 2>&1 || die "Unpack libv3270 failure"
 
 #
 # Build PW3270
@@ -43,6 +43,9 @@ cd ${myDIR}
 ./configure > $LOGFILE 2>&1 || die "Configure failure"
 make clean > $LOGFILE 2>&1 || die "Make clean failure"
 make all  > $LOGFILE 2>&1 || die "Make failure"
+
+make DESTDIR=.bin/package install
+tar --create --xz --file=mingw-pw3270.${MSYSTEM_CARCH}.tar.xz --directory=.bin/package --verbose .
 
 echo "Build complete"
 
