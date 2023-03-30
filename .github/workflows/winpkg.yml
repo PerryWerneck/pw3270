@@ -69,9 +69,9 @@ jobs:
       - name: Unpack hllapi
         run: tar -C ./.build -Jxvf mingw-hllapi.tar.xz
       - name: Make Runtime
-        run: /bin/bash ./win/makeruntime.sh
+        run: /bin/bash ./win/bundle
       - name: Make Package
-        run: tar -C ./.build -Jcvf mingw64-pw3270-full.tar.xz .
+        run: tar -C ./.build -Jcvf mingw64-pw3270.x86_64.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
