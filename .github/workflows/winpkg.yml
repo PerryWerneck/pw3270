@@ -59,7 +59,7 @@ jobs:
           latest: true
           fileName: mingw-w64-x86_64-pw3270-plugin-ipc.tar.xz
       - name: Unpack lib3270
-        run: tar -C ./.build -Jxvf mingw-w64-x86_64-lib3270.x86_64.tar.xz
+        run: tar -C ./.build -Jxvf mingw-w64-x86_64-lib3270.tar.xz
       - name: Unpack libv3270
         run: tar -C ./.build -Jxvf mingw-w64-x86_64-libv3270.tar.xz
       - name: Unpack ipcplugin
@@ -75,7 +75,7 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: mingw-w64-x86_64-pw3270.tar.xz
+          artifacts: "*-pw3270.tar.xz"
           allowUpdates: true
           draft: false
           makeLatest: true
