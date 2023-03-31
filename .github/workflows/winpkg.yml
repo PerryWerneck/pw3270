@@ -57,7 +57,7 @@ jobs:
         with:
           repository: PerryWerneck/pw3270-plugin-ipc
           latest: true
-          fileName: mingw-pw3270-plugin-ipc.tar.xz
+          fileName: mingw-w64-x86_64-pw3270-plugin-ipc.tar.xz
       - name: Unpack lib3270
         run: tar -C ./.build -Jxvf mingw-w64-x86_64-lib3270.x86_64.tar.xz
       - name: Unpack libv3270
