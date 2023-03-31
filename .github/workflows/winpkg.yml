@@ -52,7 +52,7 @@ jobs:
         with:
           repository: PerryWerneck/libhllapi
           latest: true
-          fileName: mingw-hllapi.tar.xz
+          fileName: mingw-w64-x86_64-hllapi.tar.xz
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: PerryWerneck/pw3270-plugin-ipc
@@ -67,7 +67,7 @@ jobs:
       - name: Unpack ipc3270
         run: tar -C ./.build -Jxf mingw-w64-x86_64-libipc3270.tar.xz
       - name: Unpack hllapi
-        run: tar -C ./.build -Jxf mingw-hllapi.tar.xz
+        run: tar -C ./.build -Jxf mingw-w64-x86_64-hllapi.tar.xz
       - name: Make Runtime
         run: /bin/bash ./win/bundle
       - name: Make Package
