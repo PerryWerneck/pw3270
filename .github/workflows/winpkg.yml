@@ -33,12 +33,12 @@ jobs:
         with:
           repository: PerryWerneck/lib3270
           latest: true
-          fileName: mingw-lib3270.x86_64.tar.xz
+          fileName: mingw-w64-x86_64-lib3270.tar.xz
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: PerryWerneck/libv3270
           latest: true
-          fileName: mingw-libv3270.tar.xz
+          fileName: mingw-w64-x86_64-libv3270.tar.xz
       - name: BuildApp
         run: ./win/ci-build.sh
       - name: Install pw3270
@@ -59,9 +59,9 @@ jobs:
           latest: true
           fileName: mingw-pw3270-plugin-ipc.tar.xz
       - name: Unpack lib3270
-        run: tar -C ./.build -Jxvf mingw-lib3270.x86_64.tar.xz
+        run: tar -C ./.build -Jxvf mingw-w64-x86_64lib3270.x86_64.tar.xz
       - name: Unpack libv3270
-        run: tar -C ./.build -Jxvf mingw-libv3270.tar.xz
+        run: tar -C ./.build -Jxvf mingw-w64-x86_64-libv3270.tar.xz
       - name: Unpack ipcplugin
         run: tar -C ./.build -Jxvf mingw-pw3270-plugin-ipc.tar.xz
       - name: Unpack ipc3270
@@ -71,11 +71,11 @@ jobs:
       - name: Make Runtime
         run: /bin/bash ./win/bundle
       - name: Make Package
-        run: tar -C ./.build -Jcvf mingw64-pw3270.x86_64.tar.xz .
+        run: tar -C ./.build -Jcvf mingw-w64-x86_64-pw3270.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: mingw64-pw3270.x86_64.tar.xz
+          artifacts: mingw-w64-x86_64-pw3270.tar.xz
           allowUpdates: true
           draft: false
           makeLatest: true
