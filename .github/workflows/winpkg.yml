@@ -59,19 +59,19 @@ jobs:
           latest: true
           fileName: mingw-w64-x86_64-pw3270-plugin-ipc.tar.xz
       - name: Unpack lib3270
-        run: tar -C ./.build -Jxvf mingw-w64-x86_64-lib3270.tar.xz
+        run: tar -C ./.build -Jxf mingw-w64-x86_64-lib3270.tar.xz
       - name: Unpack libv3270
-        run: tar -C ./.build -Jxvf mingw-w64-x86_64-libv3270.tar.xz
+        run: tar -C ./.build -Jxf mingw-w64-x86_64-libv3270.tar.xz
       - name: Unpack ipcplugin
-        run: tar -C ./.build -Jxvf mingw-w64-x86_64-plugin-ipc.tar.xz
+        run: tar -C ./.build -Jxf mingw-w64-x86_64-pw3270-plugin-ipc.tar.xz
       - name: Unpack ipc3270
-        run: tar -C ./.build -Jxvf mingw-w64-x86_64-libipc3270.tar.xz
+        run: tar -C ./.build -Jxf mingw-w64-x86_64-libipc3270.tar.xz
       - name: Unpack hllapi
-        run: tar -C ./.build -Jxvf mingw-hllapi.tar.xz
+        run: tar -C ./.build -Jxf mingw-hllapi.tar.xz
       - name: Make Runtime
         run: /bin/bash ./win/bundle
       - name: Make Package
-        run: tar -C ./.build -Jcvf mingw-w64-x86_64-pw3270.tar.xz .
+        run: tar -C ./.build -Jcf mingw-w64-x86_64-pw3270.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
