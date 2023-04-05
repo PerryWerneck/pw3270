@@ -34,7 +34,7 @@ jobs:
         with:
           repository: "PerryWerneck/libv3270"
           latest: true
-          fileName: "mingw-w64-x86_64-lib3270-5.4-0-x86_64.pkg.tar.zst"      
+          fileName: "mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst"      
       - name: CI-Build
         run: ./win/ci-build.sh
 
