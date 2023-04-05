@@ -1,10 +1,28 @@
 #!/bin/bash
 #
+# SPDX-License-Identifier: LGPL-3.0-or-later 
+#
+# Copyright (C) 2008 Banco do Brasil S.A.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#
 # References:
 #
 #	* https://www.msys2.org/docs/ci/
 #
-#
+
 echo "Running ${0}"
 
 LOGFILE=build.log
@@ -16,36 +34,20 @@ die ( ) {
 	exit -1
 }
 
-myDIR=$(dirname $(dirname $(readlink -f ${0})))
-echo "myDIR=${myDIR}"
-
-cd ${myDIR}
-rm -fr ${myDIR}/.build
+cd $(dirname $(dirname $(readlink -f ${0})))
 
 #
-# Unpack LIB3270
+# Install pre-reqs
 #
-echo "Unpacking lib3270"
-tar -C / -Jxf ${MINGW_PACKAGE_PREFIX}-lib3270.tar.xz > $LOGFILE 2>&1 || die "Unpack lib3270 failure"
+echo "Installing pre-reqs..."
+pacman -U --noconfirm *.pkg.tar.zst || die "pacman failure"
 
 #
-# Unpack LIBV3270
+# Build
 #
-echo "Unpacking libv3270"
-tar -C / -Jxf ${MINGW_PACKAGE_PREFIX}-libv3270.tar.xz > $LOGFILE 2>&1 || die "Unpack libv3270 failure"
-
-#
-# Build PW3270
-#
-echo "Building PW3270"
-cd ${myDIR}
-./autogen.sh > $LOGFILE 2>&1 || die "Autogen failure"
-./configure > $LOGFILE 2>&1 || die "Configure failure"
-make clean > $LOGFILE 2>&1 || die "Make clean failure"
-make all  > $LOGFILE 2>&1 || die "Make failure"
-
-make DESTDIR=.bin/package install
-tar --create --xz --file=${MINGW_PACKAGE_PREFIX}-pw3270.tar.xz --directory=.bin/package --verbose .
+echo "Building package..."
+dos2unix PKGBUILD.mingw  || die "dos2unix failure"
+makepkg BUILDDIR=/tmp/pkg -p PKGBUILD.mingw || die "makepkg failure"
 
 echo "Build complete"
 
