@@ -46,7 +46,7 @@ GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@
 GDK_LOADERS=$(echo $(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
 
 buildroot=.build
-bindir="${buildroot}${prefix}/bin"
+bindir="${buildroot}${MINGW_PREFIX}/bin"
 
 if [ -z "${WIN_ROOT}" ]; then
 	WIN_ROOT="/c/Windows"
@@ -64,8 +64,8 @@ install_bin() {
 		SOURCES=$(mktemp)
 		REQUIRES=$(mktemp)
 
-		find "${buildroot}${prefix}" -iname "*.dll" >	${SOURCES}
-		find "${buildroot}${prefix}" -iname "*.exe" >>	${SOURCES}
+		find "${buildroot}" -iname "*.dll" >	${SOURCES}
+		find "${buildroot}" -iname "*.exe" >>	${SOURCES}
 	
 		while read FILENAME
 		do
@@ -138,18 +138,18 @@ install_bin() {
 
 			if [ ! -e "${bindir}/${FILENAME}" ]; then
 
-				if [ -e ${prefix}/bin/${FILENAME} ]; then
+				if [ -e ${MINGW_PREFIX}/bin/${FILENAME} ]; then
 
 					AGAIN=1
-					cp -v "${prefix}/bin/${FILENAME}" "${bindir}/${FILENAME}"
+					cp -v "${MINGW_PREFIX}/bin/${FILENAME}" "${bindir}/${FILENAME}"
 					if [ "$?" != "0" ]; then
 						exit -1
 					fi
 
-				elif [ -e ${prefix}/lib/${FILENAME} ]; then
+				elif [ -e ${MINGW_PREFIX}/lib/${FILENAME} ]; then
 
 					AGAIN=1
-					cp -v "${prefix}/lib/${FILENAME}" "${bindir}/${FILENAME}"
+					cp -v "${MINGW_PREFIX}/lib/${FILENAME}" "${bindir}/${FILENAME}"
 					if [ "$?" != "0" ]; then
 						exit -1
 					fi
@@ -160,8 +160,8 @@ install_bin() {
 
 				else 
 
-					echo "Can't find ${prefix}/bin/${FILENAME} or ${WIN_ROOT}/System32/${FILENAME}"
-					find "${prefix}" -iname "${FILENAME}"
+					echo "Can't find ${MINGW_PREFIX}/bin/${FILENAME} or ${WIN_ROOT}/System32/${FILENAME}"
+					find "${MINGW_PREFIX}" -iname "${FILENAME}"
 					exit -1
 
 				fi
@@ -179,7 +179,7 @@ install_bin() {
 
 install_locale() {		
 
-        mkdir -p ${buildroot}${prefix}/share/locale/pt_BR/LC_MESSAGES
+        mkdir -p ${buildroot}${MINGW_PREFIX}/share/locale/pt_BR/LC_MESSAGES
 
         locales="
                 gettext-runtime.mo
@@ -192,7 +192,7 @@ install_locale() {
 		FILENAMES=$(mktemp)
         for i in ${locales}
 		do
- 			find "${prefix}/share/locale" -name ${i} >> ${FILENAMES}
+ 			find "${MINGW_PREFIX}/share/locale" -name ${i} >> ${FILENAMES}
 		done
 
 		while read FILENAME
@@ -208,7 +208,7 @@ install_locale() {
 
 install_schemas() {		
 
-        mkdir -p ${buildroot}${prefix}/share/glib-2.0/schemas
+        mkdir -p ${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas
 
         schemas="
             org.gtk.Settings.FileChooser.gschema.xml
@@ -217,15 +217,15 @@ install_schemas() {
 
 		for schema in ${schemas}
 		do
-        	cp -v "${prefix}/share/glib-2.0/schemas/${schema}" "${buildroot}${prefix}/share/glib-2.0/schemas"
+        	cp -v "${MINGW_PREFIX}/share/glib-2.0/schemas/${schema}" "${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas"
 			if [ "$?" != "0" ]; then
 				exit -1
 			fi
 		done
 
 		glib-compile-schemas \
-                --targetdir="${buildroot}${prefix}/share/glib-2.0/schemas" \
-                "${buildroot}${prefix}/share/glib-2.0/schemas"
+                --targetdir="${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas" \
+                "${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas"
 
 		if [ "$?" != "0" ]; then
 			exit -1
@@ -234,34 +234,34 @@ install_schemas() {
 
 install_theme() {		
 
-	mkdir -p "${buildroot}${prefix}/etc"
-	cp -rv "${prefix}/etc/gtk-3.0" "${buildroot}${prefix}/etc"
+	mkdir -p "${buildroot}${MINGW_PREFIX}/etc"
+	cp -rv "${MINGW_PREFIX}/etc/gtk-3.0" "${buildroot}${MINGW_PREFIX}/etc"
 	if [ "$?" != "0" ]; then
 		exit -1
 	fi
 
 	# https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
-	mkdir -p ${buildroot}${prefix}/etc/gtk-3.0
-	rm -f ${buildroot}${prefix}/etc/gtk-3.0/settings.ini
-	rm -f ${buildroot}${prefix}/etc/gtk-3.0/gtkrc
+	mkdir -p ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0
+	rm -f ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
+	rm -f ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/gtkrc
 
-	echo "[Settings]" > ${buildroot}${prefix}/etc/gtk-3.0/settings.ini
-	echo "gtk-theme-name=${1}" >> ${buildroot}${prefix}/etc/gtk-3.0/settings.ini
+	echo "[Settings]" > ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
+	echo "gtk-theme-name=${1}" >> ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
 
 	if [ -e "${srcdir}/win/gtk.css" ]; then
-		mkdir -p "${buildroot}${prefix}/share/themes/Default/gtk-3.0"
-		cp "${srcdir}/win/gtk.css" "${buildroot}${prefix}/share/themes/Default/gtk-3.0/gtk.css"
+		mkdir -p "${buildroot}${MINGW_PREFIX}/share/themes/Default/gtk-3.0"
+		cp "${srcdir}/win/gtk.css" "${buildroot}${MINGW_PREFIX}/share/themes/Default/gtk-3.0/gtk.css"
 	fi
 
 }
 
 install_icons() {
 
-	mkdir -p "${buildroot}${prefix}/share/icons"
+	mkdir -p "${buildroot}${MINGW_PREFIX}/share/icons"
 
-	if [ -d "${prefix}/share/icons/${1}" ]; then
+	if [ -d "${MINGW_PREFIX}/share/icons/${1}" ]; then
 
-		cp -rv "${prefix}/share/icons/${1}" "${buildroot}${prefix}/share/icons"
+		cp -rv "${MINGW_PREFIX}/share/icons/${1}" "${buildroot}${MINGW_PREFIX}/share/icons"
 		if [ "$?" != 0 ]; then
 			echo "Can´t copy ${1} icons"
 			exit -1
@@ -269,7 +269,7 @@ install_icons() {
 
 	elif [ -d "/usr/share/icons/${1}" ]; then
 
-		cp -rv "/usr/share/icons/${1}" "${buildroot}${prefix}/share/icons"
+		cp -rv "/usr/share/icons/${1}" "${buildroot}${MINGW_PREFIX}/share/icons"
 		if [ "$?" != 0 ]; then
 			echo "Can´t copy ${1} icons"
 			exit -1
@@ -286,14 +286,14 @@ install_icons() {
 
 install_loaders() {
 
-	if [ -d "${prefix}${GDK_LOADERS}" ]; then
-		mkdir -p "${buildroot}/${prefix}${GDK_LOADERS}"
-		cp -rv ${prefix}${GDK_LOADERS}/* "${buildroot}/${prefix}${GDK_LOADERS}"
+	if [ -d "${MINGW_PREFIX}${GDK_LOADERS}" ]; then
+		mkdir -p "${buildroot}/${MINGW_PREFIX}${GDK_LOADERS}"
+		cp -rv ${MINGW_PREFIX}${GDK_LOADERS}/* "${buildroot}/${MINGW_PREFIX}${GDK_LOADERS}"
 		if [ "$?" != "0" ]; then
 			exit -1
 		fi
 	
-		find ${buildroot}/${prefix}${GDK_LOADERS} -iname "*.a" -exec rm -f {} \;
+		find ${buildroot}/${MINGW_PREFIX}${GDK_LOADERS} -iname "*.a" -exec rm -f {} \;
 	
 	fi
 
