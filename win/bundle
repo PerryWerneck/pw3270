@@ -27,12 +27,23 @@
 
 # Setup default paths
 srcdir="$(dirname $(dirname $(readlink -f "${0}")))"
-prefix="@prefix@"
 
-GTK_PREFIX=$(@PKG_CONFIG@ --variable=prefix gtk+-3.0)
-GTK_BINARY_VERSION=$(@PKG_CONFIG@ --variable=gtk_binary_version gtk+-3.0)
-GTK_LIBDIR=$(echo $(@PKG_CONFIG@ --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
-GDK_LOADERS=$(echo $(@PKG_CONFIG@ --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
+if [ -z ${MINGW_PREFIX} ]; then
+	if [ -d "/usr/x86_64-w64-mingw32/sys-root/mingw" ]; then
+		MINGW_PREFIX="/usr/x86_64-w64-mingw32/sys-root/mingw"
+		PKG_CONFIG="/usr/bin/x86_64-w64-mingw32-pkg-config"
+	else
+		echo "Cant determine mingw prefix"
+		exit -1
+	fi
+else
+	PKG_CONFIG=${MINGW_PREFX}/bin/pkg-config
+fi
+
+GTK_PREFIX=$(${PKG_CONFIG} --variable=prefix gtk+-3.0)
+GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
+GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
+GDK_LOADERS=$(echo $(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
 
 buildroot=.build
 bindir="${buildroot}${prefix}/bin"

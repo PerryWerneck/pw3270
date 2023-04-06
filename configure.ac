@@ -74,7 +74,6 @@ case "$host" in
 		AC_CONFIG_FILES(src/main/windows/resources.rc)
 		AC_CONFIG_FILES(src/main/windows/app-manifest.xml)
 
-		AC_CONFIG_FILES(win/bundle)
 		AC_CONFIG_FILES(win/pw3270.nsi)
 
 		if test "$host_cpu" = "x86_64"; then
