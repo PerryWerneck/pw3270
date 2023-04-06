@@ -41,8 +41,16 @@ jobs:
           fileName: "mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst"      
       - name: BuildApp
         run: ./win/ci-build.sh
-      - name: Install pw3270
-        run: make DESTDIR=${PWD}/.build install
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.gettag.outputs.tag }}
+          artifacts: "*-pw3270-*.pkg.tar.zst"
+          allowUpdates: true
+          draft: false
+          makeLatest: true
+          omitBody: true
+          omitPrereleaseDuringUpdate: true
+          replacesArtifacts: true
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: PerryWerneck/libipc3270
@@ -68,6 +76,8 @@ jobs:
         run: tar -C ./.build --zstd -xf mingw-w64-x86_64-libipc3270-5.5-0-x86_64.pkg.tar.zst
       - name: Unpack hllapi
         run: tar -C ./.build --zstd -xf mingw-w64-x86_64-libhllapi-5.5-0-x86_64.pkg.tar.zst
+      - name: Unpack pw3270
+        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-pw3270-*-x86_64.pkg.tar.zst
       - name: Make Runtime
         run: /bin/bash ./win/bundle
       - name: Make Package
