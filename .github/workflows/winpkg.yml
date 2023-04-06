@@ -66,22 +66,10 @@ jobs:
           repository: PerryWerneck/pw3270-plugin-ipc
           latest: true
           fileName: mingw-w64-x86_64-pw3270-plugin-ipc-5.5-0-x86_64.pkg.tar.zst
-      - name: Unpack lib3270
-        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-lib3270-5.4-0-x86_64.pkg.tar.zst
-      - name: Unpack libv3270
-        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst
-      - name: Unpack ipcplugin
-        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-pw3270-plugin-ipc-5.5-0-x86_64.pkg.tar.zst
-      - name: Unpack ipc3270
-        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-libipc3270-5.5-0-x86_64.pkg.tar.zst
-      - name: Unpack hllapi
-        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-libhllapi-5.5-0-x86_64.pkg.tar.zst
-      - name: Unpack pw3270
-        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-pw3270-*-x86_64.pkg.tar.zst
-      - name: Make Runtime
+      - name: Make bundle
         run: /bin/bash ./win/bundle
       - name: Make Package
-        run: tar -C ./.build -Jcf mingw-w64-x86_64-pw3270-x86_64.tar.xz .
+        run: tar -C ./.build -Jcf mingw-w64-x86_64-pw3270-bundle-x86_64.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}

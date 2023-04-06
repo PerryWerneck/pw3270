@@ -288,6 +288,22 @@ install_loaders() {
 
 }
 
+unpack() {
+
+	for package in ${srcdir}/*.pkg.tar.zst
+	do
+		echo ${package}
+		tar -C ${buildroot} --zstd -xf ${package}
+		if [ "$?" != "0" ]; then
+			echo "Error unpacking ${package}"
+			exit -1
+		fi
+	done
+
+}
+
+unpack
+
 install_loaders
 install_bin
 install_locale
