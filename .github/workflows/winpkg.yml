@@ -31,14 +31,14 @@ jobs:
             mingw-w64-x86_64-nsis 
       - uses: robinraju/release-downloader@v1.7
         with:
-          repository: PerryWerneck/lib3270
+          repository: "PerryWerneck/lib3270"
           latest: true
-          fileName: mingw-w64-x86_64-lib3270.tar.xz
+          fileName: "mingw-w64-x86_64-lib3270-5.4-0-x86_64.pkg.tar.zst"      
       - uses: robinraju/release-downloader@v1.7
         with:
-          repository: PerryWerneck/libv3270
+          repository: "PerryWerneck/libv3270"
           latest: true
-          fileName: mingw-w64-x86_64-libv3270.tar.xz
+          fileName: "mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst"      
       - name: BuildApp
         run: ./win/ci-build.sh
       - name: Install pw3270
@@ -47,35 +47,35 @@ jobs:
         with:
           repository: PerryWerneck/libipc3270
           latest: true
-          fileName: mingw-w64-x86_64-libipc3270.tar.xz
+          fileName: mingw-w64-x86_64-libipc3270-5.5-0-x86_64.pkg.tar.zst
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: PerryWerneck/libhllapi
           latest: true
-          fileName: mingw-w64-x86_64-hllapi.tar.xz
+          fileName: mingw-w64-x86_64-libhllapi-5.5-0-x86_64.pkg.tar.zst
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: PerryWerneck/pw3270-plugin-ipc
           latest: true
-          fileName: mingw-w64-x86_64-pw3270-plugin-ipc.tar.xz
+          fileName: mingw-w64-x86_64-pw3270-plugin-ipc-5.5-0-x86_64.pkg.tar.zst
       - name: Unpack lib3270
-        run: tar -C ./.build -Jxf mingw-w64-x86_64-lib3270.tar.xz
+        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-lib3270-5.4-0-x86_64.pkg.tar.zst
       - name: Unpack libv3270
-        run: tar -C ./.build -Jxf mingw-w64-x86_64-libv3270.tar.xz
+        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst
       - name: Unpack ipcplugin
-        run: tar -C ./.build -Jxf mingw-w64-x86_64-pw3270-plugin-ipc.tar.xz
+        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-pw3270-plugin-ipc-5.5-0-x86_64.pkg.tar.zst
       - name: Unpack ipc3270
-        run: tar -C ./.build -Jxf mingw-w64-x86_64-libipc3270.tar.xz
+        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-libipc3270-5.5-0-x86_64.pkg.tar.zst
       - name: Unpack hllapi
-        run: tar -C ./.build -Jxf mingw-w64-x86_64-hllapi.tar.xz
+        run: tar -C ./.build --zstd -xf mingw-w64-x86_64-libhllapi-5.5-0-x86_64.pkg.tar.zst
       - name: Make Runtime
         run: /bin/bash ./win/bundle
       - name: Make Package
-        run: tar -C ./.build -Jcf mingw-w64-x86_64-pw3270.tar.xz .
+        run: tar -C ./.build -Jcf mingw-w64-x86_64-pw3270-x86_64.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: "*-pw3270.tar.xz"
+          artifacts: "*-pw3270-*.tar.xz"
           allowUpdates: true
           draft: false
           makeLatest: true
