@@ -19,7 +19,7 @@
 #
 
 #
-# Referencias:
+# References:
 #
 # https://www.gtk.org/docs/installations/windows/
 # http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
@@ -45,7 +45,7 @@ GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
 GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
 GDK_LOADERS=$(echo $(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
 
-buildroot=.build
+buildroot=.bin/bundle
 bindir="${buildroot}${MINGW_PREFIX}/bin"
 
 if [ -z "${WIN_ROOT}" ]; then
@@ -53,6 +53,11 @@ if [ -z "${WIN_ROOT}" ]; then
 fi
 
 export LANG=C
+
+prepare() {
+	rm -fr "${buildroot}"
+	mkdir -p "${buildroot}"
+} 
 
 install_bin() {
 
@@ -298,29 +303,4 @@ install_loaders() {
 	fi
 
 }
-
-unpack() {
-
-	for package in ${srcdir}/*.pkg.tar.zst
-	do
-		echo ${package}
-		tar -C ${buildroot} --zstd -xf ${package}
-		if [ "$?" != "0" ]; then
-			echo "Error unpacking ${package}"
-			exit -1
-		fi
-	done
-
-}
-
-mkdir -p ${buildroot}
-unpack
-
-install_loaders
-install_bin
-install_locale
-install_schemas
-install_theme "Adwaita"
-install_icons "Adwaita"
-
 

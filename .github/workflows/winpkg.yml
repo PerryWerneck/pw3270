@@ -67,9 +67,9 @@ jobs:
           latest: true
           fileName: mingw-w64-x86_64-pw3270-plugin-ipc-5.5-0-x86_64.pkg.tar.zst
       - name: Make bundle
-        run: /bin/bash ./win/bundle
+        run: ./win/bundle.msys
       - name: Make Package
-        run: tar -C ./.build -Jcf mingw-w64-x86_64-pw3270-bundle-x86_64.tar.xz .
+        run: tar -C ./.bin/bundle -Jcf mingw-w64-x86_64-pw3270-bundle-x86_64.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
