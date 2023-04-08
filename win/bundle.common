@@ -36,7 +36,9 @@ if [ -z ${MINGW_PREFIX} ]; then
 		echo "Cant determine mingw prefix"
 		exit -1
 	fi
-else
+fi
+
+if [ -z ${PKG_CONFIG} ]; then
 	PKG_CONFIG=${MINGW_PREFX}/bin/pkg-config
 fi
 
@@ -45,7 +47,7 @@ GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
 GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
 GDK_LOADERS=$(echo $(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
 
-buildroot=.bin/bundle
+buildroot=$(readlink -f .bin/bundle)
 bindir="${buildroot}${MINGW_PREFIX}/bin"
 
 if [ -z "${WIN_ROOT}" ]; then

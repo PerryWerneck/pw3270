@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+#
+#  Copyright (C) 2023 Perry Werneck <perry.werneck@gmail.com>
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Lesser General Public License as published
+#  by the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+#
+# References:
+#
+# https://www.gtk.org/docs/installations/windows/
+# http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
+#
+
+MINGW_PREFIX="/usr/x86_64-w64-mingw32/sys-root/mingw"
+PKG_CONFIG="/usr/bin/x86_64-w64-mingw32-pkg-config"
+MINGW_PACKAGE_PREFIX="mingw64"
+
+# Load bundle functions
+. "$(dirname $(readlink -f "${0}"))/bundle.common"
+
+prepare
+
+# Build
+make -C "${srcdir}" all
+if [ "$?" != "0" ]; then
+	echo "Build failed"
+	exit -1
+fi
+
+make -C "${srcdir}" "DESTDIR=${buildroot}" install
+if [ "$?" != "0" ]; then
+	echo "Install failed"
+	exit -1
+fi
+
+# Install pre-build packages
+packages="lib3270 libv3270"
+for package in ${packages}
+do
+	PACKAGE_NAME=$(rpm -qa | grep "${MINGW_PACKAGE_PREFIX}-${package}" | grep -v devel)
+	echo "Unpacking ${PACKAGE_NAME}"
+	for FILE in $(rpm -ql "${PACKAGE_NAME}")
+	do
+		if [ ! -d ${FILE} ]; then
+
+			FILEPATH="${buildroot}${FILE}"
+			mkdir -p "$(dirname ${FILEPATH})"
+			if [ "$?" != "0" ]; then
+				exit -1
+			fi
+
+			cp "${FILE}" "${FILEPATH}"
+			if [ "$?" != "0" ]; then
+				exit -1
+			fi
+		fi
+	done
+
+done
+
+install_loaders
+install_bin
+install_locale
+install_schemas
+install_theme "Adwaita"
+install_icons "Adwaita"
+
+
