@@ -27,6 +27,11 @@
 
 # Setup default paths
 srcdir="$(dirname $(dirname $(readlink -f "${0}")))"
+cd ${srcdir}
+if [ "$?" != "0" ]; then
+	echo "Cant cd to ${srcdir}"
+	exit -1
+fi
 
 if [ -z ${MINGW_PREFIX} ]; then
 	if [ -d "/usr/x86_64-w64-mingw32/sys-root/mingw" ]; then
@@ -47,7 +52,30 @@ GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
 GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
 GDK_LOADERS=$(echo $(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
 
+mkdir -p .bin/bundle
+if [ "$?" != "0" ]; then
+	echo "Cant mkdir base buildroot"
+	exit -1
+fi
+
 buildroot=$(readlink -f .bin/bundle)
+if [ -z ${buildroot} ]; then
+	echo "Cant detect buildroot ${buildroot}"
+	exit -1
+fi
+
+mkdir -p "${buildroot}"
+if [ "$?" != "0" ]; then
+	echo "Cant mkdir ${buildroot}"
+	exit -1
+fi
+
+rm -fr "${buildroot}/*"
+if [ "$?" != "0" ]; then
+	echo "Cant clean ${buildroot}"
+	exit -1
+fi
+
 bindir="${buildroot}${MINGW_PREFIX}/bin"
 
 if [ -z "${WIN_ROOT}" ]; then
