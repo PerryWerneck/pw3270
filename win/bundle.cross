@@ -34,21 +34,29 @@ MINGW_PACKAGE_PREFIX="mingw64"
 
 prepare
 
-# Build
-make -C "${srcdir}" all
-if [ "$?" != "0" ]; then
-	echo "Build failed"
-	exit -1
-fi
-
-make -C "${srcdir}" "DESTDIR=${buildroot}" install
-if [ "$?" != "0" ]; then
-	echo "Install failed"
-	exit -1
-fi
-
-# Install pre-build packages
+# List of pre-built packages
 packages="lib3270 libv3270"
+
+argument "build"
+if [ "$?" == "0" ]; then
+
+	# Build
+	make -C "${srcdir}" all
+	if [ "$?" != "0" ]; then
+		echo "Build failed"
+		exit -1
+	fi
+
+	make -C "${srcdir}" "DESTDIR=${buildroot}" install
+	if [ "$?" != "0" ]; then
+		echo "Install failed"
+		exit -1
+	fi
+else
+	packages="${packages} pw3270"
+fi
+
+echo "Packages: ${packages}"
 for package in ${packages}
 do
 	PACKAGE_NAME=$(rpm -qa | grep "${MINGW_PACKAGE_PREFIX}-${package}" | grep -v devel)

@@ -334,3 +334,25 @@ install_loaders() {
 
 }
 
+argument() {
+
+	local cmdline
+	for cmdline in ${BASH_ARGV[*]}
+	do
+		if [ "$(echo ${cmdline} | sed "s@^--@@g" | sed "s@^-@@g" | cut -d= -f1)" == "${1}" ]; then
+			local value
+			value="$(echo ${cmdline} | cut -d= -f2)"
+			if [ -z "${value}" ]; then
+				echo "1"
+			else
+				echo "${value}"
+			fi
+			return 0
+		fi
+	done
+	echo ""
+	return 2
+}
+
+
+
