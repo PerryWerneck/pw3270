@@ -86,7 +86,7 @@ msgstr ""
 "#-#-#-#-#  about.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-11 08:16-0300\n"
+"POT-Creation-Date: 2023-04-11 08:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,7 +138,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  header.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  header-settings.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-08 01:14-0300\n"
@@ -149,7 +149,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  header-settings.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  header.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-08 01:14-0300\n"
@@ -397,16 +397,16 @@ msgstr ""
 msgid "\"%s\" is not a valid user interface name"
 msgstr ""
 
-#: src/objects/application/actions/about.c:124
+#: src/objects/application/actions/about.c:136
 #, c-format
 msgid "%s for %s."
 msgstr ""
 
-#: src/objects/application/actions/about.c:131
+#: src/objects/application/actions/about.c:143
 msgid "32 bits Linux"
 msgstr ""
 
-#: src/objects/application/actions/about.c:129
+#: src/objects/application/actions/about.c:141
 msgid "32 bits Windows"
 msgstr ""
 
@@ -415,11 +415,11 @@ msgstr ""
 msgid "3270 session files"
 msgstr ""
 
-#: src/objects/application/actions/about.c:133
+#: src/objects/application/actions/about.c:145
 msgid "64 bits Linux"
 msgstr ""
 
-#: src/objects/application/actions/about.c:127
+#: src/objects/application/actions/about.c:139
 msgid "64 bits Windows"
 msgstr ""
 
@@ -428,7 +428,7 @@ msgid ""
 "<small><b>The toolbar position only takes effect after restart</b></small>"
 msgstr ""
 
-#: src/objects/application/actions/about.c:223 ui/windows.ui.xml:40
+#: src/objects/application/actions/about.c:235 ui/windows.ui.xml:40
 #: ui/windows.ui.xml:553 ui/macos.ui.xml:40 ui/macos.ui.xml:553
 #: ui/linux.ui.xml:40 ui/linux.ui.xml:553
 msgid "About PW3270"
@@ -457,7 +457,7 @@ msgstr ""
 msgid "Append to copy"
 msgstr ""
 
-#: src/objects/application/actions/about.c:166
+#: src/objects/application/actions/about.c:178
 msgid "Apple version"
 msgstr ""
 
@@ -487,7 +487,7 @@ msgstr ""
 msgid "Available"
 msgstr ""
 
-#: src/objects/application/actions/about.c:169
+#: src/objects/application/actions/about.c:181
 msgid "Based on X3270 from"
 msgstr ""
 
@@ -595,7 +595,7 @@ msgstr ""
 msgid "Connected to host"
 msgstr ""
 
-#: src/objects/application/actions/about.c:167
+#: src/objects/application/actions/about.c:179
 msgid "Contributors"
 msgstr ""
 
@@ -622,7 +622,7 @@ msgstr ""
 msgid "Copy as text"
 msgstr ""
 
-#: src/objects/application/actions/about.c:173
+#: src/objects/application/actions/about.c:185
 msgid "Copyright © 2008 Banco do Brasil S.A."
 msgstr ""
 
@@ -759,7 +759,7 @@ msgstr ""
 msgid "Host and Emulation settings"
 msgstr ""
 
-#: src/objects/application/actions/about.c:125 src/objects/window/window.c:565
+#: src/objects/application/actions/about.c:137 src/objects/window/window.c:565
 #: src/objects/os/linux/savedesktopicon.c:102
 #: src/objects/os/windows/savedesktopicon.c:261
 msgid "IBM 3270 Terminal emulator"
@@ -853,7 +853,7 @@ msgstr ""
 msgid "Keypads"
 msgstr ""
 
-#: src/objects/application/actions/about.c:177
+#: src/objects/application/actions/about.c:189
 msgid "LICENSE"
 msgstr ""
 
@@ -889,7 +889,7 @@ msgstr ""
 msgid "Main menu"
 msgstr ""
 
-#: src/objects/application/actions/about.c:165
+#: src/objects/application/actions/about.c:177
 msgid "Maintainers"
 msgstr ""
 
@@ -1474,7 +1474,7 @@ msgstr ""
 msgid "Unselect"
 msgstr ""
 
-#: src/objects/application/actions/about.c:104
+#: src/objects/application/actions/about.c:116
 #, c-format
 msgid "Unstable version %s-%s"
 msgstr ""
@@ -1484,7 +1484,7 @@ msgstr ""
 msgid "Use +/- for field navigation"
 msgstr ""
 
-#: src/objects/application/actions/about.c:106
+#: src/objects/application/actions/about.c:118
 #, c-format
 msgid "Version %s-%s"
 msgstr ""
@@ -1496,7 +1496,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:197
+#: src/objects/application/actions/about.c:209
 msgid "View this project on github"
 msgstr ""
 
@@ -1573,10 +1573,10 @@ msgstr ""
 msgid "_View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:196
+#: src/objects/application/actions/about.c:208
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr ""
 
-#: src/objects/application/actions/about.c:199
+#: src/objects/application/actions/about.c:211
 msgid "translator-credits"
 msgstr ""

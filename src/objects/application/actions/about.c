@@ -35,6 +35,17 @@
 static char * find_logo() {
 
 	static const char * names[] = {
+#ifdef _WIN32
+
+			G_STRINGIFY(PRODUCT_NAME) "-about.png",
+			G_STRINGIFY(PRODUCT_NAME) "-logo.png",
+			G_STRINGIFY(PRODUCT_NAME) ".png",
+			G_STRINGIFY(PACKAGE_NAME) "-about.png",
+			G_STRINGIFY(PACKAGE_NAME) "-logo.png",
+			G_STRINGIFY(PACKAGE_NAME) ".png",
+
+#else
+
 			G_STRINGIFY(PRODUCT_NAME) "-about.svg",
 			G_STRINGIFY(PRODUCT_NAME) "-logo.svg",
 			G_STRINGIFY(PRODUCT_NAME) ".svg",
@@ -48,6 +59,7 @@ static char * find_logo() {
 			G_STRINGIFY(PACKAGE_NAME) "-about.png",
 			G_STRINGIFY(PACKAGE_NAME) "-logo.png",
 			G_STRINGIFY(PACKAGE_NAME) ".png",
+#endif // _WIN32
 	};
 
 	size_t ix;
