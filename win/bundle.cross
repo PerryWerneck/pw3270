@@ -2,20 +2,20 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #
-#  Copyright (C) 2023 Perry Werneck <perry.werneck@gmail.com>
+# Copyright (C) 2023 Perry Werneck <perry.werneck@gmail.com>
 #
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU Lesser General Public License as published
-#  by the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#  You should have received a copy of the GNU Lesser General Public License
-#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
 #
@@ -28,16 +28,48 @@
 MINGW_PREFIX="/usr/x86_64-w64-mingw32/sys-root/mingw"
 PKG_CONFIG="/usr/bin/x86_64-w64-mingw32-pkg-config"
 MINGW_PACKAGE_PREFIX="mingw64"
+REPOSITORY_NAME="pw3270"
 
 # Load bundle functions
 . "$(dirname $(readlink -f "${0}"))/bundle.common"
 
 prepare
 
-# List of pre-built packages
-packages="lib3270 libv3270"
+# List of pre-req packages
+# gdk-pixbuf-loader-rsvg
 
-argument "build"
+# List of pre-built packages
+packages="lib3270 libv3270 libipc3270 libhllapi pw3270-plugin-ipc"
+
+argument "install-requires" > /dev/null
+if [ "$?" == "0" ]; then
+
+	echo "Installing: ${packages}"
+	
+	REPONUMBER=$(zypper lr | grep "${REPOSITORY_NAME}" | cut -d\| -f1)	
+	if [ -z "${REPONUMBER}" ]; then
+		echo "Cant locate repository ${REPOSITORY_NAME}"
+		exit -1
+	fi
+	
+	sudo zypper ref ${REPONUMBER}
+	if [ "$?" != "0" ]; then
+		echo "Cant refresh repository ${REPOSITORY_NAME}"
+		exit -1
+	fi
+	
+	for package in ${packages}
+	do
+		sudo zypper in --repo ${REPONUMBER} "${MINGW_PACKAGE_PREFIX}-${package}"
+		if [ "$?" != "0" ]; then
+			echo "Cant install ${MINGW_PACKAGE_PREFIX}-${package} from ${REPOSITORY_NAME}"
+			exit -1
+		fi
+	done
+	
+fi
+
+argument "build" > /dev/null
 if [ "$?" == "0" ]; then
 
 	# Build
@@ -59,8 +91,8 @@ fi
 echo "Packages: ${packages}"
 for package in ${packages}
 do
-	PACKAGE_NAME=$(rpm -qa | grep "${MINGW_PACKAGE_PREFIX}-${package}" | grep -v devel)
-	echo "Unpacking ${PACKAGE_NAME}"
+	PACKAGE_NAME=$(rpm -qa | grep "${MINGW_PACKAGE_PREFIX}-${package}" | grep -v devel | head --lines=1)
+	echo "Copy ${PACKAGE_NAME}"
 	for FILE in $(rpm -ql "${PACKAGE_NAME}")
 	do
 		if [ ! -d ${FILE} ]; then
@@ -73,6 +105,7 @@ do
 
 			cp "${FILE}" "${FILEPATH}"
 			if [ "$?" != "0" ]; then
+				echo "Cant copy '${FILE}' from '${PACKAGE_NAME}'"
 				exit -1
 			fi
 		fi
@@ -87,4 +120,5 @@ install_schemas
 install_theme "Adwaita"
 install_icons "Adwaita"
 
+echo "Bundle build complete"
 
