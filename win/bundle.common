@@ -59,8 +59,6 @@ if [ -z ${PACKAGE_VERSION} ]; then
 	exit -1
 fi
 
-
-
 GTK_PREFIX=$(${PKG_CONFIG} --variable=prefix gtk+-3.0)
 GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
 GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
@@ -394,6 +392,26 @@ make_zip() {
 	argument "upload" > /dev/null
 	if [ "$?" == "0" ]; then
 		gh release upload --clobber "${PACKAGE_VERSION}" ${srcdir}/${MINGW_PACKAGE_PREFIX}-${PACKAGE_NAME}-${PACKAGE_VERSION}.bundle.zip
+	fi	
+
+}
+
+install_runtime() {
+
+	install_loaders
+	install_bin
+	install_locale
+	install_schemas
+	install_theme "Adwaita"
+	install_icons "Adwaita"
+
+}
+
+make_packages() {
+
+	argument "zip" > /dev/null
+	if [ "$?" == "0" ]; then
+		make_zip
 	fi	
 
 }

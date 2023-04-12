@@ -120,14 +120,8 @@ unpack_rpm() {
 }
 
 unpack_rpm
-install_loaders
-install_bin
-install_locale
-install_schemas
-install_theme "Adwaita"
-install_icons "Adwaita"
-
-make_zip
+install_runtime
+make_packages
 
 echo "Bundle build complete"
 
