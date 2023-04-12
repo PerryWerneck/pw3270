@@ -88,37 +88,46 @@ else
 	packages="${packages} pw3270"
 fi
 
-echo "Packages: ${packages}"
-for package in ${packages}
-do
-	PACKAGE_NAME=$(rpm -qa | grep "${MINGW_PACKAGE_PREFIX}-${package}" | grep -v devel | head --lines=1)
-	echo "Copy ${PACKAGE_NAME}"
-	for FILE in $(rpm -ql "${PACKAGE_NAME}")
+unpack_rpm() {
+
+	local package
+	local PACKAGE_NAME
+	
+	echo "Packages: ${packages}"
+	for package in ${packages}
 	do
-		if [ ! -d ${FILE} ]; then
+		PACKAGE_NAME=$(rpm -qa | grep "${MINGW_PACKAGE_PREFIX}-${package}" | grep -v devel | head --lines=1)
+		echo "Copy ${PACKAGE_NAME}"
+		for FILE in $(rpm -ql "${PACKAGE_NAME}")
+		do
+			if [ ! -d ${FILE} ]; then
 
-			FILEPATH="${buildroot}${FILE}"
-			mkdir -p "$(dirname ${FILEPATH})"
-			if [ "$?" != "0" ]; then
-				exit -1
-			fi
+				FILEPATH="${buildroot}${FILE}"
+				mkdir -p "$(dirname ${FILEPATH})"
+				if [ "$?" != "0" ]; then
+					exit -1
+				fi
 
-			cp "${FILE}" "${FILEPATH}"
-			if [ "$?" != "0" ]; then
-				echo "Cant copy '${FILE}' from '${PACKAGE_NAME}'"
-				exit -1
+				cp "${FILE}" "${FILEPATH}"
+				if [ "$?" != "0" ]; then
+					echo "Cant copy '${FILE}' from '${PACKAGE_NAME}'"
+					exit -1
+				fi
 			fi
-		fi
+		done
+
 	done
+}
 
-done
-
+unpack_rpm
 install_loaders
 install_bin
 install_locale
 install_schemas
 install_theme "Adwaita"
 install_icons "Adwaita"
+
+make_zip
 
 echo "Bundle build complete"
 
