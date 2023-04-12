@@ -119,8 +119,20 @@ unpack_rpm() {
 	done
 }
 
+install_license() {
+	mkdir -p "${buildroot}${MINGW_PREFIX}/usr/share/${PACKAGE_NAME}"
+	cp "${srcdir}/LICENSE" "${buildroot}${MINGW_PREFIX}/share/${PACKAGE_NAME}"
+	if [ "$?" != "0" ]; then
+		echo "Cant copy LICENSE"
+		exit -1
+	fi
+}
+
 unpack_rpm
+
 install_runtime
+install_license
+
 make_packages
 
 echo "Bundle build complete"
