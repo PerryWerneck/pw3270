@@ -190,9 +190,13 @@ SubSection "@PRODUCT_NAME@" SecMain
 !ifdef WITHSDK
     Section /o "Software Development Kit" SDK
 
-		setOutPath $INSTDIR\sdk
+		setOutPath $INSTDIR\sdk\include
 		file /r "include\*.*"
+
+		setOutPath $INSTDIR\sdk\lib
 		file /r "lib\*.a"
+
+		setOutPath $INSTDIR\sdk\lib\pkgconfig
 		file /r "lib\pkgconfig\*.pc"
 
 		setOutPath $INSTDIR\sdk\msvc
