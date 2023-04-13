@@ -396,6 +396,35 @@ make_zip() {
 
 }
 
+make_nsis() {
+	makensis \
+		-INPUTCHARSET UTF8 \
+		-DWITHIPC \
+		-DWITHPLUGINS \
+		-DWITHSDK \
+		${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi
+		if [ "$?" != "0" ]; then
+			echo "Cant build nsis script"
+		fi	
+
+	if [ ! -z $(which gh) ]; then
+		argument "upload" > /dev/null
+		if [ "$?" == "0" ]; then
+			gh release upload --clobber "${PACKAGE_VERSION}" ${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}*.exe
+			if [ "$?" != "0" ]; then
+				echo "Cant upload nsis installer"
+				exit -1
+			fi			
+		fi	
+	fi
+
+	mv -f ${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}*.exe "${srcdir}"
+	if [ "$?" != "0" ]; then
+		echo "Cant copy nsis installer"
+		exit -1
+	fi	
+}
+
 install_runtime() {
 
 	install_loaders
@@ -409,9 +438,20 @@ install_runtime() {
 
 make_packages() {
 
+	mkdir -p "${buildroot}${MINGW_PREFIX}/nsi"
+	cp "${srcdir}/win/pw3270.nsi" "${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi" 
+	if [ "$?" != "0" ]; then
+		echo "Cant copy nsis script"
+	fi	
+
 	argument "zip" > /dev/null
 	if [ "$?" == "0" ]; then
 		make_zip
+	fi	
+
+	argument "nsi" > /dev/null
+	if [ "$?" == "0" ]; then
+		make_nsis
 	fi	
 
 }

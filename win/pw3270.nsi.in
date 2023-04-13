@@ -82,18 +82,45 @@ SubSection "@PRODUCT_NAME@" SecMain
 		${DisableX64FSRedirection}
 
 		# define the output path for this file
-		setOutPath $INSTDIR
 		SetShellVarContext all
 
 		createShortCut "$SMPROGRAMS\@PRODUCT_NAME@.lnk" "$INSTDIR\bin\@PRODUCT_NAME@.exe"
 		createShortCut "$DESKTOP\@PRODUCT_NAME@.lnk" "$INSTDIR\bin\@PRODUCT_NAME@.exe"
 
 		# Binary files
-		file /r "bin\*.exe"
-		file /r "bin\*.dll"
-		file /r "lib\gdk-pixbuf-2.0"
+		setOutPath "$INSTDIR"
+		file /r "bin"
+		
+		setOutPath "$INSTDIR\share\@PRODUCT_NAME@"
+		file /r "share\@PRODUCT_NAME@\*.png"
+		file /r "share\@PRODUCT_NAME@\*.svg"
+		file /r "share\@PRODUCT_NAME@\*.ui.xml"
+		file /r "share\@PRODUCT_NAME@\*.conf"
+
+		setOutPath "$INSTDIR\share\@PRODUCT_NAME@\remap"
+		file /r "share\@PRODUCT_NAME@\remap\*"
+
+		setOutPath "$INSTDIR\lib\gdk-pixbuf-2.0"
+		file /r "lib\gdk-pixbuf-2.0\*"
+
+		setOutPath "$INSTDIR\etc"
 		file /r "etc\*"
 
+		setOutPath "$INSTDIR\share\locale"
+		file /r "share\locale\*"
+
+		setOutPath "$INSTDIR\share\themes"
+		file /r "share\themes\*"
+
+		setOutPath "$INSTDIR\share\icons"
+		file /r "share\icons\*"
+
+		setOutPath "$INSTDIR\share\glib-2.0"
+		file /r "share\glib-2.0\*"
+
+		setOutPath "$INSTDIR\share\@PRODUCT_NAME@\icons"
+		file /r "share\@PRODUCT_NAME@\icons\*"
+		
 		# define uninstaller name
 		SetRegView 32
 
@@ -166,6 +193,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 		setOutPath $INSTDIR\sdk
 		file /r "include\*.*"
 		file /r "lib\*.a"
+		file /r "lib\pkgconfig\*.pc"
 
 		setOutPath $INSTDIR\sdk\msvc
 		file /r "share\@PRODUCT_NAME@\def\*.def"
@@ -189,9 +217,9 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		Section "Remote control" IPCPlugin
 
-			setOutPath $INSTDIR
 			${DisableX64FSRedirection}
-			file "lib/@PRODUCT_NAME@-plugins/ipcserver.dll"
+			CreateDirectory "$INSTDIR\lib\@PRODUCT_NAME@-plugins"
+            file "/oname=$INSTDIR\lib\@PRODUCT_NAME@-plugins\ipcserver.dll" "lib\@PRODUCT_NAME@-plugins\ipcserver.dll"
 
 		sectionEnd
 
