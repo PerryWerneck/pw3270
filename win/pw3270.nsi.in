@@ -56,16 +56,16 @@ VIAddVersionKey "LegalCopyright" "(C) 2017 Banco do Brasil S/A. All Rights Reser
 # Interface
 
 !define MUI_ABORTWARNING
-# !insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "share\@PRODUCT_NAME@\LICENSE"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 
-# !insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
-# !insertmacro MUI_UNPAGE_FINISH
+!insertmacro MUI_UNPAGE_FINISH
 
 # Languages
 !insertmacro MUI_LANGUAGE "English"
@@ -160,6 +160,24 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 	sectionEnd
 
+!ifdef WITHSDK
+    Section /o "Software Development Kit" SDK
+
+		setOutPath $INSTDIR\sdk
+		file /r "include\*.*"
+		file /r "lib\*.a"
+
+		setOutPath $INSTDIR\sdk\msvc
+		file /r "share\@PRODUCT_NAME@\def\*.def"
+		file /r "share\@PRODUCT_NAME@\def\*.mak"
+
+		SetRegView @WINARCH@
+		WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH" "$INSTDIR\sdk"
+		SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
+
+    SectionEnd
+!endif
+
 !ifdef WITHCERTS
 	Section "SSL Certificates" SSLCerts
 		setOutPath $INSTDIR\certs
@@ -249,19 +267,19 @@ Function .onInit
 	ClearErrors
 	${GetOptions} $R0 /SDK= $0
 
-#	${if} $0 == "YES"
-#
-#		SectionGetFlags ${SDK} $0
-#		IntOp $0 $0 | ${SF_SELECTED}
-#		SectionSetFlags ${SDK} $0
-#
-#	${else}
-#
-#		SectionGetFlags ${SDK} $0
-#		IntOp $0 $0 & ${SECTION_OFF}
-#		SectionSetFlags ${SDK} $0
-#
-#	${EndIf}
+	${if} $0 == "YES"
+
+		SectionGetFlags ${SDK} $0
+		IntOp $0 $0 | ${SF_SELECTED}
+		SectionSetFlags ${SDK} $0
+
+	${else}
+
+		SectionGetFlags ${SDK} $0
+		IntOp $0 $0 & ${SECTION_OFF}
+		SectionSetFlags ${SDK} $0
+
+	${EndIf}
 
 	Pop $0
 !endif
