@@ -116,62 +116,64 @@ install_bin() {
 	
 		while read FILENAME
 		do
+			echo ${FILENAME}
 			objdump -p ${FILENAME} | grep "DLL Name:" | cut -d: -f2 | tr "[:upper:]" "[:lower:]" >> ${REQUIRES}
 		done < ${SOURCES}
 
 		libs_to_exclude="
-			advapi32
-			cfgmgr32
-			comctl32
-			comdlg32
-			crypt32
-			d3d8
-			d3d9
-			ddraw
-			dnsapi
-			dsound
-			dwmapi
-			gdi32
-			gdiplus
-			glu32
-			glut32
-			imm32
-			iphlpapi
-			kernel32
-			ksuser
-			mpr
-			mscms
-			mscoree
-			msimg32
-			msvcr71
-			msvcr80
-			msvcr90
-			msvcrt
-			mswsock
-			netapi32
-			odbc32
-			ole32
-			oleacc
-			oleaut32
-			opengl32
-			psapi
-			rpcrt4
-			secur32
-			setupapi
-			shell32
-			shlwapi
-			user32
-			usp10
-			version
-			wininet
-			winmm
-			wldap32
-			ws2_32
-			wsock32
+			advapi32.dll
+			cfgmgr32.dll
+			comctl32.dll
+			comdlg32.dll
+			crypt32.dll
+			d3d8.dll
+			d3d9.dll
+			ddraw.dll
+			dnsapi.dll
+			dsound.dll
+			dwmapi.dll
+			gdi32.dll
+			gdiplus.dll
+			glu32.dll
+			glut32.dll
+			imm32.dll
+			iphlpapi.dll
+			kernel32.dll
+			ksuser.dll
+			mpr.dll
+			mscms.dll
+			mscoree.dll
+			msimg32.dll
+			msvcr71.dll
+			msvcr80.dll
+			msvcr90.dll
+			msvcrt.dll
+			mswsock.dll
+			netapi32.dll
+			odbc32.dll
+			ole32.dll
+			oleacc.dll
+			oleaut32.dll
+			opengl32.dll
+			psapi.dll
+			rpcrt4.dll
+			secur32.dll
+			setupapi.dll
+			shell32.dll
+			shlwapi.dll
+			user32.dll
+			usp10.dll
+			version.dll
+			wininet.dll
+			winmm.dll
+			wldap32.dll
+			ws2_32.dll
+			wsock32.dll
 			winspool.drv
-			ntdll
-			winhttp
-			hid
+			ntdll.dll
+			winhttp.dll
+			hid.dll
+			bcrypt.dll
 		"
 
 		# Remove system DLLs from list
@@ -183,6 +185,8 @@ install_bin() {
 		while read FILENAME
 		do
 
+			echo ${FILENAME}
+			
 			if [ ! -e "${bindir}/${FILENAME}" ]; then
 
 				if [ -e ${MINGW_PREFIX}/bin/${FILENAME} ]; then
