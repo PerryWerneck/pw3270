@@ -33,6 +33,12 @@ REPOSITORY_NAME="pw3270"
 # Load bundle functions
 . "$(dirname $(readlink -f "${0}"))/bundle.common"
 
+argument "help" > /dev/null
+if [ "$?" == "0" ]; then
+	echo "	--install-requires Install required packages"
+	echo "	--build Build application from source"
+fi
+
 prepare
 
 # List of pre-req packages

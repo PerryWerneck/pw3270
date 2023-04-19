@@ -25,6 +25,37 @@
 # http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
 #
 
+# Check command-line arguments
+argument() {
+
+	local cmdline
+	for cmdline in ${BASH_ARGV[*]}
+	do
+		if [ "$(echo ${cmdline} | sed "s@^--@@g" | sed "s@^-@@g" | cut -d= -f1)" == "${1}" ]; then
+			local value
+			value="$(echo ${cmdline} | cut -d= -f2)"
+			if [ -z "${value}" ]; then
+				echo "1"
+			else
+				echo "${value}"
+			fi
+			return 0
+		fi
+	done
+	echo ""
+	return 2
+}
+
+argument "help" > /dev/null
+if [ "$?" == "0" ]; then
+	echo "Use ${0} options"
+	echo ""
+	echo "	--help Help options (this screen)"
+	echo "	--zip Build zipfile"
+	echo "	--nsi Build nsi installer"
+	echo "	--upload Upload bundle to github"
+fi
+
 # Setup default paths
 srcdir="$(dirname $(dirname $(readlink -f "${0}")))"
 cd ${srcdir}
@@ -97,6 +128,12 @@ fi
 export LANG=C
 
 prepare() {
+
+	argument "help" > /dev/null
+	if [ "$?" == "0" ]; then
+		exit 0
+	fi
+	
 	rm -fr "${buildroot}"
 	mkdir -p "${buildroot}"
 } 
@@ -348,26 +385,6 @@ install_loaders() {
 	
 	fi
 
-}
-
-argument() {
-
-	local cmdline
-	for cmdline in ${BASH_ARGV[*]}
-	do
-		if [ "$(echo ${cmdline} | sed "s@^--@@g" | sed "s@^-@@g" | cut -d= -f1)" == "${1}" ]; then
-			local value
-			value="$(echo ${cmdline} | cut -d= -f2)"
-			if [ -z "${value}" ]; then
-				echo "1"
-			else
-				echo "${value}"
-			fi
-			return 0
-		fi
-	done
-	echo ""
-	return 2
 }
 
 make_zip() {
