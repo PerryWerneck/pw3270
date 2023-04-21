@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-08 01:14-0300\n"
-"PO-Revision-Date: 2023-01-31 11:14-0300\n"
+"PO-Revision-Date: 2023-04-21 08:30-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -431,9 +431,8 @@ msgid "If the action can be activated"
 msgstr "Se a ação pode ser ativada"
 
 #: src/objects/application/application.c:541
-#, fuzzy
 msgid "Initialization has failed"
-msgstr "Operação falhou"
+msgstr "Inicialização falhou"
 
 #: ui/windows.ui.xml:1022 ui/macos.ui.xml:1022 ui/linux.ui.xml:1022
 msgid "Insert"
