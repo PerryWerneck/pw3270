@@ -84,9 +84,6 @@ SubSection "@PRODUCT_NAME@" SecMain
 		# define the output path for this file
 		SetShellVarContext all
 
-		createShortCut "$SMPROGRAMS\@PRODUCT_NAME@.lnk" "$INSTDIR\bin\@PRODUCT_NAME@.exe"
-		createShortCut "$DESKTOP\@PRODUCT_NAME@.lnk" "$INSTDIR\bin\@PRODUCT_NAME@.exe"
-
 		# Binary files
 		setOutPath "$INSTDIR"
 		file /r "bin"
@@ -184,6 +181,9 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"				"font-family"			"Lucida Console"
 		WriteRegStr		HKLM	"Software\@PRODUCT_NAME@"				"colors"				"rgb(24,24,24);rgb(79,156,254);rgb(237,74,70);rgb(235,110,183);rgb(131,199,70);rgb(86,216,201);rgb(239,197,65);rgb(222,222,222);rgb(59,59,59);rgb(54,142,171);rgb(250,145,83);rgb(165,128,226);rgb(112,180,51);rgb(65,199,185);rgb(219,179,45);rgb(119,119,119);rgb(131,199,70);rgb(237,74,70);rgb(65,199,185);rgb(250,145,83);rgb(37,37,37);rgb(222,222,222);rgb(222,222,222);rgb(24,24,24);rgb(222,222,222);rgb(79,156,254);rgb(131,199,70);rgb(239,197,65);rgb(239,197,65)"
+
+		createShortCut "$SMPROGRAMS\@PRODUCT_NAME@.lnk" "$INSTDIR\bin\@PRODUCT_NAME@.exe" "" "$INSTDIR\bin\@PRODUCT_NAME@.ico"
+		createShortCut "$DESKTOP\@PRODUCT_NAME@.lnk" "$INSTDIR\bin\@PRODUCT_NAME@.exe" "" "$INSTDIR\bin\@PRODUCT_NAME@.ico"
 
 	sectionEnd
 
