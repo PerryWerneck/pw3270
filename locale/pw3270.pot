@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 15:03-0300\n"
+"POT-Creation-Date: 2023-04-19 09:27-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,29 +22,29 @@ msgstr ""
 msgid "\"%s\" is not a valid user interface name"
 msgstr ""
 
-#: src/objects/application/actions/about.c:118
+#: src/objects/application/actions/about.c:136
 #, c-format
 msgid "%s for %s."
 msgstr ""
 
-#: src/objects/application/actions/about.c:125
+#: src/objects/application/actions/about.c:143
 msgid "32 bits Linux"
 msgstr ""
 
-#: src/objects/application/actions/about.c:123
+#: src/objects/application/actions/about.c:141
 msgid "32 bits Windows"
 msgstr ""
 
 #: src/objects/actions/save.c:167 src/objects/os/linux/savedesktopicon.c:233
-#: src/objects/os/windows/savedesktopicon.c:224
+#: src/objects/os/windows/savedesktopicon.c:214
 msgid "3270 session files"
 msgstr ""
 
-#: src/objects/application/actions/about.c:127
+#: src/objects/application/actions/about.c:145
 msgid "64 bits Linux"
 msgstr ""
 
-#: src/objects/application/actions/about.c:121
+#: src/objects/application/actions/about.c:139
 msgid "64 bits Windows"
 msgstr ""
 
@@ -53,7 +53,7 @@ msgid ""
 "<small><b>The toolbar position only takes effect after restart</b></small>"
 msgstr ""
 
-#: src/objects/application/actions/about.c:217 ui/windows.ui.xml:40
+#: src/objects/application/actions/about.c:235 ui/windows.ui.xml:40
 #: ui/windows.ui.xml:553 ui/macos.ui.xml:40 ui/macos.ui.xml:553
 #: ui/linux.ui.xml:40 ui/linux.ui.xml:553
 msgid "About PW3270"
@@ -63,7 +63,7 @@ msgstr ""
 msgid "Action Name"
 msgstr ""
 
-#: src/objects/window/window.c:205
+#: src/objects/window/window.c:206
 msgid "Action Names"
 msgstr ""
 
@@ -73,7 +73,7 @@ msgstr ""
 msgid "Alert sound"
 msgstr ""
 
-#: src/main/tools.c:79
+#: src/main/tools.c:68
 msgid "All files"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Append to copy"
 msgstr ""
 
-#: src/objects/application/actions/about.c:160
+#: src/objects/application/actions/about.c:178
 msgid "Apple version"
 msgstr ""
 
@@ -112,7 +112,7 @@ msgstr ""
 msgid "Available"
 msgstr ""
 
-#: src/objects/application/actions/about.c:163
+#: src/objects/application/actions/about.c:181
 msgid "Based on X3270 from"
 msgstr ""
 
@@ -140,10 +140,6 @@ msgstr ""
 
 #: src/objects/os/windows/open.c:133
 msgid "Can't load session preferences"
-msgstr ""
-
-#: src/objects/settings/gsettings.c:128
-msgid "Can't load system settings"
 msgstr ""
 
 #: src/objects/application/actions/open.c:99 src/objects/window/terminal.c:192
@@ -220,11 +216,11 @@ msgstr ""
 msgid "Connect to host"
 msgstr ""
 
-#: src/objects/window/window.c:778 src/objects/window/page.c:218
+#: src/objects/window/window.c:779 src/objects/window/page.c:218
 msgid "Connected to host"
 msgstr ""
 
-#: src/objects/application/actions/about.c:161
+#: src/objects/application/actions/about.c:179
 msgid "Contributors"
 msgstr ""
 
@@ -251,12 +247,12 @@ msgstr ""
 msgid "Copy as text"
 msgstr ""
 
-#: src/objects/application/actions/about.c:167
+#: src/objects/application/actions/about.c:185
 msgid "Copyright © 2008 Banco do Brasil S.A."
 msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:114
-#: src/objects/os/windows/savedesktopicon.c:109
+#: src/objects/os/windows/savedesktopicon.c:99
 #: src/objects/os/macos/savedesktopicon.c:54
 msgid "Create shortcut for the current session"
 msgstr ""
@@ -291,7 +287,7 @@ msgstr ""
 msgid "Delete Field"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:82
+#: src/objects/os/windows/savedesktopicon.c:72
 msgid "Description"
 msgstr ""
 
@@ -300,7 +296,7 @@ msgstr ""
 msgid "Disconnect"
 msgstr ""
 
-#: src/objects/window/window.c:778 src/objects/window/window.c:805
+#: src/objects/window/window.c:779 src/objects/window/window.c:806
 #: src/objects/window/page.c:207
 msgid "Disconnected from host"
 msgstr ""
@@ -361,7 +357,7 @@ msgstr ""
 msgid "Field attributes"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:221
+#: src/objects/os/windows/savedesktopicon.c:211
 msgid "File for session preferences"
 msgstr ""
 
@@ -388,9 +384,9 @@ msgstr ""
 msgid "Host and Emulation settings"
 msgstr ""
 
-#: src/objects/application/actions/about.c:119 src/objects/window/window.c:564
+#: src/objects/application/actions/about.c:137 src/objects/window/window.c:565
 #: src/objects/os/linux/savedesktopicon.c:102
-#: src/objects/os/windows/savedesktopicon.c:271
+#: src/objects/os/windows/savedesktopicon.c:261
 msgid "IBM 3270 Terminal emulator"
 msgstr ""
 
@@ -428,6 +424,10 @@ msgstr ""
 
 #: src/objects/actions/abstract.c:141
 msgid "If the action can be activated"
+msgstr ""
+
+#: src/objects/application/application.c:541
+msgid "Initialization has failed"
 msgstr ""
 
 #: ui/windows.ui.xml:1022 ui/macos.ui.xml:1022 ui/linux.ui.xml:1022
@@ -474,11 +474,11 @@ msgstr ""
 msgid "Keypad width in columns"
 msgstr ""
 
-#: src/main/builder.c:112
+#: src/main/builder.c:117
 msgid "Keypads"
 msgstr ""
 
-#: src/objects/application/actions/about.c:171
+#: src/objects/application/actions/about.c:189
 msgid "LICENSE"
 msgstr ""
 
@@ -514,7 +514,7 @@ msgstr ""
 msgid "Main menu"
 msgstr ""
 
-#: src/objects/application/actions/about.c:159
+#: src/objects/application/actions/about.c:177
 msgid "Maintainers"
 msgstr ""
 
@@ -639,7 +639,7 @@ msgid "Paste with left margin"
 msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:71
-#: src/objects/os/windows/savedesktopicon.c:76
+#: src/objects/os/windows/savedesktopicon.c:66
 msgid "Path for the new shortcut"
 msgstr ""
 
@@ -714,7 +714,7 @@ msgid "Save session preferences"
 msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:113
-#: src/objects/os/windows/savedesktopicon.c:108
+#: src/objects/os/windows/savedesktopicon.c:98
 #: src/objects/os/macos/savedesktopicon.c:53
 msgid "Save session shortcut"
 msgstr ""
@@ -727,7 +727,7 @@ msgstr ""
 msgid "Save to shortcut file"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:186
+#: src/objects/os/windows/savedesktopicon.c:176
 msgid "Save to windows shortcut"
 msgstr ""
 
@@ -792,7 +792,7 @@ msgid "Session Trace"
 msgstr ""
 
 #: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
-#: src/objects/os/windows/savedesktopicon.c:96
+#: src/objects/os/windows/savedesktopicon.c:86
 msgid "Session file"
 msgstr ""
 
@@ -807,7 +807,7 @@ msgid "Session in new window"
 msgstr ""
 
 #: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
-#: src/objects/os/windows/savedesktopicon.c:88
+#: src/objects/os/windows/savedesktopicon.c:78
 msgid "Session name"
 msgstr ""
 
@@ -843,7 +843,7 @@ msgid "Setup toolbar"
 msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:70
-#: src/objects/os/windows/savedesktopicon.c:75
+#: src/objects/os/windows/savedesktopicon.c:65
 msgid "Shortcut file"
 msgstr ""
 
@@ -906,11 +906,11 @@ msgstr ""
 msgid "System default"
 msgstr ""
 
-#: src/objects/settings/gsettings.c:133
+#: src/objects/application/application.c:546
 msgid "System settings error"
 msgstr ""
 
-#: src/main/tools.c:75
+#: src/main/tools.c:64
 msgid "TN3270 Session Files"
 msgstr ""
 
@@ -956,7 +956,7 @@ msgid "The file to save the current session preferences"
 msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:86
-#: src/objects/os/windows/savedesktopicon.c:97
+#: src/objects/os/windows/savedesktopicon.c:87
 msgid "The file with the session preferences for this shortcut"
 msgstr ""
 
@@ -972,7 +972,7 @@ msgstr ""
 msgid "The name of associated action"
 msgstr ""
 
-#: src/objects/window/window.c:206
+#: src/objects/window/window.c:207
 msgid "The name of the actions in the header bar"
 msgstr ""
 
@@ -1001,7 +1001,7 @@ msgid "The position of the keypad"
 msgstr ""
 
 #: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
-#: src/objects/os/windows/savedesktopicon.c:90
+#: src/objects/os/windows/savedesktopicon.c:80
 msgid "The session name used in the window/tab title (empty for default)"
 msgstr ""
 
@@ -1085,10 +1085,8 @@ msgstr ""
 msgid "UI Type"
 msgstr ""
 
-#: src/objects/settings/gsettings.c:131
-msgid ""
-"Unable to initialize system settings. Application may crash in unexpected "
-"ways"
+#: src/objects/application/application.c:544
+msgid "Unable to initialize settings. Application may crash in unexpected ways"
 msgstr ""
 
 #: src/objects/os/windows/open.c:137
@@ -1101,7 +1099,7 @@ msgstr ""
 msgid "Unselect"
 msgstr ""
 
-#: src/objects/application/actions/about.c:98
+#: src/objects/application/actions/about.c:116
 #, c-format
 msgid "Unstable version %s-%s"
 msgstr ""
@@ -1111,7 +1109,7 @@ msgstr ""
 msgid "Use +/- for field navigation"
 msgstr ""
 
-#: src/objects/application/actions/about.c:100
+#: src/objects/application/actions/about.c:118
 #, c-format
 msgid "Version %s-%s"
 msgstr ""
@@ -1123,7 +1121,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:191
+#: src/objects/application/actions/about.c:209
 msgid "View this project on github"
 msgstr ""
 
@@ -1132,7 +1130,7 @@ msgstr ""
 msgid "Window with default session"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:189
+#: src/objects/os/windows/savedesktopicon.c:179
 msgid "Windows shortcuts"
 msgstr ""
 
@@ -1142,7 +1140,7 @@ msgstr ""
 
 #: src/objects/actions/save.c:103 src/objects/settings/dialog.c:78
 #: src/objects/os/linux/savedesktopicon.c:140
-#: src/objects/os/windows/savedesktopicon.c:134
+#: src/objects/os/windows/savedesktopicon.c:124
 msgid "_Cancel"
 msgstr ""
 
@@ -1192,7 +1190,7 @@ msgid "_Rename session"
 msgstr ""
 
 #: src/objects/actions/save.c:104 src/objects/os/linux/savedesktopicon.c:141
-#: src/objects/os/windows/savedesktopicon.c:135
+#: src/objects/os/windows/savedesktopicon.c:125
 msgid "_Save"
 msgstr ""
 
@@ -1200,10 +1198,10 @@ msgstr ""
 msgid "_View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:190
+#: src/objects/application/actions/about.c:208
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr ""
 
-#: src/objects/application/actions/about.c:193
+#: src/objects/application/actions/about.c:211
 msgid "translator-credits"
 msgstr ""

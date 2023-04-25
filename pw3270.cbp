@@ -58,6 +58,9 @@
 		<Unit filename="src/main/builder.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/main/linux/tools.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/main/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -69,6 +72,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/main/windows/resources.rc" />
+		<Unit filename="src/main/windows/tools.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/objects/actions/abstract.c">
 			<Option compilerVar="CC" />
 		</Unit>

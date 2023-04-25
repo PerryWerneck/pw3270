@@ -1,0 +1,480 @@
+#!/bin/bash
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+#
+# Copyright (C) 2023 Perry Werneck <perry.werneck@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+#
+# References:
+#
+# https://www.gtk.org/docs/installations/windows/
+# http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
+#
+
+# Check command-line arguments
+argument() {
+
+	local cmdline
+	for cmdline in ${BASH_ARGV[*]}
+	do
+		if [ "$(echo ${cmdline} | sed "s@^--@@g" | sed "s@^-@@g" | cut -d= -f1)" == "${1}" ]; then
+			local value
+			value="$(echo ${cmdline} | cut -d= -f2)"
+			if [ -z "${value}" ]; then
+				echo "1"
+			else
+				echo "${value}"
+			fi
+			return 0
+		fi
+	done
+	echo ""
+	return 2
+}
+
+argument "help" > /dev/null
+if [ "$?" == "0" ]; then
+	echo "Use ${0} options"
+	echo ""
+	echo "	--help Help options (this screen)"
+	echo "	--zip Build zipfile"
+	echo "	--nsi Build nsi installer"
+	echo "	--upload Upload bundle to github"
+fi
+
+# Setup default paths
+srcdir="$(dirname $(dirname $(readlink -f "${0}")))"
+cd ${srcdir}
+if [ "$?" != "0" ]; then
+	echo "Cant cd to ${srcdir}"
+	exit -1
+fi
+
+if [ -z ${MINGW_PREFIX} ]; then
+	if [ -d "/usr/x86_64-w64-mingw32/sys-root/mingw" ]; then
+		MINGW_PREFIX="/usr/x86_64-w64-mingw32/sys-root/mingw"
+		PKG_CONFIG="/usr/bin/x86_64-w64-mingw32-pkg-config"
+	else
+		echo "Cant determine mingw prefix"
+		exit -1
+	fi
+fi
+
+if [ -z ${PKG_CONFIG} ]; then
+	PKG_CONFIG=${MINGW_PREFX}/bin/pkg-config
+fi
+
+PACKAGE_NAME=$(grep AC_INIT configure.ac | cut -d[ -f2 | cut -d] -f1)
+if [ -z ${PACKAGE_NAME} ]; then
+	echo "Cant determine package name"
+	exit -1
+fi
+
+PACKAGE_VERSION=$(grep AC_INIT configure.ac | cut -d[ -f3 | cut -d] -f1)
+if [ -z ${PACKAGE_VERSION} ]; then
+	echo "Cant determine package name"
+	exit -1
+fi
+
+GTK_PREFIX=$(${PKG_CONFIG} --variable=prefix gtk+-3.0)
+GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
+GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
+GDK_LOADERS=$(echo $(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
+
+mkdir -p .bin/bundle
+if [ "$?" != "0" ]; then
+	echo "Cant mkdir base buildroot"
+	exit -1
+fi
+
+buildroot=$(readlink -f .bin/bundle)
+if [ -z ${buildroot} ]; then
+	echo "Cant detect buildroot ${buildroot}"
+	exit -1
+fi
+
+mkdir -p "${buildroot}"
+if [ "$?" != "0" ]; then
+	echo "Cant mkdir ${buildroot}"
+	exit -1
+fi
+
+rm -fr "${buildroot}/*"
+if [ "$?" != "0" ]; then
+	echo "Cant clean ${buildroot}"
+	exit -1
+fi
+
+bindir="${buildroot}${MINGW_PREFIX}/bin"
+
+if [ -z "${WIN_ROOT}" ]; then
+	WIN_ROOT="/c/Windows"
+fi
+
+export LANG=C
+
+prepare() {
+
+	argument "help" > /dev/null
+	if [ "$?" == "0" ]; then
+		exit 0
+	fi
+	
+	rm -fr "${buildroot}"
+	mkdir -p "${buildroot}"
+} 
+
+install_bin() {
+
+	mkdir -p "${bindir}"
+
+	AGAIN=1
+	until [ $AGAIN = 0 ]; do
+
+		SOURCES=$(mktemp)
+		REQUIRES=$(mktemp)
+
+		find "${buildroot}" -iname "*.dll" >	${SOURCES}
+		find "${buildroot}" -iname "*.exe" >>	${SOURCES}
+	
+		while read FILENAME
+		do
+			echo ${FILENAME}
+			objdump -p ${FILENAME} | grep "DLL Name:" | cut -d: -f2 | tr "[:upper:]" "[:lower:]" >> ${REQUIRES}
+		done < ${SOURCES}
+
+		libs_to_exclude="
+			advapi32.dll
+			cfgmgr32.dll
+			comctl32.dll
+			comdlg32.dll
+			crypt32.dll
+			d3d8.dll
+			d3d9.dll
+			ddraw.dll
+			dnsapi.dll
+			dsound.dll
+			dwmapi.dll
+			gdi32.dll
+			gdiplus.dll
+			glu32.dll
+			glut32.dll
+			imm32.dll
+			iphlpapi.dll
+			kernel32.dll
+			ksuser.dll
+			mpr.dll
+			mscms.dll
+			mscoree.dll
+			msimg32.dll
+			msvcr71.dll
+			msvcr80.dll
+			msvcr90.dll
+			msvcrt.dll
+			mswsock.dll
+			netapi32.dll
+			odbc32.dll
+			ole32.dll
+			oleacc.dll
+			oleaut32.dll
+			opengl32.dll
+			psapi.dll
+			rpcrt4.dll
+			secur32.dll
+			setupapi.dll
+			shell32.dll
+			shlwapi.dll
+			user32.dll
+			usp10.dll
+			version.dll
+			wininet.dll
+			winmm.dll
+			wldap32.dll
+			ws2_32.dll
+			wsock32.dll
+			winspool.drv
+			ntdll.dll
+			winhttp.dll
+			hid.dll
+			bcrypt.dll
+		"
+
+		# Remove system DLLs from list
+		for i in $libs_to_exclude; do
+			sed -i -e "/${i}/d" ${REQUIRES}
+		done
+
+		AGAIN=0
+		while read FILENAME
+		do
+
+			echo ${FILENAME}
+			
+			if [ ! -e "${bindir}/${FILENAME}" ]; then
+
+				if [ -e ${MINGW_PREFIX}/bin/${FILENAME} ]; then
+
+					AGAIN=1
+					cp -v "${MINGW_PREFIX}/bin/${FILENAME}" "${bindir}/${FILENAME}"
+					if [ "$?" != "0" ]; then
+						exit -1
+					fi
+
+				elif [ -e ${MINGW_PREFIX}/lib/${FILENAME} ]; then
+
+					AGAIN=1
+					cp -v "${MINGW_PREFIX}/lib/${FILENAME}" "${bindir}/${FILENAME}"
+					if [ "$?" != "0" ]; then
+						exit -1
+					fi
+
+				elif [ -e  "${WIN_ROOT}/System32/${FILENAME}" ]; then
+
+					echo "Ignoring ${WIN_ROOT}/System32/${FILENAME}"
+
+				else 
+
+					echo "Can't find ${MINGW_PREFIX}/bin/${FILENAME} or ${WIN_ROOT}/System32/${FILENAME}"
+					find "${MINGW_PREFIX}" -iname "${FILENAME}"
+					exit -1
+
+				fi
+			
+			fi
+		
+		done < ${REQUIRES}
+
+		rm -f ${SOURCES}
+		rm -f ${REQUIRES}
+		
+	done
+
+}
+
+install_locale() {		
+
+        mkdir -p ${buildroot}${MINGW_PREFIX}/share/locale/pt_BR/LC_MESSAGES
+
+        locales="
+                gettext-runtime.mo
+                gettext-tools.mo
+                glib20.mo
+                gtk30.mo
+                gtk30-properties.mo
+        "
+
+		FILENAMES=$(mktemp)
+        for i in ${locales}
+		do
+ 			find "${MINGW_PREFIX}/share/locale" -name ${i} >> ${FILENAMES}
+		done
+
+		while read FILENAME
+		do
+			mkdir -p $(dirname "${buildroot}${FILENAME}")
+			cp -v "${FILENAME}" "${buildroot}${FILENAME}"
+			if [ "$?" != "0" ]; then
+				exit -1
+			fi
+		done < ${FILENAMES}
+		rm -f ${FILENAMES}
+}
+
+install_schemas() {		
+
+        mkdir -p ${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas
+
+        schemas="
+            org.gtk.Settings.FileChooser.gschema.xml
+			gschema.dtd
+        "
+
+		for schema in ${schemas}
+		do
+        	cp -v "${MINGW_PREFIX}/share/glib-2.0/schemas/${schema}" "${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas"
+			if [ "$?" != "0" ]; then
+				exit -1
+			fi
+		done
+
+		glib-compile-schemas \
+                --targetdir="${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas" \
+                "${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas"
+
+		if [ "$?" != "0" ]; then
+			exit -1
+		fi
+}
+
+install_theme() {		
+
+	mkdir -p "${buildroot}${MINGW_PREFIX}/etc"
+	cp -rv "${MINGW_PREFIX}/etc/gtk-3.0" "${buildroot}${MINGW_PREFIX}/etc"
+	if [ "$?" != "0" ]; then
+		exit -1
+	fi
+
+	# https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
+	mkdir -p ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0
+	rm -f ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
+	rm -f ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/gtkrc
+
+	echo "[Settings]" > ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
+	echo "gtk-theme-name=${1}" >> ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
+
+	if [ -e "${srcdir}/win/gtk.css" ]; then
+		mkdir -p "${buildroot}${MINGW_PREFIX}/share/themes/Default/gtk-3.0"
+		cp "${srcdir}/win/gtk.css" "${buildroot}${MINGW_PREFIX}/share/themes/Default/gtk-3.0/gtk.css"
+	fi
+
+}
+
+install_icons() {
+
+	mkdir -p "${buildroot}${MINGW_PREFIX}/share/icons"
+
+	if [ -d "${MINGW_PREFIX}/share/icons/${1}" ]; then
+
+		cp -rv "${MINGW_PREFIX}/share/icons/${1}" "${buildroot}${MINGW_PREFIX}/share/icons"
+		if [ "$?" != 0 ]; then
+			echo "Can´t copy ${1} icons"
+			exit -1
+		fi
+
+	elif [ -d "/usr/share/icons/${1}" ]; then
+
+		cp -rv "/usr/share/icons/${1}" "${buildroot}${MINGW_PREFIX}/share/icons"
+		if [ "$?" != 0 ]; then
+			echo "Can´t copy ${1} icons"
+			exit -1
+		fi
+
+	else
+
+		echo "Can´t find ${1} icons"
+		exit -1
+	
+	fi
+	
+}
+
+install_loaders() {
+
+	if [ -d "${MINGW_PREFIX}${GDK_LOADERS}" ]; then
+		mkdir -p "${buildroot}/${MINGW_PREFIX}${GDK_LOADERS}"
+		cp -rv ${MINGW_PREFIX}${GDK_LOADERS}/* "${buildroot}/${MINGW_PREFIX}${GDK_LOADERS}"
+		if [ "$?" != "0" ]; then
+			exit -1
+		fi
+	
+		find ${buildroot}/${MINGW_PREFIX}${GDK_LOADERS} -iname "*.a" -exec rm -f {} \;
+	
+	fi
+
+}
+
+make_zip() {
+
+	cd ${buildroot}${MINGW_PREFIX}
+	if [ "$?" != "0" ]; then
+		exit -1
+	fi
+
+	rm -f ${srcdir}/${MINGW_PACKAGE_PREFIX}-${PACKAGE_NAME}-${PACKAGE_VERSION}.bundle.zip
+
+	zip -9 -r ${srcdir}/${MINGW_PACKAGE_PREFIX}-${PACKAGE_NAME}-${PACKAGE_VERSION}.bundle.zip .
+	if [ "$?" != "0" ]; then
+		exit -1
+	fi
+
+	cd ${srcdir}
+	if [ "$?" != "0" ]; then
+		exit -1
+	fi
+	
+	if [ -z $(which gh) ]; then
+		return 0
+	fi
+	
+	argument "upload" > /dev/null
+	if [ "$?" == "0" ]; then
+		gh release upload --clobber "${PACKAGE_VERSION}" ${srcdir}/${MINGW_PACKAGE_PREFIX}-${PACKAGE_NAME}-${PACKAGE_VERSION}.bundle.zip
+	fi	
+
+}
+
+make_nsis() {
+	makensis \
+		-INPUTCHARSET UTF8 \
+		-DWITHIPC \
+		-DWITHPLUGINS \
+		-DWITHSDK \
+		${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi
+		if [ "$?" != "0" ]; then
+			echo "Cant build nsis script"
+		fi	
+
+	if [ ! -z $(which gh) ]; then
+		argument "upload" > /dev/null
+		if [ "$?" == "0" ]; then
+			gh release upload --clobber "${PACKAGE_VERSION}" ${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}*.exe
+			if [ "$?" != "0" ]; then
+				echo "Cant upload nsis installer"
+				exit -1
+			fi			
+		fi	
+	fi
+
+	mv -f ${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}*.exe "${srcdir}"
+	if [ "$?" != "0" ]; then
+		echo "Cant copy nsis installer"
+		exit -1
+	fi	
+}
+
+install_runtime() {
+
+	install_loaders
+	install_bin
+	install_locale
+	install_schemas
+	install_theme "Adwaita"
+	install_icons "Adwaita"
+
+}
+
+make_packages() {
+
+	mkdir -p "${buildroot}${MINGW_PREFIX}/nsi"
+	cp "${srcdir}/win/pw3270.nsi" "${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi" 
+	if [ "$?" != "0" ]; then
+		echo "Cant copy nsis script"
+	fi	
+
+	argument "zip" > /dev/null
+	if [ "$?" == "0" ]; then
+		make_zip
+	fi	
+
+	argument "nsi" > /dev/null
+	if [ "$?" == "0" ]; then
+		make_nsis
+	fi	
+
+}
+
+

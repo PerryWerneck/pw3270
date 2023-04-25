@@ -138,15 +138,16 @@ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *kla
 #ifdef _WIN32
 		"share/icons",
 #endif // _WIN32
+		"share/" G_STRINGIFY(PRODUCT_NAME) "/icons"
 	};
 
 	size_t ix;
 	for(ix = 0; ix < G_N_ELEMENTS(icon_search_paths); ix++) {
 #if defined(DEBUG)
-		lib3270_autoptr(char) path = g_build_filename(g_get_current_dir(),icon_search_paths[ix],NULL);
+		g_autofree gchar * path = g_build_filename(g_get_current_dir(),icon_search_paths[ix],NULL);
 #elif defined(_WIN32)
 		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
-		lib3270_autoptr(char) path = g_build_filename(appdir,icon_search_paths[ix],NULL);
+		g_autofree gchar * path = g_build_filename(appdir,icon_search_paths[ix],NULL);
 #else
 		lib3270_autoptr(char) path = lib3270_build_data_filename(icon_search_paths[ix],NULL);
 #endif

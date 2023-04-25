@@ -1,0 +1,84 @@
+---
+name: WinPKG
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - winpkg
+jobs:
+  msys2-mingw64:
+    name: Publish for Windows 64
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oprypin/find-latest-tag@v1
+        id: gettag
+        with:
+          repository: PerryWerneck/pw3270
+          sort-tags: true
+          releases-only: true
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          update: true
+          install: xz dos2unix mingw-w64-x86_64-gcc automake autoconf make git pkgconf
+            mingw-w64-x86_64-gettext gettext-devel mingw-w64-x86_64-openssl
+            libtool mingw-w64-x86_64-gtk3 mingw-w64-x86_64-librsvg mingw-w64-x86_64-gdk-pixbuf2
+            mingw-w64-x86_64-optipng mingw-w64-x86_64-nsis 
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: "PerryWerneck/lib3270"
+          latest: true
+          fileName: "mingw-w64-x86_64-lib3270-5.4-0-x86_64.pkg.tar.zst"      
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: "PerryWerneck/libv3270"
+          latest: true
+          fileName: "mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst"      
+      - name: BuildApp
+        run: ./win/ci-build.sh
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.gettag.outputs.tag }}
+          artifacts: "*-pw3270-*.pkg.tar.zst"
+          allowUpdates: true
+          draft: true
+          makeLatest: true
+          omitBody: true
+          omitPrereleaseDuringUpdate: true
+          replacesArtifacts: true
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: PerryWerneck/libipc3270
+          latest: true
+          fileName: mingw-w64-x86_64-libipc3270-5.5-0-x86_64.pkg.tar.zst
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: PerryWerneck/libhllapi
+          latest: true
+          fileName: mingw-w64-x86_64-libhllapi-5.5-0-x86_64.pkg.tar.zst
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: PerryWerneck/pw3270-plugin-ipc
+          latest: true
+          fileName: mingw-w64-x86_64-pw3270-plugin-ipc-5.5-0-x86_64.pkg.tar.zst
+      - name: Make bundle
+        run: ./win/bundle.msys
+      - name: Make Package
+        run: tar -C ./.bin/bundle -Jcf mingw-w64-x86_64-pw3270-bundle-x86_64.tar.xz .
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.gettag.outputs.tag }}
+          artifacts: "*-pw3270-*.tar.xz"
+          allowUpdates: true
+          draft: true
+          makeLatest: true
+          omitBody: true
+          omitPrereleaseDuringUpdate: true
+          replacesArtifacts: true
+

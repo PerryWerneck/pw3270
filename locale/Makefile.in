@@ -68,6 +68,5 @@ all: \
 	$(foreach SRC, $(basename $(wildcard *.po)), $(BINDIR)/$(SRC)/LC_MESSAGES/$(PRODUCT_NAME).mo)
 
 install: \
-	$(foreach SRC, $(basename $(wildcard *.po)), $(DESTDIR)/$(localedir)/$(SRC)/LC_MESSAGES/$(PRODUCT_NAME).mo)
-
+	$(foreach SRC, $(basename $(wildcard *.po)), $(DESTDIR)/$(localedir)/$(SRC)/LC_MESSAGES/$(PACKAGE_NAME).mo)
 

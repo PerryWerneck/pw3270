@@ -29,6 +29,7 @@ datarootdir=@datarootdir@
 localedir=@localedir@
 docdir=@docdir@
 sysconfdir=@sysconfdir@
+datadir="$(datarootdir)/@PRODUCT_NAME@"
 
 #---[ Configuration ]--------------------------------------------------------------------
 
@@ -72,7 +73,6 @@ MSGCAT=@MSGCAT@
 WINDRES=@WINDRES@
 AR=@AR@
 VALGRIND=@VALGRIND@
-CONVERT=@CONVERT@
 STRIP=@STRIP@
 
 #---[ Build Paths ]----------------------------------------------------------------------
@@ -126,6 +126,13 @@ $(OBJDBG)/%.o: \
 		-Wall -Wextra -fstack-check \
 		-DDEBUG=1 \
 		-o $@ -c $<
+
+%.ico: \
+	$(srcdir)/branding/%.ico
+
+	@echo $< ...
+	@$(MKDIR) $(@D)
+	@cp "$<" "$@"
 
 $(OBJDBG)/%.o: \
 	%.rc \
@@ -218,30 +225,6 @@ install-%: \
 		prefix=$(prefix) \
 		install
 
-%.ico: \
-	$(srcdir)/branding/%.svg
-
-	@echo $@ ...
-	@$(MKDIR) $(@D)
-	@$(CONVERT) \
-		-density 384 \
-		-background transparent \
-		$< \
-		-define icon:auto-resize \
-		-colors 256 \
-		$@
-
-%.png: \
-	$(srcdir)/branding/%.svg
-
-	@echo $@ ...
-	@$(MKDIR) $(@D)
-	@$(CONVERT) \
-		+antialias \
-		-background transparent \
-		$< \
-		$@
-
 #---[ Main Target ]----------------------------------------------------------------------
 
 all: \
@@ -318,7 +301,7 @@ install-macos-application: \
 		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
 install-windows-application: \
-	$(PRODUCT_NAME).png \
+	branding/$(PRODUCT_NAME).png \
 	strip
 
 	@$(MKDIR) \
@@ -332,7 +315,7 @@ install-windows-application: \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)
 
 	@$(INSTALL_DATA) \
-		$(PRODUCT_NAME).png \
+		branding/$(PRODUCT_NAME).png \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png
 
 	@$(INSTALL_DATA) \
