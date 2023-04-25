@@ -15,12 +15,11 @@ Created originally for Banco do Brasil, it's now an official Brazilian Governmen
 
 ## Installation
 
-### Linux 
-
-You can download installation package for supported distributions in Open Build Service or the flatpak version from flathub.
+You can download installation package for supported linux distributions in Open Build Service, the flatpak version from flathub and windows installer from [Releases](../../releases).
 
 [<img src="https://raw.githubusercontent.com/PerryWerneck/pw3270/develop/branding/obs-badge-en.svg" alt="Download from open build service" height="80px">](https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270)
 [<img src="https://flathub.org/assets/badges/flathub-badge-en.svg" alt="Download from flathub" height="80px">](https://flathub.org/apps/details/br.app.pw3270.terminal)
+[<img src="https://github.com/PerryWerneck/pw3270/blob/develop/branding/release-badge-en.svg" alt="Download from github releases" height="80px">](../../releases)
 
 ### Windows
 
