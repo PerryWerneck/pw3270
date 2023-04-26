@@ -81,7 +81,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 		SetRegView @WINARCH@
 		${DisableX64FSRedirection}
 
-		# define the output path for this file
+		# Set SMPROGRAMS and DESKTOP path
 		SetShellVarContext all
 
 		# Binary files
@@ -224,7 +224,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 			${DisableX64FSRedirection}
 			CreateDirectory "$INSTDIR\lib\@PRODUCT_NAME@-plugins"
             file "/oname=$INSTDIR\lib\@PRODUCT_NAME@-plugins\ipcserver.dll" "lib\@PRODUCT_NAME@-plugins\ipcserver.dll"
-
+	
 		sectionEnd
 
 	SubSectionEnd
@@ -380,42 +380,6 @@ Function .onInit
 	Pop $0
 
 !endif
-
-
-	#---[ Check for GTK runtime ]------------------------------------------------------------------------
-
-!ifdef WITHGTK
-
-	SetRegView @WINARCH@
-
-	ReadRegStr $4 HKLM "Software\gtkwin\@GTK_MODVERSION@" "path"
-
-	${if} $4 == ""
-
-		SectionGetFlags ${SecGTK} $0
-		IntOp $0 $0 | ${SF_SELECTED}
-		SectionSetFlags ${SecGTK} $0
-
-	${Else}
-
-		${if} ${FileExists} `$4\*.*`
-
-			SectionGetFlags ${SecGTK}  $0
-			IntOp $0 $0 & ${SECTION_OFF}
-			SectionSetFlags ${SecGTK}  $0
-
-		${Else}
-
-			SectionGetFlags ${SecGTK}  $0
-			IntOp $0 $0 | ${SF_SELECTED}
-			SectionSetFlags ${SecGTK}  $0
-
-		${EndIf}
-
-	${EndIf}
-
-!endif
-
 
 FunctionEnd
 

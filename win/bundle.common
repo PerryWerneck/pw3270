@@ -120,6 +120,7 @@ if [ "$?" != "0" ]; then
 fi
 
 bindir="${buildroot}${MINGW_PREFIX}/bin"
+sysdir="${buildroot}/windows/system32"
 
 if [ -z "${WIN_ROOT}" ]; then
 	WIN_ROOT="/c/Windows"
@@ -262,6 +263,15 @@ install_bin() {
 		rm -f ${REQUIRES}
 		
 	done
+	
+	# libhllapi should be available in windows path
+	if [ -e "${bindir}/libhllapi.dll" ]; then
+		mkdir -p "${sysdir}"
+		mv "${bindir}/libhllapi.dll" "${sysdir}"
+		if [ "$?" != "0" ]; then
+			exit -1
+		fi
+	fi
 
 }
 

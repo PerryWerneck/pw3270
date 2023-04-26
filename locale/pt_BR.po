@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-08 01:14-0300\n"
-"PO-Revision-Date: 2023-04-21 08:30-0300\n"
+"PO-Revision-Date: 2023-04-26 07:50-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -1041,7 +1041,7 @@ msgstr "O tipo do estado mantido pela ação"
 
 #: src/objects/os/macos/savedesktopicon.c:68
 msgid "This action is not available in this platform"
-msgstr ""
+msgstr "Ação não está disponível nessa plataforma"
 
 #: src/objects/window/header-settings.c:52
 msgid "Title bar"
@@ -1092,11 +1092,10 @@ msgid "UI Type"
 msgstr "Interface de usuário"
 
 #: src/objects/application/application.c:544
-#, fuzzy
 msgid "Unable to initialize settings. Application may crash in unexpected ways"
 msgstr ""
-"Não foi possível iniciar configuração de sistema. Aplicação pode falhar de "
-"forma inesperada"
+"Não foi possível iniciar configuração. Aplicação pode falhar de forma "
+"inesperada"
 
 #: src/objects/os/windows/open.c:137
 #, c-format
