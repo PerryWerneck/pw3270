@@ -29,6 +29,7 @@ datarootdir=@datarootdir@
 localedir=@localedir@
 docdir=@docdir@
 sysconfdir=@sysconfdir@
+datadir="$(datarootdir)/@PRODUCT_NAME@"
 
 #---[ Configuration ]--------------------------------------------------------------------
 
@@ -55,8 +56,8 @@ SOURCES= \
 	$(wildcard $(srcdir)/src/main/@OSNAME@/*.rc)
 
 SCHEMAS= \
-	$(wildcard schemas/@OSNAME@/*.gschema.xml) \
-	$(wildcard schemas/common/*.gschema.xml)
+	$(wildcard schemas/*.gschema.xml) \
+	$(wildcard schemas/*.gschema.xml)
 
 #---[ Tools ]----------------------------------------------------------------------------
 
@@ -72,7 +73,6 @@ MSGCAT=@MSGCAT@
 WINDRES=@WINDRES@
 AR=@AR@
 VALGRIND=@VALGRIND@
-CONVERT=@CONVERT@
 STRIP=@STRIP@
 
 #---[ Build Paths ]----------------------------------------------------------------------
@@ -127,6 +127,13 @@ $(OBJDBG)/%.o: \
 		-DDEBUG=1 \
 		-o $@ -c $<
 
+%.ico: \
+	$(srcdir)/branding/%.ico
+
+	@echo $< ...
+	@$(MKDIR) $(@D)
+	@cp "$<" "$@"
+
 $(OBJDBG)/%.o: \
 	%.rc \
 	$(PRODUCT_NAME).ico
@@ -134,15 +141,6 @@ $(OBJDBG)/%.o: \
 	@echo $< ...
 	@$(MKDIR) $(@D)
 	@$(WINDRES) $< -O coff -o $@
-
-gschemas.compiled: \
-	$(foreach SCHEMA, $(notdir $(SCHEMAS)), $(OBJDIR)/schemas/$(SCHEMA))
-
-	@$(MKDIR) $(OBJDIR)/schemas
-
-	@glib-compile-schemas \
-		--targetdir=$(@D) \
-		$(OBJDIR)/schemas
 
 #---[ Release Rules ]--------------------------------------------------------------------
 
@@ -207,7 +205,7 @@ $(POTDIR)/%.pot: \
 	@touch $@
 
 $(OBJDIR)/schemas/%.xml: \
-	schemas/@OSNAME@/%.xml
+	schemas/%.xml
 
 	@$(MKDIR) $(@D)
 	@cp "$^" "$@"
@@ -227,25 +225,14 @@ install-%: \
 		prefix=$(prefix) \
 		install
 
-%.ico: \
-	$(srcdir)/branding/%.svg
-
-	@echo $@ ...
-	@$(MKDIR) $(@D)
-	@$(CONVERT) \
-		-density 384 \
-		-background transparent \
-		$< \
-		-define icon:auto-resize \
-		-colors 256 \
-		$@
-
-
-#---[ Release Targets ]------------------------------------------------------------------
+#---[ Main Target ]----------------------------------------------------------------------
 
 all: \
 	$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
 	locale
+
+
+#---[ Release Targets ]------------------------------------------------------------------
 
 locale: \
 	locale/$(PACKAGE_NAME).pot
@@ -284,7 +271,7 @@ install-application: \
 	install-icons
 
 	@$(MKDIR) \
-		$(DESTDIR)$(libdir)/$(PRODUCT_NAME)-plugins
+		$(DESTDIR)@PLUGIN_DIR@
 
 	@$(INSTALL_DATA) \
 		$(srcdir)/ui/@OSNAME@.ui.xml \
@@ -314,6 +301,7 @@ install-macos-application: \
 		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
 install-windows-application: \
+	branding/$(PRODUCT_NAME).png \
 	strip
 
 	@$(MKDIR) \
@@ -322,6 +310,17 @@ install-windows-application: \
 	@$(INSTALL_PROGRAM) \
 		$(BINRLS)/$(PACKAGE_NAME)@EXEEXT@ \
 		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
+
+	@$(MKDIR) \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)
+
+	@$(INSTALL_DATA) \
+		branding/$(PRODUCT_NAME).png \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png
+
+	@$(INSTALL_DATA) \
+		CHANGELOG \
+		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PACKAGE_NAME).changes
 
 install-icons:
 
@@ -333,6 +332,15 @@ install-icons:
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/icons
 
 #---[ Misc Targets ]---------------------------------------------------------------------
+
+gschemas.compiled: \
+	$(foreach SCHEMA, $(notdir $(SCHEMAS)), $(OBJDIR)/schemas/$(SCHEMA))
+
+	@$(MKDIR) $(OBJDIR)/schemas
+
+	@glib-compile-schemas \
+		--targetdir=$(@D) \
+		$(OBJDIR)/schemas
 
 locale/$(PACKAGE_NAME).pot: \
 	$(foreach SRC, $(basename $(COMMON_SOURCES)), $(POTDIR)/$(SRC).pot) \

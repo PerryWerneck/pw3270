@@ -1,0 +1,613 @@
+-------------------------------------------------------------------
+Wed Mar 22 11:05:26 UTC 2023 - perry.werneck@gmail.com
+
+- Update to version 5.5+git20230204:
+  * Updating translation.
+  * Fixing win32 build, adding 'changes' file in windows app.
+  * Updating deb and mingw packages.
+  * Updating _service
+  * Updating translation.
+  * Adding 'CHANGELOG'
+  * Updating deb control files.
+  * Updating schema path on macos bundle script.
+
+-------------------------------------------------------------------
+Thu Apr 07 23:35:08 UTC 2022 - perry.werneck@gmail.com
+
+- Update to version 5.4:
+  * fix-appdata-xml.patch removed.
+  * Adjustments in lgtm build settings.
+  * Fixing lgtm alerts.
+  * Fixing locales.
+  * Fixing ui install path.
+  * Testing refactored menu engine on windows.
+  * Refactoring menu builder engine to allow OS dependant menu layouts.
+  * Small adjustments in option parser.
+  * Fixing build system.
+  * Refactoring build sistem.
+  * Adding lgtm control file.
+  * Update README.md
+  * Exporting the log file name as an application property.
+  * Adding method for setting application object just after the plugin load.
+  * Adding host settings to classic menu.
+  * Updating win package
+  * Adjustments in the classic menu.
+  * Host and color dialogs are now part of libv3270.
+  * Fixing msys install.
+  * Working on windows package.
+  * Adjusting for windows packaging.
+  * Calling plugins on every new terminal.
+  * Commenting unnecessary message.
+  * Fix bug #24 - Run glib-compile-schemas after schema installation.
+  * Update README.md
+  * Updating metadata.
+  * Updating translation.
+  * Fixing 'save session preferences' in the classic dialog.
+  * Default for update session file is now false.
+  * Updating pre-reqs.
+  * Updating cross-compiler install script.
+  * Adding connect/disconnect icons.
+  * Adding message dialog when gsettings fail to prevent the windows 'hang' on schema failure.
+  * Fixing windows startup with session file name.
+  * 'gfile' open has failed on windows, building an OS specific version.
+  * Working on command line session file parser.
+  * Adjusting user interface.
+  * Adding 'ok' icons.
+  * Updating translations, adding method to get the active terminal window.
+  * Implementing method to get active session.
+  * Adding 'quit' icons.
+  * Fixing release build.
+  * Fixing windows load of gschemas.
+  * Fixing gsettings error.
+  * Fixing icons in the windows package.
+  * Implementing default log file from command line option.
+  * Working on windows package.
+  * Adding pixbuf loaders to runtime.
+  * Fixing gsettings on windows.
+  * Disabling tabs from command line option.
+  * Updating windows package script.
+  * Working on windows build.
+  * Updating windows schema.
+  * Fixing windows build.
+  * Adjustments in windows package.
+  * rsvg-view was replaced by inkscape.
+  * Adjusments in win package.
+  * Reseting to default session before loading of command line URL.
+  * Fixing codeql workflow
+  * Fixing startup with URL instead of session file.
+  * Fixing gnome-software integration.
+  * Adding the '.desktop' required by gnome-software on the id.
+  * Updating desktop file.
+  * Fixing obs warning.
+  * Fixing appstream-validate error.
+  * Convert from appdata to metainfo
+  * Adjusting desktop file.
+  * Reformating source with astyle.
+  * Adding metada to gtkrecentmanager entry.
+  * Fixing last-session-save engine.
+  * Adding action to open session file in the active terminal.
+  * Storing last command line passed session as a default one.
+  * Adding gsetting for default session filename.
+  * Disabling toolbar and header bar on invalid gsettings object to avoid segfaults.
+  * Fixing empty session name on "save-session-preferences" dialog.
+  * Fixing segfault on multiple session files.
+  * Updating README.
+  * Adding MVS screenshot.
+  * Update README.md
+  * Fixing windows build.
+  * Fixing translation.
+  * Fixing package build.
+  * Adjustments on about window.
+  * Delaying 'gsettings' change on application preferences dialog.
+  * Moving keypads to another project/package.
+  * Adding symbolic icon.
+  * Fixing appdata icon.
+  * Translating appdata.
+  * Trying to fix SLE-12 icon problem.
+  * Can't use metainfo and appdata in the same project.
+  * Adding metainfo for keypads.
+  * Updating package control files.
+  * Allow change of the application id from configure.
+  * Using application id for .desktop file, adjustmente in appdata.
+  * Fixing dialog section title.
+  * Fixing segfault on multiple use of settings dialog.
+  * Adding settings for the toolbar position.
+  * Ignoring patches.
+  * Fixing schema paths.
+  * Fixing fedora builds.
+  * Updating rpm control file.
+  * Fixing toolbar segfault on application exit.
+  * Enable new windows and tab lockdown.
+  * Fix loading of default settings.
+  * Updating project file.
+  * Cleaning debug messages.
+  * Fixing schemas.
+  * Adding option for lockdown the host settings dialog.
+  * Branding package should be noarch.
+  * Update README.md
+  * Changing version to 5.4 Adjustments in the about dialog.
+  * Fixing 'tag' script.
+
+-------------------------------------------------------------------
+Thu Apr 07 23:35:08 UTC 2022 - perry.werneck@gmail.com
+
+- Update to version 5.4:
+  * Adjustments in lgtm build settings.
+  * Fixing lgtm alerts.
+  * Fixing locales.
+  * Fixing ui install path.
+  * Testing refactored menu engine on windows.
+  * Refactoring menu builder engine to allow OS dependant menu layouts.
+  * Small adjustments in option parser.
+  * Fixing build system.
+  * Refactoring build sistem.
+  * Adding lgtm control file.
+  * Update README.md
+  * Exporting the log file name as an application property.
+  * Adding method for setting application object just after the plugin load.
+  * Adding host settings to classic menu.
+  * Updating win package
+  * Adjustments in the classic menu.
+  * Host and color dialogs are now part of libv3270.
+  * Fixing msys install.
+  * Working on windows package.
+  * Adjusting for windows packaging.
+  * Calling plugins on every new terminal.
+  * Commenting unnecessary message.
+  * Fix bug #24 - Run glib-compile-schemas after schema installation.
+  * Update README.md
+  * Updating metadata.
+  * Updating translation.
+  * Fixing 'save session preferences' in the classic dialog.
+  * Default for update session file is now false.
+  * Updating pre-reqs.
+  * Updating cross-compiler install script.
+  * Adding connect/disconnect icons.
+  * Adding message dialog when gsettings fail to prevent the windows 'hang' on schema failure.
+  * Fixing windows startup with session file name.
+  * 'gfile' open has failed on windows, building an OS specific version.
+  * Working on command line session file parser.
+  * Adjusting user interface.
+  * Adding 'ok' icons.
+  * Updating translations, adding method to get the active terminal window.
+  * Implementing method to get active session.
+  * Adding 'quit' icons.
+  * Fixing release build.
+  * Fixing windows load of gschemas.
+  * Fixing gsettings error.
+  * Fixing icons in the windows package.
+  * Implementing default log file from command line option.
+  * Working on windows package.
+  * Adding pixbuf loaders to runtime.
+  * Fixing gsettings on windows.
+  * Disabling tabs from command line option.
+  * Updating windows package script.
+  * Working on windows build.
+  * Updating windows schema.
+  * Fixing windows build.
+  * Adjustments in windows package.
+  * rsvg-view was replaced by inkscape.
+  * Adjusments in win package.
+  * Reseting to default session before loading of command line URL.
+  * Fixing codeql workflow
+  * Fixing startup with URL instead of session file.
+  * Fixing gnome-software integration.
+  * Adding the '.desktop' required by gnome-software on the id.
+  * Updating desktop file.
+  * Fixing obs warning.
+  * Fixing appstream-validate error.
+  * Convert from appdata to metainfo
+  * Adjusting desktop file.
+  * Reformating source with astyle.
+  * Adding metada to gtkrecentmanager entry.
+  * Fixing last-session-save engine.
+  * Adding action to open session file in the active terminal.
+  * Storing last command line passed session as a default one.
+  * Adding gsetting for default session filename.
+  * Disabling toolbar and header bar on invalid gsettings object to avoid segfaults.
+  * Fixing empty session name on "save-session-preferences" dialog.
+  * Fixing segfault on multiple session files.
+  * Updating README.
+  * Adding MVS screenshot.
+  * Update README.md
+  * Fixing windows build.
+  * Fixing translation.
+  * Fixing package build.
+  * Adjustments on about window.
+  * Delaying 'gsettings' change on application preferences dialog.
+  * Moving keypads to another project/package.
+  * Adding symbolic icon.
+  * Fixing appdata icon.
+  * Translating appdata.
+  * Trying to fix SLE-12 icon problem.
+  * Can't use metainfo and appdata in the same project.
+  * Adding metainfo for keypads.
+  * Updating package control files.
+  * Allow change of the application id from configure.
+  * Using application id for .desktop file, adjustmente in appdata.
+  * Fixing dialog section title.
+  * Fixing segfault on multiple use of settings dialog.
+  * Adding settings for the toolbar position.
+  * Ignoring patches.
+  * Fixing schema paths.
+  * Fixing fedora builds.
+  * Updating rpm control file.
+  * Fixing toolbar segfault on application exit.
+  * Enable new windows and tab lockdown.
+  * Fix loading of default settings.
+  * Updating project file.
+  * Cleaning debug messages.
+  * Fixing schemas.
+  * Adding option for lockdown the host settings dialog.
+  * Branding package should be noarch.
+  * Update README.md
+  * Changing version to 5.4 Adjustments in the about dialog.
+  * Fixing 'tag' script.
+
+-------------------------------------------------------------------
+Thu Apr 07 23:35:08 UTC 2022 - perry.werneck@gmail.com
+
+- Update to version 5.4:
+  * Adjustments in lgtm build settings.
+  * Fixing lgtm alerts.
+  * Fixing locales.
+  * Fixing ui install path.
+  * Testing refactored menu engine on windows.
+  * Refactoring menu builder engine to allow OS dependant menu layouts.
+  * Small adjustments in option parser.
+  * Fixing build system.
+  * Refactoring build sistem.
+  * Adding lgtm control file.
+  * Update README.md
+  * Exporting the log file name as an application property.
+  * Adding method for setting application object just after the plugin load.
+  * Adding host settings to classic menu.
+  * Updating win package
+  * Adjustments in the classic menu.
+  * Host and color dialogs are now part of libv3270.
+  * Fixing msys install.
+  * Working on windows package.
+  * Adjusting for windows packaging.
+  * Calling plugins on every new terminal.
+  * Commenting unnecessary message.
+  * Fix bug #24 - Run glib-compile-schemas after schema installation.
+  * Update README.md
+  * Updating metadata.
+  * Updating translation.
+  * Fixing 'save session preferences' in the classic dialog.
+  * Default for update session file is now false.
+  * Updating pre-reqs.
+  * Updating cross-compiler install script.
+  * Adding connect/disconnect icons.
+  * Adding message dialog when gsettings fail to prevent the windows 'hang' on schema failure.
+  * Fixing windows startup with session file name.
+  * 'gfile' open has failed on windows, building an OS specific version.
+  * Working on command line session file parser.
+  * Adjusting user interface.
+  * Adding 'ok' icons.
+  * Updating translations, adding method to get the active terminal window.
+  * Implementing method to get active session.
+  * Adding 'quit' icons.
+  * Fixing release build.
+  * Fixing windows load of gschemas.
+  * Fixing gsettings error.
+  * Fixing icons in the windows package.
+  * Implementing default log file from command line option.
+  * Working on windows package.
+  * Adding pixbuf loaders to runtime.
+  * Fixing gsettings on windows.
+  * Disabling tabs from command line option.
+  * Updating windows package script.
+  * Working on windows build.
+  * Updating windows schema.
+  * Fixing windows build.
+  * Adjustments in windows package.
+  * rsvg-view was replaced by inkscape.
+  * Adjusments in win package.
+  * Reseting to default session before loading of command line URL.
+  * Fixing codeql workflow
+  * Fixing startup with URL instead of session file.
+  * Fixing gnome-software integration.
+  * Adding the '.desktop' required by gnome-software on the id.
+  * Updating desktop file.
+  * Fixing obs warning.
+  * Fixing appstream-validate error.
+  * Convert from appdata to metainfo
+  * Adjusting desktop file.
+  * Reformating source with astyle.
+  * Adding metada to gtkrecentmanager entry.
+  * Fixing last-session-save engine.
+  * Adding action to open session file in the active terminal.
+  * Storing last command line passed session as a default one.
+  * Adding gsetting for default session filename.
+  * Disabling toolbar and header bar on invalid gsettings object to avoid segfaults.
+  * Fixing empty session name on "save-session-preferences" dialog.
+  * Fixing segfault on multiple session files.
+  * Updating README.
+  * Adding MVS screenshot.
+  * Update README.md
+  * Fixing windows build.
+  * Fixing translation.
+  * Fixing package build.
+  * Adjustments on about window.
+  * Delaying 'gsettings' change on application preferences dialog.
+  * Moving keypads to another project/package.
+  * Adding symbolic icon.
+  * Fixing appdata icon.
+  * Translating appdata.
+  * Trying to fix SLE-12 icon problem.
+  * Can't use metainfo and appdata in the same project.
+  * Adding metainfo for keypads.
+  * Updating package control files.
+  * Allow change of the application id from configure.
+  * Using application id for .desktop file, adjustmente in appdata.
+  * Fixing dialog section title.
+  * Fixing segfault on multiple use of settings dialog.
+  * Adding settings for the toolbar position.
+  * Ignoring patches.
+  * Fixing schema paths.
+  * Fixing fedora builds.
+  * Updating rpm control file.
+  * Fixing toolbar segfault on application exit.
+  * Enable new windows and tab lockdown.
+  * Fix loading of default settings.
+  * Updating project file.
+  * Cleaning debug messages.
+  * Fixing schemas.
+  * Adding option for lockdown the host settings dialog.
+  * Branding package should be noarch.
+  * Update README.md
+  * Changing version to 5.4 Adjustments in the about dialog.
+  * Fixing 'tag' script.
+
+-------------------------------------------------------------------
+Tue Nov 24 23:29:38 UTC 2020 - Perry Werneck <perry.werneck@gmail.com>
+
+- Adding fix-appdata-xml.patch to fix problems with gnome-software. 
+
+-------------------------------------------------------------------
+Mon Nov 02 13:05:18 UTC 2020 - perry.werneck@gmail.com
+
+- Update to version 5.3+git20201102:
+  * Fixing package build.
+  * Removing .png files, using only the svg ones.
+  * Adjusting header bar defaults.
+  * Adjustments for openSUSE 15.2.
+  * Update README.md
+  * Use 'gnome' style as default on linux and classic in other OSs.
+  * Disabling F10 redirection.
+  * Adjusting default action lists.
+  * Enabling set/reset of kpalternative in the modern interface.
+  * Moving generic tools to libv3270.
+  * Auto updating toolbar when icon style changes.
+  * Implementing standard models for menus & comboboxes.
+  * Adding copy-image menu option.
+  * Adding "copy-as-html" action.
+  * Adding 'view trace' option on the popup menus.
+  * Pre-defining session file name on save dialogs.
+  * Creating session file when a desktop icon is built with default session.
+  * Adding method to suggest session filename and path.
+  * Processing toolbar-position settings.
+  * Adding tooltips in the header bar buttons.
+  * Moving application icons to the 'icons' folder.
+  * Adding support for customized icons.
+  * Adding option for symbolic icons in the header bar.
+  * Implementing use of symbolic icons in toolbar.
+  * Updating appdata.
+  * Scanning standard directories for session definition files.
+  * Adding appdata.xml
+  * Adding architecture in about window. Usefull for windows users.
+  * Project URL changes by locale.
+  * Loading/saving dialog responses from session file.
+  * Renaming default filename.
+  * Adding custom mime-type for pw3270 session settings file
+  * Using PIE instead of pic.
+  * Refactoring keypads.
+  * Adding deb post install/uninstall scripts.
+  * removed patch: optional_optipng.patch
+
+-------------------------------------------------------------------
+Mon Jun  8 12:55:06 UTC 2020 - Perry Werneck <perry.werneck@gmail.com>
+
+- Optipng is not in the SLE-15 default repositories
+- added patch: optional_optipng.patch
+
+-------------------------------------------------------------------
+Thu Jun 04 18:31:19 UTC 2020 - perry.werneck@gmail.com
+
+- Update to version 5.3:
+  * Adding method to set environment variables from session settings file (allow use of an alternative openssl config file).
+  * Adding fallbacks for application menu.
+  * PACKAGE_RELEASE macros is now a string to allow use of rpm's release.
+  * Adding option to switch the user interface.
+  * Add build instructions for macOS
+  * Redirecting gtk logs to lib3270.
+  * Using the new dialog section element who adapts to windows UI.
+  * Refactoring session rename method.
+  * Fixing application preferences dialog warning.
+  * The defaults for windows and linux aren't the same.
+  * Adding clipboard settings dialog.
+  * Updating properties.
+  * Cleaning up.
+  * Adding toolbar properties menu.
+  * Refactoring "open" actions.
+  * Refactoring "window" actions.
+  * Refactoring application settings dialog & related widgets as gobjects.
+  * Terminal actions now lives in libv3270.
+  * Conditional and property actions moved to libv3270.
+  * Moving dialog action to libv3270.
+  * Refactoring plugin engine.
+  * Adding popup menu over OIA.
+  * Only customized sessions can be renamed.
+  * Implementing session name change dialog.
+  * Implementing tab-menu.
+  * Implementing popup menu on tab labels.
+  * Refactoring the open session/url from command line.
+  * Refactoring terminal support methods.
+  * Implementing "open session in the window" action.
+  * Implementing the new "save session" dialog.
+  * Adding toolbar settings dialog.
+  * Fixing portability issue detected by OBS.
+  * PF & PA key and lib3270's actions are now on libv3270.
+  * Implementing toolbar actions edit dialog.
+  * Implementing action viewer widget.
+  * Implementing application settings.
+  * Loading/saving print settings to/from session file.
+  * Adding accelerator settings tab on the session properties dialog.
+  * Use convert -strip
+  * ui-style is now defined by gsettings.
+  * Updating to latest versions of v3270 & lib3270.
+  * Adding missing license info.
+  * Getting appname from lib3270.
+  * Removing use of deprecated function "get_hostname".
+  * Adding support for oversize.
+  * Using the new standard error popup for print errors.
+  * Linux custom print widget is now managed by libv3270.
+  * Replacing save dialog with the new version from v3270.
+  * linux log is now sent do system log.
+  * Updating package to follow naming guidelines.
+
+-------------------------------------------------------------------
+Wed Mar 25 08:47:04 UTC 2020 - Bernhard Wiedemann <bwiedemann@suse.com>
+
+- Add reproducible.patch to make package build reproducible (boo#1047218) 
+
+-------------------------------------------------------------------
+Thu Feb 20 10:24:35 UTC 2020 - Max Lin <mlin@suse.com>
+
+- Leap 15.2 and SLE15 SP2 has newer librsvg, extend the conditional
+  for "BuildRequires: rsvg-convert"
+
+-------------------------------------------------------------------
+Wed Oct 23 17:28:57 CEST 2019 - ro@suse.de
+
+- fix build-requires for factory/tumbleweed
+  rsvg-convert tool is now in rsvg-convert package 
+
+-------------------------------------------------------------------
+Fri May 31 18:21:45 UTC 2019 - perry.werneck@gmail.com
+
+  * Doing a "clean exit" on SIGTERM.
+  * Updating translation.
+  * Updating translation.
+  * Fixing save message.
+  * Fixing the application name with ./configure option.
+  * Showing message on configuration update.
+  * Updating rpm packaging.
+  * Fixing icon and application name.
+  * Adding desktop file.
+  * Creating application icon in standard folder.
+  * Emitting message when the logo is not available on about window.
+  * Fixing memory allocation error on about dialog.
+  * Fixing bug in about window detected on windows version.
+  * Fixing win32 runtime.
+  * Updating read me.
+  * Updating versions in win packate.
+  * Fixing file version indication in win32 package.
+  * Fixing windows build.
+  * Removing windows native dialog.
+  * Fixing windows build.
+  * Removing unused sources.
+  * Adding compiled version of the schemas in the runtime package.
+  * Adding gtkfilechooser schema to runtime package.
+  * Comentando fontes do código que foi transferido para a libv3270.
+  * Adding script to build and install lib3270 and libv3270 on msys2
+  * Fixing msys2 build.
+  * Disabling unused code.
+  * Updating translations.
+  * Renaming application transfer file dialog to avoid conflicts.
+  * Updating package control file.
+
+-------------------------------------------------------------------
+Tue Feb 26 16:55:21 UTC 2019 - perry.werneck@gmail.com
+
+- Update to version 5.2:
+  * Updating linux packages.
+  * Removing libv3270 submodule
+  * Updating branding Makefile.
+  * Updating autogen
+  * Updating project.
+  * Fixing RHEL 7 builds.
+  * Removing unused UI files.
+  * Fixing .deb builds
+  * Fixing RHEL7 build.
+  * Updating linux package.
+
+-------------------------------------------------------------------
+Thu Sep 14 00:28:23 UTC 2017 - jengelh@inai.de
+
+- Put libpw3270 into its own package (shared library guideline).
+- Drop require on /usr/bin/openssl, this is unusual for a library
+  to request.
+- %configure already sets CFLAGS,CXXFLAGS, do not set it again.
+  Replace old RPM variables. Remove redundant %clean section.
+  Do not run fdupes across hardlink boundaries.
+- Fix one RPM category. Trim redundant words from description.
+
+-------------------------------------------------------------------
+Wed Sep 13 13:51:34 UTC 2017 - erico.mendonca@suse.com
+
+- fix_actions.patch: patch is no longer necessary.
+- keypad_update.patch: patch is no longer necessary.
+- mutex_include.patch: patch is no longer necessary.
+- gtk2-fixes.patch: patch is no longer necessary.
+- file_chooser.patch: patch is no longer necessary.
+- fix_oorexx_charset.patch: patch is no longer necessary.
+
+-------------------------------------------------------------------
+Wed Sep 13 12:25:12 UTC 2017 - perry.werneck@gmail.com
+
+- Updating to the latest git level, closing package for distribution.
+- Java, Rexx, PHP, Mono and other extensions for scripting are now separated packages.
+
+-------------------------------------------------------------------
+Thu Jan 26 12:37:48 UTC 2017 - perry.werneck@gmail.com
+
+- Fixing .deb builds. 
+
+-------------------------------------------------------------------
+Thu Jan 19 16:36:08 UTC 2017 - perry.werneck@gmail.com
+
+- Removing unused sources, refactoring Makefiles, build & installation
+
+-------------------------------------------------------------------
+Tue Dec 27 16:00:33 UTC 2016 - perry.werneck@gmail.com
+
+- Updating deb dependencies.
+
+-------------------------------------------------------------------
+Fri Nov  4 17:36:54 UTC 2016 - perry.werneck@gmail.com
+
+- Fixing PHP5 requires. 
+
+-------------------------------------------------------------------
+Fri Oct 21 19:34:11 UTC 2016 - perry.werneck@gmail.com
+
+- Fixing script file chooser 
+- added patches:    fix_oorexx_charset.patch
+                    mutex_include.patch
+                    keypad_update.patch
+                    file_chooser.patch
+                    fix_actions.patch
+                    gtk2-fixes.patch
+
+-------------------------------------------------------------------
+Fri Oct 21 19:05:20 UTC 2016 - perry.werneck@gmail.com
+
+- Fixing charset problem on ooRexx plugin
+
+-------------------------------------------------------------------
+Fri Oct 21 18:38:28 UTC 2016 - perry.werneck@gmail.com
+
+- Fixing backport for bug 998842 (https://bugzilla.suse.com/show_bug.cgi?id=998842)
+    on OpenSUSE 13.2
+
+-------------------------------------------------------------------
+Thu Oct 20 11:13:41 UTC 2016 - perry.werneck@gmail.com
+
+- Adding PHP5 support on Debian builds 
+
+-------------------------------------------------------------------
+Wed Oct 19 17:21:01 UTC 2016 - perry.werneck@gmail.com
+
+- Fixing gtk2 builds.

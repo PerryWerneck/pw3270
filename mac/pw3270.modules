@@ -4,12 +4,12 @@
 <moduleset>
 
 	<include href="https://gitlab.gnome.org/GNOME/gtk-osx/raw/master/modulesets-stable/gtk-osx.modules" />
-	<include href="https://raw.githubusercontent.com/PerryWerneck/libv3270/macos/mac/libv3270.modules" />
+	<include href="https://raw.githubusercontent.com/PerryWerneck/libv3270/master/mac/libv3270.modules" />
 		
 	<repository type="git" name="github.com" href="git://github.com/"/>
 
 	<autotools id="pw3270">
-		<branch repo="github.com" module="PerryWerneck/pw3270" revision="macos" />
+		<branch repo="github.com" module="PerryWerneck/pw3270" revision="master" />
 		<dependencies>
 			<dep package="meta-gtk-osx-bootstrap" />
 			<dep package="glib" />

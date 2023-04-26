@@ -82,7 +82,7 @@ void pw3270_window_set_header_action_names(GtkWidget *window, const gchar *actio
 			}
 			g_strfreev(elements);
 
-			// And then, the right side actions;
+			// And then, the right side actions
 			elements = g_strsplit(header_blocks[1],",",-1);
 			for(ix=0; elements[ix]; ix++) {
 				button = pw3270_header_button_new_from_builder(GTK_WIDGET(window),builder,elements[ix]);

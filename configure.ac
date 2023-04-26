@@ -23,7 +23,7 @@ AC_PREREQ(2.61)
 
 dnl Initialise automake with the package name, version and
 dnl bug-reporting address.
-AC_INIT([pw3270], [5.4], [perry.werneck@gmail.com])
+AC_INIT([pw3270], [5.5], [perry.werneck@gmail.com])
 
 dnl Place auxilliary scripts here.
 AC_CONFIG_AUX_DIR([scripts])
@@ -39,6 +39,8 @@ AC_CONFIG_HEADER([src/include/config.h])
 
 dnl Initialise automake stuff.
 AM_INIT_AUTOMAKE
+
+LT_INIT
 
 dnl Set gettext version
 AM_GNU_GETTEXT_VERSION([0.14])
@@ -72,10 +74,6 @@ case "$host" in
 		AC_CONFIG_FILES(src/main/windows/resources.rc)
 		AC_CONFIG_FILES(src/main/windows/app-manifest.xml)
 
-		# Windows and linux doesn't use the same defaults.
-		AC_CONFIG_FILES(schemas/windows/application.gschema.xml)
-		AC_CONFIG_FILES(schemas/windows/window.gschema.xml)
-		AC_CONFIG_FILES(win/makeruntime.sh)
 		AC_CONFIG_FILES(win/pw3270.nsi)
 
 		if test "$host_cpu" = "x86_64"; then
@@ -92,6 +90,9 @@ case "$host" in
 		AC_SUBST(WINARCH,$app_cv_winarch)
 		AC_SUBST(NSISREDIR,$app_cv_nsisredir)
 
+		# Windows and unix doesn't use the same defaults.
+		AC_SUBST(DEFAULT_UI_STYLE,0)
+		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"true")
 		;;
 
 	*-apple-darwin*)
@@ -101,23 +102,27 @@ case "$host" in
 		CFLAGS="$CFLAGS -pthread"
 		LDFLAGS="$LDFLAGS -pthread"
 
-		AC_CONFIG_FILES(schemas/macos/application.gschema.xml)
-		AC_CONFIG_FILES(schemas/macos/window.gschema.xml)
+		# Windows and unix doesn't use the same defaults.
+		AC_SUBST(DEFAULT_UI_STYLE,1)
+		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"false")
 		;;
 
  	*)
 		app_cv_osname="linux"
 		app_rls_ldflags=""
 
-		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir)"
+		CFLAGS="$CFLAGS -pthread -DLIBDIR=\$(libdir) -DDATADIR=\$(datadir)"
 		LDFLAGS="$LDFLAGS -pthread"
 
-		AC_CONFIG_FILES(schemas/linux/application.gschema.xml)
-		AC_CONFIG_FILES(schemas/linux/window.gschema.xml)
+		# Windows and unix doesn't use the same defaults.
+		AC_SUBST(DEFAULT_UI_STYLE,1)
+		AC_SUBST(DEFAULT_MENUBAR_VISIBLE,"false")
 
 esac
 
-app_release_date=$(date +%Y-%m-%d)
+DATE_FMT="+%Y-%m-%d"
+SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-$(date +%s)}"
+app_release_date=$(date -u -d "@$SOURCE_DATE_EPOCH" "$DATE_FMT" 2>/dev/null || date -u -r "$SOURCE_DATE_EPOCH" "$DATE_FMT" 2>/dev/null || date -u "$DATE_FMT")
 AC_SUBST(RELEASE_DATE,$app_release_date)
 AC_SUBST(OSNAME,$app_cv_osname)
 AC_SUBST(RLS_LDFLAGS,$app_rls_ldflags)
@@ -128,12 +133,19 @@ AC_SUBST(DLLPREFIX)
 AC_SUBST(DLL_LDFLAGS)
 
 dnl ---------------------------------------------------------------------------
+dnl Check for headers
+dnl ---------------------------------------------------------------------------
+
+AC_CHECK_HEADER(malloc.h, AC_DEFINE(HAVE_MALLOC_H,,[do we have malloc.h?]))
+AC_CHECK_FUNC(localtime_r, AC_DEFINE(HAVE_LOCALTIME_R, [], [Do we have localtime_r?]) )
+AC_CHECK_FUNC(strtok_r, AC_DEFINE(HAVE_STRTOK_R, [], [Do we have strtok_r?]) )
+
+dnl ---------------------------------------------------------------------------
 dnl Check for other programs
 dnl ---------------------------------------------------------------------------
 
 AC_PATH_TOOL([AR], [ar], [ar])
 AC_PATH_TOOL([CONVERT], [convert], [no])
-dnl AC_PATH_TOOL([OPTIPNG],[optipng],[no])
 AC_PATH_TOOL([ZIP],[zip],[no])
 AC_PATH_TOOL([DLLTOOL],[dlltool],[no])
 AC_PATH_TOOL([WINDRES], [windres], [no])
@@ -152,6 +164,8 @@ AC_PATH_TOOL([STRIP], [strip], [true])
 AC_PATH_TOOL([DESKTOP_INSTALL],[desktop-file-install],[no])
 AC_PATH_TOOL([GLIB_SCHEMA_COMPILER],[glib-compile-schemas],[false])
 
+AC_PATH_TOOL([OPTIPNG], [optipng], [true])
+
 PKG_CHECK_EXISTS
 
 dnl ---------------------------------------------------------------------------
@@ -163,8 +177,8 @@ AC_SUBST(PACKAGE_DESCRIPTION,"IBM 3270 Terminal emulator")
 app_vrs_major=$(echo $VERSION | cut -d. -f1)
 app_vrs_minor=$(echo $VERSION | cut -d. -f2)
 
-AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_VERSION, $app_vrs_major)
-AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor)
+AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_VERSION, $app_vrs_major, [The package major version])
+AC_DEFINE_UNQUOTED(PACKAGE_MINOR_VERSION, $app_vrs_minor, [The package minor version])
 
 AC_SUBST(PACKAGE_MAJOR_VERSION,$app_vrs_major)
 AC_SUBST(PACKAGE_MINOR_VERSION,$app_vrs_minor)
@@ -174,9 +188,9 @@ AC_ARG_WITH([release], [AS_HELP_STRING([--with-release], [Set release])], [ app_
 app_rls_major=$(echo $app_cv_release.0.0 | cut -d. -f1)
 app_rls_minor=$(echo $app_cv_release.0.0 | cut -d. -f2)
 
-AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$app_cv_release")
-AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_RELEASE, $app_rls_major)
-AC_DEFINE_UNQUOTED(PACKAGE_MINOR_RELEASE, $app_rls_minor)
+AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$app_cv_release",[The package release])
+AC_DEFINE_UNQUOTED(PACKAGE_MAJOR_RELEASE, $app_rls_major,[The package major release])
+AC_DEFINE_UNQUOTED(PACKAGE_MINOR_RELEASE, $app_rls_minor,[The package minor release])
 
 AC_SUBST(PACKAGE_RELEASE,$app_cv_release)
 AC_SUBST(PACKAGE_MAJOR_RELEASE,$app_rls_major)
@@ -187,13 +201,24 @@ dnl Set application id & product name
 dnl ---------------------------------------------------------------------------
 
 AC_ARG_WITH([product-name], [AS_HELP_STRING([--with-product-name], [Set product name])], [ app_cv_product="$withval" ],[ app_cv_product=`pkg-config --variable=product_name lib3270` ])
-AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product)
+AC_DEFINE_UNQUOTED(PRODUCT_NAME, $app_cv_product,[The product name])
 AC_SUBST(PRODUCT_NAME,$app_cv_product)
 
-AC_ARG_WITH([application-id], [AS_HELP_STRING([--application-id], [Set the application ID])], [ app_cv_application_id="$withval" ],[ app_cv_application_id="br.com.bb.$app_cv_product" ])
+AC_ARG_WITH([product-id], [AS_HELP_STRING([--product-id], [Set the product ID])], [ app_cv_product_id="$withval" ],[ app_cv_product_id=`$PKG_CONFIG --variable=product_id lib3270` ])
+AC_DEFINE_UNQUOTED(PRODUCT_ID, $app_cv_product_id,[The product ID])
+AC_SUBST(PRODUCT_ID,$app_cv_product_id)
 
-AC_DEFINE_UNQUOTED(APPLICATION_ID, $app_cv_application_id)
+app_cv_object_path="/"`echo $app_cv_product_id | sed -e "s@\.@/@g"`"/"
+AC_DEFINE_UNQUOTED(PRODUCT_PATH, "$app_cv_object_path",[The schema path])
+AC_SUBST(PRODUCT_PATH,$app_cv_object_path)
+
+AC_ARG_WITH([application-id], [AS_HELP_STRING([--application-id], [Set the application ID])], [ app_cv_application_id="$withval" ],[ app_cv_application_id=$app_cv_product_id.terminal ])
+AC_DEFINE_UNQUOTED(APPLICATION_ID, $app_cv_application_id,[The application ID])
 AC_SUBST(APPLICATION_ID,$app_cv_application_id)
+
+AC_ARG_WITH([plugin-dir], [AS_HELP_STRING([--with-plugin-dir], [The application plugin dir])], [ app_cv_plugin_path="$withval" ],[ app_cv_plugin_path=`pkg-config --variable=plugin_path lib3270` ])
+AC_DEFINE_UNQUOTED(PLUGIN_DIR, "$app_cv_plugin_path", [The product name])
+AC_SUBST(PLUGIN_DIR,$app_cv_plugin_path)
 
 dnl ---------------------------------------------------------------------------
 dnl Check for unstable version
@@ -209,7 +234,7 @@ AC_ARG_ENABLE([unstable],
 ])
 
 if test "$app_cv_unstable" == "yes"; then
-	AC_DEFINE(ENABLE_UNSTABLE_FEATURES)
+	AC_DEFINE(ENABLE_UNSTABLE_FEATURES,,[Are we using the unstable features?])
 	AC_MSG_NOTICE([Enabling unstable features])
 else
 	AC_MSG_NOTICE([Using only stable features])
@@ -220,13 +245,13 @@ dnl ---------------------------------------------------------------------------
 dnl Check for LIBV3270
 dnl ---------------------------------------------------------------------------
 
-PKG_CHECK_MODULES( [LIBV3270], [libv3270], AC_DEFINE(HAVE_LIBV3270), AC_MSG_ERROR([LIBV3270 not present.]))
+PKG_CHECK_MODULES( [LIBV3270], [libv3270], AC_DEFINE(HAVE_LIBV3270,,[Do we have libv3270?]), AC_MSG_ERROR([LIBV3270 not present.]))
 
 AC_SUBST(LIBV3270_LIBS)
 AC_SUBST(LIBV3270_CFLAGS)
 
 AC_ARG_WITH([library-name], [AS_HELP_STRING([--with-library-name], [Set protocol library name])], [ app_cv_library="$withval" ],[ app_cv_library=`pkg-config --variable=library_name lib3270` ])
-AC_DEFINE_UNQUOTED(LIBRARY_NAME, $app_cv_library)
+AC_DEFINE_UNQUOTED(LIBRARY_NAME, $app_cv_library,[The tn3270 library name])
 AC_SUBST(LIBRARY_NAME,$app_cv_library)
 
 dnl ---------------------------------------------------------------------------
@@ -235,19 +260,7 @@ dnl ---------------------------------------------------------------------------
 
 GLIB_GSETTINGS
 
-case "$host" in
-	*-mingw32|*-pc-msys)
-		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
-		;;
-
-	*-apple-darwin*)
-		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
-		;;
-
- 	*)
-		PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK), AC_MSG_ERROR([GTK not present.]))
-
-esac
+PKG_CHECK_MODULES( [GTK], [gtk+-3.0 glib-2.0 gmodule-2.0], AC_DEFINE(HAVE_GTK,1,[Do we have gtk?]), AC_MSG_ERROR([GTK not present.]))
 
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)
@@ -290,7 +303,11 @@ dnl Configure which files to generate.
 dnl ---------------------------------------------------------------------------
 
 AC_CONFIG_FILES(Makefile)
+
+AC_CONFIG_FILES(schemas/application.gschema.xml)
+AC_CONFIG_FILES(schemas/window.gschema.xml)
 AC_CONFIG_FILES(schemas/Makefile)
+
 AC_CONFIG_FILES(locale/Makefile)
 
 AC_CONFIG_FILES(branding/Makefile)

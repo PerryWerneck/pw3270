@@ -23,6 +23,9 @@
 #include <pw3270/actions.h>
 #include <pw3270/keypad.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 enum {
 	PROP_ZERO,
@@ -299,7 +302,7 @@ static void pw3270Application_init(pw3270Application *app) {
 		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
 	}
 
-	pw3270_load_plugins_from_path(app, G_STRINGIFY(LIBDIR) G_DIR_SEPARATOR_S G_STRINGIFY(PRODUCT_NAME) "-plugins");
+	pw3270_load_plugins_from_path(app, PLUGIN_DIR);
 
 #endif // _WIN32
 
@@ -427,8 +430,6 @@ void startup(GApplication *application) {
 
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
 
-	GSettings *settings = pw3270_application_get_settings(application);
-
 	//
 	// Common actions
 	//
@@ -445,14 +446,14 @@ void startup(GApplication *application) {
 	//
 	// Open session actions.
 	//
-	if(g_settings_get_boolean(settings,"allow-open-session-actions")) {
+	if(pw3270_application_get_boolean(application,"allow-open-session-actions",TRUE)) {
 		g_action_map_add_action(G_ACTION_MAP(application),pw3270_open_session_action_new());
 	}
 
 	//
 	// New tab actions
 	//
-	if(g_settings_get_boolean(settings,"allow-new-tab-actions")) {
+	if(pw3270_application_get_boolean(application,"allow-new-tab-actions",TRUE)) {
 
 		GAction * new_tab_actions[] = {
 			pw3270_open_tab_action_new(),
@@ -468,7 +469,7 @@ void startup(GApplication *application) {
 	//
 	// New window actions
 	//
-	if(g_settings_get_boolean(settings,"allow-new-window-actions")) {
+	if(pw3270_application_get_boolean(application,"allow-new-window-actions",TRUE)) {
 
 		GAction * new_window_actions[] = {
 			pw3270_open_window_action_new(),
@@ -482,34 +483,42 @@ void startup(GApplication *application) {
 	}
 
 	//
-	// Setup application menus
-	//
-	g_autoptr(GtkBuilder) builder = pw3270_application_builder_new(application);
-
-	//
 	// Load keypad models
 	//
 	{
-		lib3270_autoptr(char) keypad_path = lib3270_build_data_filename("keypad",NULL);
+		g_autofree gchar *keypad_path = pw3270_build_data_path("keypad");
 
-		g_autoptr(GError) error = NULL;
-		g_autoptr(GDir) dir = g_dir_open(keypad_path,0,&error);
+		if(keypad_path) {
 
-		if(dir) {
+			g_message("Searching for keypads in '%s'",keypad_path);
 
-			const gchar *name = g_dir_read_name(dir);
-			while(!error && name) {
-				g_autofree gchar * path = g_build_filename(keypad_path,name,NULL);
-				app->keypads = pw3270_keypad_model_new_from_xml(app->keypads,path);
-				name = g_dir_read_name(dir);
+			g_autoptr(GError) error = NULL;
+			g_autoptr(GDir) dir = g_dir_open(keypad_path,0,&error);
+
+			if(dir) {
+
+				const gchar *name = g_dir_read_name(dir);
+				while(!error && name) {
+					g_autofree gchar * path = g_build_filename(keypad_path,name,NULL);
+					app->keypads = pw3270_keypad_model_new_from_xml(app->keypads,path);
+					name = g_dir_read_name(dir);
+				}
+
 			}
 
+			if(error) {
+				g_message("Can't read %s: %s",keypad_path,error->message);
+			}
+
+
 		}
 
-		if(error) {
-			g_message("Can't read %s: %s",keypad_path,error->message);
-		}
 	}
+
+	//
+	// Setup application menus
+	//
+	g_autoptr(GtkBuilder) builder = pw3270_application_builder_new(application);
 
 	if(gtk_application_prefers_app_menu(GTK_APPLICATION(application)))
 		gtk_application_set_app_menu(GTK_APPLICATION (application), G_MENU_MODEL(gtk_builder_get_object (builder, "app-menu")));
@@ -521,6 +530,32 @@ void startup(GApplication *application) {
 void activate(GApplication *application) {
 
 	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application),NULL);
+
+	if(!PW3270_APPLICATION(application)->settings) {
+
+		GtkWidget * dialog = gtk_message_dialog_new_with_markup(
+								 NULL,
+								 0,
+								 GTK_MESSAGE_ERROR,
+								 GTK_BUTTONS_CLOSE,
+								 _("Initialization has failed")
+							 );
+
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_("Unable to initialize settings. Application may crash in unexpected ways"));
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_("System settings error"));
+
+		gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
+
+		gtk_widget_show_all(dialog);
+
+		gtk_dialog_run(GTK_DIALOG(dialog));
+
+		gtk_widget_destroy(dialog);
+
+		g_application_quit(G_APPLICATION(application));
+
+	}
 
 	// Present the new window
 	pw3270_window_set_current_page(window,0);
@@ -557,10 +592,13 @@ PW3270_UI_STYLE pw3270_application_get_ui_style(GApplication *app) {
 }
 
 GSettings * pw3270_application_get_settings(GApplication *app) {
-
 	g_return_val_if_fail(PW3270_IS_APPLICATION(app),NULL);
 	return PW3270_APPLICATION(app)->settings;
+}
 
+gboolean pw3270_application_get_boolean(GApplication *app, const gchar *option_name, gboolean def) {
+	g_return_val_if_fail(PW3270_IS_APPLICATION(app),def);
+	return g_settings_get_boolean(PW3270_APPLICATION(app)->settings,option_name);
 }
 
 GSList * pw3270_application_get_plugins(GApplication *app) {
@@ -608,7 +646,12 @@ static int loghandler(const H3270 G_GNUC_UNUSED(*hSession), pw3270Application *a
 		return -1;
 	}
 
-	FILE *f = fopen(app->logfile,"a");
+	int fd = open(app->logfile,O_WRONLY|O_APPEND|O_CREAT,S_IWUSR|S_IRUSR);
+	if(fd < 0) {
+		return -1;
+	}
+
+	FILE *f = fdopen(fd,"a");
 
 	if(f) {
 		time_t ltime = time(0);

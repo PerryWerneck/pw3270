@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>pw3270.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>br.com.bb.pw3270</string>
+	<string>br.app.pw3270</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>LSMinimumSystemVersion</key>

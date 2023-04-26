@@ -1,0 +1,24 @@
+<services>
+
+	<!-- https://github.com/openSUSE/obs-service-tar_scm/blob/master/tar_scm.py -->
+	<service name="tar_scm">
+      
+		<param name="url">https://github.com/PerryWerneck/pw3270.git</param>
+      
+		<param name="changesgenerate">enable</param>
+		<param name="changesauthor">perry.werneck@gmail.com</param>
+      
+		<param name="versionformat">@PARENT_TAG@+git%cd</param>
+		<param name="scm">git</param>
+		<param name="revision">develop</param>
+
+	</service>
+
+	<service name="recompress">
+		<param name="file">*.tar</param>
+		<param name="compression">xz</param>
+	</service>
+
+	<service name="set_version" />
+
+</services>

@@ -27,17 +27,10 @@ build-stamp:
 	dh_testdir
 
 	# Add here commands to compile the package.
-    
-	aclocal
-	autoconf
-    
-	mkdir -p scripts
-	automake --add-missing 2> /dev/null | true
-    
-	./configure --prefix=/usr
-
+	NOCONFIGURE=1 ./autogen.sh
+	./configure --prefix=/usr --enable-unstable --with-application-id=br.com.bb.pw3270.unstable
 	rm -f debian/*.install
-	make Release
+	make all
 
 	# --- end custom part for compiling
 
@@ -65,8 +58,6 @@ install: build
 
 	# Install main application
 	make DESTDIR=$(PWD)/debian/$(PACKAGE_NAME) install-application
-
-	# --- end custom part for installing
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -104,3 +95,4 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install
+

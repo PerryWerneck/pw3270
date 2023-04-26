@@ -52,7 +52,7 @@ struct _pw3270Application {
 	GtkApplication parent;
 #ifndef __APPLE__
 	PW3270_UI_STYLE	ui_style;
-#endif // __APPLE__
+#endif // !__APPLE__
 
 	GSettings	* settings;
 	GList		* keypads;

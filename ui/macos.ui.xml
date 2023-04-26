@@ -330,7 +330,7 @@
 
 		</submenu>
 
-		<submenu id="view-menu-placeholder">
+		<submenu id="top-menu-view-placeholder">
 
 			<attribute name='label' translatable='yes'>_View</attribute>
 

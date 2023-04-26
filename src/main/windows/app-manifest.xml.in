@@ -3,7 +3,7 @@
     <assemblyIdentity
         version="@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
         processorArchitecture="*"
-        name="br.com.bb.@PRODUCT_NAME@"
+        name="br.app.@PRODUCT_NAME@"
         type="win32"
     />
     <description>@PACKAGE_DESCRIPTION@</description>

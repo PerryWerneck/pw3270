@@ -1,4 +1,3 @@
-
 ## GTK Based 3270 terminal emulator
 
 <img src="https://raw.githubusercontent.com/PerryWerneck/PerryWerneck/master/screenshots/mvs-tk4.png" alt="Screenshot">
@@ -7,29 +6,24 @@ pw3270 is a modern, GTK-based, completely free tn3270 emulator.
 
 Created originally for Banco do Brasil, it's now an official Brazilian Government Public Software project, and is used worldwide. 
 
-See more details at https://softwarepublico.gov.br/social/pw3270/
-
 <!-- https://github.com/igrigorik/ga-beacon -->
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-![CodeQL](https://github.com/PerryWerneck/libv3270/workflows/CodeQL/badge.svg?branch=master)
+![CodeQL](https://github.com/PerryWerneck/pw3270/workflows/CodeQL/badge.svg?branch=master)
+[![build result](https://build.opensuse.org/projects/home:PerryWerneck:pw3270/packages/pw3270/badge.svg?type=percent)](https://build.opensuse.org/package/show/home:PerryWerneck:pw3270/pw3270)
 
 ## Installation
 
-[<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/opensuse.svg" alt="OpenSUSE Linux" height="80px">](https://software.opensuse.org/package/pw3270)
-[<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/linux.svg" alt="Linux distribution" height="80px">](https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270)
+You can download installation package for supported linux distributions in [Open Build Service](https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270), the flatpak version from flathub and windows installer from [Releases](../../releases).
 
-### Linux (latest and unstable versions)
+[<img src="https://raw.githubusercontent.com/PerryWerneck/pw3270/develop/branding/obs-badge-en.svg" alt="Download from open build service" height="80px">](https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270)
+[<img src="https://flathub.org/assets/badges/flathub-badge-en.svg" alt="Download from flathub" height="80px">](https://flathub.org/apps/details/br.app.pw3270.terminal)
+[<img src="https://github.com/PerryWerneck/pw3270/blob/develop/branding/release-badge-en.svg" alt="Download from github releases" height="80px">](../../releases)
 
-For the supported distributions get the install repositories and instructions from https://software.opensuse.org/download.html?project=home%3APerryWerneck%3Apw3270&package=pw3270
+Alternative windows installers for stable and unstable versions are already available on Dropbox and one drive.
 
-### Windows
-
-Updated windows installers are available on Dropbox, google drive and one drive.
-
-[<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/dropbox.svg" alt="Get from dropbox" height="80px">](https://www.dropbox.com/sh/2qy3s6b5s4o4bws/AAAubHE8SBG7r6CJSKPflKN0a?dl=0)
-[<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/googledrive.svg" alt="Get from google drive" height="80px">](https://drive.google.com/drive/folders/1tmtKzGujLVvnIV_knWQXl_TBEC3_9ucL?usp=sharing)
-[<img src="https://cdn.jsdelivr.net/npm/simple-icons@3.9.0/icons/microsoftonedrive.svg" alt="Get from Microsoft One Drive" height="80px">](https://onedrive.live.com/?id=D8B46DA0372A6F1A%212208&cid=D8B46DA0372A6F1A)
+[<img src="https://raw.githubusercontent.com/PerryWerneck/pw3270/develop/branding/dropbox-badge-en.svg" alt="Get from dropbox" height="80px">](https://www.dropbox.com/sh/2qy3s6b5s4o4bws/AAAubHE8SBG7r6CJSKPflKN0a?dl=0)
+[<img src="https://raw.githubusercontent.com/PerryWerneck/pw3270/develop/branding/onedrive-badge-en.svg" alt="Get from Microsoft One Drive" height="80px">](https://onedrive.live.com/?id=D8B46DA0372A6F1A%212208&cid=D8B46DA0372A6F1A)
 
 ## Building for Linux
 
@@ -121,7 +115,7 @@ Updated windows installers are available on Dropbox, google drive and one drive.
 2. build
 
 	```shell
-	jhbuild --moduleset=https://raw.githubusercontent.com/PerryWerneck/pw3270/macos/mac/pw3270.modules build pw3270
+	jhbuild --moduleset=https://raw.githubusercontent.com/PerryWerneck/pw3270/master/mac/pw3270.modules build pw3270
 	```
 
 

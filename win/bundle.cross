@@ -1,0 +1,213 @@
+#!/bin/bash
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+#
+# Copyright (C) 2023 Perry Werneck <perry.werneck@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+#
+# References:
+#
+# https://www.gtk.org/docs/installations/windows/
+# http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
+#
+
+MINGW_PREFIX="/usr/x86_64-w64-mingw32/sys-root/mingw"
+PKG_CONFIG="/usr/bin/x86_64-w64-mingw32-pkg-config"
+MINGW_PACKAGE_PREFIX="mingw64"
+REPOSITORY_NAME="pw3270"
+
+# Load bundle functions
+. "$(dirname $(readlink -f "${0}"))/bundle.common"
+
+argument "help" > /dev/null
+if [ "$?" == "0" ]; then
+	echo "	--install-requires Install required packages"
+	echo "	--build Build application from source"
+fi
+
+prepare
+
+# List of pre-req packages
+# gdk-pixbuf-loader-rsvg
+
+# List of pre-built packages
+packages="lib3270 libv3270 libipc3270 libhllapi pw3270-plugin-ipc"
+dev_packages="lib3270 libv3270 libipc3270"
+
+install_prereqs() {
+
+	local list
+	local package
+	
+	list="${packages}"
+	for package in ${dev_packages}
+	do
+		list="${list} ${package}-devel"
+	done	
+
+	echo "Installing: ${list}"
+	
+	REPONUMBER=$(zypper lr | grep "${REPOSITORY_NAME}" | cut -d\| -f1)	
+	if [ -z "${REPONUMBER}" ]; then
+		echo "Cant locate repository ${REPOSITORY_NAME}"
+		exit -1
+	fi
+	
+	sudo zypper ref ${REPONUMBER}
+	if [ "$?" != "0" ]; then
+		echo "Cant refresh repository ${REPOSITORY_NAME}"
+		exit -1
+	fi
+	
+	for package in ${list}
+	do
+		sudo zypper in --repo ${REPONUMBER} "${MINGW_PACKAGE_PREFIX}-${package}"
+		if [ "$?" != "0" ]; then
+			echo "Cant install ${MINGW_PACKAGE_PREFIX}-${package} from ${REPOSITORY_NAME}"
+			exit -1
+		fi
+	done
+}
+
+build_package() {
+
+	# Build
+	make -C "${srcdir}" all
+	if [ "$?" != "0" ]; then
+		echo "Build failed"
+		exit -1
+	fi
+
+	make -C "${srcdir}" "DESTDIR=${buildroot}" install
+	if [ "$?" != "0" ]; then
+		echo "Install failed"
+		exit -1
+	fi
+
+}
+
+argument "install-requires" > /dev/null
+if [ "$?" == "0" ]; then
+	install_prereqs
+fi
+
+argument "build" > /dev/null
+if [ "$?" == "0" ]; then
+
+	NOCONFIGURE=1 ./autogen.sh
+	if [ "$?" != "0" ]; then
+		echo "Configure failed"
+		exit -1
+	fi
+
+	${MINGW_PACKAGE_PREFIX}-configure
+	if [ "$?" != "0" ]; then
+		echo "Configure failed"
+		exit -1
+	fi
+
+	build_package
+	
+else
+
+	packages="${packages} pw3270"
+
+fi
+
+unpack_rpm() {
+
+	local package
+	local list
+	local PACKAGE_NAME
+	
+	for package in ${packages}
+	do
+		PACKAGE_NAME=$(rpm -qa | grep "${MINGW_PACKAGE_PREFIX}-${package}" | grep -v devel | head --lines=1)
+		if [ -z "${PACKAGE_NAME}" ]; then
+			echo "No data from ${MINGW_PACKAGE_PREFIX}-${package}"
+			exit -1
+		fi
+		echo "Copy ${PACKAGE_NAME}"
+		for FILE in $(rpm -ql "${PACKAGE_NAME}")
+		do
+			if [ ! -d ${FILE} ]; then
+
+				FILEPATH="${buildroot}${FILE}"
+				mkdir -p "$(dirname ${FILEPATH})"
+				if [ "$?" != "0" ]; then
+					exit -1
+				fi
+
+				cp "${FILE}" "${FILEPATH}"
+				if [ "$?" != "0" ]; then
+					echo "Cant copy '${FILE}' from '${PACKAGE_NAME}'"
+					exit -1
+				fi
+			fi
+		done
+
+	done
+
+
+	for package in ${dev_packages}
+	do
+		PACKAGE_NAME=$(rpm -qa | grep "${MINGW_PACKAGE_PREFIX}-${package}" | grep devel | head --lines=1)
+		if [ -z "${PACKAGE_NAME}" ]; then
+			echo "No data from ${MINGW_PACKAGE_PREFIX}-${package}-devel"
+			exit -1
+		fi
+		echo "Copy ${PACKAGE_NAME}"
+		for FILE in $(rpm -ql "${PACKAGE_NAME}")
+		do
+			if [ ! -d ${FILE} ]; then
+
+				FILEPATH="${buildroot}${FILE}"
+				mkdir -p "$(dirname ${FILEPATH})"
+				if [ "$?" != "0" ]; then
+					exit -1
+				fi
+
+				cp "${FILE}" "${FILEPATH}"
+				if [ "$?" != "0" ]; then
+					echo "Cant copy '${FILE}' from '${PACKAGE_NAME}'"
+					exit -1
+				fi
+			fi
+		done
+
+	done
+
+}
+
+install_license() {
+	mkdir -p "${buildroot}${MINGW_PREFIX}/usr/share/${PACKAGE_NAME}"
+	cp "${srcdir}/LICENSE" "${buildroot}${MINGW_PREFIX}/share/${PACKAGE_NAME}"
+	if [ "$?" != "0" ]; then
+		echo "Cant copy LICENSE"
+		exit -1
+	fi
+}
+
+unpack_rpm
+
+install_runtime
+install_license
+
+make_packages
+
+echo "Bundle build complete"
+

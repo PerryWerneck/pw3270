@@ -50,20 +50,20 @@ all:
 	@$(MKDIR) $(BINDIR)
 	@$(GLIB_SCHEMA_COMPILER) \
 		--targetdir=$(BINDIR) \
-		./@OSNAME@
+		.
 	
 install: \
 	all
 
-	@$(MKDIR) $(DESTDIR)/$(schemadir)
+	@$(MKDIR) $(DESTDIR)$(schemadir)
 	@$(INSTALL_DATA) \
-		@OSNAME@/application.gschema.xml \
-		$(DESTDIR)/$(schemadir)/$(PRODUCT_NAME)-application.gschema.xml
+		application.gschema.xml \
+		$(DESTDIR)$(schemadir)/$(PRODUCT_NAME)-application.gschema.xml
 		
 	@$(INSTALL_DATA) \
-		@OSNAME@/window.gschema.xml \
-		$(DESTDIR)/$(schemadir)/$(PRODUCT_NAME)-window.gschema.xml
+		window.gschema.xml \
+		$(DESTDIR)$(schemadir)/$(PRODUCT_NAME)-window.gschema.xml
 
 	@$(GLIB_SCHEMA_COMPILER) \
-		$(DESTDIR)/$(schemadir)
+		$(DESTDIR)$(schemadir)
 

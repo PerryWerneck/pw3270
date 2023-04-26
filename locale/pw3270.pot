@@ -9,7 +9,7 @@ msgstr ""
 "#-#-#-#-#  view.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "#-#-#-#-#  save.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "#-#-#-#-#  abstract.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgstr ""
 "#-#-#-#-#  application.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-25 06:53-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,7 @@ msgstr ""
 "#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,7 +64,7 @@ msgstr ""
 "#-#-#-#-#  preferences.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgstr ""
 "#-#-#-#-#  open.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,7 +86,7 @@ msgstr ""
 "#-#-#-#-#  about.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-25 06:53-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,7 +97,7 @@ msgstr ""
 "#-#-#-#-#  window.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-25 06:53-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,7 +108,7 @@ msgstr ""
 "#-#-#-#-#  terminal.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,7 +119,7 @@ msgstr ""
 "#-#-#-#-#  page.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,18 +130,7 @@ msgstr ""
 "#-#-#-#-#  keyfile.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  header-settings.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,7 +141,18 @@ msgstr ""
 "#-#-#-#-#  header.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  header-settings.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,7 +163,7 @@ msgstr ""
 "#-#-#-#-#  sessionproperties.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,7 +174,7 @@ msgstr ""
 "#-#-#-#-#  filetransfer.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,7 +185,7 @@ msgstr ""
 "#-#-#-#-#  connect.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,7 +196,7 @@ msgstr ""
 "#-#-#-#-#  close.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -207,7 +207,7 @@ msgstr ""
 "#-#-#-#-#  toolbar.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -218,7 +218,7 @@ msgstr ""
 "#-#-#-#-#  settings.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -229,18 +229,7 @@ msgstr ""
 "#-#-#-#-#  models.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  gsettings.pot (PACKAGE VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -251,7 +240,7 @@ msgstr ""
 "#-#-#-#-#  dialog.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -262,7 +251,7 @@ msgstr ""
 "#-#-#-#-#  actionview.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -273,7 +262,7 @@ msgstr ""
 "#-#-#-#-#  tools.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-25 06:53-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -284,7 +273,7 @@ msgstr ""
 "#-#-#-#-#  builder.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-25 06:53-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -295,7 +284,7 @@ msgstr ""
 "#-#-#-#-#  model.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -306,7 +295,7 @@ msgstr ""
 "#-#-#-#-#  element.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -317,7 +306,7 @@ msgstr ""
 "#-#-#-#-#  attribute.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:54-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -328,7 +317,7 @@ msgstr ""
 "#-#-#-#-#  savedesktopicon.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:55-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -339,7 +328,7 @@ msgstr ""
 "#-#-#-#-#  savedesktopicon.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:56-0300\n"
+"POT-Creation-Date: 2023-04-25 06:53-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -350,7 +339,18 @@ msgstr ""
 "#-#-#-#-#  open.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:56-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  savedesktopicon.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -361,7 +361,18 @@ msgstr ""
 "#-#-#-#-#  windows.ui.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:56-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  macos.ui.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -372,7 +383,7 @@ msgstr ""
 "#-#-#-#-#  linux.ui.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-23 01:56-0300\n"
+"POT-Creation-Date: 2023-04-24 23:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -381,44 +392,45 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/objects/application/application.c:225
+#: src/objects/application/application.c:214
 #, c-format
 msgid "\"%s\" is not a valid user interface name"
 msgstr ""
 
-#: src/objects/application/actions/about.c:110
+#: src/objects/application/actions/about.c:136
 #, c-format
 msgid "%s for %s."
 msgstr ""
 
-#: src/objects/application/actions/about.c:117
+#: src/objects/application/actions/about.c:143
 msgid "32 bits Linux"
 msgstr ""
 
-#: src/objects/application/actions/about.c:115
+#: src/objects/application/actions/about.c:141
 msgid "32 bits Windows"
 msgstr ""
 
-#: src/objects/actions/save.c:166 src/objects/os/linux/savedesktopicon.c:267
-#: src/objects/os/windows/savedesktopicon.c:222
+#: src/objects/actions/save.c:167 src/objects/os/linux/savedesktopicon.c:233
+#: src/objects/os/windows/savedesktopicon.c:214
 msgid "3270 session files"
 msgstr ""
 
-#: src/objects/application/actions/about.c:119
+#: src/objects/application/actions/about.c:145
 msgid "64 bits Linux"
 msgstr ""
 
-#: src/objects/application/actions/about.c:113
+#: src/objects/application/actions/about.c:139
 msgid "64 bits Windows"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:215
+#: src/objects/toolbar/settings.c:214
 msgid ""
 "<small><b>The toolbar position only takes effect after restart</b></small>"
 msgstr ""
 
-#: src/objects/application/actions/about.c:209 ui/windows.ui.xml:40
-#: ui/windows.ui.xml:553 ui/linux.ui.xml:40 ui/linux.ui.xml:553
+#: src/objects/application/actions/about.c:235 ui/windows.ui.xml:40
+#: ui/windows.ui.xml:553 ui/macos.ui.xml:40 ui/macos.ui.xml:553
+#: ui/linux.ui.xml:40 ui/linux.ui.xml:553
 msgid "About PW3270"
 msgstr ""
 
@@ -426,39 +438,40 @@ msgstr ""
 msgid "Action Name"
 msgstr ""
 
-#: src/objects/window/window.c:233
+#: src/objects/window/window.c:206
 msgid "Action Names"
 msgstr ""
 
 #: ui/windows.ui.xml:525 ui/windows.ui.xml:917 ui/windows.ui.xml:1032
+#: ui/macos.ui.xml:525 ui/macos.ui.xml:917 ui/macos.ui.xml:1032
 #: ui/linux.ui.xml:525 ui/linux.ui.xml:917 ui/linux.ui.xml:1032
 msgid "Alert sound"
 msgstr ""
 
-#: src/main/tools.c:79
+#: src/main/tools.c:68
 msgid "All files"
 msgstr ""
 
-#: ui/windows.ui.xml:252 ui/windows.ui.xml:691 ui/linux.ui.xml:252
-#: ui/linux.ui.xml:691
+#: ui/windows.ui.xml:252 ui/windows.ui.xml:691 ui/macos.ui.xml:252
+#: ui/macos.ui.xml:691 ui/linux.ui.xml:252 ui/linux.ui.xml:691
 msgid "Append to copy"
 msgstr ""
 
-#: src/objects/application/actions/about.c:152
+#: src/objects/application/actions/about.c:178
 msgid "Apple version"
 msgstr ""
 
-#: ui/windows.ui.xml:385 ui/windows.ui.xml:665 ui/linux.ui.xml:385
-#: ui/linux.ui.xml:665
+#: ui/windows.ui.xml:385 ui/windows.ui.xml:665 ui/macos.ui.xml:385
+#: ui/macos.ui.xml:665 ui/linux.ui.xml:385 ui/linux.ui.xml:665
 msgid "Application"
 msgstr ""
 
-#: src/objects/window/header-settings.c:125
+#: src/objects/window/header-settings.c:93
 msgid "Application menu"
 msgstr ""
 
 #: src/objects/application/actions/preferences.c:76 ui/windows.ui.xml:84
-#: ui/linux.ui.xml:84
+#: ui/macos.ui.xml:84 ui/linux.ui.xml:84
 msgid "Application preferences"
 msgstr ""
 
@@ -466,28 +479,28 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: ui/windows.ui.xml:500 ui/linux.ui.xml:500
+#: ui/windows.ui.xml:500 ui/macos.ui.xml:500 ui/linux.ui.xml:500
 msgid "Auto-Reconnect"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:119 src/objects/settings/actionview.c:73
+#: src/objects/toolbar/settings.c:118 src/objects/settings/actionview.c:73
 msgid "Available"
 msgstr ""
 
-#: src/objects/application/actions/about.c:155
+#: src/objects/application/actions/about.c:181
 msgid "Based on X3270 from"
 msgstr ""
 
-#: ui/windows.ui.xml:490 ui/windows.ui.xml:946 ui/linux.ui.xml:490
-#: ui/linux.ui.xml:946
+#: ui/windows.ui.xml:490 ui/windows.ui.xml:946 ui/macos.ui.xml:490
+#: ui/macos.ui.xml:946 ui/linux.ui.xml:490 ui/linux.ui.xml:946
 msgid "Blank Fill"
 msgstr ""
 
-#: ui/windows.ui.xml:455 ui/linux.ui.xml:455
+#: ui/windows.ui.xml:455 ui/macos.ui.xml:455 ui/linux.ui.xml:455
 msgid "Blinking Cursor"
 msgstr ""
 
-#: ui/windows.ui.xml:505 ui/linux.ui.xml:505
+#: ui/windows.ui.xml:505 ui/macos.ui.xml:505 ui/linux.ui.xml:505
 msgid "Bold"
 msgstr ""
 
@@ -502,10 +515,6 @@ msgstr ""
 
 #: src/objects/os/windows/open.c:133
 msgid "Can't load session preferences"
-msgstr ""
-
-#: src/objects/settings/gsettings.c:128
-msgid "Can't load system settings"
 msgstr ""
 
 #: src/objects/application/actions/open.c:99 src/objects/window/terminal.c:192
@@ -525,7 +534,7 @@ msgstr ""
 msgid "Change the application preferences"
 msgstr ""
 
-#: src/objects/window/header-settings.c:96
+#: src/objects/window/header-settings.c:64
 msgid "Change the position of the title bar icons"
 msgstr ""
 
@@ -534,17 +543,19 @@ msgid "Change the preferences for the active session"
 msgstr ""
 
 #: ui/windows.ui.xml:305 ui/windows.ui.xml:725 ui/windows.ui.xml:867
+#: ui/macos.ui.xml:305 ui/macos.ui.xml:725 ui/macos.ui.xml:867
 #: ui/linux.ui.xml:305 ui/linux.ui.xml:725 ui/linux.ui.xml:867
 msgid "Clear"
 msgstr ""
 
-#: ui/windows.ui.xml:400 ui/linux.ui.xml:400
+#: ui/windows.ui.xml:400 ui/macos.ui.xml:400 ui/linux.ui.xml:400
 msgid "Clipboard"
 msgstr ""
 
 #: ui/windows.ui.xml:150 ui/windows.ui.xml:187 ui/windows.ui.xml:617
-#: ui/windows.ui.xml:654 ui/linux.ui.xml:150 ui/linux.ui.xml:187
-#: ui/linux.ui.xml:617 ui/linux.ui.xml:654
+#: ui/windows.ui.xml:654 ui/macos.ui.xml:150 ui/macos.ui.xml:187
+#: ui/macos.ui.xml:617 ui/macos.ui.xml:654 ui/linux.ui.xml:150
+#: ui/linux.ui.xml:187 ui/linux.ui.xml:617 ui/linux.ui.xml:654
 msgid "Clipboard contents"
 msgstr ""
 
@@ -552,14 +563,15 @@ msgstr ""
 msgid "Close all windows and exit application"
 msgstr ""
 
-#: src/objects/window/actions/close.c:61
+#: src/objects/window/actions/close.c:52
 msgid "Close the window"
 msgstr ""
 
-#: src/objects/window/actions/close.c:60 ui/windows.ui.xml:217
+#: src/objects/window/actions/close.c:51 ui/windows.ui.xml:217
 #: ui/windows.ui.xml:813 ui/windows.ui.xml:1011 ui/windows.ui.xml:1118
-#: ui/linux.ui.xml:217 ui/linux.ui.xml:813 ui/linux.ui.xml:1011
-#: ui/linux.ui.xml:1118
+#: ui/macos.ui.xml:217 ui/macos.ui.xml:813 ui/macos.ui.xml:1011
+#: ui/macos.ui.xml:1118 ui/linux.ui.xml:217 ui/linux.ui.xml:813
+#: ui/linux.ui.xml:1011 ui/linux.ui.xml:1118
 msgid "Close window"
 msgstr ""
 
@@ -571,7 +583,7 @@ msgstr ""
 msgid "Connect"
 msgstr ""
 
-#: ui/windows.ui.xml:450 ui/linux.ui.xml:450
+#: ui/windows.ui.xml:450 ui/macos.ui.xml:450 ui/linux.ui.xml:450
 msgid "Connect on startup"
 msgstr ""
 
@@ -579,90 +591,93 @@ msgstr ""
 msgid "Connect to host"
 msgstr ""
 
-#: src/objects/window/window.c:802 src/objects/window/page.c:218
+#: src/objects/window/window.c:779 src/objects/window/page.c:218
 msgid "Connected to host"
 msgstr ""
 
-#: src/objects/application/actions/about.c:153
+#: src/objects/application/actions/about.c:179
 msgid "Contributors"
 msgstr ""
 
-#: ui/windows.ui.xml:237 ui/windows.ui.xml:686 ui/linux.ui.xml:237
-#: ui/linux.ui.xml:686
+#: ui/windows.ui.xml:237 ui/windows.ui.xml:686 ui/macos.ui.xml:237
+#: ui/macos.ui.xml:686 ui/linux.ui.xml:237 ui/linux.ui.xml:686
 msgid "Copy"
 msgstr ""
 
-#: ui/windows.ui.xml:706 ui/linux.ui.xml:706
+#: ui/windows.ui.xml:706 ui/macos.ui.xml:706 ui/linux.ui.xml:706
 msgid "Copy as HTML"
 msgstr ""
 
-#: ui/windows.ui.xml:711 ui/linux.ui.xml:711
+#: ui/windows.ui.xml:711 ui/macos.ui.xml:711 ui/linux.ui.xml:711
 msgid "Copy as image"
 msgstr ""
 
-#: ui/windows.ui.xml:247 ui/windows.ui.xml:701 ui/linux.ui.xml:247
-#: ui/linux.ui.xml:701
+#: ui/windows.ui.xml:247 ui/windows.ui.xml:701 ui/macos.ui.xml:247
+#: ui/macos.ui.xml:701 ui/linux.ui.xml:247 ui/linux.ui.xml:701
 msgid "Copy as table"
 msgstr ""
 
-#: ui/windows.ui.xml:242 ui/windows.ui.xml:696 ui/linux.ui.xml:242
-#: ui/linux.ui.xml:696
+#: ui/windows.ui.xml:242 ui/windows.ui.xml:696 ui/macos.ui.xml:242
+#: ui/macos.ui.xml:696 ui/linux.ui.xml:242 ui/linux.ui.xml:696
 msgid "Copy as text"
 msgstr ""
 
-#: src/objects/application/actions/about.c:159
+#: src/objects/application/actions/about.c:185
 msgid "Copyright © 2008 Banco do Brasil S.A."
 msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:114
-#: src/objects/os/windows/savedesktopicon.c:107
+#: src/objects/os/windows/savedesktopicon.c:99
+#: src/objects/os/macos/savedesktopicon.c:54
 msgid "Create shortcut for the current session"
 msgstr ""
 
-#: ui/windows.ui.xml:475 ui/windows.ui.xml:902 ui/linux.ui.xml:475
-#: ui/linux.ui.xml:902
+#: ui/windows.ui.xml:475 ui/windows.ui.xml:902 ui/macos.ui.xml:475
+#: ui/macos.ui.xml:902 ui/linux.ui.xml:475 ui/linux.ui.xml:902
 msgid "Cross hair cursor"
 msgstr ""
 
-#: ui/windows.ui.xml:177 ui/windows.ui.xml:644 ui/linux.ui.xml:177
-#: ui/linux.ui.xml:644
+#: ui/windows.ui.xml:177 ui/windows.ui.xml:644 ui/macos.ui.xml:177
+#: ui/macos.ui.xml:644 ui/linux.ui.xml:177 ui/linux.ui.xml:644
 msgid "Current Screen"
 msgstr ""
 
-#: ui/windows.ui.xml:140 ui/windows.ui.xml:607 ui/linux.ui.xml:140
-#: ui/linux.ui.xml:607
+#: ui/windows.ui.xml:140 ui/windows.ui.xml:607 ui/macos.ui.xml:140
+#: ui/macos.ui.xml:607 ui/linux.ui.xml:140 ui/linux.ui.xml:607
 msgid "Current screen"
 msgstr ""
 
-#: ui/windows.ui.xml:670 ui/linux.ui.xml:670
+#: ui/windows.ui.xml:670 ui/macos.ui.xml:670 ui/linux.ui.xml:670
 msgid "Current session"
 msgstr ""
 
-#: ui/windows.ui.xml:257 ui/windows.ui.xml:716 ui/linux.ui.xml:257
-#: ui/linux.ui.xml:716
+#: ui/windows.ui.xml:257 ui/windows.ui.xml:716 ui/macos.ui.xml:257
+#: ui/macos.ui.xml:716 ui/linux.ui.xml:257 ui/linux.ui.xml:716
 msgid "Cut"
 msgstr ""
 
 #: ui/windows.ui.xml:315 ui/windows.ui.xml:735 ui/windows.ui.xml:877
+#: ui/macos.ui.xml:315 ui/macos.ui.xml:735 ui/macos.ui.xml:877
 #: ui/linux.ui.xml:315 ui/linux.ui.xml:735 ui/linux.ui.xml:877
 msgid "Delete Field"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:80
+#: src/objects/os/windows/savedesktopicon.c:72
 msgid "Description"
 msgstr ""
 
-#: ui/windows.ui.xml:808 ui/windows.ui.xml:1006 ui/linux.ui.xml:808
-#: ui/linux.ui.xml:1006
+#: ui/windows.ui.xml:808 ui/windows.ui.xml:1006 ui/macos.ui.xml:808
+#: ui/macos.ui.xml:1006 ui/linux.ui.xml:808 ui/linux.ui.xml:1006
 msgid "Disconnect"
 msgstr ""
 
-#: src/objects/window/window.c:802 src/objects/window/window.c:829
+#: src/objects/window/window.c:779 src/objects/window/window.c:806
 #: src/objects/window/page.c:207
 msgid "Disconnected from host"
 msgstr ""
 
 #: ui/windows.ui.xml:540 ui/windows.ui.xml:929 ui/windows.ui.xml:1045
+#: ui/macos.ui.xml:540 ui/macos.ui.xml:929 ui/macos.ui.xml:1045
 #: ui/linux.ui.xml:540 ui/linux.ui.xml:929 ui/linux.ui.xml:1045
 msgid "Dynamic font spacing"
 msgstr ""
@@ -692,16 +707,19 @@ msgid "End"
 msgstr ""
 
 #: ui/windows.ui.xml:310 ui/windows.ui.xml:730 ui/windows.ui.xml:872
+#: ui/macos.ui.xml:310 ui/macos.ui.xml:730 ui/macos.ui.xml:872
 #: ui/linux.ui.xml:310 ui/linux.ui.xml:730 ui/linux.ui.xml:872
 msgid "Erase input"
 msgstr ""
 
 #: ui/windows.ui.xml:320 ui/windows.ui.xml:740 ui/windows.ui.xml:882
+#: ui/macos.ui.xml:320 ui/macos.ui.xml:740 ui/macos.ui.xml:882
 #: ui/linux.ui.xml:320 ui/linux.ui.xml:740 ui/linux.ui.xml:882
 msgid "Erase to end of field"
 msgstr ""
 
 #: ui/windows.ui.xml:325 ui/windows.ui.xml:745 ui/windows.ui.xml:887
+#: ui/macos.ui.xml:325 ui/macos.ui.xml:745 ui/macos.ui.xml:887
 #: ui/linux.ui.xml:325 ui/linux.ui.xml:745 ui/linux.ui.xml:887
 msgid "Erase to end of line"
 msgstr ""
@@ -710,19 +728,20 @@ msgstr ""
 msgid "Error starting session"
 msgstr ""
 
-#: ui/windows.ui.xml:353 ui/linux.ui.xml:353
+#: ui/windows.ui.xml:353 ui/macos.ui.xml:353 ui/linux.ui.xml:353
 msgid "Field attributes"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:219
+#: src/objects/os/windows/savedesktopicon.c:211
 msgid "File for session preferences"
 msgstr ""
 
-#: ui/windows.ui.xml:470 ui/linux.ui.xml:470
+#: ui/windows.ui.xml:470 ui/macos.ui.xml:470 ui/linux.ui.xml:470
 msgid "Full Screen"
 msgstr ""
 
 #: ui/windows.ui.xml:779 ui/windows.ui.xml:955 ui/windows.ui.xml:1050
+#: ui/macos.ui.xml:779 ui/macos.ui.xml:955 ui/macos.ui.xml:1050
 #: ui/linux.ui.xml:779 ui/linux.ui.xml:955 ui/linux.ui.xml:1050
 msgid "Full screen"
 msgstr ""
@@ -731,22 +750,22 @@ msgstr ""
 msgid "Generic name"
 msgstr ""
 
-#: ui/windows.ui.xml:37 ui/windows.ui.xml:550 ui/linux.ui.xml:37
-#: ui/linux.ui.xml:550
+#: ui/windows.ui.xml:37 ui/windows.ui.xml:550 ui/macos.ui.xml:37
+#: ui/macos.ui.xml:550 ui/linux.ui.xml:37 ui/linux.ui.xml:550
 msgid "Help"
 msgstr ""
 
-#: ui/windows.ui.xml:390 ui/linux.ui.xml:390
+#: ui/windows.ui.xml:390 ui/macos.ui.xml:390 ui/linux.ui.xml:390
 msgid "Host and Emulation settings"
 msgstr ""
 
-#: src/objects/application/actions/about.c:111 src/objects/window/window.c:592
+#: src/objects/application/actions/about.c:137 src/objects/window/window.c:565
 #: src/objects/os/linux/savedesktopicon.c:102
-#: src/objects/os/windows/savedesktopicon.c:269
+#: src/objects/os/windows/savedesktopicon.c:261
 msgid "IBM 3270 Terminal emulator"
 msgstr ""
 
-#: src/objects/actions/view.c:90
+#: src/objects/actions/view.c:89
 msgid "Icon"
 msgstr ""
 
@@ -782,7 +801,11 @@ msgstr ""
 msgid "If the action can be activated"
 msgstr ""
 
-#: ui/windows.ui.xml:1022 ui/linux.ui.xml:1022
+#: src/objects/application/application.c:541
+msgid "Initialization has failed"
+msgstr ""
+
+#: ui/windows.ui.xml:1022 ui/macos.ui.xml:1022 ui/linux.ui.xml:1022
 msgid "Insert"
 msgstr ""
 
@@ -798,15 +821,15 @@ msgstr ""
 msgid "Items packed from the start to the end"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:113
+#: src/objects/toolbar/settings.c:112
 msgid "Itens"
 msgstr ""
 
-#: ui/windows.ui.xml:515 ui/linux.ui.xml:515
+#: ui/windows.ui.xml:515 ui/macos.ui.xml:515 ui/linux.ui.xml:515
 msgid "Keep selected"
 msgstr ""
 
-#: ui/windows.ui.xml:395 ui/linux.ui.xml:395
+#: ui/windows.ui.xml:395 ui/macos.ui.xml:395 ui/linux.ui.xml:395
 msgid "Keyboard accelerators"
 msgstr ""
 
@@ -826,15 +849,15 @@ msgstr ""
 msgid "Keypad width in columns"
 msgstr ""
 
-#: src/main/builder.c:118
+#: src/main/builder.c:117
 msgid "Keypads"
 msgstr ""
 
-#: src/objects/application/actions/about.c:163
+#: src/objects/application/actions/about.c:189
 msgid "LICENSE"
 msgstr ""
 
-#: src/objects/actions/view.c:99
+#: src/objects/actions/view.c:98
 msgid "Label"
 msgstr ""
 
@@ -850,56 +873,56 @@ msgstr ""
 msgid "List of the available and unpacked actions"
 msgstr ""
 
-#: src/objects/application/application.c:179
+#: src/objects/application/application.c:167
 msgid "Log name"
 msgstr ""
 
-#: ui/windows.ui.xml:72 ui/linux.ui.xml:72
+#: ui/windows.ui.xml:72 ui/macos.ui.xml:72 ui/linux.ui.xml:72
 msgid "Main Menu"
 msgstr ""
 
-#: ui/windows.ui.xml:67 ui/linux.ui.xml:67
+#: ui/windows.ui.xml:67 ui/macos.ui.xml:67 ui/linux.ui.xml:67
 msgid "Main Toolbar"
 msgstr ""
 
-#: ui/windows.ui.xml:1093 ui/linux.ui.xml:1093
+#: ui/windows.ui.xml:1093 ui/macos.ui.xml:1093 ui/linux.ui.xml:1093
 msgid "Main menu"
 msgstr ""
 
-#: src/objects/application/actions/about.c:151
+#: src/objects/application/actions/about.c:177
 msgid "Maintainers"
 msgstr ""
 
-#: ui/windows.ui.xml:348 ui/linux.ui.xml:348
+#: ui/windows.ui.xml:348 ui/macos.ui.xml:348 ui/linux.ui.xml:348
 msgid "Menu"
 msgstr ""
 
-#: ui/windows.ui.xml:419 ui/windows.ui.xml:1059 ui/linux.ui.xml:419
-#: ui/linux.ui.xml:1059
+#: ui/windows.ui.xml:419 ui/windows.ui.xml:1059 ui/macos.ui.xml:419
+#: ui/macos.ui.xml:1059 ui/linux.ui.xml:419 ui/linux.ui.xml:1059
 msgid "Model 2 - 80x24"
 msgstr ""
 
-#: ui/windows.ui.xml:424 ui/windows.ui.xml:1064 ui/linux.ui.xml:424
-#: ui/linux.ui.xml:1064
+#: ui/windows.ui.xml:424 ui/windows.ui.xml:1064 ui/macos.ui.xml:424
+#: ui/macos.ui.xml:1064 ui/linux.ui.xml:424 ui/linux.ui.xml:1064
 msgid "Model 3 - 80x32"
 msgstr ""
 
-#: ui/windows.ui.xml:429 ui/windows.ui.xml:1069 ui/linux.ui.xml:429
-#: ui/linux.ui.xml:1069
+#: ui/windows.ui.xml:429 ui/windows.ui.xml:1069 ui/macos.ui.xml:429
+#: ui/macos.ui.xml:1069 ui/linux.ui.xml:429 ui/linux.ui.xml:1069
 msgid "Model 4 - 80x43"
 msgstr ""
 
-#: ui/windows.ui.xml:434 ui/windows.ui.xml:1074 ui/linux.ui.xml:434
-#: ui/linux.ui.xml:1074
+#: ui/windows.ui.xml:434 ui/windows.ui.xml:1074 ui/macos.ui.xml:434
+#: ui/macos.ui.xml:1074 ui/linux.ui.xml:434 ui/linux.ui.xml:1074
 msgid "Model 5 - 132x27"
 msgstr ""
 
-#: ui/windows.ui.xml:460 ui/windows.ui.xml:924 ui/linux.ui.xml:460
-#: ui/linux.ui.xml:924
+#: ui/windows.ui.xml:460 ui/windows.ui.xml:924 ui/macos.ui.xml:460
+#: ui/macos.ui.xml:924 ui/linux.ui.xml:460 ui/linux.ui.xml:924
 msgid "Monocase"
 msgstr ""
 
-#: ui/windows.ui.xml:535 ui/linux.ui.xml:535
+#: ui/windows.ui.xml:535 ui/macos.ui.xml:535 ui/linux.ui.xml:535
 msgid "Network keep alive"
 msgstr ""
 
@@ -927,11 +950,11 @@ msgstr ""
 msgid "Open Session"
 msgstr ""
 
-#: ui/windows.ui.xml:56 ui/linux.ui.xml:56
+#: ui/windows.ui.xml:56 ui/macos.ui.xml:56 ui/linux.ui.xml:56
 msgid "Open in New Tab"
 msgstr ""
 
-#: ui/windows.ui.xml:51 ui/linux.ui.xml:51
+#: ui/windows.ui.xml:51 ui/macos.ui.xml:51 ui/linux.ui.xml:51
 msgid "Open in New Window"
 msgstr ""
 
@@ -960,8 +983,9 @@ msgid "Open session on the active terminal"
 msgstr ""
 
 #: ui/windows.ui.xml:447 ui/windows.ui.xml:755 ui/windows.ui.xml:897
-#: ui/windows.ui.xml:1042 ui/linux.ui.xml:447 ui/linux.ui.xml:755
-#: ui/linux.ui.xml:897 ui/linux.ui.xml:1042
+#: ui/windows.ui.xml:1042 ui/macos.ui.xml:447 ui/macos.ui.xml:755
+#: ui/macos.ui.xml:897 ui/macos.ui.xml:1042 ui/linux.ui.xml:447
+#: ui/linux.ui.xml:755 ui/linux.ui.xml:897 ui/linux.ui.xml:1042
 msgid "Options"
 msgstr ""
 
@@ -969,28 +993,28 @@ msgstr ""
 msgid "Parameter Type"
 msgstr ""
 
-#: ui/windows.ui.xml:262 ui/windows.ui.xml:829 ui/linux.ui.xml:262
-#: ui/linux.ui.xml:829
+#: ui/windows.ui.xml:262 ui/windows.ui.xml:829 ui/macos.ui.xml:262
+#: ui/macos.ui.xml:829 ui/linux.ui.xml:262 ui/linux.ui.xml:829
 msgid "Paste from clipboard"
 msgstr ""
 
-#: ui/windows.ui.xml:272 ui/windows.ui.xml:839 ui/linux.ui.xml:272
-#: ui/linux.ui.xml:839
+#: ui/windows.ui.xml:272 ui/windows.ui.xml:839 ui/macos.ui.xml:272
+#: ui/macos.ui.xml:839 ui/linux.ui.xml:272 ui/linux.ui.xml:839
 msgid "Paste from text file"
 msgstr ""
 
-#: ui/windows.ui.xml:267 ui/windows.ui.xml:834 ui/linux.ui.xml:267
-#: ui/linux.ui.xml:834
+#: ui/windows.ui.xml:267 ui/windows.ui.xml:834 ui/macos.ui.xml:267
+#: ui/macos.ui.xml:834 ui/linux.ui.xml:267 ui/linux.ui.xml:834
 msgid "Paste next"
 msgstr ""
 
-#: ui/windows.ui.xml:485 ui/windows.ui.xml:941 ui/linux.ui.xml:485
-#: ui/linux.ui.xml:941
+#: ui/windows.ui.xml:485 ui/windows.ui.xml:941 ui/macos.ui.xml:485
+#: ui/macos.ui.xml:941 ui/linux.ui.xml:485 ui/linux.ui.xml:941
 msgid "Paste with left margin"
 msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:71
-#: src/objects/os/windows/savedesktopicon.c:74
+#: src/objects/os/windows/savedesktopicon.c:66
 msgid "Path for the new shortcut"
 msgstr ""
 
@@ -998,20 +1022,20 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
-#: ui/windows.ui.xml:662 ui/linux.ui.xml:662
+#: ui/windows.ui.xml:662 ui/macos.ui.xml:662 ui/linux.ui.xml:662
 msgid "Preferences"
 msgstr ""
 
-#: ui/windows.ui.xml:174 ui/windows.ui.xml:641 ui/linux.ui.xml:174
-#: ui/linux.ui.xml:641
+#: ui/windows.ui.xml:174 ui/windows.ui.xml:641 ui/macos.ui.xml:174
+#: ui/macos.ui.xml:641 ui/linux.ui.xml:174 ui/linux.ui.xml:641
 msgid "Print"
 msgstr ""
 
-#: ui/windows.ui.xml:992 ui/linux.ui.xml:992
+#: ui/windows.ui.xml:992 ui/macos.ui.xml:992 ui/linux.ui.xml:992
 msgid "Print screen"
 msgstr ""
 
-#: ui/windows.ui.xml:795 ui/linux.ui.xml:795
+#: ui/windows.ui.xml:795 ui/macos.ui.xml:795 ui/linux.ui.xml:795
 msgid "Print selected"
 msgstr ""
 
@@ -1021,7 +1045,7 @@ msgid "Property \"%s\" is invalid for this object"
 msgstr ""
 
 #: src/objects/application/actions/window.c:64 ui/windows.ui.xml:89
-#: ui/linux.ui.xml:89
+#: ui/macos.ui.xml:89 ui/linux.ui.xml:89
 msgid "Quit"
 msgstr ""
 
@@ -1029,13 +1053,13 @@ msgstr ""
 msgid "Rename Session"
 msgstr ""
 
-#: ui/windows.ui.xml:296 ui/windows.ui.xml:858 ui/linux.ui.xml:296
-#: ui/linux.ui.xml:858
+#: ui/windows.ui.xml:296 ui/windows.ui.xml:858 ui/macos.ui.xml:296
+#: ui/macos.ui.xml:858 ui/linux.ui.xml:296 ui/linux.ui.xml:858
 msgid "Reselect"
 msgstr ""
 
-#: ui/windows.ui.xml:480 ui/windows.ui.xml:912 ui/linux.ui.xml:480
-#: ui/linux.ui.xml:912
+#: ui/windows.ui.xml:480 ui/windows.ui.xml:912 ui/macos.ui.xml:480
+#: ui/macos.ui.xml:912 ui/linux.ui.xml:480 ui/linux.ui.xml:912
 msgid "Resize on alternate screen"
 msgstr ""
 
@@ -1043,8 +1067,8 @@ msgstr ""
 msgid "Right"
 msgstr ""
 
-#: ui/windows.ui.xml:135 ui/windows.ui.xml:602 ui/linux.ui.xml:135
-#: ui/linux.ui.xml:602
+#: ui/windows.ui.xml:135 ui/windows.ui.xml:602 ui/macos.ui.xml:135
+#: ui/macos.ui.xml:602 ui/linux.ui.xml:135 ui/linux.ui.xml:602
 msgid "Save"
 msgstr ""
 
@@ -1052,66 +1076,68 @@ msgstr ""
 msgid "Save current session preferences to file"
 msgstr ""
 
-#: ui/windows.ui.xml:987 ui/linux.ui.xml:987
+#: ui/windows.ui.xml:987 ui/macos.ui.xml:987 ui/linux.ui.xml:987
 msgid "Save screen"
 msgstr ""
 
-#: ui/windows.ui.xml:790 ui/linux.ui.xml:790
+#: ui/windows.ui.xml:790 ui/macos.ui.xml:790 ui/linux.ui.xml:790
 msgid "Save selected"
 msgstr ""
 
-#: src/objects/actions/save.c:75 src/objects/actions/save.c:163
+#: src/objects/actions/save.c:75 src/objects/actions/save.c:164
 msgid "Save session preferences"
 msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:113
-#: src/objects/os/windows/savedesktopicon.c:106
+#: src/objects/os/windows/savedesktopicon.c:98
+#: src/objects/os/macos/savedesktopicon.c:53
 msgid "Save session shortcut"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:264
+#: src/objects/os/linux/savedesktopicon.c:230
 msgid "Save to session filename"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:236
+#: src/objects/os/linux/savedesktopicon.c:202
 msgid "Save to shortcut file"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:184
+#: src/objects/os/windows/savedesktopicon.c:176
 msgid "Save to windows shortcut"
 msgstr ""
 
-#: ui/windows.ui.xml:416 ui/windows.ui.xml:1056 ui/linux.ui.xml:416
-#: ui/linux.ui.xml:1056
+#: ui/windows.ui.xml:416 ui/windows.ui.xml:1056 ui/macos.ui.xml:416
+#: ui/macos.ui.xml:1056 ui/linux.ui.xml:416 ui/linux.ui.xml:1056
 msgid "Screen size"
 msgstr ""
 
-#: ui/windows.ui.xml:286 ui/windows.ui.xml:853 ui/linux.ui.xml:286
-#: ui/linux.ui.xml:853
+#: ui/windows.ui.xml:286 ui/windows.ui.xml:853 ui/macos.ui.xml:286
+#: ui/macos.ui.xml:853 ui/linux.ui.xml:286 ui/linux.ui.xml:853
 msgid "Select Field"
 msgstr ""
 
-#: ui/windows.ui.xml:281 ui/windows.ui.xml:848 ui/linux.ui.xml:281
-#: ui/linux.ui.xml:848
+#: ui/windows.ui.xml:281 ui/windows.ui.xml:848 ui/macos.ui.xml:281
+#: ui/macos.ui.xml:848 ui/linux.ui.xml:281 ui/linux.ui.xml:848
 msgid "Select all"
 msgstr ""
 
-#: ui/windows.ui.xml:495 ui/windows.ui.xml:760 ui/linux.ui.xml:495
-#: ui/linux.ui.xml:760
+#: ui/windows.ui.xml:495 ui/windows.ui.xml:760 ui/macos.ui.xml:495
+#: ui/macos.ui.xml:760 ui/linux.ui.xml:495 ui/linux.ui.xml:760
 msgid "Select by rectangles"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:113
+#: src/objects/toolbar/settings.c:112
 msgid "Select the toolbar itens"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:118
+#: src/objects/toolbar/settings.c:117
 msgid "Selected"
 msgstr ""
 
 #: ui/windows.ui.xml:145 ui/windows.ui.xml:182 ui/windows.ui.xml:612
-#: ui/windows.ui.xml:649 ui/linux.ui.xml:145 ui/linux.ui.xml:182
-#: ui/linux.ui.xml:612 ui/linux.ui.xml:649
+#: ui/windows.ui.xml:649 ui/macos.ui.xml:145 ui/macos.ui.xml:182
+#: ui/macos.ui.xml:612 ui/macos.ui.xml:649 ui/linux.ui.xml:145
+#: ui/linux.ui.xml:182 ui/linux.ui.xml:612 ui/linux.ui.xml:649
 msgid "Selected area"
 msgstr ""
 
@@ -1120,81 +1146,84 @@ msgid "Send/Receive"
 msgstr ""
 
 #: src/objects/window/actions/filetransfer.c:46 ui/windows.ui.xml:196
-#: ui/windows.ui.xml:997 ui/linux.ui.xml:196 ui/linux.ui.xml:997
+#: ui/windows.ui.xml:997 ui/macos.ui.xml:196 ui/macos.ui.xml:997
+#: ui/linux.ui.xml:196 ui/linux.ui.xml:997
 msgid "Send/Receive files"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:253 src/objects/toolbar/settings.c:263
+#: src/objects/toolbar/settings.c:252 src/objects/toolbar/settings.c:262
 msgid "Separator"
 msgstr ""
 
-#: ui/windows.ui.xml:48 ui/windows.ui.xml:584 ui/linux.ui.xml:48
-#: ui/linux.ui.xml:584
+#: ui/windows.ui.xml:48 ui/windows.ui.xml:584 ui/macos.ui.xml:48
+#: ui/macos.ui.xml:584 ui/linux.ui.xml:48 ui/linux.ui.xml:584
 msgid "Session"
 msgstr ""
 
 #: ui/windows.ui.xml:77 ui/windows.ui.xml:978 ui/windows.ui.xml:1098
+#: ui/macos.ui.xml:77 ui/macos.ui.xml:978 ui/macos.ui.xml:1098
 #: ui/linux.ui.xml:77 ui/linux.ui.xml:978 ui/linux.ui.xml:1098
 msgid "Session Trace"
 msgstr ""
 
 #: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
-#: src/objects/os/windows/savedesktopicon.c:94
+#: src/objects/os/windows/savedesktopicon.c:86
 msgid "Session file"
 msgstr ""
 
-#: ui/windows.ui.xml:127 ui/windows.ui.xml:594 ui/linux.ui.xml:127
-#: ui/linux.ui.xml:594
+#: ui/windows.ui.xml:127 ui/windows.ui.xml:594 ui/macos.ui.xml:127
+#: ui/macos.ui.xml:594 ui/linux.ui.xml:127 ui/linux.ui.xml:594
 msgid "Session in New Tab"
 msgstr ""
 
-#: ui/windows.ui.xml:122 ui/windows.ui.xml:589 ui/linux.ui.xml:122
-#: ui/linux.ui.xml:589
+#: ui/windows.ui.xml:122 ui/windows.ui.xml:589 ui/macos.ui.xml:122
+#: ui/macos.ui.xml:589 ui/linux.ui.xml:122 ui/linux.ui.xml:589
 msgid "Session in new window"
 msgstr ""
 
 #: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
-#: src/objects/os/windows/savedesktopicon.c:86
+#: src/objects/os/windows/savedesktopicon.c:78
 msgid "Session name"
 msgstr ""
 
 #: src/objects/window/actions/sessionproperties.c:36 ui/windows.ui.xml:164
-#: ui/windows.ui.xml:631 ui/windows.ui.xml:1112 ui/linux.ui.xml:164
+#: ui/windows.ui.xml:631 ui/windows.ui.xml:1112 ui/macos.ui.xml:164
+#: ui/macos.ui.xml:631 ui/macos.ui.xml:1112 ui/linux.ui.xml:164
 #: ui/linux.ui.xml:631 ui/linux.ui.xml:1112
 msgid "Session preferences"
 msgstr ""
 
-#: src/objects/application/application.c:258
+#: src/objects/application/application.c:249
 msgid "Set default log file name"
 msgstr ""
 
-#: src/objects/application/application.c:249
+#: src/objects/application/application.c:239
 msgid "Set the user-interface type"
 msgstr ""
 
-#: ui/windows.ui.xml:382 ui/linux.ui.xml:382
+#: ui/windows.ui.xml:382 ui/macos.ui.xml:382 ui/linux.ui.xml:382
 msgid "Settings"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:183
+#: src/objects/toolbar/settings.c:182
 msgid "Setup the toolbar style and position"
 msgstr ""
 
-#: src/objects/window/header-settings.c:85
+#: src/objects/window/header-settings.c:53
 msgid "Setup title bar"
 msgstr ""
 
-#: src/objects/toolbar/toolbar.c:213 src/objects/toolbar/settings.c:95
+#: src/objects/toolbar/toolbar.c:213 src/objects/toolbar/settings.c:94
 msgid "Setup toolbar"
 msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:70
-#: src/objects/os/windows/savedesktopicon.c:73
+#: src/objects/os/windows/savedesktopicon.c:65
 msgid "Shortcut file"
 msgstr ""
 
-#: ui/windows.ui.xml:159 ui/windows.ui.xml:626 ui/linux.ui.xml:159
-#: ui/linux.ui.xml:626
+#: ui/windows.ui.xml:159 ui/windows.ui.xml:626 ui/macos.ui.xml:159
+#: ui/macos.ui.xml:626 ui/linux.ui.xml:159 ui/linux.ui.xml:626
 msgid "Shortcut for this session"
 msgstr ""
 
@@ -1202,15 +1231,15 @@ msgstr ""
 msgid "Shortcut name"
 msgstr ""
 
-#: ui/windows.ui.xml:510 ui/linux.ui.xml:510
+#: ui/windows.ui.xml:510 ui/macos.ui.xml:510 ui/linux.ui.xml:510
 msgid "Show Underline"
 msgstr ""
 
-#: ui/windows.ui.xml:774 ui/linux.ui.xml:774
+#: ui/windows.ui.xml:774 ui/macos.ui.xml:774 ui/linux.ui.xml:774
 msgid "Show menu"
 msgstr ""
 
-#: ui/windows.ui.xml:769 ui/linux.ui.xml:769
+#: ui/windows.ui.xml:769 ui/macos.ui.xml:769 ui/linux.ui.xml:769
 msgid "Show toolbar"
 msgstr ""
 
@@ -1218,12 +1247,12 @@ msgstr ""
 msgid "Small"
 msgstr ""
 
-#: ui/windows.ui.xml:520 ui/windows.ui.xml:936 ui/linux.ui.xml:520
-#: ui/linux.ui.xml:936
+#: ui/windows.ui.xml:520 ui/windows.ui.xml:936 ui/macos.ui.xml:520
+#: ui/macos.ui.xml:936 ui/linux.ui.xml:520 ui/linux.ui.xml:936
 msgid "Smart paste"
 msgstr ""
 
-#: src/objects/os/linux/savedesktopicon.c:239
+#: src/objects/os/linux/savedesktopicon.c:205
 msgid "Standard desktop files"
 msgstr ""
 
@@ -1239,7 +1268,7 @@ msgstr ""
 msgid "State Type"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:183
+#: src/objects/toolbar/settings.c:182
 msgid "Style & Position"
 msgstr ""
 
@@ -1252,28 +1281,28 @@ msgstr ""
 msgid "System default"
 msgstr ""
 
-#: src/objects/settings/gsettings.c:133
+#: src/objects/application/application.c:546
 msgid "System settings error"
 msgstr ""
 
-#: src/main/tools.c:75
+#: src/main/tools.c:64
 msgid "TN3270 Session Files"
 msgstr ""
 
-#: src/objects/window/keyfile.c:237
+#: src/objects/window/keyfile.c:241
 msgid "TN3270 Session description"
 msgstr ""
 
-#: ui/windows.ui.xml:111 ui/windows.ui.xml:573 ui/linux.ui.xml:111
-#: ui/linux.ui.xml:573
+#: ui/windows.ui.xml:111 ui/windows.ui.xml:573 ui/macos.ui.xml:111
+#: ui/macos.ui.xml:573 ui/linux.ui.xml:111 ui/linux.ui.xml:573
 msgid "Tab with default session"
 msgstr ""
 
-#: ui/windows.ui.xml:405 ui/linux.ui.xml:405
+#: ui/windows.ui.xml:405 ui/macos.ui.xml:405 ui/linux.ui.xml:405
 msgid "Terminal colors"
 msgstr ""
 
-#: ui/windows.ui.xml:442 ui/linux.ui.xml:442
+#: ui/windows.ui.xml:442 ui/macos.ui.xml:442 ui/linux.ui.xml:442
 msgid "Terminal font"
 msgstr ""
 
@@ -1293,7 +1322,7 @@ msgstr ""
 msgid "The action tooltip"
 msgstr ""
 
-#: src/objects/application/application.c:165
+#: src/objects/application/application.c:153
 msgid "The code of the User interface type"
 msgstr ""
 
@@ -1302,11 +1331,11 @@ msgid "The file to save the current session preferences"
 msgstr ""
 
 #: src/objects/os/linux/savedesktopicon.c:86
-#: src/objects/os/windows/savedesktopicon.c:95
+#: src/objects/os/windows/savedesktopicon.c:87
 msgid "The file with the session preferences for this shortcut"
 msgstr ""
 
-#: src/objects/application/application.c:180
+#: src/objects/application/application.c:168
 msgid "The full path of the default log file"
 msgstr ""
 
@@ -1318,7 +1347,7 @@ msgstr ""
 msgid "The name of associated action"
 msgstr ""
 
-#: src/objects/window/window.c:234
+#: src/objects/window/window.c:207
 msgid "The name of the actions in the header bar"
 msgstr ""
 
@@ -1347,7 +1376,7 @@ msgid "The position of the keypad"
 msgstr ""
 
 #: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
-#: src/objects/os/windows/savedesktopicon.c:88
+#: src/objects/os/windows/savedesktopicon.c:80
 msgid "The session name used in the window/tab title (empty for default)"
 msgstr ""
 
@@ -1379,16 +1408,21 @@ msgstr ""
 msgid "The type of the state kept by the action"
 msgstr ""
 
-#: src/objects/window/header-settings.c:84
+#: src/objects/os/macos/savedesktopicon.c:68
+msgid "This action is not available in this platform"
+msgstr ""
+
+#: src/objects/window/header-settings.c:52
 msgid "Title bar"
 msgstr ""
 
-#: src/objects/window/header-settings.c:96
+#: src/objects/window/header-settings.c:64
 msgid "Title bar actions"
 msgstr ""
 
-#: src/objects/toolbar/settings.c:94 ui/windows.ui.xml:343
-#: ui/windows.ui.xml:968 ui/windows.ui.xml:1088 ui/linux.ui.xml:343
+#: src/objects/toolbar/settings.c:93 ui/windows.ui.xml:343
+#: ui/windows.ui.xml:968 ui/windows.ui.xml:1088 ui/macos.ui.xml:343
+#: ui/macos.ui.xml:968 ui/macos.ui.xml:1088 ui/linux.ui.xml:343
 #: ui/linux.ui.xml:968 ui/linux.ui.xml:1088
 msgid "Toolbar"
 msgstr ""
@@ -1409,27 +1443,25 @@ msgstr ""
 msgid "Top (system default)"
 msgstr ""
 
-#: ui/windows.ui.xml:973 ui/linux.ui.xml:973
+#: ui/windows.ui.xml:973 ui/macos.ui.xml:973 ui/linux.ui.xml:973
 msgid "Top menu"
 msgstr ""
 
-#: ui/windows.ui.xml:338 ui/linux.ui.xml:338
+#: ui/windows.ui.xml:338 ui/macos.ui.xml:338 ui/linux.ui.xml:338
 msgid "Trace"
 msgstr ""
 
-#: ui/windows.ui.xml:465 ui/windows.ui.xml:1027 ui/linux.ui.xml:465
-#: ui/linux.ui.xml:1027
+#: ui/windows.ui.xml:465 ui/windows.ui.xml:1027 ui/macos.ui.xml:465
+#: ui/macos.ui.xml:1027 ui/linux.ui.xml:465 ui/linux.ui.xml:1027
 msgid "Track Cursor"
 msgstr ""
 
-#: src/objects/application/application.c:164
+#: src/objects/application/application.c:152
 msgid "UI Type"
 msgstr ""
 
-#: src/objects/settings/gsettings.c:131
-msgid ""
-"Unable to initialize system settings. Application may crash in unexpected "
-"ways"
+#: src/objects/application/application.c:544
+msgid "Unable to initialize settings. Application may crash in unexpected ways"
 msgstr ""
 
 #: src/objects/os/windows/open.c:137
@@ -1437,42 +1469,43 @@ msgstr ""
 msgid "Unable to load session preferences from '%s'"
 msgstr ""
 
-#: ui/windows.ui.xml:291 ui/windows.ui.xml:800 ui/linux.ui.xml:291
-#: ui/linux.ui.xml:800
+#: ui/windows.ui.xml:291 ui/windows.ui.xml:800 ui/macos.ui.xml:291
+#: ui/macos.ui.xml:800 ui/linux.ui.xml:291 ui/linux.ui.xml:800
 msgid "Unselect"
 msgstr ""
 
-#: src/objects/application/actions/about.c:90
+#: src/objects/application/actions/about.c:116
 #, c-format
 msgid "Unstable version %s-%s"
 msgstr ""
 
-#: ui/windows.ui.xml:530 ui/windows.ui.xml:907 ui/linux.ui.xml:530
-#: ui/linux.ui.xml:907
+#: ui/windows.ui.xml:530 ui/windows.ui.xml:907 ui/macos.ui.xml:530
+#: ui/macos.ui.xml:907 ui/linux.ui.xml:530 ui/linux.ui.xml:907
 msgid "Use +/- for field navigation"
 msgstr ""
 
-#: src/objects/application/actions/about.c:92
+#: src/objects/application/actions/about.c:118
 #, c-format
 msgid "Version %s-%s"
 msgstr ""
 
 #: src/objects/window/header.c:63 ui/windows.ui.xml:64 ui/windows.ui.xml:965
-#: ui/windows.ui.xml:1085 ui/linux.ui.xml:64 ui/linux.ui.xml:965
+#: ui/windows.ui.xml:1085 ui/macos.ui.xml:64 ui/macos.ui.xml:965
+#: ui/macos.ui.xml:1085 ui/linux.ui.xml:64 ui/linux.ui.xml:965
 #: ui/linux.ui.xml:1085
 msgid "View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:183
+#: src/objects/application/actions/about.c:209
 msgid "View this project on github"
 msgstr ""
 
-#: ui/windows.ui.xml:106 ui/windows.ui.xml:568 ui/linux.ui.xml:106
-#: ui/linux.ui.xml:568
+#: ui/windows.ui.xml:106 ui/windows.ui.xml:568 ui/macos.ui.xml:106
+#: ui/macos.ui.xml:568 ui/linux.ui.xml:106 ui/linux.ui.xml:568
 msgid "Window with default session"
 msgstr ""
 
-#: src/objects/os/windows/savedesktopicon.c:187
+#: src/objects/os/windows/savedesktopicon.c:179
 msgid "Windows shortcuts"
 msgstr ""
 
@@ -1480,9 +1513,9 @@ msgstr ""
 msgid "_Apply"
 msgstr ""
 
-#: src/objects/actions/save.c:102 src/objects/settings/dialog.c:78
-#: src/objects/os/linux/savedesktopicon.c:174
-#: src/objects/os/windows/savedesktopicon.c:132
+#: src/objects/actions/save.c:103 src/objects/settings/dialog.c:78
+#: src/objects/os/linux/savedesktopicon.c:140
+#: src/objects/os/windows/savedesktopicon.c:124
 msgid "_Cancel"
 msgstr ""
 
@@ -1490,35 +1523,36 @@ msgstr ""
 msgid "_Close session"
 msgstr ""
 
-#: ui/windows.ui.xml:369 ui/windows.ui.xml:1107 ui/linux.ui.xml:369
-#: ui/linux.ui.xml:1107
+#: ui/windows.ui.xml:369 ui/windows.ui.xml:1107 ui/macos.ui.xml:369
+#: ui/macos.ui.xml:1107 ui/linux.ui.xml:369 ui/linux.ui.xml:1107
 msgid "_Connect"
 msgstr ""
 
-#: ui/windows.ui.xml:374 ui/linux.ui.xml:374
+#: ui/windows.ui.xml:374 ui/macos.ui.xml:374 ui/linux.ui.xml:374
 msgid "_Disconnect"
 msgstr ""
 
 #: ui/windows.ui.xml:232 ui/windows.ui.xml:681 ui/windows.ui.xml:824
+#: ui/macos.ui.xml:232 ui/macos.ui.xml:681 ui/macos.ui.xml:824
 #: ui/linux.ui.xml:232 ui/linux.ui.xml:681 ui/linux.ui.xml:824
 msgid "_Edit"
 msgstr ""
 
-#: ui/windows.ui.xml:99 ui/linux.ui.xml:99
+#: ui/windows.ui.xml:99 ui/macos.ui.xml:99 ui/linux.ui.xml:99
 msgid "_File"
 msgstr ""
 
-#: ui/windows.ui.xml:361 ui/linux.ui.xml:361
+#: ui/windows.ui.xml:361 ui/macos.ui.xml:361 ui/linux.ui.xml:361
 msgid "_Network"
 msgstr ""
 
-#: ui/windows.ui.xml:103 ui/windows.ui.xml:565 ui/linux.ui.xml:103
-#: ui/linux.ui.xml:565
+#: ui/windows.ui.xml:103 ui/windows.ui.xml:565 ui/macos.ui.xml:103
+#: ui/macos.ui.xml:565 ui/linux.ui.xml:103 ui/linux.ui.xml:565
 msgid "_New"
 msgstr ""
 
-#: ui/windows.ui.xml:119 ui/windows.ui.xml:581 ui/linux.ui.xml:119
-#: ui/linux.ui.xml:581
+#: ui/windows.ui.xml:119 ui/windows.ui.xml:581 ui/macos.ui.xml:119
+#: ui/macos.ui.xml:581 ui/linux.ui.xml:119 ui/linux.ui.xml:581
 msgid "_Open"
 msgstr ""
 
@@ -1530,19 +1564,19 @@ msgstr ""
 msgid "_Rename session"
 msgstr ""
 
-#: src/objects/actions/save.c:103 src/objects/os/linux/savedesktopicon.c:175
-#: src/objects/os/windows/savedesktopicon.c:133
+#: src/objects/actions/save.c:104 src/objects/os/linux/savedesktopicon.c:141
+#: src/objects/os/windows/savedesktopicon.c:125
 msgid "_Save"
 msgstr ""
 
-#: ui/windows.ui.xml:335 ui/linux.ui.xml:335
+#: ui/windows.ui.xml:335 ui/macos.ui.xml:335 ui/linux.ui.xml:335
 msgid "_View"
 msgstr ""
 
-#: src/objects/application/actions/about.c:182
+#: src/objects/application/actions/about.c:208
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr ""
 
-#: src/objects/application/actions/about.c:185
+#: src/objects/application/actions/about.c:211
 msgid "translator-credits"
 msgstr ""

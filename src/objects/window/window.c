@@ -138,15 +138,16 @@ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *kla
 #ifdef _WIN32
 		"share/icons",
 #endif // _WIN32
+		"share/" G_STRINGIFY(PRODUCT_NAME) "/icons"
 	};
 
 	size_t ix;
 	for(ix = 0; ix < G_N_ELEMENTS(icon_search_paths); ix++) {
 #if defined(DEBUG)
-		lib3270_autoptr(char) path = g_build_filename(g_get_current_dir(),icon_search_paths[ix],NULL);
+		g_autofree gchar * path = g_build_filename(g_get_current_dir(),icon_search_paths[ix],NULL);
 #elif defined(_WIN32)
 		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
-		lib3270_autoptr(char) path = g_build_filename(appdir,icon_search_paths[ix],NULL);
+		g_autofree gchar * path = g_build_filename(appdir,icon_search_paths[ix],NULL);
 #else
 		lib3270_autoptr(char) path = lib3270_build_data_filename(icon_search_paths[ix],NULL);
 #endif
@@ -183,34 +184,6 @@ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *kla
 		}
 	}
 #endif // DEBUG
-
-	/*
-	{
-		gtk_icon_theme_append_search_path(
-		    gtk_icon_theme_get_default(),
-		    "./icons"
-		);
-
-		gchar **paths = NULL;
-		gint n_paths = 0;
-
-		gtk_icon_theme_get_search_path (
-		    gtk_icon_theme_get_default(),
-			&paths,
-			&n_paths
-		);
-
-		gint p;
-		for(p = 0; p < n_paths;p++) {
-			printf("**** [%s]\n",paths[p]);
-		}
-
-	}
-#else
-	{
-	}
-#endif // DEBUG
-	*/
 
 	{
 		GtkWidgetClass *widget = GTK_WIDGET_CLASS(klass);
@@ -748,8 +721,6 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 	}
 
 	pw3270_application_window_set_active_terminal(GTK_WIDGET(window),terminal);
-
-	// gtk_window_set_interactive_debugging(TRUE);
 
 	return GTK_WIDGET(window);
 
