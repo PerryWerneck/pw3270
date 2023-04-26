@@ -33,7 +33,7 @@ jobs:
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: "PerryWerneck/libv3270"
-          latest: true
+          tag: 5.4
           fileName: "macos-libv3270.tar.xz"      
       - name: build
         run: ./mac/ci-build.sh
