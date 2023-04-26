@@ -10,11 +10,21 @@ cd ${srcdir}
 mkdir -p ./scripts
 mkdir -p m4
 
-libtoolize --force
-if test $? != 0 ; then
-        echo "libtoolize failed."
-        exit -1
-fi
+case `uname` in
+Darwin*)
+	glibtoolize --force
+	if test $? != 0 ; then
+			echo "glibtoolize failed."
+			exit -1
+	fi
+	;;
+*) 
+	libtoolize --force
+	if test $? != 0 ; then
+			echo "libtoolize failed."
+			exit -1
+	fi
+esac
 
 aclocal
 if test $? != 0 ; then
