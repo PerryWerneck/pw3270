@@ -23,7 +23,7 @@ jobs:
       - name: Install Pre reqs
         run: |
           brew update
-          brew install xz automake binutils coreutils curl gettext libtool openssl pkgconfig gtk+3
+          brew install xz automake libtool binutils coreutils curl gettext libtool openssl pkgconfig gtk+3
           brew upgrade
       - uses: robinraju/release-downloader@v1.7
         with:
