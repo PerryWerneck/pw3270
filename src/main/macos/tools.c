@@ -23,11 +23,11 @@
  #include <CoreFoundation/CFBundle.h>
  #include <CoreFoundation/CFURL.h>
 
- static gchar * get_path_from_bundle(const char *name) {
+ static gchar * get_path_from_bundle(const char *name, GFileTest test) {
 
 	size_t szBuffer = PATH_MAX;
 	char buffer[PATH_MAX+1];
-	memset(buffer,0,PATH_MAX+1]);
+	memset(buffer,0,PATH_MAX+1);
 
 	CFBundleRef mainBundle = CFBundleGetMainBundle();
 
@@ -42,7 +42,7 @@
 
 			gchar * path = g_build_filename(buffer,name,NULL);
 
-			if(access(path,R_OK) == 0) {
+			if(g_file_test(path,test)) {
 				return path;
 			}
 
@@ -52,19 +52,16 @@
 
 	}
 
-	return NUL;
+	return NULL;
 
  }
 
  gchar * pw3270_build_data_path(const char *name) {
 
-		gchar * path = get_path_from_bundle(name);
+		gchar * path = get_path_from_bundle(name,G_FILE_TEST_IS_DIR);
 
 		if(path) {
-			if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
-				return path;
-			}
-			g_free(path);
+			return path;
 		}
 
 		g_message("Cant find path for '%s'",path);
@@ -74,13 +71,10 @@
 
  gchar * pw3270_build_data_filename(const char *filename) {
 
-		gchar * path = get_path_from_bundle(name);
+		gchar * path = get_path_from_bundle(filename,G_FILE_TEST_IS_REGULAR);
 
 		if(path) {
-			if(g_file_test(path,G_FILE_TEST_IS_REGULAR)) {
-				return path;
-			}
-			g_free(path);
+			return path;
 		}
 
 		g_error("Cant find '%s'",filename);
