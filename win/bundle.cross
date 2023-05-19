@@ -76,23 +76,6 @@ install_prereqs() {
 	done
 }
 
-build_package() {
-
-	# Build
-	make -C "${srcdir}" all
-	if [ "$?" != "0" ]; then
-		echo "Build failed"
-		exit -1
-	fi
-
-	make -C "${srcdir}" "DESTDIR=${buildroot}" install
-	if [ "$?" != "0" ]; then
-		echo "Install failed"
-		exit -1
-	fi
-
-}
-
 argument "install-requires" > /dev/null
 if [ "$?" == "0" ]; then
 	install_prereqs

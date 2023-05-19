@@ -332,6 +332,7 @@ make_nsis() {
 		-DWITHIPC \
 		-DWITHPLUGINS \
 		-DWITHSDK \
+		-DPKGDIR=${buildroot}${MINGW_PREFIX} \
 		${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi
 		if [ "$?" != "0" ]; then
 			echo "Cant build nsis script"
@@ -357,7 +358,7 @@ make_nsis() {
 
 install_license() {
 	mkdir -p "${buildroot}${MINGW_PREFIX}/usr/share/${PACKAGE_NAME}"
-	cp "${srcdir}/LICENSE" "${buildroot}${MINGW_PREFIX}/share/${PACKAGE_NAME}"
+	cp "${srcdir}/LICENSE" "${buildroot}${MINGW_PREFIX}/usr/share/${PACKAGE_NAME}"
 	if [ "$?" != "0" ]; then
 		echo "Cant copy LICENSE"
 		exit -1
@@ -369,14 +370,33 @@ install_runtime() {
 	install_locale
 }
 
+build_package() {
+
+	# Build
+	make -C "${srcdir}" all
+	if [ "$?" != "0" ]; then
+		echo "Build failed"
+		exit -1
+	fi
+
+	make -C "${srcdir}" "DESTDIR=${buildroot}" install
+	if [ "$?" != "0" ]; then
+		echo "Install failed"
+		exit -1
+	fi
+
+}
+
 make_packages() {
 
-	mkdir -p "${buildroot}${MINGW_PREFIX}/nsi"
-	cp "${srcdir}/win/${PACKAGE_NAME}.nsi" "${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi" 
-	if [ "$?" != "0" ]; then
-		echo "Cant copy nsis script"
-	fi	
-
+	if [ -e "${srcdir}/win/${PACKAGE_NAME}.nsi" ]; then
+		mkdir -p "${buildroot}${MINGW_PREFIX}/nsi"
+		cp "${srcdir}/win/${PACKAGE_NAME}.nsi" "${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi" 
+		if [ "$?" != "0" ]; then
+			echo "Cant copy nsis script"
+		fi	
+	fi
+	
 	argument "zip" > /dev/null
 	if [ "$?" == "0" ]; then
 		make_zip
