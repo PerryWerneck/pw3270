@@ -40,7 +40,7 @@ cd $(dirname $(dirname $(readlink -f ${0})))
 # Install pre-reqs
 #
 echo "Installing pre-reqs..."
-pacman -U --noconfirm *.pkg.tar.zst || die "pacman failure"
+pacman -U --noconfirm *.pkg.tar.zst || die "pre-reqs failure"
 
 #
 # Build

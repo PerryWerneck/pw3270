@@ -278,9 +278,41 @@ static void pw3270Application_init(pw3270Application *app) {
 		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
 	}
 
+	// Load plugins from registry
+	/*
 	{
-		lib3270_autoptr(char) plugin_path = lib3270_build_data_filename("plugins",NULL);
-		pw3270_load_plugins_from_path(app, plugin_path);
+		HKEY hKey;
+		DWORD cbData = 4096;
+		g_autofree gchar *path = g_malloc0(cbData);
+
+		if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,G_STRINGIFY(PRODUCT_NAME)"\\plugin",0,KEY_READ,&hKey) == ERROR_SUCCESS) {
+			DWORD dwRet = RegQueryValueEx(hKey,"path",NULL,NULL,(LPBYTE) path, &cbData);
+			if(dwRet != ERROR_SUCCESS && *path) {
+				pw3270_load_plugins_from_path(app, path);
+			}
+			CloseHandle(hKey);
+		}
+	}
+	*/
+
+	// Load plugin from default paths.
+	{
+		const char *paths[] = {
+			"plugins",
+			G_STRINGIFY(PRODUCT_NAME) "-plugins",
+			"lib/plugins",
+			"lib/" G_STRINGIFY(PRODUCT_NAME) "-plugins",
+		};
+		size_t ix;
+
+		for(ix = 0; ix < G_N_ELEMENTS(paths);ix++) {
+			lib3270_autoptr(char) path = lib3270_build_data_filename("plugins",NULL);
+			if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
+				pw3270_load_plugins_from_path(app, path);
+				break;
+			}
+		}
+
 	}
 
 #elif defined(__APPLE__)
