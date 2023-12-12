@@ -100,13 +100,13 @@
 						schema_id,
 						TRUE);
 
-				g_message("Loading '%s'",names[ix]);
+//				g_message("Loading '%s'",names[ix]);
 				settings = g_settings_new_full(schema, NULL, NULL);
 
 				g_settings_schema_source_unref(source);
 
 				if(settings) {
-					g_message("Got gsettings from %s",names[ix]);
+//					g_message("Got gsettings from %s",names[ix]);
 					return settings;
 				}
 
@@ -157,7 +157,7 @@
 
  GSettings * pw3270_application_settings_new() {
 	return settings_new(G_STRINGIFY(PRODUCT_ID));
- }	
+ }
 
  GSettings * pw3270_application_window_settings_new() {
 	return settings_new(G_STRINGIFY(PRODUCT_ID) ".window");

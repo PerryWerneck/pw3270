@@ -278,35 +278,21 @@ static void pw3270Application_init(pw3270Application *app) {
 		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
 	}
 
-	// Load plugins from registry
-	/*
-	{
-		HKEY hKey;
-		DWORD cbData = 4096;
-		g_autofree gchar *path = g_malloc0(cbData);
-
-		if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,G_STRINGIFY(PRODUCT_NAME)"\\plugin",0,KEY_READ,&hKey) == ERROR_SUCCESS) {
-			DWORD dwRet = RegQueryValueEx(hKey,"path",NULL,NULL,(LPBYTE) path, &cbData);
-			if(dwRet != ERROR_SUCCESS && *path) {
-				pw3270_load_plugins_from_path(app, path);
-			}
-			CloseHandle(hKey);
-		}
-	}
-	*/
-
 	// Load plugin from default paths.
 	{
 		const char *paths[] = {
 			"plugins",
 			G_STRINGIFY(PRODUCT_NAME) "-plugins",
-			"lib/plugins",
-			"lib/" G_STRINGIFY(PRODUCT_NAME) "-plugins",
+			"lib\\plugins",
+			"lib\\" G_STRINGIFY(PRODUCT_NAME) "-plugins",
 		};
 		size_t ix;
 
+		g_autofree gchar * install = g_win32_get_package_installation_directory_of_module(NULL);
+
 		for(ix = 0; ix < G_N_ELEMENTS(paths);ix++) {
-			lib3270_autoptr(char) path = lib3270_build_data_filename("plugins",NULL);
+			g_autofree gchar * path = g_build_filename(install,paths[ix],NULL);
+			g_message("Checking '%s' for plugin files",path);
 			if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
 				pw3270_load_plugins_from_path(app, path);
 				break;
