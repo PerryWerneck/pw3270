@@ -222,6 +222,7 @@ SubSection "@PRODUCT_NAME@" SecMain
 		Section "Remote control" IPCPlugin
 
 			${DisableX64FSRedirection}
+
 			CreateDirectory "$INSTDIR\lib\@PRODUCT_NAME@-plugins"
             file "/oname=$INSTDIR\lib\@PRODUCT_NAME@-plugins\ipcserver.dll" "lib\@PRODUCT_NAME@-plugins\ipcserver.dll"
 	

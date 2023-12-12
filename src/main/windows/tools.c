@@ -35,8 +35,9 @@
 			return path;
 		}
 
-		g_free(path);
 		g_message("Cant find path for '%s'",path);
+		g_free(path);
+
 		return NULL;
 
  }
