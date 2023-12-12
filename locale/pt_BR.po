@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-31 11:13-0300\n"
-"PO-Revision-Date: 2023-01-31 11:14-0300\n"
+"POT-Creation-Date: 2023-04-08 01:14-0300\n"
+"PO-Revision-Date: 2023-04-26 07:50-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
 "Language: pt_BR\n"
@@ -24,29 +24,29 @@ msgstr ""
 msgid "\"%s\" is not a valid user interface name"
 msgstr "\"%s\" não é um nome válido para interface de usuário"
 
-#: src/objects/application/actions/about.c:118
+#: src/objects/application/actions/about.c:136
 #, c-format
 msgid "%s for %s."
 msgstr "%s para %s"
 
-#: src/objects/application/actions/about.c:125
+#: src/objects/application/actions/about.c:143
 msgid "32 bits Linux"
 msgstr "Linux 32 bits"
 
-#: src/objects/application/actions/about.c:123
+#: src/objects/application/actions/about.c:141
 msgid "32 bits Windows"
 msgstr "Windows 32 bits"
 
 #: src/objects/actions/save.c:167 src/objects/os/linux/savedesktopicon.c:233
-#: src/objects/os/windows/savedesktopicon.c:224
+#: src/objects/os/windows/savedesktopicon.c:214
 msgid "3270 session files"
 msgstr "Arquivos de sessão TN3270"
 
-#: src/objects/application/actions/about.c:127
+#: src/objects/application/actions/about.c:145
 msgid "64 bits Linux"
 msgstr "Linux 64 bits"
 
-#: src/objects/application/actions/about.c:121
+#: src/objects/application/actions/about.c:139
 msgid "64 bits Windows"
 msgstr "Windows 64 bits"
 
@@ -57,7 +57,7 @@ msgstr ""
 "<small><b>Alterações na posição da barra de ferramentas só tem efeito apos "
 "reinício da aplicação</b></small>"
 
-#: src/objects/application/actions/about.c:217 ui/windows.ui.xml:40
+#: src/objects/application/actions/about.c:235 ui/windows.ui.xml:40
 #: ui/windows.ui.xml:553 ui/macos.ui.xml:40 ui/macos.ui.xml:553
 #: ui/linux.ui.xml:40 ui/linux.ui.xml:553
 msgid "About PW3270"
@@ -67,7 +67,7 @@ msgstr "Sobre o PW3270"
 msgid "Action Name"
 msgstr "Nome da ação"
 
-#: src/objects/window/window.c:205
+#: src/objects/window/window.c:206
 msgid "Action Names"
 msgstr "Nome das ações"
 
@@ -77,7 +77,7 @@ msgstr "Nome das ações"
 msgid "Alert sound"
 msgstr "Aviso sonoro"
 
-#: src/main/tools.c:79
+#: src/main/tools.c:68
 msgid "All files"
 msgstr "Todos os arquivos"
 
@@ -86,7 +86,7 @@ msgstr "Todos os arquivos"
 msgid "Append to copy"
 msgstr "Adicionar à cópia"
 
-#: src/objects/application/actions/about.c:160
+#: src/objects/application/actions/about.c:178
 msgid "Apple version"
 msgstr "Versão Apple"
 
@@ -116,7 +116,7 @@ msgstr "Reconectar automaticamente"
 msgid "Available"
 msgstr "Disponível"
 
-#: src/objects/application/actions/about.c:163
+#: src/objects/application/actions/about.c:181
 msgid "Based on X3270 from"
 msgstr "Baseado no X3270 por"
 
@@ -145,10 +145,6 @@ msgstr "Não foi possível carregar arquivo de sessão"
 #: src/objects/os/windows/open.c:133
 msgid "Can't load session preferences"
 msgstr "Não foi possível carregar preferências da sessão"
-
-#: src/objects/settings/gsettings.c:128
-msgid "Can't load system settings"
-msgstr "Não foi possível carregar configurações de sistema"
 
 #: src/objects/application/actions/open.c:99 src/objects/window/terminal.c:192
 #, c-format
@@ -224,11 +220,11 @@ msgstr "Conectar ao iniciar"
 msgid "Connect to host"
 msgstr "Conectar ao servidor"
 
-#: src/objects/window/window.c:778 src/objects/window/page.c:218
+#: src/objects/window/window.c:779 src/objects/window/page.c:218
 msgid "Connected to host"
 msgstr "Conectado no servidor"
 
-#: src/objects/application/actions/about.c:161
+#: src/objects/application/actions/about.c:179
 msgid "Contributors"
 msgstr "Contribuidores"
 
@@ -255,12 +251,12 @@ msgstr "Copiar como tabela"
 msgid "Copy as text"
 msgstr "Copiar como texto"
 
-#: src/objects/application/actions/about.c:167
+#: src/objects/application/actions/about.c:185
 msgid "Copyright © 2008 Banco do Brasil S.A."
 msgstr "Copyright © 2008 Banco do Brasil S.A."
 
 #: src/objects/os/linux/savedesktopicon.c:114
-#: src/objects/os/windows/savedesktopicon.c:109
+#: src/objects/os/windows/savedesktopicon.c:99
 #: src/objects/os/macos/savedesktopicon.c:54
 msgid "Create shortcut for the current session"
 msgstr "Criar atalho para a sessão atual."
@@ -295,7 +291,7 @@ msgstr "Recortar"
 msgid "Delete Field"
 msgstr "Apagar campo"
 
-#: src/objects/os/windows/savedesktopicon.c:82
+#: src/objects/os/windows/savedesktopicon.c:72
 msgid "Description"
 msgstr "Descrição"
 
@@ -304,7 +300,7 @@ msgstr "Descrição"
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: src/objects/window/window.c:778 src/objects/window/window.c:805
+#: src/objects/window/window.c:779 src/objects/window/window.c:806
 #: src/objects/window/page.c:207
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
@@ -365,7 +361,7 @@ msgstr "Erro iniciando sessão"
 msgid "Field attributes"
 msgstr "Atributos de campo"
 
-#: src/objects/os/windows/savedesktopicon.c:221
+#: src/objects/os/windows/savedesktopicon.c:211
 msgid "File for session preferences"
 msgstr "Arquivo para preferências da sessão"
 
@@ -392,9 +388,9 @@ msgstr "Ajuda"
 msgid "Host and Emulation settings"
 msgstr "Configuração de servidor e emulação"
 
-#: src/objects/application/actions/about.c:119 src/objects/window/window.c:564
+#: src/objects/application/actions/about.c:137 src/objects/window/window.c:565
 #: src/objects/os/linux/savedesktopicon.c:102
-#: src/objects/os/windows/savedesktopicon.c:271
+#: src/objects/os/windows/savedesktopicon.c:261
 msgid "IBM 3270 Terminal emulator"
 msgstr "Emulador de terminal IBM 3270"
 
@@ -433,6 +429,10 @@ msgstr "Apenas ícones"
 #: src/objects/actions/abstract.c:141
 msgid "If the action can be activated"
 msgstr "Se a ação pode ser ativada"
+
+#: src/objects/application/application.c:541
+msgid "Initialization has failed"
+msgstr "Inicialização falhou"
 
 #: ui/windows.ui.xml:1022 ui/macos.ui.xml:1022 ui/linux.ui.xml:1022
 msgid "Insert"
@@ -478,11 +478,11 @@ msgstr "Altura do painel em linhas"
 msgid "Keypad width in columns"
 msgstr "Largura do painel em colunas"
 
-#: src/main/builder.c:112
+#: src/main/builder.c:117
 msgid "Keypads"
 msgstr "Painéis"
 
-#: src/objects/application/actions/about.c:171
+#: src/objects/application/actions/about.c:189
 msgid "LICENSE"
 msgstr "LICENCA"
 
@@ -518,7 +518,7 @@ msgstr "Barra de ferramentas"
 msgid "Main menu"
 msgstr "Menu principal"
 
-#: src/objects/application/actions/about.c:159
+#: src/objects/application/actions/about.c:177
 msgid "Maintainers"
 msgstr "Mantenedores"
 
@@ -643,7 +643,7 @@ msgid "Paste with left margin"
 msgstr "Colar com margem esquerda"
 
 #: src/objects/os/linux/savedesktopicon.c:71
-#: src/objects/os/windows/savedesktopicon.c:76
+#: src/objects/os/windows/savedesktopicon.c:66
 msgid "Path for the new shortcut"
 msgstr "Caminho para o novo atalho"
 
@@ -718,7 +718,7 @@ msgid "Save session preferences"
 msgstr "Salvar preferências da sessão"
 
 #: src/objects/os/linux/savedesktopicon.c:113
-#: src/objects/os/windows/savedesktopicon.c:108
+#: src/objects/os/windows/savedesktopicon.c:98
 #: src/objects/os/macos/savedesktopicon.c:53
 msgid "Save session shortcut"
 msgstr "Salvar atalho para a sessão"
@@ -731,7 +731,7 @@ msgstr "Salvar para arquivo de sessão"
 msgid "Save to shortcut file"
 msgstr "Salvar para arquivo de atalho"
 
-#: src/objects/os/windows/savedesktopicon.c:186
+#: src/objects/os/windows/savedesktopicon.c:176
 msgid "Save to windows shortcut"
 msgstr "Salvar para atalho windows"
 
@@ -796,7 +796,7 @@ msgid "Session Trace"
 msgstr "Trace da sessão"
 
 #: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
-#: src/objects/os/windows/savedesktopicon.c:96
+#: src/objects/os/windows/savedesktopicon.c:86
 msgid "Session file"
 msgstr "Arquivo de sessão"
 
@@ -811,7 +811,7 @@ msgid "Session in new window"
 msgstr "Sessão em nova janela"
 
 #: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
-#: src/objects/os/windows/savedesktopicon.c:88
+#: src/objects/os/windows/savedesktopicon.c:78
 msgid "Session name"
 msgstr "Nome da sessão"
 
@@ -847,7 +847,7 @@ msgid "Setup toolbar"
 msgstr "Configurar barra de ferramentas"
 
 #: src/objects/os/linux/savedesktopicon.c:70
-#: src/objects/os/windows/savedesktopicon.c:75
+#: src/objects/os/windows/savedesktopicon.c:65
 msgid "Shortcut file"
 msgstr "Arquivo de atalho"
 
@@ -910,11 +910,11 @@ msgstr "Simbólico"
 msgid "System default"
 msgstr "Padrão do sistema"
 
-#: src/objects/settings/gsettings.c:133
+#: src/objects/application/application.c:546
 msgid "System settings error"
 msgstr "Erro nas configurações de sistema"
 
-#: src/main/tools.c:75
+#: src/main/tools.c:64
 msgid "TN3270 Session Files"
 msgstr "Arquivos de sessão TN3270"
 
@@ -960,7 +960,7 @@ msgid "The file to save the current session preferences"
 msgstr "O arquivo com as preferências da sessão atual"
 
 #: src/objects/os/linux/savedesktopicon.c:86
-#: src/objects/os/windows/savedesktopicon.c:97
+#: src/objects/os/windows/savedesktopicon.c:87
 msgid "The file with the session preferences for this shortcut"
 msgstr "O arquivo com as preferências da sessão para esse atalho"
 
@@ -976,7 +976,7 @@ msgstr "A etiqueta da ação"
 msgid "The name of associated action"
 msgstr "Nome da ação associada"
 
-#: src/objects/window/window.c:206
+#: src/objects/window/window.c:207
 msgid "The name of the actions in the header bar"
 msgstr "O nome das ações na barra de título"
 
@@ -1005,7 +1005,7 @@ msgid "The position of the keypad"
 msgstr "A posição do painel"
 
 #: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
-#: src/objects/os/windows/savedesktopicon.c:90
+#: src/objects/os/windows/savedesktopicon.c:80
 msgid "The session name used in the window/tab title (empty for default)"
 msgstr ""
 "O nome da sessão usada no título da janela/aba. Vazio para usar o valor "
@@ -1041,7 +1041,7 @@ msgstr "O tipo do estado mantido pela ação"
 
 #: src/objects/os/macos/savedesktopicon.c:68
 msgid "This action is not available in this platform"
-msgstr ""
+msgstr "Ação não está disponível nessa plataforma"
 
 #: src/objects/window/header-settings.c:52
 msgid "Title bar"
@@ -1091,13 +1091,11 @@ msgstr "Mostrar posição do cursor"
 msgid "UI Type"
 msgstr "Interface de usuário"
 
-#: src/objects/settings/gsettings.c:131
-msgid ""
-"Unable to initialize system settings. Application may crash in unexpected "
-"ways"
+#: src/objects/application/application.c:544
+msgid "Unable to initialize settings. Application may crash in unexpected ways"
 msgstr ""
-"Não foi possível iniciar configuração de sistema. Aplicação pode falhar de "
-"forma inesperada"
+"Não foi possível iniciar configuração. Aplicação pode falhar de forma "
+"inesperada"
 
 #: src/objects/os/windows/open.c:137
 #, c-format
@@ -1109,7 +1107,7 @@ msgstr "Incapaz de ler preferências de sessa de '%s'"
 msgid "Unselect"
 msgstr "Remover seleção"
 
-#: src/objects/application/actions/about.c:98
+#: src/objects/application/actions/about.c:116
 #, c-format
 msgid "Unstable version %s-%s"
 msgstr "Versão instável %s-%s"
@@ -1119,7 +1117,7 @@ msgstr "Versão instável %s-%s"
 msgid "Use +/- for field navigation"
 msgstr "Usar teclas +/- para navegar por campos"
 
-#: src/objects/application/actions/about.c:100
+#: src/objects/application/actions/about.c:118
 #, c-format
 msgid "Version %s-%s"
 msgstr "Versão %s-%s"
@@ -1131,7 +1129,7 @@ msgstr "Versão %s-%s"
 msgid "View"
 msgstr "Exibir"
 
-#: src/objects/application/actions/about.c:191
+#: src/objects/application/actions/about.c:209
 msgid "View this project on github"
 msgstr "Visite-nos no github"
 
@@ -1140,7 +1138,7 @@ msgstr "Visite-nos no github"
 msgid "Window with default session"
 msgstr "Janela com sessão padrão"
 
-#: src/objects/os/windows/savedesktopicon.c:189
+#: src/objects/os/windows/savedesktopicon.c:179
 msgid "Windows shortcuts"
 msgstr "Atalhos windows"
 
@@ -1150,7 +1148,7 @@ msgstr "_Aplicar"
 
 #: src/objects/actions/save.c:103 src/objects/settings/dialog.c:78
 #: src/objects/os/linux/savedesktopicon.c:140
-#: src/objects/os/windows/savedesktopicon.c:134
+#: src/objects/os/windows/savedesktopicon.c:124
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1200,7 +1198,7 @@ msgid "_Rename session"
 msgstr "Renomear sessão"
 
 #: src/objects/actions/save.c:104 src/objects/os/linux/savedesktopicon.c:141
-#: src/objects/os/windows/savedesktopicon.c:135
+#: src/objects/os/windows/savedesktopicon.c:125
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -1208,11 +1206,11 @@ msgstr "_Salvar"
 msgid "_View"
 msgstr "_Exibir"
 
-#: src/objects/application/actions/about.c:190
+#: src/objects/application/actions/about.c:208
 msgid "https://github.com/PerryWerneck/pw3270"
 msgstr "https://github.com/PerryWerneck/pw3270"
 
-#: src/objects/application/actions/about.c:193
+#: src/objects/application/actions/about.c:211
 msgid "translator-credits"
 msgstr "translator-credits"
 
@@ -1646,6 +1644,9 @@ msgstr "translator-credits"
 
 #~ msgid "Can't load plugin %s"
 #~ msgstr "Não foi possível carregar plugin %s"
+
+#~ msgid "Can't load system settings"
+#~ msgstr "Não foi possível carregar configurações de sistema"
 
 #~ msgid "Can't open \"%s\""
 #~ msgstr "Não foi possível abrir %s"
@@ -2667,9 +2668,6 @@ msgstr "translator-credits"
 #~ msgstr "Abrir em nova janela"
 
 #~ msgid "Operation failed"
-#~ msgstr "Operação falhou"
-
-#~ msgid "Operation has failed"
 #~ msgstr "Operação falhou"
 
 #~ msgid "Option '%c:' is not supported"

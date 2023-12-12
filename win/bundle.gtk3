@@ -1,0 +1,139 @@
+#!/bin/bash
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+#
+# Copyright (C) 2023 Perry Werneck <perry.werneck@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+#
+# References:
+#
+# https://www.gtk.org/docs/installations/windows/
+# http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
+#
+
+# Load bundle functions
+. "$(dirname $(readlink -f "${0}"))/bundle.common"
+
+GTK_PREFIX=$(${PKG_CONFIG} --variable=prefix gtk+-3.0)
+GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
+GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
+GDK_LOADERS=$(echo $(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
+
+install_schemas() {		
+
+        mkdir -p ${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas
+
+        schemas="
+            org.gtk.Settings.FileChooser.gschema.xml
+			gschema.dtd
+        "
+
+		for schema in ${schemas}
+		do
+        	cp -v "${MINGW_PREFIX}/share/glib-2.0/schemas/${schema}" "${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas"
+			if [ "$?" != "0" ]; then
+				exit -1
+			fi
+		done
+
+		glib-compile-schemas \
+                --targetdir="${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas" \
+                "${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas"
+
+		if [ "$?" != "0" ]; then
+			exit -1
+		fi
+}
+
+install_theme() {		
+
+	mkdir -p "${buildroot}${MINGW_PREFIX}/etc"
+	cp -rv "${MINGW_PREFIX}/etc/gtk-3.0" "${buildroot}${MINGW_PREFIX}/etc"
+	if [ "$?" != "0" ]; then
+		exit -1
+	fi
+
+	# https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
+	mkdir -p ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0
+	rm -f ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
+	rm -f ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/gtkrc
+
+	echo "[Settings]" > ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
+	echo "gtk-theme-name=${1}" >> ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
+
+	if [ -e "${srcdir}/win/gtk.css" ]; then
+		mkdir -p "${buildroot}${MINGW_PREFIX}/share/themes/Default/gtk-3.0"
+		cp "${srcdir}/win/gtk.css" "${buildroot}${MINGW_PREFIX}/share/themes/Default/gtk-3.0/gtk.css"
+	fi
+
+}
+
+install_icons() {
+
+	mkdir -p "${buildroot}${MINGW_PREFIX}/share/icons"
+
+	if [ -d "${MINGW_PREFIX}/share/icons/${1}" ]; then
+
+		cp -rv "${MINGW_PREFIX}/share/icons/${1}" "${buildroot}${MINGW_PREFIX}/share/icons"
+		if [ "$?" != 0 ]; then
+			echo "Can´t copy ${1} icons"
+			exit -1
+		fi
+
+	elif [ -d "/usr/share/icons/${1}" ]; then
+
+		cp -rv "/usr/share/icons/${1}" "${buildroot}${MINGW_PREFIX}/share/icons"
+		if [ "$?" != 0 ]; then
+			echo "Can´t copy ${1} icons"
+			exit -1
+		fi
+
+	else
+
+		echo "Can´t find ${1} icons"
+		exit -1
+	
+	fi
+	
+}
+
+install_loaders() {
+
+	if [ -d "${MINGW_PREFIX}${GDK_LOADERS}" ]; then
+		mkdir -p "${buildroot}/${MINGW_PREFIX}${GDK_LOADERS}"
+		cp -rv ${MINGW_PREFIX}${GDK_LOADERS}/* "${buildroot}/${MINGW_PREFIX}${GDK_LOADERS}"
+		if [ "$?" != "0" ]; then
+			exit -1
+		fi
+	
+		find ${buildroot}/${MINGW_PREFIX}${GDK_LOADERS} -iname "*.a" -exec rm -f {} \;
+	
+	fi
+
+}
+
+install_gtk3_runtime() {
+
+	install_loaders
+	install_bin
+	install_locale
+	install_schemas
+	install_theme "Adwaita"
+	install_icons "Adwaita"
+
+}
+	

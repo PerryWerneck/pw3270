@@ -278,9 +278,41 @@ static void pw3270Application_init(pw3270Application *app) {
 		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
 	}
 
+	// Load plugins from registry
+	/*
 	{
-		lib3270_autoptr(char) plugin_path = lib3270_build_data_filename("plugins",NULL);
-		pw3270_load_plugins_from_path(app, plugin_path);
+		HKEY hKey;
+		DWORD cbData = 4096;
+		g_autofree gchar *path = g_malloc0(cbData);
+
+		if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,G_STRINGIFY(PRODUCT_NAME)"\\plugin",0,KEY_READ,&hKey) == ERROR_SUCCESS) {
+			DWORD dwRet = RegQueryValueEx(hKey,"path",NULL,NULL,(LPBYTE) path, &cbData);
+			if(dwRet != ERROR_SUCCESS && *path) {
+				pw3270_load_plugins_from_path(app, path);
+			}
+			CloseHandle(hKey);
+		}
+	}
+	*/
+
+	// Load plugin from default paths.
+	{
+		const char *paths[] = {
+			"plugins",
+			G_STRINGIFY(PRODUCT_NAME) "-plugins",
+			"lib/plugins",
+			"lib/" G_STRINGIFY(PRODUCT_NAME) "-plugins",
+		};
+		size_t ix;
+
+		for(ix = 0; ix < G_N_ELEMENTS(paths);ix++) {
+			lib3270_autoptr(char) path = lib3270_build_data_filename("plugins",NULL);
+			if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
+				pw3270_load_plugins_from_path(app, path);
+				break;
+			}
+		}
+
 	}
 
 #elif defined(__APPLE__)
@@ -430,8 +462,6 @@ void startup(GApplication *application) {
 
 	G_APPLICATION_CLASS(pw3270Application_parent_class)->startup(application);
 
-//	GSettings *settings = pw3270_application_get_settings(application);
-
 	//
 	// Common actions
 	//
@@ -488,25 +518,33 @@ void startup(GApplication *application) {
 	// Load keypad models
 	//
 	{
-		lib3270_autoptr(char) keypad_path = lib3270_build_data_filename("keypad",NULL);
+		g_autofree gchar *keypad_path = pw3270_build_data_path("keypad");
 
-		g_autoptr(GError) error = NULL;
-		g_autoptr(GDir) dir = g_dir_open(keypad_path,0,&error);
+		if(keypad_path) {
 
-		if(dir) {
+			g_message("Searching for keypads in '%s'",keypad_path);
 
-			const gchar *name = g_dir_read_name(dir);
-			while(!error && name) {
-				g_autofree gchar * path = g_build_filename(keypad_path,name,NULL);
-				app->keypads = pw3270_keypad_model_new_from_xml(app->keypads,path);
-				name = g_dir_read_name(dir);
+			g_autoptr(GError) error = NULL;
+			g_autoptr(GDir) dir = g_dir_open(keypad_path,0,&error);
+
+			if(dir) {
+
+				const gchar *name = g_dir_read_name(dir);
+				while(!error && name) {
+					g_autofree gchar * path = g_build_filename(keypad_path,name,NULL);
+					app->keypads = pw3270_keypad_model_new_from_xml(app->keypads,path);
+					name = g_dir_read_name(dir);
+				}
+
 			}
 
+			if(error) {
+				g_message("Can't read %s: %s",keypad_path,error->message);
+			}
+
+
 		}
 
-		if(error) {
-			g_message("Can't read %s: %s",keypad_path,error->message);
-		}
 	}
 
 	//
@@ -524,6 +562,32 @@ void startup(GApplication *application) {
 void activate(GApplication *application) {
 
 	GtkWidget * window = pw3270_application_window_new(GTK_APPLICATION(application),NULL);
+
+	if(!PW3270_APPLICATION(application)->settings) {
+
+		GtkWidget * dialog = gtk_message_dialog_new_with_markup(
+								 NULL,
+								 0,
+								 GTK_MESSAGE_ERROR,
+								 GTK_BUTTONS_CLOSE,
+								 _("Initialization has failed")
+							 );
+
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),_("Unable to initialize settings. Application may crash in unexpected ways"));
+
+		gtk_window_set_title(GTK_WINDOW(dialog),_("System settings error"));
+
+		gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
+
+		gtk_widget_show_all(dialog);
+
+		gtk_dialog_run(GTK_DIALOG(dialog));
+
+		gtk_widget_destroy(dialog);
+
+		g_application_quit(G_APPLICATION(application));
+
+	}
 
 	// Present the new window
 	pw3270_window_set_current_page(window,0);

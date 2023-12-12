@@ -24,20 +24,16 @@
 
 Name "@PRODUCT_NAME@"
 Caption "@PRODUCT_NAME@ - @PACKAGE_DESCRIPTION@"
-!ifdef WITHGTK
-outfile "@PRODUCT_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@-gtk-@GTK_MODVERSION@-@host_cpu@.exe"
-!else
-outfile "@PRODUCT_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@-requires-gtk-@GTK_MODVERSION@-@host_cpu@.exe"
-!endif
+outfile "@PRODUCT_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@-@host_cpu@.exe"
 
 XPStyle on
 
 installDir "$@PROGRAMFILES@\@PRODUCT_NAME@"
 
 #define the installer icon
-!define MUI_ICON "@PRODUCT_NAME@.ico"
-!define MUI_UNICON "@PRODUCT_NAME@.ico"
-icon "@PRODUCT_NAME@.ico"
+!define MUI_ICON "bin\@PRODUCT_NAME@.ico"
+!define MUI_UNICON "bin\@PRODUCT_NAME@.ico"
+icon "bin\@PRODUCT_NAME@.ico"
 
 # Get installation folder from registry if available
 InstallDirRegKey HKLM "Software\@PRODUCT_NAME@" "InstallLocation"
@@ -60,16 +56,16 @@ VIAddVersionKey "LegalCopyright" "(C) 2017 Banco do Brasil S/A. All Rights Reser
 # Interface
 
 !define MUI_ABORTWARNING
-# !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "LICENSE"
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "share\@PRODUCT_NAME@\LICENSE"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 
-# !insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
-# !insertmacro MUI_UNPAGE_FINISH
+!insertmacro MUI_UNPAGE_FINISH
 
 # Languages
 !insertmacro MUI_LANGUAGE "English"
@@ -80,71 +76,48 @@ VIAddVersionKey "LegalCopyright" "(C) 2017 Banco do Brasil S/A. All Rights Reser
 # default section
 SubSection "@PRODUCT_NAME@" SecMain
 
-	Section "Core" SecCore
+	Section "@PRODUCT_NAME@" SecCore
 
 		SetRegView @WINARCH@
 		${DisableX64FSRedirection}
 
-		# define the output path for this file
-		setOutPath $INSTDIR
+		# Set SMPROGRAMS and DESKTOP path
 		SetShellVarContext all
 
-		createShortCut "$SMPROGRAMS\@PRODUCT_NAME@.lnk" "$INSTDIR\@PRODUCT_NAME@.exe"
-		createShortCut "$DESKTOP\@PRODUCT_NAME@.lnk" "$INSTDIR\@PRODUCT_NAME@.exe"
-
 		# Binary files
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.exe"			"bin\@PRODUCT_NAME@.exe"
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.ico"			"bin\@PRODUCT_NAME@.ico"
-		file "/oname=$INSTDIR\lib@LIBRARY_NAME@.dll"		"bin\lib@LIBRARY_NAME@.dll"
-		file "/oname=$INSTDIR\libv3270.dll"					"bin\libv3270.dll"
+		setOutPath "$INSTDIR"
+		file /r "bin"
+		
+		setOutPath "$INSTDIR\share\@PRODUCT_NAME@"
+		file /r "share\@PRODUCT_NAME@\*.png"
+		file /r "share\@PRODUCT_NAME@\*.svg"
+		file /r "share\@PRODUCT_NAME@\*.ui.xml"
+		file /r "share\@PRODUCT_NAME@\*.conf"
 
-		# Register file association
+		setOutPath "$INSTDIR\share\@PRODUCT_NAME@\remap"
+		file /r "share\@PRODUCT_NAME@\remap\*"
 
-		# icons & logos
-		CreateDirectory "$INSTDIR\icons"
-		file "/oname=$INSTDIR\icons\gtk-connect-symbolic.svg"			"share\@PRODUCT_NAME@\icons\gtk-connect-symbolic.svg"
-		file "/oname=$INSTDIR\icons\gtk-disconnect-symbolic.svg"		"share\@PRODUCT_NAME@\icons\gtk-disconnect-symbolic.svg"
-		file "/oname=$INSTDIR\icons\connect-symbolic.svg"				"share\@PRODUCT_NAME@\icons\connect-symbolic.svg"
-		file "/oname=$INSTDIR\icons\disconnect-symbolic.svg"			"share\@PRODUCT_NAME@\icons\disconnect-symbolic.svg"
-		file "/oname=$INSTDIR\icons\@PRODUCT_NAME@.svg"					"share\@PRODUCT_NAME@\@PRODUCT_NAME@.svg"
+		setOutPath "$INSTDIR\lib\gdk-pixbuf-2.0"
+		file /r "lib\gdk-pixbuf-2.0\*"
 
-		file "/oname=$INSTDIR\@PRODUCT_NAME@-logo.svg"					"share\@PRODUCT_NAME@\@PRODUCT_NAME@-logo.svg"
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.svg"						"share\@PRODUCT_NAME@\@PRODUCT_NAME@.svg"
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.png"						"share\@PRODUCT_NAME@\@PRODUCT_NAME@.png"
+		setOutPath "$INSTDIR\etc"
+		file /r "etc\*"
 
-		# Schema
-		CreateDirectory "$INSTDIR\schemas"
-		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-application.gschema.xml"	"share\glib-2.0\schemas\@PRODUCT_NAME@-application.gschema.xml"
-		file "/oname=$INSTDIR\schemas\@PRODUCT_NAME@-window.gschema.xml"		"share\glib-2.0\schemas\@PRODUCT_NAME@-window.gschema.xml"
+		setOutPath "$INSTDIR\share\locale"
+		file /r "share\locale\*"
 
-		file "/oname=$INSTDIR\gschemas.compiled"								"runtime/share/glib-2.0/schemas/gschemas.compiled"
+		setOutPath "$INSTDIR\share\themes"
+		file /r "share\themes\*"
 
-		# Configuration files
-		file "/oname=$INSTDIR\colors.conf"								"share\@PRODUCT_NAME@\colors.conf"
+		setOutPath "$INSTDIR\share\icons"
+		file /r "share\icons\*"
 
-		# Documentation files
-		file "/oname=$INSTDIR\AUTHORS"									"AUTHORS"
-		file "/oname=$INSTDIR\LICENSE"									"LICENSE"
+		setOutPath "$INSTDIR\share\glib-2.0"
+		file /r "share\glib-2.0\*"
 
-		# Misc folders
-		CreateDirectory "$INSTDIR\certs"
-		CreateDirectory "$INSTDIR\plugins"
-		CreateDirectory "$INSTDIR\keypad"
-
-		# UI definition files
-		CreateDirectory "$INSTDIR\ui"
-		file "/oname=$INSTDIR\@PRODUCT_NAME@.ui.xml" 	"share\@PRODUCT_NAME@\@PRODUCT_NAME@.ui.xml"
-
-		# Charset definition files
-		CreateDirectory "$INSTDIR\remap"
-		file "/oname=$INSTDIR\remap\bracket.xml" 	"share\@PRODUCT_NAME@\remap\bracket.xml"
-
-		# Locale files
-		CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\@PACKAGE_NAME@.mo"														"share\locale\pt_BR\LC_MESSAGES\@PACKAGE_NAME@.mo"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"	"share\locale\pt_BR\LC_MESSAGES\lib@LIBRARY_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"
-		file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libv3270-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"				"share\locale\pt_BR\LC_MESSAGES\libv3270-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"
-
+		setOutPath "$INSTDIR\share\@PRODUCT_NAME@\icons"
+		file /r "share\@PRODUCT_NAME@\icons\*"
+		
 		# define uninstaller name
 		SetRegView 32
 
@@ -209,7 +182,33 @@ SubSection "@PRODUCT_NAME@" SecMain
 		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"				"font-family"			"Lucida Console"
 		WriteRegStr		HKLM	"Software\@PRODUCT_NAME@"				"colors"				"rgb(24,24,24);rgb(79,156,254);rgb(237,74,70);rgb(235,110,183);rgb(131,199,70);rgb(86,216,201);rgb(239,197,65);rgb(222,222,222);rgb(59,59,59);rgb(54,142,171);rgb(250,145,83);rgb(165,128,226);rgb(112,180,51);rgb(65,199,185);rgb(219,179,45);rgb(119,119,119);rgb(131,199,70);rgb(237,74,70);rgb(65,199,185);rgb(250,145,83);rgb(37,37,37);rgb(222,222,222);rgb(222,222,222);rgb(24,24,24);rgb(222,222,222);rgb(79,156,254);rgb(131,199,70);rgb(239,197,65);rgb(239,197,65)"
 
+		createShortCut "$SMPROGRAMS\@PRODUCT_NAME@.lnk" "$INSTDIR\bin\@PRODUCT_NAME@.exe" "" "$INSTDIR\bin\@PRODUCT_NAME@.ico"
+		createShortCut "$DESKTOP\@PRODUCT_NAME@.lnk" "$INSTDIR\bin\@PRODUCT_NAME@.exe" "" "$INSTDIR\bin\@PRODUCT_NAME@.ico"
+
 	sectionEnd
+
+!ifdef WITHSDK
+    Section /o "Software Development Kit" SDK
+
+		setOutPath $INSTDIR\sdk\include
+		file /r "include\*.*"
+
+		setOutPath $INSTDIR\sdk\lib
+		file /r "lib\*.a"
+
+		setOutPath $INSTDIR\sdk\lib\pkgconfig
+		file /r "lib\pkgconfig\*.pc"
+
+		setOutPath $INSTDIR\sdk\msvc
+		file /r "share\@PRODUCT_NAME@\def\*.def"
+		file /r "share\@PRODUCT_NAME@\def\*.mak"
+
+		SetRegView @WINARCH@
+		WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH" "$INSTDIR\sdk"
+		SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
+
+    SectionEnd
+!endif
 
 !ifdef WITHCERTS
 	Section "SSL Certificates" SSLCerts
@@ -222,111 +221,15 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 		Section "Remote control" IPCPlugin
 
-			setOutPath $INSTDIR
-
 			${DisableX64FSRedirection}
-
-			CreateDirectory "$INSTDIR\plugins"
-			file "/oname=$INSTDIR\plugins\ipcserver.dll"			"lib\@PRODUCT_NAME@-plugins\ipcserver.dll"
-
-			CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-			file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libipc3270-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"	"share\locale\pt_BR\LC_MESSAGES\libipc3270-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"
-
-			${@NSISREDIR@}
-			file "/oname=$SYSDIR\libipc3270.dll"				"bin\libipc3270.dll"
-
+			CreateDirectory "$INSTDIR\lib\@PRODUCT_NAME@-plugins"
+            file "/oname=$INSTDIR\lib\@PRODUCT_NAME@-plugins\ipcserver.dll" "lib\@PRODUCT_NAME@-plugins\ipcserver.dll"
+	
 		sectionEnd
 
 	SubSectionEnd
 
-!ifdef WITHEXTRAS
-	SubSection "Extra modules" Languages
-
-!ifdef WITHLIBHLLAPI
-		Section "HLLAPI" HLLAPIBinding
-
-			${@NSISREDIR@}
-
-			# Install HLLAPI connector
-			file "/oname=$SYSDIR\hllapi.dll"		"bin\libhllapi.dll"
-
-			# Install with "lib" prefix for compatibility.
-			file "/oname=$SYSDIR\libhllapi.dll"		"bin\libhllapi.dll"
-
-			CreateDirectory "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-			file "/oname=$INSTDIR\locale\pt_BR\LC_MESSAGES\libhllapi-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"	"share\locale\pt_BR\LC_MESSAGES\libhllapi-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.mo"
-
-		SectionEnd
-!endif
-
-		Section "KEYPADS" Keypads
-
-			file "/oname=$INSTDIR\keypad\00-right.xml" 	"share\@PRODUCT_NAME@\keypad\00-right.xml"
-			file "/oname=$INSTDIR\keypad\10-bottom.xml" 	"share\@PRODUCT_NAME@\keypad\10-bottom.xml"
-
-		SectionEnd
-
-!ifdef WITHMONO-TN3270
-		Section /o ".NET" DOTNET
-
-			CreateDirectory "$INSTDIR\dotnet"
-
-			${DisableX64FSRedirection}
-			file "/oname=$INSTDIR\dotnet\tn3270.dll"	"mono/lib/tn3270-5.2/tn3270.dll"
-			file "/oname=$INSTDIR\dotnet\tn3270.xml"	"mono/gapi-2.0/tn3270/tn3270.xml"
-
-			${@NSISREDIR@}
-			file "/oname=$SYSDIR\mono-tn3270.dll"		"mono-tn3270.dll"
-
-		SectionEnd
-!endif
-
-	SubSectionEnd
-!endif
-
-!ifdef WITHSDK
-	Section /o "Software Development Kit" SDK
-
-		setOutPath $INSTDIR\sdk\include
-		file /r "include\*.*"
-
-		CreateDirectory "$INSTDIR\sdk"
-		CreateDirectory "$INSTDIR\sdk\def"
-		CreateDirectory "$INSTDIR\sdk\lib"
-
-		file "/oname=$INSTDIR\sdk\lib\lib3270.dll.a"		"lib\lib@LIBRARY_NAME@.dll.a"
-		file "/oname=$INSTDIR\sdk\lib\lib3270.delayed.a"	"lib\lib@LIBRARY_NAME@.delayed.a"
-		file "/oname=$INSTDIR\sdk\lib\lib3270.static.a"		"lib\lib@LIBRARY_NAME@.static.a"
-		file "/oname=$INSTDIR\sdk\lib\libv3270.dll.a"		"lib\libv3270.dll.a"
-		file "/oname=$INSTDIR\sdk\lib\libipc3270.dll.a"		"lib\libipc3270.dll.a"
-		file "/oname=$INSTDIR\sdk\lib\libipc3270.static.a"	"lib\libipc3270.static.a"
-		file "/oname=$INSTDIR\sdk\lib\libhllapi.dll.a"		"lib\libhllapi.dll.a"
-
-		file "/oname=$INSTDIR\sdk\lib3270.mak"			"share\@PRODUCT_NAME@\def\lib3270.mak"
-
-		file "/oname=$INSTDIR\sdk\def\lib@LIBRARY_NAME@.def"	"share\@PRODUCT_NAME@\def\lib@LIBRARY_NAME@.def"
-		file "/oname=$INSTDIR\sdk\def\libv3270.def"		"share\@PRODUCT_NAME@\def\libv3270.def"
-		file "/oname=$INSTDIR\sdk\def\libipc3270.def"		"share\@PRODUCT_NAME@\def\libipc3270.def"
-		file "/oname=$INSTDIR\sdk\def\libhllapi.def"		"share\@PRODUCT_NAME@\def\libhllapi.def"
-
-		SetRegView @WINARCH@
-		WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH" "$INSTDIR\sdk"
-		SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
-
-	SectionEnd
-!endif
-
 SubSectionEnd
-
-
-!ifdef WITHGTK
-Section "GTK+ Runtime" SecGTK
-
-	setOutPath $INSTDIR
-	file /r "runtime\*.*"
-
-SectionEnd
-!endif
 
 Section "Uninstall"
 
@@ -343,15 +246,7 @@ Section "Uninstall"
 	delete $SMPROGRAMS\@PRODUCT_NAME@.lnk
 	delete $DESKTOP\@PRODUCT_NAME@.lnk
 
-	RMDir /r "$INSTDIR\locale"
-	RMDir /r "$INSTDIR\share"
-	RMDir /r "$INSTDIR\etc"
-	RMDir /r "$INSTDIR\plugins"
-	RMDir /r "$INSTDIR\sdk"
-	RMDir /r "$INSTDIR\gtk2-runtime"
-
-	# Delete all files
-	delete "$INSTDIR\*.dll"
+	RMDir /r "$INSTDIR"
 
 	# Remove registry
 	SetRegView 32
@@ -485,42 +380,6 @@ Function .onInit
 	Pop $0
 
 !endif
-
-
-	#---[ Check for GTK runtime ]------------------------------------------------------------------------
-
-!ifdef WITHGTK
-
-	SetRegView @WINARCH@
-
-	ReadRegStr $4 HKLM "Software\gtkwin\@GTK_MODVERSION@" "path"
-
-	${if} $4 == ""
-
-		SectionGetFlags ${SecGTK} $0
-		IntOp $0 $0 | ${SF_SELECTED}
-		SectionSetFlags ${SecGTK} $0
-
-	${Else}
-
-		${if} ${FileExists} `$4\*.*`
-
-			SectionGetFlags ${SecGTK}  $0
-			IntOp $0 $0 & ${SECTION_OFF}
-			SectionSetFlags ${SecGTK}  $0
-
-		${Else}
-
-			SectionGetFlags ${SecGTK}  $0
-			IntOp $0 $0 | ${SF_SELECTED}
-			SectionSetFlags ${SecGTK}  $0
-
-		${EndIf}
-
-	${EndIf}
-
-!endif
-
 
 FunctionEnd
 
