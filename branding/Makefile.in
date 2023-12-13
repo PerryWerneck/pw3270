@@ -24,9 +24,9 @@ APPLICATION_ID=@APPLICATION_ID@
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
+srcdir=@srcdir@
 datarootdir=@datarootdir@
 bindir=@bindir@
-srcdir=@srcdir@
 
 BUILDDIR=@BUILDDIR@
 BINDIR=$(BUILDDIR)/.bin
@@ -156,7 +156,7 @@ install-windows: \
 	@$(MKDIR) $(DESTDIR)$(bindir)
 
 	@$(INSTALL_DATA) \
-		$(PRODUCT_NAME).ico \
+		$(srcdir)/$(PRODUCT_NAME).ico \
 		$(DESTDIR)$(bindir)/$(PRODUCT_NAME).ico
 
 
