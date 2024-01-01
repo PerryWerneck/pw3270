@@ -65,6 +65,10 @@ void pw3270_load_plugins_from_path(pw3270Application *app, const char *path) {
 
 		}
 
+	} else {
+
+		g_warning("Can't load plugins from %s: %s",path,"Invalid path");
+
 	}
 
 }

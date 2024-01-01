@@ -278,9 +278,27 @@ static void pw3270Application_init(pw3270Application *app) {
 		g_settings_bind(app->settings, "ui-style", app, "ui-style", G_SETTINGS_BIND_DEFAULT);
 	}
 
+	// Load plugin from default paths.
 	{
-		lib3270_autoptr(char) plugin_path = lib3270_build_data_filename("plugins",NULL);
-		pw3270_load_plugins_from_path(app, plugin_path);
+		const char *paths[] = {
+			"plugins",
+			G_STRINGIFY(PRODUCT_NAME) "-plugins",
+			"lib\\plugins",
+			"lib\\" G_STRINGIFY(PRODUCT_NAME) "-plugins",
+		};
+		size_t ix;
+
+		g_autofree gchar * install = g_win32_get_package_installation_directory_of_module(NULL);
+
+		for(ix = 0; ix < G_N_ELEMENTS(paths);ix++) {
+			g_autofree gchar * path = g_build_filename(install,paths[ix],NULL);
+			g_message("Checking '%s' for plugin files",path);
+			if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
+				pw3270_load_plugins_from_path(app, path);
+				break;
+			}
+		}
+
 	}
 
 #elif defined(__APPLE__)

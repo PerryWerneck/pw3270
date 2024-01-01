@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #
-#  Copyright (C) 2021 Perry Werneck <perry.werneck@gmail.com>
+#  Copyright (C) 2023 Perry Werneck <perry.werneck@gmail.com>
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published
@@ -18,15 +18,8 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-#
-# References:
-#
-# https://www.gtk.org/docs/installations/windows/
-# http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
-#
-
 # Load bundle functions
-. "$(dirname $(readlink -f "${0}"))/bundle.common"
+. "$(dirname $(readlink -f "${0}"))/bundle.gtk3"
 
 prepare
 
@@ -40,11 +33,6 @@ do
 	fi
 done
 
-install_loaders
-install_bin
-install_locale
-install_schemas
-install_theme "Adwaita"
-install_icons "Adwaita"
+install_gtk3_runtime
 
 

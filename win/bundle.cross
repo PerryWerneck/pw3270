@@ -18,20 +18,13 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-#
-# References:
-#
-# https://www.gtk.org/docs/installations/windows/
-# http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
-#
-
 MINGW_PREFIX="/usr/x86_64-w64-mingw32/sys-root/mingw"
 PKG_CONFIG="/usr/bin/x86_64-w64-mingw32-pkg-config"
 MINGW_PACKAGE_PREFIX="mingw64"
 REPOSITORY_NAME="pw3270"
 
 # Load bundle functions
-. "$(dirname $(readlink -f "${0}"))/bundle.common"
+. "$(dirname $(readlink -f "${0}"))/bundle.gtk3"
 
 argument "help" > /dev/null
 if [ "$?" == "0" ]; then
@@ -81,23 +74,6 @@ install_prereqs() {
 			exit -1
 		fi
 	done
-}
-
-build_package() {
-
-	# Build
-	make -C "${srcdir}" all
-	if [ "$?" != "0" ]; then
-		echo "Build failed"
-		exit -1
-	fi
-
-	make -C "${srcdir}" "DESTDIR=${buildroot}" install
-	if [ "$?" != "0" ]; then
-		echo "Install failed"
-		exit -1
-	fi
-
 }
 
 argument "install-requires" > /dev/null
@@ -193,18 +169,9 @@ unpack_rpm() {
 
 }
 
-install_license() {
-	mkdir -p "${buildroot}${MINGW_PREFIX}/usr/share/${PACKAGE_NAME}"
-	cp "${srcdir}/LICENSE" "${buildroot}${MINGW_PREFIX}/share/${PACKAGE_NAME}"
-	if [ "$?" != "0" ]; then
-		echo "Cant copy LICENSE"
-		exit -1
-	fi
-}
-
 unpack_rpm
 
-install_runtime
+install_gtk3_runtime
 install_license
 
 make_packages

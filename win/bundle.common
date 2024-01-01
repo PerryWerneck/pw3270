@@ -18,13 +18,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-#
-# References:
-#
-# https://www.gtk.org/docs/installations/windows/
-# http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
-#
-
 # Check command-line arguments
 argument() {
 
@@ -52,7 +45,10 @@ if [ "$?" == "0" ]; then
 	echo ""
 	echo "	--help Help options (this screen)"
 	echo "	--zip Build zipfile"
-	echo "	--nsi Build nsi installer"
+	
+	if [ -e "${srcdir}/win/${PACKAGE_NAME}.nsi" ]; then
+		echo "	--nsi Build nsi installer"
+	fi
 	echo "	--upload Upload bundle to github"
 fi
 
@@ -89,11 +85,6 @@ if [ -z ${PACKAGE_VERSION} ]; then
 	echo "Cant determine package name"
 	exit -1
 fi
-
-GTK_PREFIX=$(${PKG_CONFIG} --variable=prefix gtk+-3.0)
-GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
-GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
-GDK_LOADERS=$(echo $(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
 
 mkdir -p .bin/bundle
 if [ "$?" != "0" ]; then
@@ -304,98 +295,6 @@ install_locale() {
 		rm -f ${FILENAMES}
 }
 
-install_schemas() {		
-
-        mkdir -p ${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas
-
-        schemas="
-            org.gtk.Settings.FileChooser.gschema.xml
-			gschema.dtd
-        "
-
-		for schema in ${schemas}
-		do
-        	cp -v "${MINGW_PREFIX}/share/glib-2.0/schemas/${schema}" "${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas"
-			if [ "$?" != "0" ]; then
-				exit -1
-			fi
-		done
-
-		glib-compile-schemas \
-                --targetdir="${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas" \
-                "${buildroot}${MINGW_PREFIX}/share/glib-2.0/schemas"
-
-		if [ "$?" != "0" ]; then
-			exit -1
-		fi
-}
-
-install_theme() {		
-
-	mkdir -p "${buildroot}${MINGW_PREFIX}/etc"
-	cp -rv "${MINGW_PREFIX}/etc/gtk-3.0" "${buildroot}${MINGW_PREFIX}/etc"
-	if [ "$?" != "0" ]; then
-		exit -1
-	fi
-
-	# https://stackoverflow.com/questions/37035936/how-to-get-native-windows-decorations-on-gtk3-on-windows-7-and-msys2
-	mkdir -p ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0
-	rm -f ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
-	rm -f ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/gtkrc
-
-	echo "[Settings]" > ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
-	echo "gtk-theme-name=${1}" >> ${buildroot}${MINGW_PREFIX}/etc/gtk-3.0/settings.ini
-
-	if [ -e "${srcdir}/win/gtk.css" ]; then
-		mkdir -p "${buildroot}${MINGW_PREFIX}/share/themes/Default/gtk-3.0"
-		cp "${srcdir}/win/gtk.css" "${buildroot}${MINGW_PREFIX}/share/themes/Default/gtk-3.0/gtk.css"
-	fi
-
-}
-
-install_icons() {
-
-	mkdir -p "${buildroot}${MINGW_PREFIX}/share/icons"
-
-	if [ -d "${MINGW_PREFIX}/share/icons/${1}" ]; then
-
-		cp -rv "${MINGW_PREFIX}/share/icons/${1}" "${buildroot}${MINGW_PREFIX}/share/icons"
-		if [ "$?" != 0 ]; then
-			echo "Can´t copy ${1} icons"
-			exit -1
-		fi
-
-	elif [ -d "/usr/share/icons/${1}" ]; then
-
-		cp -rv "/usr/share/icons/${1}" "${buildroot}${MINGW_PREFIX}/share/icons"
-		if [ "$?" != 0 ]; then
-			echo "Can´t copy ${1} icons"
-			exit -1
-		fi
-
-	else
-
-		echo "Can´t find ${1} icons"
-		exit -1
-	
-	fi
-	
-}
-
-install_loaders() {
-
-	if [ -d "${MINGW_PREFIX}${GDK_LOADERS}" ]; then
-		mkdir -p "${buildroot}/${MINGW_PREFIX}${GDK_LOADERS}"
-		cp -rv ${MINGW_PREFIX}${GDK_LOADERS}/* "${buildroot}/${MINGW_PREFIX}${GDK_LOADERS}"
-		if [ "$?" != "0" ]; then
-			exit -1
-		fi
-	
-		find ${buildroot}/${MINGW_PREFIX}${GDK_LOADERS} -iname "*.a" -exec rm -f {} \;
-	
-	fi
-
-}
 
 make_zip() {
 
@@ -433,6 +332,7 @@ make_nsis() {
 		-DWITHIPC \
 		-DWITHPLUGINS \
 		-DWITHSDK \
+		-DPKGDIR=${buildroot}${MINGW_PREFIX} \
 		${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi
 		if [ "$?" != "0" ]; then
 			echo "Cant build nsis script"
@@ -456,25 +356,47 @@ make_nsis() {
 	fi	
 }
 
-install_runtime() {
+install_license() {
+	mkdir -p "${buildroot}${MINGW_PREFIX}/usr/share/${PACKAGE_NAME}"
+	cp "${srcdir}/LICENSE" "${buildroot}${MINGW_PREFIX}/usr/share/${PACKAGE_NAME}"
+	if [ "$?" != "0" ]; then
+		echo "Cant copy LICENSE"
+		exit -1
+	fi
+}
 
-	install_loaders
+install_runtime() {
 	install_bin
 	install_locale
-	install_schemas
-	install_theme "Adwaita"
-	install_icons "Adwaita"
+}
+
+build_package() {
+
+	# Build
+	make -C "${srcdir}" all
+	if [ "$?" != "0" ]; then
+		echo "Build failed"
+		exit -1
+	fi
+
+	make -C "${srcdir}" "DESTDIR=${buildroot}" install
+	if [ "$?" != "0" ]; then
+		echo "Install failed"
+		exit -1
+	fi
 
 }
 
 make_packages() {
 
-	mkdir -p "${buildroot}${MINGW_PREFIX}/nsi"
-	cp "${srcdir}/win/pw3270.nsi" "${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi" 
-	if [ "$?" != "0" ]; then
-		echo "Cant copy nsis script"
-	fi	
-
+	if [ -e "${srcdir}/win/${PACKAGE_NAME}.nsi" ]; then
+		mkdir -p "${buildroot}${MINGW_PREFIX}/nsi"
+		cp "${srcdir}/win/${PACKAGE_NAME}.nsi" "${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi" 
+		if [ "$?" != "0" ]; then
+			echo "Cant copy nsis script"
+		fi	
+	fi
+	
 	argument "zip" > /dev/null
 	if [ "$?" == "0" ]; then
 		make_zip
