@@ -137,7 +137,7 @@ cp "$(brew --prefix)/share/pw3270/colors.conf" "${res_path}"
 echo "Bundling GLib schemas"
 mkdir -p "${tmp}/schemas"
 
-cp "$(brew --prefix)$(pkg-config gtk+-3.0 --variable=prefix)/share/glib-2.0/schemas/pw3270*.gschema.xml" "${tmp}/schemas"
+cp "$(pkg-config gtk+-3.0 --variable=prefix)/share/glib-2.0/schemas/pw3270*.gschema.xml" "${tmp}/schemas"
 cp "$(pkg-config gtk+-3.0 --variable=prefix)/share/glib-2.0/schemas/org.gtk.Settings."*".gschema.xml" "${tmp}/schemas"
 
 glib-compile-schemas --targetdir="${res_path}" "${tmp}/schemas"
