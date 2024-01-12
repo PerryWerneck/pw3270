@@ -301,7 +301,7 @@ install-macos-application: \
 		$(DESTDIR)$(bindir)/$(PRODUCT_NAME)@EXEEXT@
 
 install-windows-application: \
-	branding/$(PRODUCT_NAME).png \
+	$(srcdir)/branding/$(PRODUCT_NAME).png \
 	strip
 
 	@$(MKDIR) \
@@ -315,11 +315,11 @@ install-windows-application: \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)
 
 	@$(INSTALL_DATA) \
-		branding/$(PRODUCT_NAME).png \
+		$(srcdir)/branding/$(PRODUCT_NAME).png \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PRODUCT_NAME).png
 
 	@$(INSTALL_DATA) \
-		CHANGELOG \
+		$(srcdir)/CHANGELOG \
 		$(DESTDIR)$(datarootdir)/$(PRODUCT_NAME)/$(PACKAGE_NAME).changes
 
 install-icons:
