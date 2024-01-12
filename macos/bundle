@@ -5,7 +5,7 @@ set -Eeuo pipefail
 check_dependencies() {
     local unavailable=()
     for dependency in "${@:-$(</dev/stdin)}"; do
-        if [[ ! -x "$(command -v ${dependency})" ]]; then unavailable+=("${dependency}"); fi
+        if [[ ! -x "$(command -v "${dependency}")" ]]; then unavailable+=("${dependency}"); fi
     done
     if [[ ${#unavailable[@]} == 1 ]]; then
         echo "Dependency '${unavailable[*]}' not found."
@@ -18,7 +18,7 @@ check_dependencies() {
 
 find_lib() {
     # https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/UsingDynamicLibraries.html
-    local libs_path="${HOME}/lib /usr/local/lib /usr/lib"
+    local libs_path="${HOME}/lib $(brew --prefix)/lib /usr/lib"
     for lib in "${@:-$(</dev/stdin)}"; do
         local found=""
         if [[ -f "${lib}" ]]; then
@@ -73,17 +73,25 @@ bundle_cp() {
         cp "${source}" "${target}"
         chmod u+w "${target}"
         
-        if [[ "${id}" != "" ]]; then install_name_tool -id "${id}" "${target}"; fi
-        install_name_tool -add_rpath "@executable_path/../Frameworks" "${target}"
+        if [[ "${id}" != "" ]]; then install_name_tool -id "${id}" "${target}" 2> /dev/null; fi
+        install_name_tool -add_rpath "@executable_path/../Frameworks" "${target}" 2> /dev/null
         
         for old_install_name in $(otool -L "${target}" | grep '^\t' | cut -c 2- | sed -n "s/\(.*\) (.*)/\1/p"); do
             if [[ "${old_install_name}" == "${id}" ]]; then continue; fi
-            local lib="$(find_lib "${old_install_name}")"
+            if [[ "${old_install_name}" =~ ${system_libs} ]]; then continue; fi
+            local lib
+            if [[ "${old_install_name}" =~ ^@loader_path.* ]]; then
+                lib="$(find_lib "$(dirname "${source}")/${old_install_name//@loader_path/}")"
+            else
+                lib="$(find_lib "${old_install_name}")"
+            fi
             local new_install_name="$(bundle_cp "${lib}")"
             if [[ "${new_install_name}" != "" ]]; then 
-                install_name_tool -change "${old_install_name}" "${new_install_name}" "${target}"
+                install_name_tool -change "${old_install_name}" "${new_install_name}" "${target}" 2> /dev/null
             fi
         done
+        # https://stackoverflow.com/a/71753248/6910609
+        codesign --force -s - "${target}" 2> /dev/null
         echo >&2 "${target}"
     done
 }
@@ -113,9 +121,9 @@ bundle_cache() {
 check_dependencies otool grep cut sed greadlink qlmanage sips iconutil
 
 # Creates temporary directory
-echo "Creating temporary directory"
+echo "* Creating temporary directory"
 tmp="$(mktemp -d)"
-trap 'echo "Removing temporary directory \"${tmp}\""; rm -rf "${tmp}"' EXIT
+trap 'echo "* Removing temporary directory \"${tmp}\""; rm -rf "${tmp}"' EXIT
 
 bundle="pw3270.app"
 bundle_path="${bundle}/Contents"
@@ -129,17 +137,15 @@ mkdir -p "${bundle_path}"
 cp "Info.plist" "${bundle_path}"
 
 mkdir -p "${res_path}"
-cp -r "../ui" "${res_path}"
+cp -r "../ui/macos.ui.xml" "${res_path}/pw3270.ui.xml"
 cp -r "$(brew --prefix)/share/pw3270/remap" "${res_path}"
 cp "$(brew --prefix)/share/pw3270/colors.conf" "${res_path}"
 
 # Bundle GLib schemas
-echo "Bundling GLib schemas"
+echo "* Bundling GLib schemas"
 mkdir -p "${tmp}/schemas"
-
-cp "$(brew --prefix)$(pkg-config gtk+-3.0 --variable=prefix)/share/glib-2.0/schemas/pw3270*.gschema.xml" "${tmp}/schemas"
+cp "../schemas/"*".gschema.xml" "${tmp}/schemas"
 cp "$(pkg-config gtk+-3.0 --variable=prefix)/share/glib-2.0/schemas/org.gtk.Settings."*".gschema.xml" "${tmp}/schemas"
-
 glib-compile-schemas --targetdir="${res_path}" "${tmp}/schemas"
 
 # Create the GTK settings file
@@ -152,7 +158,7 @@ gtk-print-preview-command="open -b com.apple.Preview %f"
 EOF
 
 # Make icon bundle
-echo "Creating app icon bundle"
+echo "* Creating app icon bundle"
 iconset="${tmp}/pw3270.iconset"
 rm -fr "${iconset}"
 mkdir -p "${iconset}"
@@ -168,34 +174,41 @@ iconutil -c icns -o "${res_path}/pw3270.icns" "${iconset}"
 
 
 # Copy icons
+echo "* Copying icons"
 mkdir -p "${res_path}/icons"
 cp -r "$(brew --prefix adwaita-icon-theme)/share/icons/" "${res_path}/icons"
 cp -r "$(brew --prefix hicolor-icon-theme)/share/icons/" "${res_path}/icons"
 mogrify -format png -path "${res_path}" -background transparent "../branding/*.svg"
 
 # Copy themes
+echo "* Copying themes"
 mkdir -p "${res_path}/themes"
 cp -a "$(brew --prefix gtk+3)/share/themes/Mac" "${res_path}/themes"
 
 # Copy mime database
+echo "* Copying mime database"
 mkdir -p "${res_path}/mime"
 cp "$(pkg-config shared-mime-info --variable=prefix)/share/mime/mime.cache" "${res_path}/mime"
 
 # Copy executables
+echo "* Copying executables"
 mkdir -p "${exe_path}"
 bundle_cp "../.bin/Release/pw3270"
 cp "launcher.sh" "${exe_path}"
 
 # Bundle GdkPixbuf Image Loader Modules
+echo "* Bundling GdkPixbuf Image Loader Modules"
 gdk-pixbuf-query-loaders | bundle_cache > "${res_path}/gdk-loaders.cache"
 
 # Bundle GTK+ Input Method Modules
+echo "* Bundling GTK+ Input Method Modules"
 gtk_prefix="$(pkg-config gtk+-3.0 --variable prefix)"
 gtk-query-immodules-3.0 | bundle_cache \
     | sed "s|${gtk_prefix}/share/locale|@executable_path/../Resources/locale|g" \
     > "${res_path}/gtk.immodules"
 
 # Bundle print backends
+echo "* Bundling print backends"
 mkdir -p "${lib_path}/printbackends"
 for backend in "$(pkg-config gtk+-3.0 --variable=prefix)/lib/gtk-3.0/$(pkg-config gtk+-3.0 --variable=gtk_binary_version)/printbackends/"*.so; do
     bundle_cp "${backend}"
@@ -206,7 +219,8 @@ done
 # TODO: gerar o Info.plist com a versão do macOS $(sw_vers -productVersion)
 
 # Bundle locale
+echo "* Bundling locale"
 mkdir -p "${res_path}/locale"
 cp -r "../.bin/locale/" "${res_path}/locale"
-cp "$(brew --prefix)/share/locale/pt_BR/LC_MESSAGES/lib3270.mo" "${res_path}/locale/pt_BR/LC_MESSAGES"
-cp "$(brew --prefix)/share/locale/pt_BR/LC_MESSAGES/libv3270.mo" "${res_path}/locale/pt_BR/LC_MESSAGES"
+cp "$(brew --prefix)/share/locale/pt_BR/LC_MESSAGES/lib3270"*".mo" "${res_path}/locale/pt_BR/LC_MESSAGES"
+cp "$(brew --prefix)/share/locale/pt_BR/LC_MESSAGES/libv3270"*".mo" "${res_path}/locale/pt_BR/LC_MESSAGES"
