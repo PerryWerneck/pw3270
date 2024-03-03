@@ -61,6 +61,9 @@
 		<Unit filename="src/main/linux/tools.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/main/macos/tools.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/main/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
