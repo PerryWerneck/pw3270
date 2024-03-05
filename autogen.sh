@@ -10,21 +10,20 @@ cd ${srcdir}
 mkdir -p ./scripts
 mkdir -p m4
 
-case `uname` in
-Darwin*)
-	glibtoolize --force
-	if test $? != 0 ; then
-			echo "glibtoolize failed."
-			exit -1
-	fi
-	;;
-*) 
-	libtoolize --force
-	if test $? != 0 ; then
-			echo "libtoolize failed."
-			exit -1
-	fi
-esac
+LIBTOOLIZE=$(which libtoolize)
+if [ -z ${LIBTOOLIZE} ]; then
+	LIBTOOLIZE=$(which glibtoolize)
+fi
+if [ -z ${LIBTOOLIZE} ]; then
+	echo "Can't find libtoolize"
+	exit -1
+fi
+
+${LIBTOOLIZE} --force
+if test $? != 0 ; then
+	echo "libtoolize failed."
+	exit -1
+fi
 
 aclocal
 if test $? != 0 ; then
