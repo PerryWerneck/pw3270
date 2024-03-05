@@ -1,15 +1,12 @@
 name: Publish
 on:
   push:
-    branches:
-      - macos  
+    branches: [ "macos" ]
   pull_request:
-    branches:
-      - master
-      - develop      
+    branches: [ "master" ]
+    
 jobs:
-  macos:
-    name: Publish macos
+  macos-build:
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -27,7 +24,6 @@ jobs:
           find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
           find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
           find /usr/local/lib/node_modules/npm -delete
-          brew upgrade
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: "PerryWerneck/lib3270"
@@ -40,14 +36,4 @@ jobs:
           fileName: "macos-libv3270.tar.xz"      
       - name: build
         run: ./mac/ci-build.sh
-      - uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: "macos-pw3270.tar.xz"
-          allowUpdates: true
-          draft: true
-          makeLatest: true
-          omitBody: true
-          omitPrereleaseDuringUpdate: true
-          replacesArtifacts: true
 
