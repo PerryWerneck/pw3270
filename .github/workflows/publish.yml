@@ -1,15 +1,12 @@
 ---
-name: WinPKG
+name: Publish
 on:
-  pull_request:
-    branches:
-      - master
   push:
-    branches:
-      - winpkg
+    branches: [ "publish" ]
+    tags: [ "*" ]
+
 jobs:
-  msys2-mingw64:
-    name: Publish for Windows 64
+  msys2-publish:
     runs-on: windows-latest
     defaults:
       run:
@@ -74,7 +71,7 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: "*-pw3270-*.tar.xz"
+          artifacts: "*-pw3270-*.tar.*"
           allowUpdates: true
           draft: true
           makeLatest: true
