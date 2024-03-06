@@ -13,14 +13,19 @@ jobs:
         uses: actions/checkout@v3
       - name: Install Pre reqs
         run: |
+          brew remove azure-cli
           find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
           find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
+          rm -rf /usr/local/bin/2to3*
+          rm -rf /usr/local/bin/idle3*
+          rm -rf /usr/local/bin/pydoc3*
+          rm -rf /usr/local/bin/python3
+          rm -rf /usr/local/bin/python3-config
+          rm -rf /usr/local/bin/python3*
+          rm -rf /usr/local/bin/python3*-config
           find /usr/local/lib/node_modules/npm -delete
           brew update
           brew install xz automake libtool binutils coreutils curl gettext libtool openssl pkgconfig gtk+3
-          find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
-          find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
-          find /usr/local/lib/node_modules/npm -delete
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: "PerryWerneck/lib3270"
