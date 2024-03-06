@@ -25,11 +25,7 @@
 
 echo "Running ${0}"
 
-LOGFILE=build.log
-rm -f ${LOGFILE}
-
 die ( ) {
-	[ -s $LOGFILE ] && tail $LOGFILE
 	[ "$1" ] && echo "$*"
 	exit -1
 }
