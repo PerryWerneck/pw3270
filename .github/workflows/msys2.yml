@@ -1,14 +1,12 @@
-name: MSYS2
+name: check-msys2
 on:
-  pull_request:
-    branches:
-      - master
   push:
-    branches:
-      - develop    
+    branches: [ "win" ]
+  pull_request:
+    branches: [ "master" ]
+
 jobs:
-  msys2-mingw:
-    name: Publish Windows 64
+  msys2-build:
     runs-on: windows-latest
     defaults:
       run:

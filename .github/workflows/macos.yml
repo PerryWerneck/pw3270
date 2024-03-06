@@ -1,8 +1,9 @@
-name: Publish
+name: check-macos
 on:
   push:
-    branches: [ "publish" ]
-    tags: [ "*" ]
+    branches: [ "macos" ]
+  pull_request:
+    branches: [ "master" ]
     
 jobs:
   macos-build:
