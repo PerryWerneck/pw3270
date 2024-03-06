@@ -1,9 +1,8 @@
 name: Publish
 on:
   push:
-    branches: [ "macos" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: [ "publish" ]
+    tags: [ "*" ]
     
 jobs:
   macos-build:
@@ -11,12 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: oprypin/find-latest-tag@v1
-        id: gettag
-        with:
-          repository: PerryWerneck/pw3270
-          sort-tags: true
-          releases-only: true
       - name: Install Pre reqs
         run: |
           brew update
