@@ -60,3 +60,4 @@ package() {
     "${startdir}/LICENSE" \
     "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE"
 }
+

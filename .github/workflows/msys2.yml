@@ -29,6 +29,9 @@ jobs:
           latest: true
           fileName: "mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst"      
       - name: CI-Build
-        run: ./win/ci-build.sh
+        run: |
+          pacman -U --noconfirm *.pkg.tar.zst
+          dos2unix PKGBUILD.mingw
+          makepkg BUILDDIR=/tmp/pkg -p PKGBUILD.mingw
 
 
