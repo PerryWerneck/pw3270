@@ -35,3 +35,6 @@ fi
 make DESTDIR=.bin/package install
 tar --create --xz --file=macos-${PROJECT_NAME}.tar.xz --directory=.bin/package --verbose .
 
+find .
+
+

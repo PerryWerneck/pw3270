@@ -66,6 +66,7 @@ jobs:
       - name: Make bundle
         run: |
           ./win/bundle.msys
+          rm -f *.tar.xz
           tar -C ./.bin/bundle -Jcf mingw-w64-x86_64-pw3270-bundle-x86_64.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
