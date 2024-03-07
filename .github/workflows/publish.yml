@@ -65,6 +65,7 @@ jobs:
           replacesArtifacts: true
       - name: Make bundle
         run: |
+          ./autogen.sh
           ./win/bundle.msys --nsi --zip
           find . -iname '*.exe'
           find . -iname '*.zip'
