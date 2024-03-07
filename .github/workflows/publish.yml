@@ -119,7 +119,7 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: "*-pw3270-*.tar.*"
+          artifacts: "macos-pw3270.tar.xz"
           allowUpdates: true
           draft: false
           makeLatest: true
