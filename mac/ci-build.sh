@@ -7,7 +7,7 @@ unpack() {
 
 	echo "Unpacking ${1}"
 
-	tar -C $(brew --cellar) -Jxvf macos-${1}.tar.xz 
+	tar -C $(brew --cellar) -Jxf macos-${1}.tar.xz 
 	if [ "$?" != "0" ]; then
 		exit -1
 	fi
@@ -17,6 +17,8 @@ unpack() {
 		exit -1
 	fi
 
+	rm -f macos-${1}.tar.xz
+	
 }
 
 unpack lib3270
@@ -35,6 +37,6 @@ fi
 make DESTDIR=.bin/package install
 tar --create --xz --file=macos-${PROJECT_NAME}.tar.xz --directory=.bin/package --verbose .
 
-find .
+find . -iname *.tar.xz
 
 
