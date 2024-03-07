@@ -389,22 +389,46 @@ build_package() {
 
 make_packages() {
 
+	echo "----------------------------------"
+	find . -iname *.nsi
+	echo "----------------------------------"
+	find ${srcdir} -iname *.nsi
+	echo "----------------------------------"
+	find ${buildroot} -iname *.nsi
+	echo "----------------------------------"
+	
 	if [ -e "${srcdir}/win/${PACKAGE_NAME}.nsi" ]; then
 		mkdir -p "${buildroot}${MINGW_PREFIX}/nsi"
 		cp "${srcdir}/win/${PACKAGE_NAME}.nsi" "${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi" 
-		if [ "$?" != "0" ]; then
-			echo "Cant copy nsis script"
+		if [ "$?" == "0" ]; then
+			echo "Nsis script installed"
+		else 
+			echo "Error installing nsis"
 		fi	
+	else
+		echo "Cant find ${srcdir}/win/${PACKAGE_NAME}.nsi"
 	fi
 	
-	argument "zip" > /dev/null
-	if [ "$?" == "0" ]; then
-		make_zip
-	fi	
+	if [ -e "${srcdir}/LICENSE" ]; then
+		mkdir -p "${buildroot}${MINGW_PREFIX}/share/pw3270"
+		cp "${srcdir}/LICENSE" "${buildroot}${MINGW_PREFIX}/share/pw3270" 
+		if [ "$?" == "0" ]; then
+			echo "License installed"
+		else
+			echo "Error installing license"
+		fi	
+	else
+		echo "Cant find ${srcdir}/LICENSE"
+	fi
 
 	argument "nsi" > /dev/null
 	if [ "$?" == "0" ]; then
 		make_nsis
+	fi	
+
+	argument "zip" > /dev/null
+	if [ "$?" == "0" ]; then
+		make_zip
 	fi	
 
 }

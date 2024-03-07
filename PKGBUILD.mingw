@@ -25,7 +25,7 @@ source=()
 
 pkgver=$(grep AC_INIT "${startdir}/configure.ac" | cut -d[ -f3 | cut -d] -f1)
 pkgrel=0
-pkgdesc="TN3270 Access library"
+pkgdesc="IBM 3270 Terminal emulator for GTK"
 url="https://github.com/PerryWerneck/${_realname}"
 arch=(i686 x86_64)
 license=(LGPL-3.0-or-later)
@@ -38,12 +38,12 @@ conflicts=($pkgname)
 
 prepare() {
   rm -fr "$srcdir/$pkgname"
-  ln -snf "$startdir" "$srcdir/$pkgname"
+  mkdir -p "$srcdir/$pkgname"
 }
 
 build() {
-  cd $pkgname
-  ./autogen.sh \
+  cd "$srcdir/$pkgname"
+  ${startdir}/autogen.sh \
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
     --host=${MINGW_CHOST} \
@@ -53,10 +53,11 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/$pkgname"
   make DESTDIR="${pkgdir}" install
   install \
     -Dm644 \
-    "LICENSE" \
+    "${startdir}/LICENSE" \
     "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE"
 }
+

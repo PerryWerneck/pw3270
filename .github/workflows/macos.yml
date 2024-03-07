@@ -1,0 +1,41 @@
+name: check-macos
+on:
+  push:
+    branches: [ "macos" ]
+  pull_request:
+    branches: [ "master" ]
+    
+jobs:
+  macos-build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Pre reqs
+        run: |
+          brew remove azure-cli
+          find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
+          find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
+          rm -rf /usr/local/bin/2to3*
+          rm -rf /usr/local/bin/idle3*
+          rm -rf /usr/local/bin/pydoc3*
+          rm -rf /usr/local/bin/python3
+          rm -rf /usr/local/bin/python3-config
+          rm -rf /usr/local/bin/python3*
+          rm -rf /usr/local/bin/python3*-config
+          find /usr/local/lib/node_modules/npm -delete
+          brew update
+          brew install xz automake libtool binutils coreutils curl gettext libtool openssl pkgconfig gtk+3
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: "PerryWerneck/lib3270"
+          latest: true
+          fileName: "macos-lib3270.tar.xz"      
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: "PerryWerneck/libv3270"
+          latest: true
+          fileName: "macos-libv3270.tar.xz"      
+      - name: build
+        run: ./mac/ci-build.sh
+

@@ -1,25 +1,18 @@
-name: MSYS2
+name: check-msys2
 on:
-  pull_request:
-    branches:
-      - master
   push:
-    branches:
-      - develop    
+    branches: [ "win" ]
+  pull_request:
+    branches: [ "master" ]
+
 jobs:
-  msys2-mingw:
-    name: Publish Windows 64
+  msys2-build:
     runs-on: windows-latest
     defaults:
       run:
         shell: msys2 {0}
     steps:
       - uses: actions/checkout@v3
-      - uses: oprypin/find-latest-tag@v1
-        id: gettag
-        with:
-          repository: PerryWerneck/pw3270
-          releases-only: true
       - uses: msys2/setup-msys2@v2
         with:
           msystem: mingw64
@@ -36,6 +29,9 @@ jobs:
           latest: true
           fileName: "mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst"      
       - name: CI-Build
-        run: ./win/ci-build.sh
+        run: |
+          pacman -U --noconfirm *.pkg.tar.zst
+          dos2unix PKGBUILD.mingw
+          makepkg BUILDDIR=/tmp/pkg -p PKGBUILD.mingw
 
 

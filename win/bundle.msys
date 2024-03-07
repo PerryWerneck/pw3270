@@ -33,6 +33,31 @@ do
 	fi
 done
 
+argument "build" > /dev/null
+if [ "$?" == "0" ]; then
+
+	NOCONFIGURE=1 ./autogen.sh
+	if [ "$?" != "0" ]; then
+		echo "Configure failed"
+		exit -1
+	fi
+
+	./configure
+	if [ "$?" != "0" ]; then
+		echo "Configure failed"
+		exit -1
+	fi
+
+	build_package
+	
+else
+
+	packages="${packages} pw3270"
+
+fi
+
+
 install_gtk3_runtime
+make_packages
 
 
