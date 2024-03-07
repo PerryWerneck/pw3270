@@ -403,20 +403,32 @@ make_packages() {
 		if [ "$?" == "0" ]; then
 			echo "Nsis script installed"
 		else 
-			echo "Erro installing nsis"
+			echo "Error installing nsis"
 		fi	
 	else
 		echo "Cant find ${srcdir}/win/${PACKAGE_NAME}.nsi"
 	fi
 	
-	argument "zip" > /dev/null
-	if [ "$?" == "0" ]; then
-		make_zip
-	fi	
+	if [ -e "${srcdir}/LICENSE" ]; then
+		mkdir -p "${buildroot}${MINGW_PREFIX}/share/pw3270"
+		cp "${srcdir}/LICENSE" "${buildroot}${MINGW_PREFIX}/share/pw3270" 
+		if [ "$?" == "0" ]; then
+			echo "License installed"
+		else
+			echo "Error installing license"
+		fi	
+	else
+		echo "Cant find ${srcdir}/LICENSE"
+	fi
 
 	argument "nsi" > /dev/null
 	if [ "$?" == "0" ]; then
 		make_nsis
+	fi	
+
+	argument "zip" > /dev/null
+	if [ "$?" == "0" ]; then
+		make_zip
 	fi	
 
 }
