@@ -56,7 +56,7 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: "*-pw3270-*.pkg.tar.zst"
+          artifacts: "*-pw3270-5*.pkg.tar.zst"
           allowUpdates: true
           draft: true
           makeLatest: true
@@ -69,12 +69,20 @@ jobs:
           ./win/bundle.msys --nsi --zip
           find . -iname '*.exe'
           find . -iname '*.zip'
-          rm -f *plugin*
-          tar -C ./.bin/bundle -Jcf mingw-w64-x86_64-pw3270-bundle-x86_64.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
           artifacts: "*.zip"
+          allowUpdates: true
+          draft: true
+          makeLatest: true
+          omitBody: true
+          omitPrereleaseDuringUpdate: true
+          replacesArtifacts: true
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.gettag.outputs.tag }}
+          artifacts: "pw3270-5*.exe"
           allowUpdates: true
           draft: true
           makeLatest: true
