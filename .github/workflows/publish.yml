@@ -35,6 +35,7 @@ jobs:
       - name: MakeNSIS
         run: |
           ./win/bundle.msys --nsi
+          mv .bin/bundle/mingw64/bin/*.exe .
           find . -iname '*.exe'
       - uses: oprypin/find-latest-tag@v1
         id: gettag
@@ -76,6 +77,16 @@ jobs:
         with:
           tag: ${{ steps.gettag.outputs.tag }}
           artifacts: "*-pw3270-*.tar.*"
+          allowUpdates: true
+          draft: true
+          makeLatest: true
+          omitBody: true
+          omitPrereleaseDuringUpdate: true
+          replacesArtifacts: true
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.gettag.outputs.tag }}
+          artifacts: "pw3270*.exe"
           allowUpdates: true
           draft: true
           makeLatest: true
