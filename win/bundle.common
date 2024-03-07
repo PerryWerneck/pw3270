@@ -404,7 +404,7 @@ make_packages() {
 			echo "Erro installing nsis"
 		fi	
 	else
-		echo "Cant find 
+		echo "Cant find ${srcdir}/win/${PACKAGE_NAME}.nsi"
 	fi
 	
 	argument "zip" > /dev/null
