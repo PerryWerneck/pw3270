@@ -392,18 +392,19 @@ make_packages() {
 	echo "----------------------------------"
 	find ${srcdir} -iname *.nsi
 	echo "----------------------------------"
+	find ${buildroot} -iname *.nsi
+	echo "----------------------------------"
 	
 	if [ -e "${srcdir}/win/${PACKAGE_NAME}.nsi" ]; then
 		mkdir -p "${buildroot}${MINGW_PREFIX}/nsi"
 		cp "${srcdir}/win/${PACKAGE_NAME}.nsi" "${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi" 
-		if [ "$?" != "0" ]; then
-			echo "Cant copy nsis script"
-		fi	
-
-		argument "nsi" > /dev/null
 		if [ "$?" == "0" ]; then
-			make_nsis
+			echo "Nsis script installed"
+		else 
+			echo "Erro installing nsis"
 		fi	
+	else
+		echo "Cant find 
 	fi
 	
 	argument "zip" > /dev/null
@@ -411,6 +412,10 @@ make_packages() {
 		make_zip
 	fi	
 
+	argument "nsi" > /dev/null
+	if [ "$?" == "0" ]; then
+		make_nsis
+	fi	
 
 }
 
