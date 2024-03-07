@@ -34,5 +34,6 @@ do
 done
 
 install_gtk3_runtime
+make_packages
 
 
