@@ -27,16 +27,26 @@ jobs:
           repository: "PerryWerneck/libv3270"
           latest: true
           fileName: "mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst"      
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: PerryWerneck/libipc3270
+          latest: true
+          fileName: mingw-w64-x86_64-libipc3270-5.5-0-x86_64.pkg.tar.zst
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: PerryWerneck/libhllapi
+          latest: true
+          fileName: mingw-w64-x86_64-libhllapi-5.5-0-x86_64.pkg.tar.zst
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: PerryWerneck/pw3270-plugin-ipc
+          latest: true
+          fileName: mingw-w64-x86_64-pw3270-plugin-ipc-5.5-0-x86_64.pkg.tar.zst
       - name: MakePackage
         run: |
           pacman -U --noconfirm *.pkg.tar.zst
           dos2unix PKGBUILD.mingw
           makepkg BUILDDIR=/tmp/pkg -p PKGBUILD.mingw
-      - name: MakeNSIS
-        run: |
-          ./win/bundle.msys --nsi
-          mv .bin/bundle/mingw64/bin/*.exe .
-          find . -iname '*.exe'
       - uses: oprypin/find-latest-tag@v1
         id: gettag
         with:
@@ -53,40 +63,17 @@ jobs:
           omitBody: true
           omitPrereleaseDuringUpdate: true
           replacesArtifacts: true
-      - uses: robinraju/release-downloader@v1.7
-        with:
-          repository: PerryWerneck/libipc3270
-          latest: true
-          fileName: mingw-w64-x86_64-libipc3270-5.5-0-x86_64.pkg.tar.zst
-      - uses: robinraju/release-downloader@v1.7
-        with:
-          repository: PerryWerneck/libhllapi
-          latest: true
-          fileName: mingw-w64-x86_64-libhllapi-5.5-0-x86_64.pkg.tar.zst
-      - uses: robinraju/release-downloader@v1.7
-        with:
-          repository: PerryWerneck/pw3270-plugin-ipc
-          latest: true
-          fileName: mingw-w64-x86_64-pw3270-plugin-ipc-5.5-0-x86_64.pkg.tar.zst
       - name: Make bundle
         run: |
-          ./win/bundle.msys
+          ./win/bundle.msys --nsi --zip
+          find . -iname '*.exe'
+          find . -iname '*.zip'
           rm -f *plugin*
           tar -C ./.bin/bundle -Jcf mingw-w64-x86_64-pw3270-bundle-x86_64.tar.xz .
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
           artifacts: "*-pw3270-*.tar.*"
-          allowUpdates: true
-          draft: true
-          makeLatest: true
-          omitBody: true
-          omitPrereleaseDuringUpdate: true
-          replacesArtifacts: true
-      - uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: "pw3270*.exe"
           allowUpdates: true
           draft: true
           makeLatest: true
