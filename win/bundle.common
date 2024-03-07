@@ -390,6 +390,8 @@ build_package() {
 make_packages() {
 
 	echo "----------------------------------"
+	find . -iname *.nsi
+	echo "----------------------------------"
 	find ${srcdir} -iname *.nsi
 	echo "----------------------------------"
 	find ${buildroot} -iname *.nsi
