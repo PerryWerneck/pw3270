@@ -29,6 +29,7 @@ REPOSITORY_NAME="pw3270"
 argument "help" > /dev/null
 if [ "$?" == "0" ]; then
 	echo "	--install-requires Install required packages"
+	echo "	--install-repositories Install win32 repositories"
 	echo "	--build Build application from source"
 fi
 
@@ -54,27 +55,22 @@ install_prereqs() {
 
 	echo "Installing: ${list}"
 	
-	REPONUMBER=$(zypper lr | grep "${REPOSITORY_NAME}" | cut -d\| -f1)	
-	if [ -z "${REPONUMBER}" ]; then
-		echo "Cant locate repository ${REPOSITORY_NAME}"
-		exit -1
-	fi
-	
-	sudo zypper ref ${REPONUMBER}
-	if [ "$?" != "0" ]; then
-		echo "Cant refresh repository ${REPOSITORY_NAME}"
-		exit -1
-	fi
-	
 	for package in ${list}
 	do
-		sudo zypper in --repo ${REPONUMBER} "${MINGW_PACKAGE_PREFIX}-${package}"
+		sudo zypper in "${MINGW_PACKAGE_PREFIX}-${package}"
 		if [ "$?" != "0" ]; then
 			echo "Cant install ${MINGW_PACKAGE_PREFIX}-${package} from ${REPOSITORY_NAME}"
 			exit -1
 		fi
 	done
 }
+
+argument "install-repositories" > /dev/null
+if [ "$?" == "0" ]; then
+	sudo zypper ar obs://windows:mingw:win64 windows_mingw_win64
+	sudo zypper ar obs://windows:mingw windows_mingw
+	sudo zypper ar obs://home:PerryWerneck:pw3270 home_PerryWerneck_pw3270
+fi
 
 argument "install-requires" > /dev/null
 if [ "$?" == "0" ]; then

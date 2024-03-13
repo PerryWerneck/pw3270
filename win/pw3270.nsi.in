@@ -290,6 +290,36 @@ Function .onInit
 		Abort
 	${EndIf}
 
+	#---[ Check PLUGINS Command line option ]-------------------------------------------------------------
+
+	Push $0
+
+	${GetParameters} $R0
+	ClearErrors
+	${GetOptions} $R0 /PLUGINS= $0
+
+	${if} $0 == "NO"
+
+!ifdef WITHMONO-TN3270
+		SectionGetFlags ${DOTNET} $0
+		IntOp $0 $0 & ${SECTION_OFF}
+		SectionSetFlags ${DOTNET} $0
+!endif
+
+!ifdef WITHLIBHLLAPI
+		SectionGetFlags ${HLLAPIBinding} $0
+		IntOp $0 $0 | ${SF_SELECTED}
+		SectionSetFlags ${HLLAPIBinding} $0
+!endif
+
+		SectionGetFlags ${IPCPlugin} $0
+		IntOp $0 $0 | ${SF_SELECTED}
+		SectionSetFlags ${IPCPlugin} $0
+
+	${EndIf}
+
+	Pop $0
+
 	#---[ Check SDK Command line option ]-----------------------------------------------------------------
 
 !ifdef WITHSDK
