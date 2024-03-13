@@ -28,7 +28,7 @@
 # Load bundle functions
 . "$(dirname $(readlink -f "${0}"))/bundle.common"
 
-pkg-config --exists gtk+-3.0
+${PKG_CONFIG} --exists gtk+-3.0
 if [ "$?" == "0" ]; then
 	GTK_PREFIX=$(${PKG_CONFIG} --variable=prefix gtk+-3.0)
 	GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
