@@ -34,14 +34,11 @@
 
 	<description>
 		<p>GTK Based 3270 terminal emulator</p>
+		<p xml:lang="pt_BR">Emulador de terminal 3270 baseado em GTK-3</p>
 		<p>pw3270 is a modern, GTK-based, completely free tn3270 emulator.</p>
+		<p xml:lang="pt_BR">@PRODUCT_NAME@ é um emulador tn3270 moderno, baseado em GTK e completamente livre.</p>
 		<p>Created originally for Banco do Brasil, it's now an official Brazilian Government Public Software project, and is used worldwide.</p>
-	</description>
-
-	<description xml:lang="pt_BR">
-		<p>Emulador de terminal 3270 baseado em GTK-3</p>
-		<p>@PRODUCT_NAME@ é um emulador tn3270 moderno, baseado em GTK e completamente livre.</p>
-		<p>Criado originalmente para o Banco do Brasil, agora é um projeto de software público do governo brasileiro usado em todo o mundo.</p>
+		<p xml:lang="pt_BR">Criado originalmente para o Banco do Brasil, agora é um projeto de software público do governo brasileiro usado em todo o mundo.</p>
 	</description>
 
 	<url type="homepage">https://github.com/PerryWerneck/pw3270</url>

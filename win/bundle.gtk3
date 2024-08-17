@@ -28,10 +28,13 @@
 # Load bundle functions
 . "$(dirname $(readlink -f "${0}"))/bundle.common"
 
-GTK_PREFIX=$(${PKG_CONFIG} --variable=prefix gtk+-3.0)
-GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
-GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
-GDK_LOADERS=$(echo $(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
+${PKG_CONFIG} --exists gtk+-3.0
+if [ "$?" == "0" ]; then
+	GTK_PREFIX=$(${PKG_CONFIG} --variable=prefix gtk+-3.0)
+	GTK_BINARY_VERSION=$(${PKG_CONFIG} --variable=gtk_binary_version gtk+-3.0)
+	GTK_LIBDIR=$(echo $(${PKG_CONFIG} --variable=libdir gtk+-3.0) | sed "s@^C:/@/c/@g")
+	GDK_LOADERS=$(echo $(${PKG_CONFIG} --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0) | sed -e "s@${GTK_PREFIX}@@g")
+fi
 
 install_schemas() {		
 
