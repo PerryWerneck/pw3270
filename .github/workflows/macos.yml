@@ -14,7 +14,6 @@ jobs:
       - name: Install Pre reqs
         run: |
           brew remove azure-cli
-          brew remove npm
           find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
           find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
           rm -rf /usr/local/bin/2to3*
