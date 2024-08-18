@@ -8,6 +8,6 @@ Build-Depends: debhelper (>= 7), lib3270-dev, libv3270-dev, autotools-dev, autoc
 Standards-Version: 3.9.1.0
 DEBTRANSFORM-RELEASE: 1
 Files: 
- 00000000000000000000000000000000 000000 pw3270-unstable-5.3.tar.xz
+ 00000000000000000000000000000000 000000 pw3270-5.5.tar.xz
 
 

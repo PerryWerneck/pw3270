@@ -1,10 +1,61 @@
 -------------------------------------------------------------------
+Sun Aug 18 16:27:20 UTC 2024 - perry.werneck@gmail.com
+
+- Update to version 5.5+git20240817:
+  * Updating metainfo according documentation on https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/#metainfo-translations
+  * Updating readme.
+  * Debugging cross bundler.
+  * Publish only on tag updates.
+  * Updating win32 package.
+  * Changing autogen.sh for use in macos according to https://github.com/PerryWerneck/pw3270/issues/63#issuecomment-1979258212
+  * Update to macOS Sonoma
+  * Fixing schema paths for macos bundle.
+  * Should use glibtoolize on mac.
+  * Adding badges for dropbox and onedrive.
+  * Updating windows bundle and translation.
+  * Update README.md
+  * Fixing windows shortcut.
+  * Refactoring nsi script.
+  * Uploading zipfile to release.
+  * On windows using the png logo for about window.
+  * msys based bundler is now bundle.msys, common calls splitted to bundle.common
+  * Updating package names on winpkg action.
+  * Using mingw packages instead of .tar.xz on windows action.
+  * Updating win32 artifact names.
+  * Using 'classical' style only on windows, removing debug message.
+  * Fixing macos defaults, searching for optipng.
+  * Renaming old 'makeruntime' to 'bundle' since he now packs the entire application.
+  * Using msystem arch for file names.
+  * Default menu visibility is 'true' on windows.
+  * Fixing keypad path.
+  * Better image scan for about window.
+  * Fixing win32 build, validating system settings on startup.
+  * Using the same schemas for mac,windows and linux.
+  * Removing unused lgtm file.
+  * reproducible.patch merged and removed
+  * Moving default header buttons to left.
+  * Building locale based on product name.
+  * Storing png image to avoid dependencies.
+  * Using converted icon to avoid requirements of inkscape and convert on build action.
+  * Implementing winpkg workflow.
+
+-------------------------------------------------------------------
+Thu Feb 29 15:19:41 UTC 2024 - Dominique Leuenberger <dimstar@opensuse.org>
+
+- Use %autosetup macro. Allows to eliminate the usage of deprecated
+  %patchN.
+
+-------------------------------------------------------------------
+Sun Mar 26 13:53:07 UTC 2023 - Bernhard Wiedemann <bwiedemann@suse.com>
+
+- Add reproducible.patch to override build date (boo#1047218)
+
+-------------------------------------------------------------------
 Wed Mar 22 11:05:26 UTC 2023 - perry.werneck@gmail.com
 
 - Update to version 5.5+git20230204:
   * Updating translation.
   * Fixing win32 build, adding 'changes' file in windows app.
-  * Updating deb and mingw packages.
   * Updating _service
   * Updating translation.
   * Adding 'CHANGELOG'

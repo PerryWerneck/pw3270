@@ -1,7 +1,7 @@
 #
 # spec file for package pw3270
 #
-# Copyright (c) 2022 SUSE LLC
+# Copyright (c) 2024 SUSE LLC
 # Copyright (c) <2008> <Banco do Brasil S.A.>
 #
 # All modifications and additions to the file contributed by third parties
@@ -13,8 +13,9 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via https://github.com/PerryWerneck/pw3270/issues
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
+
 
 %define _product %(pkg-config --variable=product_name lib3270)
 
@@ -26,7 +27,7 @@
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
 Name:           pw3270
-Version:        5.5+git20230204
+Version:        5.5+git20240817
 Release:        0
 Summary:        IBM 3270 Terminal emulator for GTK
 License:        GPL-2.0-only
@@ -107,15 +108,16 @@ Based on the original x3270 code, pw3270 was originally created for Banco do Bra
 
 
 #--[ Configuration & Branding ]---------------------------------------------------------------------------------------
+
 %package branding
-Summary:			Default branding for %{name}
-Group:				System/X11/Terminals
+Summary:        Default branding for %{name}
+Group:          System/X11/Terminals
 
-Requires:			%{name} = %{version}
-BuildArch:			noarch
+Requires:       %{name} = %{version}
+BuildArch:      noarch
 
-Requires(post):		desktop-file-utils
-Requires(postun):	desktop-file-utils
+Requires(post): desktop-file-utils
+Requires(postun): desktop-file-utils
 
 %description branding
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -124,8 +126,9 @@ This package contains the default branding for %{name}.
 
 
 #---[ Build & Install ]-----------------------------------------------------------------------------------------------
+
 %prep
-%setup
+%autosetup -p1
 
 %global _lto_cflags %{_lto_cflags} -ffat-lto-objects
 NOCONFIGURE=1 ./autogen.sh
