@@ -21,7 +21,7 @@
 
 %define plugindir %(pkg-config --variable=plugin_path lib3270)
 %if "%{plugindir}" == ""
-	%define plugindir /usr/lib64/pw3270-plugins
+	%define plugindir %{_libdir}/pw3270-plugins
 %endif
 
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
