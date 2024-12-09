@@ -38,4 +38,3 @@ i18n.gettext(
     args: '--directory=' + meson.project_source_root(),
     preset: 'glib'
 )
-

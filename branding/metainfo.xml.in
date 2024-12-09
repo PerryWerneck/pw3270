@@ -14,7 +14,7 @@
 
 <component type="desktop-application">
 
-	<id>@APPLICATION_ID@.desktop</id>
+	<id>@PRODUCT_ID@.desktop</id>
 
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>LGPL-3.0</project_license>
@@ -31,7 +31,7 @@
 	</requires>
 
 	<developer_name>Perry Werneck</developer_name>
-
+APPLICATION_ID
 	<description>
 		<p>GTK Based 3270 terminal emulator</p>
 		<p xml:lang="pt_BR">Emulador de terminal 3270 baseado em GTK-3</p>
@@ -44,7 +44,7 @@
 	<url type="homepage">https://github.com/PerryWerneck/pw3270</url>
 	<url type="bugtracker">https://github.com/PerryWerneck/pw3270/issues</url>
 
-	<launchable type="desktop-id">@APPLICATION_ID@.desktop</launchable>
+	<launchable type="desktop-id">@PRODUCT_ID@.desktop</launchable>
 
 	<screenshots>
 		<screenshot type="default">
@@ -63,6 +63,6 @@
 	<translation type="gettext">@PRODUCT_NAME@</translation>
 
 	<releases>
-		<release version="@VERSION@" date="@RELEASE_DATE@"/>
+		<release version=@PACKAGE_VERSION@ date=@PACKAGE_RELEASE_DATE@/>
 	</releases>
 </component>

@@ -99,6 +99,8 @@ lib_deps = [
 app_conf = configuration_data()
 app_conf.set_quoted('PACKAGE_NAME', meson.project_name())
 app_conf.set('PRODUCT_NAME', lib3270.get_variable('product_name'))
+app_conf.set('PRODUCT_ID', lib3270.get_variable('product_id'))
+app_conf.set('PRODUCT_PATH', lib3270.get_variable('product_id').replace('.','/'))
 app_conf.set_quoted('PLUGIN_DIR',lib3270.get_variable('plugin_path'))
 app_conf.set_quoted('PACKAGE_VERSION', meson.project_version())
 app_conf.set_quoted('PACKAGE_DESCRIPTION', project_description)
@@ -115,8 +117,19 @@ app_conf.set_quoted('RPQ_TIMESTAMP_VALUE', rpq_timestamp_value)
 package_release = run_command('sh', '-c', datecmd + ' +%-y.%-m.%-d', check : true).stdout().strip()
 app_conf.set_quoted('PACKAGE_RELEASE', package_release)
 
+package_release_date = run_command('sh', '-c', datecmd + ' +%Y-%m-%d', check : true).stdout().strip()
+app_conf.set_quoted('PACKAGE_RELEASE_DATE', package_release_date)
+
 if cc.compiles('#include <unistd.h>', name : 'unistd.h')
 	app_conf.set('HAVE_UNISTD_H', 1)
+endif
+
+if host_machine.system() == 'windows'
+	app_conf.set('DEFAULT_UI_STYLE', 0)
+	app_conf.set('DEFAULT_MENUBAR_VISIBLE', 'true')
+else
+	app_conf.set('DEFAULT_UI_STYLE', 1)
+	app_conf.set('DEFAULT_MENUBAR_VISIBLE', 'false')
 endif
 
 #
@@ -218,6 +231,34 @@ config_src = [
       configuration : app_conf
   )
 ]
+
+configure_file(
+  input : 'schemas/application.gschema.xml.in',
+  output : meson.project_name() + '-application.gschema.xml',
+  install_dir: get_option('datadir') / 'glib-2.0/schemas',
+  configuration : app_conf
+)
+
+configure_file(
+  input : 'schemas/window.gschema.xml.in',
+  output : meson.project_name() + '-window.gschema.xml',
+  install_dir: get_option('datadir') / 'glib-2.0/schemas',
+  configuration : app_conf
+)
+
+configure_file(
+  input : 'branding/metainfo.xml.in',
+  output : lib3270.get_variable('product_id') + '.metainfo.xml',
+  install_dir: get_option('datadir') / 'metainfo',
+  configuration : app_conf
+)
+
+configure_file(
+  input : 'branding/mime.xml.in',
+  output : meson.project_name() + '.xml',
+  install_dir: get_option('datadir') / 'mime/packages',
+  configuration : app_conf
+)
 
 if host_machine.system() == 'windows'
 
