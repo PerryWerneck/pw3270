@@ -278,6 +278,13 @@ else
 
 endif
 
+configure_file(
+	input : 'ui/' + host_machine.system() + '.ui.xml',
+	output : lib3270.get_variable('product_name') + '.ui.xml',
+	install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
+	configuration : app_conf
+)
+
 if host_machine.system() == 'linux'
 
 	configure_file(
@@ -316,18 +323,17 @@ if host_machine.system() == 'linux'
 	)
 
 	configure_file(
-	input : 'branding/metainfo.xml.in',
-	output : lib3270.get_variable('product_id') + '.metainfo.xml',
-	install_dir: get_option('datadir') / 'metainfo',
-	configuration : app_conf
+		input : 'branding/metainfo.xml.in',
+		output : lib3270.get_variable('product_id') + '.metainfo.xml',
+		install_dir: get_option('datadir') / 'metainfo',
+		configuration : app_conf
 	)
 
 	configure_file(
-	input : 'branding/mime.xml.in',
-	output : meson.project_name() + '.xml',
-	install_dir: get_option('datadir') / 'mime/packages',
-	configuration : app_conf
+		input : 'branding/mime.xml.in',
+		output : meson.project_name() + '.xml',
+		install_dir: get_option('datadir') / 'mime/packages',
+		configuration : app_conf
 	)
-
 
 endif
