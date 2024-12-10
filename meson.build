@@ -292,3 +292,27 @@ else
 
 endif
 
+if host_machine.system() == 'linux'
+
+	configure_file(
+		input : 'branding/launcher.desktop.in',
+		output : lib3270.get_variable('product_id') + '.desktop',
+		install_dir: get_option('datadir') / 'applications',
+		install_tag: 'runtime',
+		configuration : app_conf
+	)
+
+	custom_target(
+		'icon',
+		command: [ 
+			find_program('scour', required: true),
+			'../branding/' + meson.project_name() + '.svg',
+			lib3270.get_variable('product_id') + '.svg',
+		],
+		output: lib3270.get_variable('product_id') + '.svg',
+		install: true,
+		install_tag: 'runtime',
+		install_dir: get_option('datadir') + '/icons'
+	)
+
+endif
