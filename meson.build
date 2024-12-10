@@ -26,6 +26,8 @@ project(
 
 project_description = 'IBM 3270 Terminal emulator for GTK'
 
+scour = find_program('scour', required: true)
+
 #
 # Compiler flags
 #
@@ -288,7 +290,7 @@ configure_file(
 custom_target(
 	'about-image',
 	command: [ 
-		find_program('scour', required: true),
+		scour,
 		'../branding/' + meson.project_name() + '.svg',
 		lib3270.get_variable('product_name') + '.svg',
 	],
@@ -296,6 +298,26 @@ custom_target(
 	install: true,
 	install_tag: 'runtime',
 	install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
+)
+
+install_data([
+	'icons/connect.svg',          
+	'icons/disconnect.svg',           
+	'icons/gtk-connect-symbolic.svg',     
+	'icons/gtk-ok.svg',
+	'icons/gtk-quit.svg',           
+	'icons/ok.svg',   
+	'icons/quit.svg',
+	'icons/connect-symbolic.svg',  
+	'icons/disconnect-symbolic.svg',  
+	'icons/gtk-disconnect-symbolic.svg',  
+	'icons/gtk-ok-symbolic.svg',  
+	'icons/gtk-quit-symbolic.svg',  
+	'icons/ok-symbolic.svg',  
+	'icons/quit-symbolic.svg',
+	],
+	install_tag: 'runtime',
+	install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
 )
 
 if host_machine.system() == 'linux'
@@ -311,7 +333,7 @@ if host_machine.system() == 'linux'
 	custom_target(
 		'icon-color',
 		command: [ 
-			find_program('scour', required: true),
+			scour,
 			'../branding/' + meson.project_name() + '.svg',
 			lib3270.get_variable('product_id') + '.svg',
 		],
@@ -325,7 +347,7 @@ if host_machine.system() == 'linux'
 	custom_target(
 		'icon-symbolic',
 		command: [ 
-			find_program('scour', required: true),
+			scour,
 			'../branding/' + meson.project_name() + '-symbolic.svg',
 			lib3270.get_variable('product_id') + '-symbolic.svg',
 		],
