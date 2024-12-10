@@ -1,6 +1,5 @@
 src/main/placeholders.c
 src/main/windows/tools.c
-src/main/builder.c
 src/main/linux/tools.c
 src/main/macos/tools.c
 src/main/main.c

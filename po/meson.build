@@ -29,7 +29,7 @@
 
 i18n = import('i18n')
 
-gettext_package = meson.project_name() + '-' + libversion
+gettext_package = meson.project_name()
 
 add_project_arguments('-DGETTEXT_PACKAGE="' + gettext_package + '"', language: 'c')
 
