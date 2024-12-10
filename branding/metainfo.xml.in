@@ -31,7 +31,6 @@
 	</requires>
 
 	<developer_name>Perry Werneck</developer_name>
-APPLICATION_ID
 	<description>
 		<p>GTK Based 3270 terminal emulator</p>
 		<p xml:lang="pt_BR">Emulador de terminal 3270 baseado em GTK-3</p>

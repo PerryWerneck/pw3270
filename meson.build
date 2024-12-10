@@ -246,20 +246,6 @@ configure_file(
   configuration : app_conf
 )
 
-configure_file(
-  input : 'branding/metainfo.xml.in',
-  output : lib3270.get_variable('product_id') + '.metainfo.xml',
-  install_dir: get_option('datadir') / 'metainfo',
-  configuration : app_conf
-)
-
-configure_file(
-  input : 'branding/mime.xml.in',
-  output : meson.project_name() + '.xml',
-  install_dir: get_option('datadir') / 'mime/packages',
-  configuration : app_conf
-)
-
 if host_machine.system() == 'windows'
 
   # https://mesonbuild.com/Windows-module.html
@@ -303,7 +289,7 @@ if host_machine.system() == 'linux'
 	)
 
 	custom_target(
-		'icon',
+		'icon-color',
 		command: [ 
 			find_program('scour', required: true),
 			'../branding/' + meson.project_name() + '.svg',
@@ -312,7 +298,36 @@ if host_machine.system() == 'linux'
 		output: lib3270.get_variable('product_id') + '.svg',
 		install: true,
 		install_tag: 'runtime',
-		install_dir: get_option('datadir') + '/icons'
+		install_dir: get_option('datadir') + '/icons/hicolor/scalable/apps',
 	)
+
+	# TODO: How to save with same name??? Cant accept 'rename'
+	custom_target(
+		'icon-symbolic',
+		command: [ 
+			find_program('scour', required: true),
+			'../branding/' + meson.project_name() + '-symbolic.svg',
+			lib3270.get_variable('product_id') + '-symbolic.svg',
+		],
+		output: lib3270.get_variable('product_id') + '-symbolic.svg',
+		install: true,
+		install_tag: 'runtime',
+		install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
+	)
+
+	configure_file(
+	input : 'branding/metainfo.xml.in',
+	output : lib3270.get_variable('product_id') + '.metainfo.xml',
+	install_dir: get_option('datadir') / 'metainfo',
+	configuration : app_conf
+	)
+
+	configure_file(
+	input : 'branding/mime.xml.in',
+	output : meson.project_name() + '.xml',
+	install_dir: get_option('datadir') / 'mime/packages',
+	configuration : app_conf
+	)
+
 
 endif
