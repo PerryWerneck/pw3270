@@ -285,6 +285,19 @@ configure_file(
 	configuration : app_conf
 )
 
+custom_target(
+	'about-image',
+	command: [ 
+		find_program('scour', required: true),
+		'../branding/' + meson.project_name() + '.svg',
+		lib3270.get_variable('product_name') + '.svg',
+	],
+	output: lib3270.get_variable('product_name') + '.svg',
+	install: true,
+	install_tag: 'runtime',
+	install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
+)
+
 if host_machine.system() == 'linux'
 
 	configure_file(
