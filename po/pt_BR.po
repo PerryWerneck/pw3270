@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-08 01:14-0300\n"
+"POT-Creation-Date: 2024-12-11 05:58-0300\n"
 "PO-Revision-Date: 2023-04-26 07:50-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
@@ -19,545 +19,188 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "X-Generator: Gtranslator 40.0\n"
 
-#: src/objects/application/application.c:214
-#, c-format
-msgid "\"%s\" is not a valid user interface name"
-msgstr "\"%s\" não é um nome válido para interface de usuário"
+#: src/main/tools.c:64
+msgid "TN3270 Session Files"
+msgstr "Arquivos de sessão TN3270"
 
-#: src/objects/application/actions/about.c:136
-#, c-format
-msgid "%s for %s."
-msgstr "%s para %s"
+#: src/main/tools.c:68
+msgid "All files"
+msgstr "Todos os arquivos"
 
-#: src/objects/application/actions/about.c:143
-msgid "32 bits Linux"
-msgstr "Linux 32 bits"
+#: src/objects/actions/abstract.c:93
+msgid "Action Name"
+msgstr "Nome da ação"
 
-#: src/objects/application/actions/about.c:141
-msgid "32 bits Windows"
-msgstr "Windows 32 bits"
+#: src/objects/actions/abstract.c:94
+msgid "The name used to invoke the action"
+msgstr "O nome usado para ativar a ação"
+
+#: src/objects/actions/abstract.c:101
+msgid "Icon Name"
+msgstr "Nome do ícone"
+
+#: src/objects/actions/abstract.c:102
+msgid "The name of the icon associated with the action"
+msgstr "Nome do ícone associado com a ação"
+
+#: src/objects/actions/abstract.c:109
+msgid "The action label"
+msgstr "A etiqueta da ação"
+
+#: src/objects/actions/abstract.c:110
+msgid "The label for the action"
+msgstr "A etiqueta da ação"
+
+#: src/objects/actions/abstract.c:117
+msgid "The action tooltip"
+msgstr "A dica da ação"
+
+#: src/objects/actions/abstract.c:118
+msgid "The tooltip for the action"
+msgstr "A dica da ação"
+
+#: src/objects/actions/abstract.c:124
+msgid "Parameter Type"
+msgstr "Tipo de parâmetro"
+
+#: src/objects/actions/abstract.c:125
+msgid "The type of GVariant passed to activate()"
+msgstr "The type of GVariant passed to activate()"
+
+#: src/objects/actions/abstract.c:131
+msgid "State Type"
+msgstr "Tipo do estado"
+
+#: src/objects/actions/abstract.c:132
+msgid "The type of the state kept by the action"
+msgstr "O tipo do estado mantido pela ação"
+
+#: src/objects/actions/abstract.c:140
+msgid "Enabled"
+msgstr "Habilitado"
+
+#: src/objects/actions/abstract.c:141
+msgid "If the action can be activated"
+msgstr "Se a ação pode ser ativada"
+
+#: src/objects/actions/abstract.c:152
+msgid "State"
+msgstr "Estado"
+
+#: src/objects/actions/abstract.c:153
+msgid "The state the action is in"
+msgstr "O estado em que a ação está"
+
+#: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
+#: src/objects/os/windows/savedesktopicon.c:78
+msgid "Session name"
+msgstr "Nome da sessão"
+
+#: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
+#: src/objects/os/windows/savedesktopicon.c:80
+msgid "The session name used in the window/tab title (empty for default)"
+msgstr ""
+"O nome da sessão usada no título da janela/aba. Vazio para usar o valor "
+"padrão"
+
+#: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
+#: src/objects/os/windows/savedesktopicon.c:86
+msgid "Session file"
+msgstr "Arquivo de sessão"
+
+#: src/objects/actions/save.c:64
+msgid "The file to save the current session preferences"
+msgstr "O arquivo com as preferências da sessão atual"
+
+#: src/objects/actions/save.c:75 src/objects/actions/save.c:164
+msgid "Save session preferences"
+msgstr "Salvar preferências da sessão"
+
+#: src/objects/actions/save.c:77
+msgid "Save current session preferences to file"
+msgstr "Salvar preferências da sessão para arquivo"
+
+#: src/objects/actions/save.c:103 src/objects/os/linux/savedesktopicon.c:140
+#: src/objects/os/windows/savedesktopicon.c:124
+#: src/objects/settings/dialog.c:78
+msgid "_Cancel"
+msgstr "_Cancelar"
+
+#: src/objects/actions/save.c:104 src/objects/os/linux/savedesktopicon.c:141
+#: src/objects/os/windows/savedesktopicon.c:125
+msgid "_Save"
+msgstr "_Salvar"
 
 #: src/objects/actions/save.c:167 src/objects/os/linux/savedesktopicon.c:233
 #: src/objects/os/windows/savedesktopicon.c:214
 msgid "3270 session files"
 msgstr "Arquivos de sessão TN3270"
 
-#: src/objects/application/actions/about.c:145
-msgid "64 bits Linux"
-msgstr "Linux 64 bits"
+#: src/objects/actions/view.c:89
+msgid "Icon"
+msgstr "Ícone"
 
-#: src/objects/application/actions/about.c:139
-msgid "64 bits Windows"
-msgstr "Windows 64 bits"
+#: src/objects/actions/view.c:98
+msgid "Label"
+msgstr "Etiqueta"
 
-#: src/objects/toolbar/settings.c:214
-msgid ""
-"<small><b>The toolbar position only takes effect after restart</b></small>"
-msgstr ""
-"<small><b>Alterações na posição da barra de ferramentas só tem efeito apos "
-"reinício da aplicação</b></small>"
+#: src/objects/application/actions/open.c:49
+msgid "Open Session"
+msgstr "Abrir sessão"
 
-#: src/objects/application/actions/about.c:235 ui/windows.ui.xml:40
-#: ui/windows.ui.xml:553 ui/macos.ui.xml:40 ui/macos.ui.xml:553
-#: ui/linux.ui.xml:40 ui/linux.ui.xml:553
-msgid "About PW3270"
-msgstr "Sobre o PW3270"
-
-#: src/objects/actions/abstract.c:93
-msgid "Action Name"
-msgstr "Nome da ação"
-
-#: src/objects/window/window.c:206
-msgid "Action Names"
-msgstr "Nome das ações"
-
-#: ui/windows.ui.xml:525 ui/windows.ui.xml:917 ui/windows.ui.xml:1032
-#: ui/macos.ui.xml:525 ui/macos.ui.xml:917 ui/macos.ui.xml:1032
-#: ui/linux.ui.xml:525 ui/linux.ui.xml:917 ui/linux.ui.xml:1032
-msgid "Alert sound"
-msgstr "Aviso sonoro"
-
-#: src/main/tools.c:68
-msgid "All files"
-msgstr "Todos os arquivos"
-
-#: ui/windows.ui.xml:252 ui/windows.ui.xml:691 ui/macos.ui.xml:252
-#: ui/macos.ui.xml:691 ui/linux.ui.xml:252 ui/linux.ui.xml:691
-msgid "Append to copy"
-msgstr "Adicionar à cópia"
-
-#: src/objects/application/actions/about.c:178
-msgid "Apple version"
-msgstr "Versão Apple"
-
-#: ui/windows.ui.xml:385 ui/windows.ui.xml:665 ui/macos.ui.xml:385
-#: ui/macos.ui.xml:665 ui/linux.ui.xml:385 ui/linux.ui.xml:665
-msgid "Application"
-msgstr "Aplicação"
-
-#: src/objects/window/header-settings.c:93
-msgid "Application menu"
-msgstr "Menu da aplicação"
-
-#: src/objects/application/actions/preferences.c:76 ui/windows.ui.xml:84
-#: ui/macos.ui.xml:84 ui/linux.ui.xml:84
-msgid "Application preferences"
-msgstr "Preferências da aplicação"
-
-#: src/objects/window/page.c:264
-msgid "Apply"
-msgstr "Aplicar"
-
-#: ui/windows.ui.xml:500 ui/macos.ui.xml:500 ui/linux.ui.xml:500
-msgid "Auto-Reconnect"
-msgstr "Reconectar automaticamente"
-
-#: src/objects/toolbar/settings.c:118 src/objects/settings/actionview.c:73
-msgid "Available"
-msgstr "Disponível"
-
-#: src/objects/application/actions/about.c:181
-msgid "Based on X3270 from"
-msgstr "Baseado no X3270 por"
-
-#: ui/windows.ui.xml:490 ui/windows.ui.xml:946 ui/macos.ui.xml:490
-#: ui/macos.ui.xml:946 ui/linux.ui.xml:490 ui/linux.ui.xml:946
-msgid "Blank Fill"
-msgstr "Completar com espaços"
-
-#: ui/windows.ui.xml:455 ui/macos.ui.xml:455 ui/linux.ui.xml:455
-msgid "Blinking Cursor"
-msgstr "Cursor piscante"
-
-#: ui/windows.ui.xml:505 ui/macos.ui.xml:505 ui/linux.ui.xml:505
-msgid "Bold"
-msgstr "Negrito"
-
-#: src/objects/toolbar/models.c:134
-msgid "Bottom"
-msgstr "Em baixo"
-
-#: src/objects/application/actions/open.c:104 src/objects/window/terminal.c:143
-#: src/objects/window/terminal.c:197
-msgid "Can't load session file"
-msgstr "Não foi possível carregar arquivo de sessão"
-
-#: src/objects/os/windows/open.c:133
-msgid "Can't load session preferences"
-msgstr "Não foi possível carregar preferências da sessão"
+#: src/objects/application/actions/open.c:50 src/objects/window/page.c:265
+msgid "Cancel"
+msgstr "_Cancelar"
 
 #: src/objects/application/actions/open.c:99 src/objects/window/terminal.c:192
 #, c-format
 msgid "Can't use \"%s\""
 msgstr "Não posso usar %s"
 
-#: src/objects/window/terminal.c:138
-msgid "Can't use default session file"
-msgstr "Não posso usar arquivo de sessão default"
+#: src/objects/application/actions/open.c:104 src/objects/window/terminal.c:143
+#: src/objects/window/terminal.c:197
+msgid "Can't load session file"
+msgstr "Não foi possível carregar arquivo de sessão"
 
-#: src/objects/application/actions/open.c:50 src/objects/window/page.c:265
-msgid "Cancel"
-msgstr "_Cancelar"
+#: src/objects/application/actions/open.c:176
+msgid "Open session"
+msgstr "Abrir sessão"
+
+#: src/objects/application/actions/open.c:177
+msgid "Open session on the active terminal"
+msgstr "Abrir sessão no terminal ativo"
+
+#: src/objects/application/actions/open.c:189
+msgid "Open in new window"
+msgstr "Abrir em nova janela"
+
+#: src/objects/application/actions/open.c:190
+msgid "Open session in New window"
+msgstr "Abrir sessão em nova janela"
+
+#: src/objects/application/actions/open.c:201
+msgid "Open in new tab"
+msgstr "Abrir em nova aba"
+
+#: src/objects/application/actions/open.c:202
+msgid "Open session in New Tab"
+msgstr "Abrir sessão em nova aba"
+
+#: src/objects/application/actions/preferences.c:76
+msgid "Application preferences"
+msgstr "Preferências da aplicação"
 
 #: src/objects/application/actions/preferences.c:78
 msgid "Change the application preferences"
 msgstr "Modificar preferências da aplicação"
 
-#: src/objects/window/header-settings.c:64
-msgid "Change the position of the title bar icons"
-msgstr "Modificar posição dos ícones da barra de título"
-
-#: src/objects/window/actions/sessionproperties.c:37
-msgid "Change the preferences for the active session"
-msgstr "Modificar preferências da sessão ativa"
-
-#: ui/windows.ui.xml:305 ui/windows.ui.xml:725 ui/windows.ui.xml:867
-#: ui/macos.ui.xml:305 ui/macos.ui.xml:725 ui/macos.ui.xml:867
-#: ui/linux.ui.xml:305 ui/linux.ui.xml:725 ui/linux.ui.xml:867
-msgid "Clear"
-msgstr "Limpar"
-
-#: ui/windows.ui.xml:400 ui/macos.ui.xml:400 ui/linux.ui.xml:400
-msgid "Clipboard"
-msgstr "Área de transferência"
-
-#: ui/windows.ui.xml:150 ui/windows.ui.xml:187 ui/windows.ui.xml:617
-#: ui/windows.ui.xml:654 ui/macos.ui.xml:150 ui/macos.ui.xml:187
-#: ui/macos.ui.xml:617 ui/macos.ui.xml:654 ui/linux.ui.xml:150
-#: ui/linux.ui.xml:187 ui/linux.ui.xml:617 ui/linux.ui.xml:654
-msgid "Clipboard contents"
-msgstr "Conteúdo da área de transferência"
+#: src/objects/application/actions/window.c:64
+msgid "Quit"
+msgstr "Sair"
 
 #: src/objects/application/actions/window.c:65
 msgid "Close all windows and exit application"
 msgstr "Fecha todas as janelas e encerra a aplicação"
-
-#: src/objects/window/actions/close.c:52
-msgid "Close the window"
-msgstr "Fechar a janela"
-
-#: src/objects/window/actions/close.c:51 ui/windows.ui.xml:217
-#: ui/windows.ui.xml:813 ui/windows.ui.xml:1011 ui/windows.ui.xml:1118
-#: ui/macos.ui.xml:217 ui/macos.ui.xml:813 ui/macos.ui.xml:1011
-#: ui/macos.ui.xml:1118 ui/linux.ui.xml:217 ui/linux.ui.xml:813
-#: ui/linux.ui.xml:1011 ui/linux.ui.xml:1118
-msgid "Close window"
-msgstr "Fechar janela"
-
-#: src/objects/os/linux/savedesktopicon.c:101
-msgid "Comment"
-msgstr "Comentário"
-
-#: src/objects/window/actions/connect.c:59
-msgid "Connect"
-msgstr "Conectar"
-
-#: ui/windows.ui.xml:450 ui/macos.ui.xml:450 ui/linux.ui.xml:450
-msgid "Connect on startup"
-msgstr "Conectar ao iniciar"
-
-#: src/objects/window/actions/connect.c:60
-msgid "Connect to host"
-msgstr "Conectar ao servidor"
-
-#: src/objects/window/window.c:779 src/objects/window/page.c:218
-msgid "Connected to host"
-msgstr "Conectado no servidor"
-
-#: src/objects/application/actions/about.c:179
-msgid "Contributors"
-msgstr "Contribuidores"
-
-#: ui/windows.ui.xml:237 ui/windows.ui.xml:686 ui/macos.ui.xml:237
-#: ui/macos.ui.xml:686 ui/linux.ui.xml:237 ui/linux.ui.xml:686
-msgid "Copy"
-msgstr "Copiar"
-
-#: ui/windows.ui.xml:706 ui/macos.ui.xml:706 ui/linux.ui.xml:706
-msgid "Copy as HTML"
-msgstr "Copiar como HTML"
-
-#: ui/windows.ui.xml:711 ui/macos.ui.xml:711 ui/linux.ui.xml:711
-msgid "Copy as image"
-msgstr "Copiar como imagem"
-
-#: ui/windows.ui.xml:247 ui/windows.ui.xml:701 ui/macos.ui.xml:247
-#: ui/macos.ui.xml:701 ui/linux.ui.xml:247 ui/linux.ui.xml:701
-msgid "Copy as table"
-msgstr "Copiar como tabela"
-
-#: ui/windows.ui.xml:242 ui/windows.ui.xml:696 ui/macos.ui.xml:242
-#: ui/macos.ui.xml:696 ui/linux.ui.xml:242 ui/linux.ui.xml:696
-msgid "Copy as text"
-msgstr "Copiar como texto"
-
-#: src/objects/application/actions/about.c:185
-msgid "Copyright © 2008 Banco do Brasil S.A."
-msgstr "Copyright © 2008 Banco do Brasil S.A."
-
-#: src/objects/os/linux/savedesktopicon.c:114
-#: src/objects/os/windows/savedesktopicon.c:99
-#: src/objects/os/macos/savedesktopicon.c:54
-msgid "Create shortcut for the current session"
-msgstr "Criar atalho para a sessão atual."
-
-#: ui/windows.ui.xml:475 ui/windows.ui.xml:902 ui/macos.ui.xml:475
-#: ui/macos.ui.xml:902 ui/linux.ui.xml:475 ui/linux.ui.xml:902
-msgid "Cross hair cursor"
-msgstr "Cursor mira"
-
-#: ui/windows.ui.xml:177 ui/windows.ui.xml:644 ui/macos.ui.xml:177
-#: ui/macos.ui.xml:644 ui/linux.ui.xml:177 ui/linux.ui.xml:644
-msgid "Current Screen"
-msgstr "Tela atual"
-
-#: ui/windows.ui.xml:140 ui/windows.ui.xml:607 ui/macos.ui.xml:140
-#: ui/macos.ui.xml:607 ui/linux.ui.xml:140 ui/linux.ui.xml:607
-msgid "Current screen"
-msgstr "Tela atual"
-
-#: ui/windows.ui.xml:670 ui/macos.ui.xml:670 ui/linux.ui.xml:670
-msgid "Current session"
-msgstr "Sessão atual"
-
-#: ui/windows.ui.xml:257 ui/windows.ui.xml:716 ui/macos.ui.xml:257
-#: ui/macos.ui.xml:716 ui/linux.ui.xml:257 ui/linux.ui.xml:716
-msgid "Cut"
-msgstr "Recortar"
-
-#: ui/windows.ui.xml:315 ui/windows.ui.xml:735 ui/windows.ui.xml:877
-#: ui/macos.ui.xml:315 ui/macos.ui.xml:735 ui/macos.ui.xml:877
-#: ui/linux.ui.xml:315 ui/linux.ui.xml:735 ui/linux.ui.xml:877
-msgid "Delete Field"
-msgstr "Apagar campo"
-
-#: src/objects/os/windows/savedesktopicon.c:72
-msgid "Description"
-msgstr "Descrição"
-
-#: ui/windows.ui.xml:808 ui/windows.ui.xml:1006 ui/macos.ui.xml:808
-#: ui/macos.ui.xml:1006 ui/linux.ui.xml:808 ui/linux.ui.xml:1006
-msgid "Disconnect"
-msgstr "Desconectar"
-
-#: src/objects/window/window.c:779 src/objects/window/window.c:806
-#: src/objects/window/page.c:207
-msgid "Disconnected from host"
-msgstr "Desconectado do servidor"
-
-#: ui/windows.ui.xml:540 ui/windows.ui.xml:929 ui/windows.ui.xml:1045
-#: ui/macos.ui.xml:540 ui/macos.ui.xml:929 ui/macos.ui.xml:1045
-#: ui/linux.ui.xml:540 ui/linux.ui.xml:929 ui/linux.ui.xml:1045
-msgid "Dynamic font spacing"
-msgstr "Espaçamento dinâmico"
-
-#: src/objects/keypad/element.c:128
-msgid "Element col"
-msgstr "Coluna do elemento"
-
-#: src/objects/keypad/element.c:152
-msgid "Element height in rows"
-msgstr "Altura atual do elemento em linhas"
-
-#: src/objects/keypad/element.c:116
-msgid "Element row"
-msgstr "Linha do elemento"
-
-#: src/objects/keypad/element.c:140
-msgid "Element width in columns"
-msgstr "Largura do elemento em colunas"
-
-#: src/objects/actions/abstract.c:140
-msgid "Enabled"
-msgstr "Habilitado"
-
-#: src/objects/settings/actionview.c:78
-msgid "End"
-msgstr "Final"
-
-#: ui/windows.ui.xml:310 ui/windows.ui.xml:730 ui/windows.ui.xml:872
-#: ui/macos.ui.xml:310 ui/macos.ui.xml:730 ui/macos.ui.xml:872
-#: ui/linux.ui.xml:310 ui/linux.ui.xml:730 ui/linux.ui.xml:872
-msgid "Erase input"
-msgstr "Apagar campos"
-
-#: ui/windows.ui.xml:320 ui/windows.ui.xml:740 ui/windows.ui.xml:882
-#: ui/macos.ui.xml:320 ui/macos.ui.xml:740 ui/macos.ui.xml:882
-#: ui/linux.ui.xml:320 ui/linux.ui.xml:740 ui/linux.ui.xml:882
-msgid "Erase to end of field"
-msgstr "Apagar até o final do campo"
-
-#: ui/windows.ui.xml:325 ui/windows.ui.xml:745 ui/windows.ui.xml:887
-#: ui/macos.ui.xml:325 ui/macos.ui.xml:745 ui/macos.ui.xml:887
-#: ui/linux.ui.xml:325 ui/linux.ui.xml:745 ui/linux.ui.xml:887
-msgid "Erase to end of line"
-msgstr "Apagar até o final da linha"
-
-#: src/objects/os/windows/open.c:140
-msgid "Error starting session"
-msgstr "Erro iniciando sessão"
-
-#: ui/windows.ui.xml:353 ui/macos.ui.xml:353 ui/linux.ui.xml:353
-msgid "Field attributes"
-msgstr "Atributos de campo"
-
-#: src/objects/os/windows/savedesktopicon.c:211
-msgid "File for session preferences"
-msgstr "Arquivo para preferências da sessão"
-
-#: ui/windows.ui.xml:470 ui/macos.ui.xml:470 ui/linux.ui.xml:470
-msgid "Full Screen"
-msgstr "Tela cheia"
-
-#: ui/windows.ui.xml:779 ui/windows.ui.xml:955 ui/windows.ui.xml:1050
-#: ui/macos.ui.xml:779 ui/macos.ui.xml:955 ui/macos.ui.xml:1050
-#: ui/linux.ui.xml:779 ui/linux.ui.xml:955 ui/linux.ui.xml:1050
-msgid "Full screen"
-msgstr "Tela cheia"
-
-#: src/objects/os/linux/savedesktopicon.c:94
-msgid "Generic name"
-msgstr "Nome genérico"
-
-#: ui/windows.ui.xml:37 ui/windows.ui.xml:550 ui/macos.ui.xml:37
-#: ui/macos.ui.xml:550 ui/linux.ui.xml:37 ui/linux.ui.xml:550
-msgid "Help"
-msgstr "Ajuda"
-
-#: ui/windows.ui.xml:390 ui/macos.ui.xml:390 ui/linux.ui.xml:390
-msgid "Host and Emulation settings"
-msgstr "Configuração de servidor e emulação"
-
-#: src/objects/application/actions/about.c:137 src/objects/window/window.c:565
-#: src/objects/os/linux/savedesktopicon.c:102
-#: src/objects/os/windows/savedesktopicon.c:261
-msgid "IBM 3270 Terminal emulator"
-msgstr "Emulador de terminal IBM 3270"
-
-#: src/objects/actions/view.c:89
-msgid "Icon"
-msgstr "Ícone"
-
-#: src/objects/actions/abstract.c:101
-msgid "Icon Name"
-msgstr "Nome do ícone"
-
-#: src/objects/toolbar/settings.c:54
-msgid "Icon Size"
-msgstr "Tamanho do ícone"
-
-#: src/objects/toolbar/settings.c:61
-msgid "Icon Style"
-msgstr "Estilo do ícone"
-
-#: src/objects/toolbar/models.c:52
-msgid "Icon _size"
-msgstr "_Tamanho do ícone"
-
-#: src/objects/toolbar/models.c:108
-msgid "Icon type"
-msgstr "Tipo do ícone"
-
-#: src/objects/toolbar/models.c:97
-msgid "Icons & text"
-msgstr "Ícones e texto"
-
-#: src/objects/toolbar/models.c:87
-msgid "Icons only"
-msgstr "Apenas ícones"
-
-#: src/objects/actions/abstract.c:141
-msgid "If the action can be activated"
-msgstr "Se a ação pode ser ativada"
-
-#: src/objects/application/application.c:541
-msgid "Initialization has failed"
-msgstr "Inicialização falhou"
-
-#: ui/windows.ui.xml:1022 ui/macos.ui.xml:1022 ui/linux.ui.xml:1022
-msgid "Insert"
-msgstr "Inserção"
-
-#: src/objects/keypad/attribute.c:79
-msgid "Invalid or unknown property type"
-msgstr "Tipo da propriedade é inválido ou desconhecido"
-
-#: src/objects/settings/actionview.c:79
-msgid "Items packed from the end to the start"
-msgstr "Itens empacotados do final para o início"
-
-#: src/objects/settings/actionview.c:69
-msgid "Items packed from the start to the end"
-msgstr "Itens empacotados do início para o final"
-
-#: src/objects/toolbar/settings.c:112
-msgid "Itens"
-msgstr "Itens"
-
-#: ui/windows.ui.xml:515 ui/macos.ui.xml:515 ui/linux.ui.xml:515
-msgid "Keep selected"
-msgstr "Manter selecionado"
-
-#: ui/windows.ui.xml:395 ui/macos.ui.xml:395 ui/linux.ui.xml:395
-msgid "Keyboard accelerators"
-msgstr "Atalhos de teclado"
-
-#: src/objects/keypad/model.c:103
-msgid "Keypad Label"
-msgstr "Etiqueta do painel"
-
-#: src/objects/keypad/model.c:93
-msgid "Keypad Name"
-msgstr "Nome do painel"
-
-#: src/objects/keypad/model.c:136
-msgid "Keypad height in rows"
-msgstr "Altura do painel em linhas"
-
-#: src/objects/keypad/model.c:124
-msgid "Keypad width in columns"
-msgstr "Largura do painel em colunas"
-
-#: src/main/builder.c:117
-msgid "Keypads"
-msgstr "Painéis"
-
-#: src/objects/application/actions/about.c:189
-msgid "LICENSE"
-msgstr "LICENCA"
-
-#: src/objects/actions/view.c:98
-msgid "Label"
-msgstr "Etiqueta"
-
-#: src/objects/toolbar/models.c:66
-msgid "Large"
-msgstr "Grande"
-
-#: src/objects/toolbar/models.c:131
-msgid "Left"
-msgstr "Esquerda"
-
-#: src/objects/settings/actionview.c:74
-msgid "List of the available and unpacked actions"
-msgstr "Lista de ações disponíveis ainda não empacotadas"
-
-#: src/objects/application/application.c:167
-msgid "Log name"
-msgstr "Nome do arquivo de log"
-
-#: ui/windows.ui.xml:72 ui/macos.ui.xml:72 ui/linux.ui.xml:72
-msgid "Main Menu"
-msgstr "Menu principal"
-
-#: ui/windows.ui.xml:67 ui/macos.ui.xml:67 ui/linux.ui.xml:67
-msgid "Main Toolbar"
-msgstr "Barra de ferramentas"
-
-#: ui/windows.ui.xml:1093 ui/macos.ui.xml:1093 ui/linux.ui.xml:1093
-msgid "Main menu"
-msgstr "Menu principal"
-
-#: src/objects/application/actions/about.c:177
-msgid "Maintainers"
-msgstr "Mantenedores"
-
-#: ui/windows.ui.xml:348 ui/macos.ui.xml:348 ui/linux.ui.xml:348
-msgid "Menu"
-msgstr "Menu"
-
-#: ui/windows.ui.xml:419 ui/windows.ui.xml:1059 ui/macos.ui.xml:419
-#: ui/macos.ui.xml:1059 ui/linux.ui.xml:419 ui/linux.ui.xml:1059
-msgid "Model 2 - 80x24"
-msgstr "Modelo 2 - 80x24"
-
-#: ui/windows.ui.xml:424 ui/windows.ui.xml:1064 ui/macos.ui.xml:424
-#: ui/macos.ui.xml:1064 ui/linux.ui.xml:424 ui/linux.ui.xml:1064
-msgid "Model 3 - 80x32"
-msgstr "Modelo 3 - 80x32"
-
-#: ui/windows.ui.xml:429 ui/windows.ui.xml:1069 ui/macos.ui.xml:429
-#: ui/macos.ui.xml:1069 ui/linux.ui.xml:429 ui/linux.ui.xml:1069
-msgid "Model 4 - 80x43"
-msgstr "Modelo 4 - 80x43"
-
-#: ui/windows.ui.xml:434 ui/windows.ui.xml:1074 ui/macos.ui.xml:434
-#: ui/macos.ui.xml:1074 ui/linux.ui.xml:434 ui/linux.ui.xml:1074
-msgid "Model 5 - 132x27"
-msgstr "Modelo 5 - 132x27"
-
-#: ui/windows.ui.xml:460 ui/windows.ui.xml:924 ui/macos.ui.xml:460
-#: ui/macos.ui.xml:924 ui/linux.ui.xml:460 ui/linux.ui.xml:924
-msgid "Monocase"
-msgstr "Só Maiúsculas"
-
-#: ui/windows.ui.xml:535 ui/macos.ui.xml:535 ui/linux.ui.xml:535
-msgid "Network keep alive"
-msgstr "Network keep alive"
-
-#: src/objects/window/page.c:275
-msgid "New session name"
-msgstr "Novo nome de sessão"
 
 #: src/objects/application/actions/window.c:84
 msgid "New tab"
@@ -575,488 +218,367 @@ msgstr "Nova janela"
 msgid "New window with default session"
 msgstr "Nova janela com sessão padrão"
 
-#: src/objects/application/actions/open.c:49
-msgid "Open Session"
-msgstr "Abrir sessão"
+#: src/objects/application/actions/about.c:116
+#, c-format
+msgid "Unstable version %s-%s"
+msgstr "Versão instável %s-%s"
 
-#: ui/windows.ui.xml:56 ui/macos.ui.xml:56 ui/linux.ui.xml:56
-msgid "Open in New Tab"
-msgstr "Abrir em nova aba"
+#: src/objects/application/actions/about.c:118
+#, c-format
+msgid "Version %s-%s"
+msgstr "Versão %s-%s"
 
-#: ui/windows.ui.xml:51 ui/macos.ui.xml:51 ui/linux.ui.xml:51
-msgid "Open in New Window"
-msgstr "Abrir em nova janela"
+#: src/objects/application/actions/about.c:136
+#, c-format
+msgid "%s for %s."
+msgstr "%s para %s"
 
-#: src/objects/application/actions/open.c:201
-msgid "Open in new tab"
-msgstr "Abrir em nova aba"
+#: src/objects/application/actions/about.c:137
+#: src/objects/os/linux/savedesktopicon.c:102
+#: src/objects/os/windows/savedesktopicon.c:261 src/objects/window/window.c:565
+msgid "IBM 3270 Terminal emulator"
+msgstr "Emulador de terminal IBM 3270"
 
-#: src/objects/application/actions/open.c:189
-msgid "Open in new window"
-msgstr "Abrir em nova janela"
+#: src/objects/application/actions/about.c:139
+msgid "64 bits Windows"
+msgstr "Windows 64 bits"
 
-#: src/objects/application/actions/open.c:176
-msgid "Open session"
-msgstr "Abrir sessão"
+#: src/objects/application/actions/about.c:141
+msgid "32 bits Windows"
+msgstr "Windows 32 bits"
 
-#: src/objects/application/actions/open.c:202
-msgid "Open session in New Tab"
-msgstr "Abrir sessão em nova aba"
+#: src/objects/application/actions/about.c:143
+msgid "32 bits Linux"
+msgstr "Linux 32 bits"
 
-#: src/objects/application/actions/open.c:190
-msgid "Open session in New window"
-msgstr "Abrir sessão em nova janela"
+#: src/objects/application/actions/about.c:145
+msgid "64 bits Linux"
+msgstr "Linux 64 bits"
 
-#: src/objects/application/actions/open.c:177
-msgid "Open session on the active terminal"
-msgstr "Abrir sessão no terminal ativo"
+#: src/objects/application/actions/about.c:177
+msgid "Maintainers"
+msgstr "Mantenedores"
 
-#: ui/windows.ui.xml:447 ui/windows.ui.xml:755 ui/windows.ui.xml:897
-#: ui/windows.ui.xml:1042 ui/macos.ui.xml:447 ui/macos.ui.xml:755
-#: ui/macos.ui.xml:897 ui/macos.ui.xml:1042 ui/linux.ui.xml:447
-#: ui/linux.ui.xml:755 ui/linux.ui.xml:897 ui/linux.ui.xml:1042
-msgid "Options"
-msgstr "Opções"
+#: src/objects/application/actions/about.c:178
+msgid "Apple version"
+msgstr "Versão Apple"
 
-#: src/objects/actions/abstract.c:124
-msgid "Parameter Type"
-msgstr "Tipo de parâmetro"
+#: src/objects/application/actions/about.c:179
+msgid "Contributors"
+msgstr "Contribuidores"
 
-#: ui/windows.ui.xml:262 ui/windows.ui.xml:829 ui/macos.ui.xml:262
-#: ui/macos.ui.xml:829 ui/linux.ui.xml:262 ui/linux.ui.xml:829
-msgid "Paste from clipboard"
-msgstr "Colar da área de transferência"
+#: src/objects/application/actions/about.c:181
+msgid "Based on X3270 from"
+msgstr "Baseado no X3270 por"
 
-#: ui/windows.ui.xml:272 ui/windows.ui.xml:839 ui/macos.ui.xml:272
-#: ui/macos.ui.xml:839 ui/linux.ui.xml:272 ui/linux.ui.xml:839
-msgid "Paste from text file"
-msgstr "Colar de um arquivo texto"
+#: src/objects/application/actions/about.c:185
+msgid "Copyright © 2008 Banco do Brasil S.A."
+msgstr "Copyright © 2008 Banco do Brasil S.A."
 
-#: ui/windows.ui.xml:267 ui/windows.ui.xml:834 ui/macos.ui.xml:267
-#: ui/macos.ui.xml:834 ui/linux.ui.xml:267 ui/linux.ui.xml:834
-msgid "Paste next"
-msgstr "Colar próximo"
+#: src/objects/application/actions/about.c:189
+msgid "LICENSE"
+msgstr "LICENCA"
 
-#: ui/windows.ui.xml:485 ui/windows.ui.xml:941 ui/macos.ui.xml:485
-#: ui/macos.ui.xml:941 ui/linux.ui.xml:485 ui/linux.ui.xml:941
-msgid "Paste with left margin"
-msgstr "Colar com margem esquerda"
+#: src/objects/application/actions/about.c:208
+msgid "https://github.com/PerryWerneck/pw3270"
+msgstr "https://github.com/PerryWerneck/pw3270"
 
-#: src/objects/os/linux/savedesktopicon.c:71
-#: src/objects/os/windows/savedesktopicon.c:66
-msgid "Path for the new shortcut"
-msgstr "Caminho para o novo atalho"
+#: src/objects/application/actions/about.c:209
+msgid "View this project on github"
+msgstr "Visite-nos no github"
 
-#: src/objects/toolbar/models.c:125
-msgid "Position"
-msgstr "Posição"
+#: src/objects/application/actions/about.c:211
+msgid "translator-credits"
+msgstr "translator-credits"
 
-#: ui/windows.ui.xml:662 ui/macos.ui.xml:662 ui/linux.ui.xml:662
-msgid "Preferences"
-msgstr "Preferências"
+#: src/objects/application/actions/about.c:235
+msgid "About PW3270"
+msgstr "Sobre o PW3270"
 
-#: ui/windows.ui.xml:174 ui/windows.ui.xml:641 ui/macos.ui.xml:174
-#: ui/macos.ui.xml:641 ui/linux.ui.xml:174 ui/linux.ui.xml:641
-msgid "Print"
-msgstr "Imprimir"
+#: src/objects/application/application.c:152
+msgid "UI Type"
+msgstr "Interface de usuário"
 
-#: ui/windows.ui.xml:992 ui/macos.ui.xml:992 ui/linux.ui.xml:992
-msgid "Print screen"
-msgstr "Imrpimir o conteúdo da tela"
+#: src/objects/application/application.c:153
+msgid "The code of the User interface type"
+msgstr "Código identificando o tipo de interface do usuário"
 
-#: ui/windows.ui.xml:795 ui/macos.ui.xml:795 ui/linux.ui.xml:795
-msgid "Print selected"
-msgstr "Imprimir seleção"
+#: src/objects/application/application.c:167
+msgid "Log name"
+msgstr "Nome do arquivo de log"
+
+#: src/objects/application/application.c:168
+msgid "The full path of the default log file"
+msgstr "Caminho completo do arquivo default"
+
+#: src/objects/application/application.c:214
+#, c-format
+msgid "\"%s\" is not a valid user interface name"
+msgstr "\"%s\" não é um nome válido para interface de usuário"
+
+#: src/objects/application/application.c:239
+msgid "Set the user-interface type"
+msgstr "Define o tipo de interface do usuário"
+
+#: src/objects/application/application.c:249
+msgid "Set default log file name"
+msgstr "Define o nome do arquivo de log padrão"
+
+#: src/objects/application/application.c:559
+msgid "Initialization has failed"
+msgstr "Inicialização falhou"
+
+#: src/objects/application/application.c:562
+msgid "Unable to initialize settings. Application may crash in unexpected ways"
+msgstr ""
+"Não foi possível iniciar configuração. Aplicação pode falhar de forma "
+"inesperada"
+
+#: src/objects/application/application.c:564
+msgid "System settings error"
+msgstr "Erro nas configurações de sistema"
+
+#: src/objects/keypad/attribute.c:79
+msgid "Invalid or unknown property type"
+msgstr "Tipo da propriedade é inválido ou desconhecido"
 
 #: src/objects/keypad/attribute.c:116
 #, c-format
 msgid "Property \"%s\" is invalid for this object"
 msgstr "Propriedade \"%s\" é inválida para este objeto"
 
-#: src/objects/application/actions/window.c:64 ui/windows.ui.xml:89
-#: ui/macos.ui.xml:89 ui/linux.ui.xml:89
-msgid "Quit"
-msgstr "Sair"
+#: src/objects/keypad/element.c:86
+msgid "The name of the icon"
+msgstr "O nome do ícone"
 
-#: src/objects/window/page.c:262
-msgid "Rename Session"
-msgstr "Renomear sessão"
+#: src/objects/keypad/element.c:96
+msgid "The name of associated action"
+msgstr "Nome da ação associada"
 
-#: ui/windows.ui.xml:296 ui/windows.ui.xml:858 ui/macos.ui.xml:296
-#: ui/macos.ui.xml:858 ui/linux.ui.xml:296 ui/linux.ui.xml:858
-msgid "Reselect"
-msgstr "Reselecionar"
+#: src/objects/keypad/element.c:106 src/objects/keypad/model.c:104
+msgid "The Label of the keypad"
+msgstr "A etiqueta do painel"
 
-#: ui/windows.ui.xml:480 ui/windows.ui.xml:912 ui/macos.ui.xml:480
-#: ui/macos.ui.xml:912 ui/linux.ui.xml:480 ui/linux.ui.xml:912
-msgid "Resize on alternate screen"
-msgstr "Mudar tamanho do terminal em tela alternativa"
+#: src/objects/keypad/element.c:116
+msgid "Element row"
+msgstr "Linha do elemento"
 
-#: src/objects/toolbar/models.c:137
-msgid "Right"
-msgstr "Direita"
+#: src/objects/keypad/element.c:128
+msgid "Element col"
+msgstr "Coluna do elemento"
 
-#: ui/windows.ui.xml:135 ui/windows.ui.xml:602 ui/macos.ui.xml:135
-#: ui/macos.ui.xml:602 ui/linux.ui.xml:135 ui/linux.ui.xml:602
-msgid "Save"
-msgstr "Salvar"
+#: src/objects/keypad/element.c:140
+msgid "Element width in columns"
+msgstr "Largura do elemento em colunas"
 
-#: src/objects/actions/save.c:77
-msgid "Save current session preferences to file"
-msgstr "Salvar preferências da sessão para arquivo"
+#: src/objects/keypad/element.c:152
+msgid "Element height in rows"
+msgstr "Altura atual do elemento em linhas"
 
-#: ui/windows.ui.xml:987 ui/macos.ui.xml:987 ui/linux.ui.xml:987
-msgid "Save screen"
-msgstr "Salvar tela"
+#: src/objects/keypad/model.c:93
+msgid "Keypad Name"
+msgstr "Nome do painel"
 
-#: ui/windows.ui.xml:790 ui/macos.ui.xml:790 ui/linux.ui.xml:790
-msgid "Save selected"
-msgstr "Salvar seleção"
+#: src/objects/keypad/model.c:94
+msgid "The name used to identify the keypad"
+msgstr "O nome usado para identificar o painel"
 
-#: src/objects/actions/save.c:75 src/objects/actions/save.c:164
-msgid "Save session preferences"
-msgstr "Salvar preferências da sessão"
+#: src/objects/keypad/model.c:103
+msgid "Keypad Label"
+msgstr "Etiqueta do painel"
 
-#: src/objects/os/linux/savedesktopicon.c:113
-#: src/objects/os/windows/savedesktopicon.c:98
-#: src/objects/os/macos/savedesktopicon.c:53
-msgid "Save session shortcut"
-msgstr "Salvar atalho para a sessão"
+#: src/objects/keypad/model.c:114
+msgid "The position of the keypad"
+msgstr "A posição do painel"
 
-#: src/objects/os/linux/savedesktopicon.c:230
-msgid "Save to session filename"
-msgstr "Salvar para arquivo de sessão"
+#: src/objects/keypad/model.c:124
+msgid "Keypad width in columns"
+msgstr "Largura do painel em colunas"
 
-#: src/objects/os/linux/savedesktopicon.c:202
-msgid "Save to shortcut file"
-msgstr "Salvar para arquivo de atalho"
+#: src/objects/keypad/model.c:136
+msgid "Keypad height in rows"
+msgstr "Altura do painel em linhas"
 
-#: src/objects/os/windows/savedesktopicon.c:176
-msgid "Save to windows shortcut"
-msgstr "Salvar para atalho windows"
-
-#: ui/windows.ui.xml:416 ui/windows.ui.xml:1056 ui/macos.ui.xml:416
-#: ui/macos.ui.xml:1056 ui/linux.ui.xml:416 ui/linux.ui.xml:1056
-msgid "Screen size"
-msgstr "Tamanho da tela"
-
-#: ui/windows.ui.xml:286 ui/windows.ui.xml:853 ui/macos.ui.xml:286
-#: ui/macos.ui.xml:853 ui/linux.ui.xml:286 ui/linux.ui.xml:853
-msgid "Select Field"
-msgstr "Selecionar campo"
-
-#: ui/windows.ui.xml:281 ui/windows.ui.xml:848 ui/macos.ui.xml:281
-#: ui/macos.ui.xml:848 ui/linux.ui.xml:281 ui/linux.ui.xml:848
-msgid "Select all"
-msgstr "Selecionar tudo"
-
-#: ui/windows.ui.xml:495 ui/windows.ui.xml:760 ui/macos.ui.xml:495
-#: ui/macos.ui.xml:760 ui/linux.ui.xml:495 ui/linux.ui.xml:760
-msgid "Select by rectangles"
-msgstr "Seleção retangular"
-
-#: src/objects/toolbar/settings.c:112
-msgid "Select the toolbar itens"
-msgstr "Selecione itens da barra de ferramentas"
-
-#: src/objects/toolbar/settings.c:117
-msgid "Selected"
-msgstr "Selecionado"
-
-#: ui/windows.ui.xml:145 ui/windows.ui.xml:182 ui/windows.ui.xml:612
-#: ui/windows.ui.xml:649 ui/macos.ui.xml:145 ui/macos.ui.xml:182
-#: ui/macos.ui.xml:612 ui/macos.ui.xml:649 ui/linux.ui.xml:145
-#: ui/linux.ui.xml:182 ui/linux.ui.xml:612 ui/linux.ui.xml:649
-msgid "Selected area"
-msgstr "Área selecionada"
-
-#: src/objects/window/actions/filetransfer.c:45
-msgid "Send/Receive"
-msgstr "Enviar/Receber"
-
-#: src/objects/window/actions/filetransfer.c:46 ui/windows.ui.xml:196
-#: ui/windows.ui.xml:997 ui/macos.ui.xml:196 ui/macos.ui.xml:997
-#: ui/linux.ui.xml:196 ui/linux.ui.xml:997
-msgid "Send/Receive files"
-msgstr "Enviar/Receber arquivos"
-
-#: src/objects/toolbar/settings.c:252 src/objects/toolbar/settings.c:262
-msgid "Separator"
-msgstr "Separador"
-
-#: ui/windows.ui.xml:48 ui/windows.ui.xml:584 ui/macos.ui.xml:48
-#: ui/macos.ui.xml:584 ui/linux.ui.xml:48 ui/linux.ui.xml:584
-msgid "Session"
-msgstr "Sessão"
-
-#: ui/windows.ui.xml:77 ui/windows.ui.xml:978 ui/windows.ui.xml:1098
-#: ui/macos.ui.xml:77 ui/macos.ui.xml:978 ui/macos.ui.xml:1098
-#: ui/linux.ui.xml:77 ui/linux.ui.xml:978 ui/linux.ui.xml:1098
-msgid "Session Trace"
-msgstr "Trace da sessão"
-
-#: src/objects/actions/save.c:63 src/objects/os/linux/savedesktopicon.c:85
-#: src/objects/os/windows/savedesktopicon.c:86
-msgid "Session file"
-msgstr "Arquivo de sessão"
-
-#: ui/windows.ui.xml:127 ui/windows.ui.xml:594 ui/macos.ui.xml:127
-#: ui/macos.ui.xml:594 ui/linux.ui.xml:127 ui/linux.ui.xml:594
-msgid "Session in New Tab"
-msgstr "Sessão em nova aba"
-
-#: ui/windows.ui.xml:122 ui/windows.ui.xml:589 ui/macos.ui.xml:122
-#: ui/macos.ui.xml:589 ui/linux.ui.xml:122 ui/linux.ui.xml:589
-msgid "Session in new window"
-msgstr "Sessão em nova janela"
-
-#: src/objects/actions/save.c:56 src/objects/os/linux/savedesktopicon.c:77
-#: src/objects/os/windows/savedesktopicon.c:78
-msgid "Session name"
-msgstr "Nome da sessão"
-
-#: src/objects/window/actions/sessionproperties.c:36 ui/windows.ui.xml:164
-#: ui/windows.ui.xml:631 ui/windows.ui.xml:1112 ui/macos.ui.xml:164
-#: ui/macos.ui.xml:631 ui/macos.ui.xml:1112 ui/linux.ui.xml:164
-#: ui/linux.ui.xml:631 ui/linux.ui.xml:1112
-msgid "Session preferences"
-msgstr "Preferências da sessão"
-
-#: src/objects/application/application.c:249
-msgid "Set default log file name"
-msgstr "Define o nome do arquivo de log padrão"
-
-#: src/objects/application/application.c:239
-msgid "Set the user-interface type"
-msgstr "Define o tipo de interface do usuário"
-
-#: ui/windows.ui.xml:382 ui/macos.ui.xml:382 ui/linux.ui.xml:382
-msgid "Settings"
-msgstr "Configurações"
-
-#: src/objects/toolbar/settings.c:182
-msgid "Setup the toolbar style and position"
-msgstr "Configura estilo e posição da barra de ferramentas"
-
-#: src/objects/window/header-settings.c:53
-msgid "Setup title bar"
-msgstr "Configurar barra de título"
-
-#: src/objects/toolbar/toolbar.c:213 src/objects/toolbar/settings.c:94
-msgid "Setup toolbar"
-msgstr "Configurar barra de ferramentas"
+#: src/objects/os/linux/savedesktopicon.c:63
+msgid "Shortcut name"
+msgstr "Nome do atalho"
 
 #: src/objects/os/linux/savedesktopicon.c:70
 #: src/objects/os/windows/savedesktopicon.c:65
 msgid "Shortcut file"
 msgstr "Arquivo de atalho"
 
-#: ui/windows.ui.xml:159 ui/windows.ui.xml:626 ui/macos.ui.xml:159
-#: ui/macos.ui.xml:626 ui/linux.ui.xml:159 ui/linux.ui.xml:626
-msgid "Shortcut for this session"
-msgstr "Atalho para essa sessão"
-
-#: src/objects/os/linux/savedesktopicon.c:63
-msgid "Shortcut name"
-msgstr "Nome do atalho"
-
-#: ui/windows.ui.xml:510 ui/macos.ui.xml:510 ui/linux.ui.xml:510
-msgid "Show Underline"
-msgstr "Mostrar sublinhado"
-
-#: ui/windows.ui.xml:774 ui/macos.ui.xml:774 ui/linux.ui.xml:774
-msgid "Show menu"
-msgstr "Mostrar menu"
-
-#: ui/windows.ui.xml:769 ui/macos.ui.xml:769 ui/linux.ui.xml:769
-msgid "Show toolbar"
-msgstr "Mostrar barra de ferramentas"
-
-#: src/objects/toolbar/models.c:61
-msgid "Small"
-msgstr "Pequeno"
-
-#: ui/windows.ui.xml:520 ui/windows.ui.xml:936 ui/macos.ui.xml:520
-#: ui/macos.ui.xml:936 ui/linux.ui.xml:520 ui/linux.ui.xml:936
-msgid "Smart paste"
-msgstr "Colar inteligente"
-
-#: src/objects/os/linux/savedesktopicon.c:205
-msgid "Standard desktop files"
-msgstr "Arquivo de atalho padrão"
-
-#: src/objects/settings/actionview.c:68
-msgid "Start"
-msgstr "Inicio"
-
-#: src/objects/actions/abstract.c:152
-msgid "State"
-msgstr "Estado"
-
-#: src/objects/actions/abstract.c:131
-msgid "State Type"
-msgstr "Tipo do estado"
-
-#: src/objects/toolbar/settings.c:182
-msgid "Style & Position"
-msgstr "Estilo & Posição"
-
-#: src/objects/toolbar/models.c:114
-msgid "Symbolic"
-msgstr "Simbólico"
-
-#: src/objects/toolbar/models.c:55 src/objects/toolbar/models.c:82
-#: src/objects/toolbar/models.c:111
-msgid "System default"
-msgstr "Padrão do sistema"
-
-#: src/objects/application/application.c:546
-msgid "System settings error"
-msgstr "Erro nas configurações de sistema"
-
-#: src/main/tools.c:64
-msgid "TN3270 Session Files"
-msgstr "Arquivos de sessão TN3270"
-
-#: src/objects/window/keyfile.c:241
-msgid "TN3270 Session description"
-msgstr "Descrição de sessão TN3270"
-
-#: ui/windows.ui.xml:111 ui/windows.ui.xml:573 ui/macos.ui.xml:111
-#: ui/macos.ui.xml:573 ui/linux.ui.xml:111 ui/linux.ui.xml:573
-msgid "Tab with default session"
-msgstr "Aba com a sessão padrão"
-
-#: ui/windows.ui.xml:405 ui/macos.ui.xml:405 ui/linux.ui.xml:405
-msgid "Terminal colors"
-msgstr "Cores do terminal"
-
-#: ui/windows.ui.xml:442 ui/macos.ui.xml:442 ui/linux.ui.xml:442
-msgid "Terminal font"
-msgstr "Fonte do terminal"
-
-#: src/objects/toolbar/models.c:92
-msgid "Text only"
-msgstr "Apenas texto"
-
-#: src/objects/keypad/model.c:104 src/objects/keypad/element.c:106
-msgid "The Label of the keypad"
-msgstr "A etiqueta do painel"
-
-#: src/objects/actions/abstract.c:109
-msgid "The action label"
-msgstr "A etiqueta da ação"
-
-#: src/objects/actions/abstract.c:117
-msgid "The action tooltip"
-msgstr "A dica da ação"
-
-#: src/objects/application/application.c:153
-msgid "The code of the User interface type"
-msgstr "Código identificando o tipo de interface do usuário"
-
-#: src/objects/actions/save.c:64
-msgid "The file to save the current session preferences"
-msgstr "O arquivo com as preferências da sessão atual"
+#: src/objects/os/linux/savedesktopicon.c:71
+#: src/objects/os/windows/savedesktopicon.c:66
+msgid "Path for the new shortcut"
+msgstr "Caminho para o novo atalho"
 
 #: src/objects/os/linux/savedesktopicon.c:86
 #: src/objects/os/windows/savedesktopicon.c:87
 msgid "The file with the session preferences for this shortcut"
 msgstr "O arquivo com as preferências da sessão para esse atalho"
 
-#: src/objects/application/application.c:168
-msgid "The full path of the default log file"
-msgstr "Caminho completo do arquivo default"
+#: src/objects/os/linux/savedesktopicon.c:94
+msgid "Generic name"
+msgstr "Nome genérico"
 
-#: src/objects/actions/abstract.c:110
-msgid "The label for the action"
-msgstr "A etiqueta da ação"
+#: src/objects/os/linux/savedesktopicon.c:101
+msgid "Comment"
+msgstr "Comentário"
 
-#: src/objects/keypad/element.c:96
-msgid "The name of associated action"
-msgstr "Nome da ação associada"
+#: src/objects/os/linux/savedesktopicon.c:113
+#: src/objects/os/macos/savedesktopicon.c:53
+#: src/objects/os/windows/savedesktopicon.c:98
+msgid "Save session shortcut"
+msgstr "Salvar atalho para a sessão"
 
-#: src/objects/window/window.c:207
-msgid "The name of the actions in the header bar"
-msgstr "O nome das ações na barra de título"
+#: src/objects/os/linux/savedesktopicon.c:114
+#: src/objects/os/macos/savedesktopicon.c:54
+#: src/objects/os/windows/savedesktopicon.c:99
+msgid "Create shortcut for the current session"
+msgstr "Criar atalho para a sessão atual."
 
-#: src/objects/toolbar/toolbar.c:98
-msgid "The name of the actions in the toolbar"
-msgstr "O nome das ações na barra de ferramentas"
+#: src/objects/os/linux/savedesktopicon.c:202
+msgid "Save to shortcut file"
+msgstr "Salvar para arquivo de atalho"
 
-#: src/objects/keypad/element.c:86
-msgid "The name of the icon"
-msgstr "O nome do ícone"
+#: src/objects/os/linux/savedesktopicon.c:205
+msgid "Standard desktop files"
+msgstr "Arquivo de atalho padrão"
 
-#: src/objects/actions/abstract.c:102
-msgid "The name of the icon associated with the action"
-msgstr "Nome do ícone associado com a ação"
-
-#: src/objects/keypad/model.c:94
-msgid "The name used to identify the keypad"
-msgstr "O nome usado para identificar o painel"
-
-#: src/objects/actions/abstract.c:94
-msgid "The name used to invoke the action"
-msgstr "O nome usado para ativar a ação"
-
-#: src/objects/keypad/model.c:114
-msgid "The position of the keypad"
-msgstr "A posição do painel"
-
-#: src/objects/actions/save.c:57 src/objects/os/linux/savedesktopicon.c:79
-#: src/objects/os/windows/savedesktopicon.c:80
-msgid "The session name used in the window/tab title (empty for default)"
-msgstr ""
-"O nome da sessão usada no título da janela/aba. Vazio para usar o valor "
-"padrão"
-
-#: src/objects/actions/abstract.c:153
-msgid "The state the action is in"
-msgstr "O estado em que a ação está"
-
-#: src/objects/toolbar/toolbar.c:109
-msgid "The toolbar icon size"
-msgstr "Tamanho dos ícones na barra de ferramentas"
-
-#: src/objects/toolbar/toolbar.c:135
-msgid "The toolbar icon type"
-msgstr "Tipo dos ícones na barra de ferramentas"
-
-#: src/objects/toolbar/toolbar.c:122
-msgid "The toolbar style"
-msgstr "Estilo da barra de ferramentas"
-
-#: src/objects/actions/abstract.c:118
-msgid "The tooltip for the action"
-msgstr "A dica da ação"
-
-#: src/objects/actions/abstract.c:125
-msgid "The type of GVariant passed to activate()"
-msgstr "The type of GVariant passed to activate()"
-
-#: src/objects/actions/abstract.c:132
-msgid "The type of the state kept by the action"
-msgstr "O tipo do estado mantido pela ação"
+#: src/objects/os/linux/savedesktopicon.c:230
+msgid "Save to session filename"
+msgstr "Salvar para arquivo de sessão"
 
 #: src/objects/os/macos/savedesktopicon.c:68
 msgid "This action is not available in this platform"
 msgstr "Ação não está disponível nessa plataforma"
 
-#: src/objects/window/header-settings.c:52
-msgid "Title bar"
-msgstr "Barra de título"
+#: src/objects/os/windows/open.c:133
+msgid "Can't load session preferences"
+msgstr "Não foi possível carregar preferências da sessão"
 
-#: src/objects/window/header-settings.c:64
-msgid "Title bar actions"
-msgstr "Ações da barra de título"
+#: src/objects/os/windows/open.c:137
+#, c-format
+msgid "Unable to load session preferences from '%s'"
+msgstr "Incapaz de ler preferências de sessa de '%s'"
 
-#: src/objects/toolbar/settings.c:93 ui/windows.ui.xml:343
-#: ui/windows.ui.xml:968 ui/windows.ui.xml:1088 ui/macos.ui.xml:343
-#: ui/macos.ui.xml:968 ui/macos.ui.xml:1088 ui/linux.ui.xml:343
-#: ui/linux.ui.xml:968 ui/linux.ui.xml:1088
-msgid "Toolbar"
-msgstr "Barra de ferramentas"
+#: src/objects/os/windows/open.c:140
+msgid "Error starting session"
+msgstr "Erro iniciando sessão"
+
+#: src/objects/os/windows/savedesktopicon.c:72
+msgid "Description"
+msgstr "Descrição"
+
+#: src/objects/os/windows/savedesktopicon.c:176
+msgid "Save to windows shortcut"
+msgstr "Salvar para atalho windows"
+
+#: src/objects/os/windows/savedesktopicon.c:179
+msgid "Windows shortcuts"
+msgstr "Atalhos windows"
+
+#: src/objects/os/windows/savedesktopicon.c:211
+msgid "File for session preferences"
+msgstr "Arquivo para preferências da sessão"
+
+#: src/objects/settings/actionview.c:68
+msgid "Start"
+msgstr "Inicio"
+
+#: src/objects/settings/actionview.c:69
+msgid "Items packed from the start to the end"
+msgstr "Itens empacotados do início para o final"
+
+#: src/objects/settings/actionview.c:73 src/objects/toolbar/settings.c:118
+msgid "Available"
+msgstr "Disponível"
+
+#: src/objects/settings/actionview.c:74
+msgid "List of the available and unpacked actions"
+msgstr "Lista de ações disponíveis ainda não empacotadas"
+
+#: src/objects/settings/actionview.c:78
+msgid "End"
+msgstr "Final"
+
+#: src/objects/settings/actionview.c:79
+msgid "Items packed from the end to the start"
+msgstr "Itens empacotados do final para o início"
+
+#: src/objects/settings/dialog.c:79
+msgid "_Apply"
+msgstr "_Aplicar"
+
+#: src/objects/toolbar/models.c:52
+msgid "Icon _size"
+msgstr "_Tamanho do ícone"
+
+#: src/objects/toolbar/models.c:55 src/objects/toolbar/models.c:82
+#: src/objects/toolbar/models.c:111
+msgid "System default"
+msgstr "Padrão do sistema"
+
+#: src/objects/toolbar/models.c:61
+msgid "Small"
+msgstr "Pequeno"
+
+#: src/objects/toolbar/models.c:66
+msgid "Large"
+msgstr "Grande"
+
+#: src/objects/toolbar/models.c:79
+msgid "Toolbar s_tyle"
+msgstr "Est_ilo da barra de ferramentas"
+
+#: src/objects/toolbar/models.c:87
+msgid "Icons only"
+msgstr "Apenas ícones"
+
+#: src/objects/toolbar/models.c:92
+msgid "Text only"
+msgstr "Apenas texto"
+
+#: src/objects/toolbar/models.c:97
+msgid "Icons & text"
+msgstr "Ícones e texto"
+
+#: src/objects/toolbar/models.c:108
+msgid "Icon type"
+msgstr "Tipo do ícone"
+
+#: src/objects/toolbar/models.c:114
+msgid "Symbolic"
+msgstr "Simbólico"
+
+#: src/objects/toolbar/models.c:125
+msgid "Position"
+msgstr "Posição"
+
+#: src/objects/toolbar/models.c:128
+msgid "Top (system default)"
+msgstr "Em cima (padrão do sistema)"
+
+#: src/objects/toolbar/models.c:131
+msgid "Left"
+msgstr "Esquerda"
+
+#: src/objects/toolbar/models.c:134
+msgid "Bottom"
+msgstr "Em baixo"
+
+#: src/objects/toolbar/models.c:137
+msgid "Right"
+msgstr "Direita"
+
+#: src/objects/toolbar/settings.c:54
+msgid "Icon Size"
+msgstr "Tamanho do ícone"
+
+#: src/objects/toolbar/settings.c:61
+msgid "Icon Style"
+msgstr "Estilo do ícone"
 
 #: src/objects/toolbar/settings.c:68
 msgid "Toolbar Style"
@@ -1066,153 +588,449 @@ msgstr "Estilo da barra de ferramentas"
 msgid "Toolbar position"
 msgstr "Posição da barra de ferramentas"
 
-#: src/objects/toolbar/models.c:79
-msgid "Toolbar s_tyle"
-msgstr "Est_ilo da barra de ferramentas"
+#: src/objects/toolbar/settings.c:93
+msgid "Toolbar"
+msgstr "Barra de ferramentas"
 
-#: src/objects/toolbar/models.c:128
-msgid "Top (system default)"
-msgstr "Em cima (padrão do sistema)"
+#: src/objects/toolbar/settings.c:94 src/objects/toolbar/toolbar.c:213
+msgid "Setup toolbar"
+msgstr "Configurar barra de ferramentas"
 
-#: ui/windows.ui.xml:973 ui/macos.ui.xml:973 ui/linux.ui.xml:973
-msgid "Top menu"
-msgstr "Menu principal"
+#: src/objects/toolbar/settings.c:112
+msgid "Itens"
+msgstr "Itens"
 
-#: ui/windows.ui.xml:338 ui/macos.ui.xml:338 ui/linux.ui.xml:338
-msgid "Trace"
-msgstr "Trace"
+#: src/objects/toolbar/settings.c:112
+msgid "Select the toolbar itens"
+msgstr "Selecione itens da barra de ferramentas"
 
-#: ui/windows.ui.xml:465 ui/windows.ui.xml:1027 ui/macos.ui.xml:465
-#: ui/macos.ui.xml:1027 ui/linux.ui.xml:465 ui/linux.ui.xml:1027
-msgid "Track Cursor"
-msgstr "Mostrar posição do cursor"
+#: src/objects/toolbar/settings.c:117
+msgid "Selected"
+msgstr "Selecionado"
 
-#: src/objects/application/application.c:152
-msgid "UI Type"
-msgstr "Interface de usuário"
+#: src/objects/toolbar/settings.c:182
+msgid "Style & Position"
+msgstr "Estilo & Posição"
 
-#: src/objects/application/application.c:544
-msgid "Unable to initialize settings. Application may crash in unexpected ways"
+#: src/objects/toolbar/settings.c:182
+msgid "Setup the toolbar style and position"
+msgstr "Configura estilo e posição da barra de ferramentas"
+
+#: src/objects/toolbar/settings.c:214
+msgid ""
+"<small><b>The toolbar position only takes effect after restart</b></small>"
 msgstr ""
-"Não foi possível iniciar configuração. Aplicação pode falhar de forma "
-"inesperada"
+"<small><b>Alterações na posição da barra de ferramentas só tem efeito apos "
+"reinício da aplicação</b></small>"
 
-#: src/objects/os/windows/open.c:137
-#, c-format
-msgid "Unable to load session preferences from '%s'"
-msgstr "Incapaz de ler preferências de sessa de '%s'"
+#. It's a separator
+#: src/objects/toolbar/settings.c:252 src/objects/toolbar/settings.c:262
+msgid "Separator"
+msgstr "Separador"
 
-#: ui/windows.ui.xml:291 ui/windows.ui.xml:800 ui/macos.ui.xml:291
-#: ui/macos.ui.xml:800 ui/linux.ui.xml:291 ui/linux.ui.xml:800
-msgid "Unselect"
-msgstr "Remover seleção"
+#: src/objects/toolbar/toolbar.c:98
+msgid "The name of the actions in the toolbar"
+msgstr "O nome das ações na barra de ferramentas"
 
-#: src/objects/application/actions/about.c:116
-#, c-format
-msgid "Unstable version %s-%s"
-msgstr "Versão instável %s-%s"
+#: src/objects/toolbar/toolbar.c:109
+msgid "The toolbar icon size"
+msgstr "Tamanho dos ícones na barra de ferramentas"
 
-#: ui/windows.ui.xml:530 ui/windows.ui.xml:907 ui/macos.ui.xml:530
-#: ui/macos.ui.xml:907 ui/linux.ui.xml:530 ui/linux.ui.xml:907
-msgid "Use +/- for field navigation"
-msgstr "Usar teclas +/- para navegar por campos"
+#: src/objects/toolbar/toolbar.c:122
+msgid "The toolbar style"
+msgstr "Estilo da barra de ferramentas"
 
-#: src/objects/application/actions/about.c:118
-#, c-format
-msgid "Version %s-%s"
-msgstr "Versão %s-%s"
-
-#: src/objects/window/header.c:63 ui/windows.ui.xml:64 ui/windows.ui.xml:965
-#: ui/windows.ui.xml:1085 ui/macos.ui.xml:64 ui/macos.ui.xml:965
-#: ui/macos.ui.xml:1085 ui/linux.ui.xml:64 ui/linux.ui.xml:965
-#: ui/linux.ui.xml:1085
-msgid "View"
-msgstr "Exibir"
-
-#: src/objects/application/actions/about.c:209
-msgid "View this project on github"
-msgstr "Visite-nos no github"
-
-#: ui/windows.ui.xml:106 ui/windows.ui.xml:568 ui/macos.ui.xml:106
-#: ui/macos.ui.xml:568 ui/linux.ui.xml:106 ui/linux.ui.xml:568
-msgid "Window with default session"
-msgstr "Janela com sessão padrão"
-
-#: src/objects/os/windows/savedesktopicon.c:179
-msgid "Windows shortcuts"
-msgstr "Atalhos windows"
-
-#: src/objects/settings/dialog.c:79
-msgid "_Apply"
-msgstr "_Aplicar"
-
-#: src/objects/actions/save.c:103 src/objects/settings/dialog.c:78
-#: src/objects/os/linux/savedesktopicon.c:140
-#: src/objects/os/windows/savedesktopicon.c:124
-msgid "_Cancel"
-msgstr "_Cancelar"
-
-#: src/objects/window/page.c:371
-msgid "_Close session"
-msgstr "_Fechar sessão"
-
-#: ui/windows.ui.xml:369 ui/windows.ui.xml:1107 ui/macos.ui.xml:369
-#: ui/macos.ui.xml:1107 ui/linux.ui.xml:369 ui/linux.ui.xml:1107
-msgid "_Connect"
-msgstr "_Conectar"
-
-#: ui/windows.ui.xml:374 ui/macos.ui.xml:374 ui/linux.ui.xml:374
-msgid "_Disconnect"
-msgstr "_Desconectar"
-
-#: ui/windows.ui.xml:232 ui/windows.ui.xml:681 ui/windows.ui.xml:824
-#: ui/macos.ui.xml:232 ui/macos.ui.xml:681 ui/macos.ui.xml:824
-#: ui/linux.ui.xml:232 ui/linux.ui.xml:681 ui/linux.ui.xml:824
-msgid "_Edit"
-msgstr "_Editar"
-
-#: ui/windows.ui.xml:99 ui/macos.ui.xml:99 ui/linux.ui.xml:99
-msgid "_File"
-msgstr "_Arquivo"
-
-#: ui/windows.ui.xml:361 ui/macos.ui.xml:361 ui/linux.ui.xml:361
-msgid "_Network"
-msgstr "_Rede"
-
-#: ui/windows.ui.xml:103 ui/windows.ui.xml:565 ui/macos.ui.xml:103
-#: ui/macos.ui.xml:565 ui/linux.ui.xml:103 ui/linux.ui.xml:565
-msgid "_New"
-msgstr "_Nova"
-
-#: ui/windows.ui.xml:119 ui/windows.ui.xml:581 ui/macos.ui.xml:119
-#: ui/macos.ui.xml:581 ui/linux.ui.xml:119 ui/linux.ui.xml:581
-msgid "_Open"
-msgstr "_Abrir"
+#: src/objects/toolbar/toolbar.c:135
+msgid "The toolbar icon type"
+msgstr "Tipo dos ícones na barra de ferramentas"
 
 #: src/objects/toolbar/toolbar.c:235
 msgid "_Preferences"
 msgstr "_Preferências"
 
+#: src/objects/window/actions/close.c:51
+msgid "Close window"
+msgstr "Fechar janela"
+
+#: src/objects/window/actions/close.c:52
+msgid "Close the window"
+msgstr "Fechar a janela"
+
+#: src/objects/window/actions/connect.c:59
+msgid "Connect"
+msgstr "Conectar"
+
+#: src/objects/window/actions/connect.c:60
+msgid "Connect to host"
+msgstr "Conectar ao servidor"
+
+#: src/objects/window/actions/filetransfer.c:45
+msgid "Send/Receive"
+msgstr "Enviar/Receber"
+
+#: src/objects/window/actions/filetransfer.c:46
+msgid "Send/Receive files"
+msgstr "Enviar/Receber arquivos"
+
+#: src/objects/window/actions/sessionproperties.c:36
+msgid "Session preferences"
+msgstr "Preferências da sessão"
+
+#: src/objects/window/actions/sessionproperties.c:37
+msgid "Change the preferences for the active session"
+msgstr "Modificar preferências da sessão ativa"
+
+#: src/objects/window/header-settings.c:52
+msgid "Title bar"
+msgstr "Barra de título"
+
+#: src/objects/window/header-settings.c:53
+msgid "Setup title bar"
+msgstr "Configurar barra de título"
+
+#: src/objects/window/header-settings.c:64
+msgid "Title bar actions"
+msgstr "Ações da barra de título"
+
+#: src/objects/window/header-settings.c:64
+msgid "Change the position of the title bar icons"
+msgstr "Modificar posição dos ícones da barra de título"
+
+#: src/objects/window/header-settings.c:93
+msgid "Application menu"
+msgstr "Menu da aplicação"
+
+#: src/objects/window/header.c:63
+msgid "View"
+msgstr "Exibir"
+
+#: src/objects/window/keyfile.c:241
+msgid "TN3270 Session description"
+msgstr "Descrição de sessão TN3270"
+
+#: src/objects/window/page.c:207 src/objects/window/window.c:779
+#: src/objects/window/window.c:806
+msgid "Disconnected from host"
+msgstr "Desconectado do servidor"
+
+#: src/objects/window/page.c:218 src/objects/window/window.c:779
+msgid "Connected to host"
+msgstr "Conectado no servidor"
+
+#: src/objects/window/page.c:262
+msgid "Rename Session"
+msgstr "Renomear sessão"
+
+#: src/objects/window/page.c:264
+msgid "Apply"
+msgstr "Aplicar"
+
+#. Create label.rename
+#: src/objects/window/page.c:275
+msgid "New session name"
+msgstr "Novo nome de sessão"
+
 #: src/objects/window/page.c:365
 msgid "_Rename session"
 msgstr "Renomear sessão"
 
-#: src/objects/actions/save.c:104 src/objects/os/linux/savedesktopicon.c:141
-#: src/objects/os/windows/savedesktopicon.c:125
-msgid "_Save"
-msgstr "_Salvar"
+#: src/objects/window/page.c:371
+msgid "_Close session"
+msgstr "_Fechar sessão"
 
-#: ui/windows.ui.xml:335 ui/macos.ui.xml:335 ui/linux.ui.xml:335
-msgid "_View"
-msgstr "_Exibir"
+#: src/objects/window/terminal.c:138
+msgid "Can't use default session file"
+msgstr "Não posso usar arquivo de sessão default"
 
-#: src/objects/application/actions/about.c:208
-msgid "https://github.com/PerryWerneck/pw3270"
-msgstr "https://github.com/PerryWerneck/pw3270"
+#: src/objects/window/window.c:206
+msgid "Action Names"
+msgstr "Nome das ações"
 
-#: src/objects/application/actions/about.c:211
-msgid "translator-credits"
-msgstr "translator-credits"
+#: src/objects/window/window.c:207
+msgid "The name of the actions in the header bar"
+msgstr "O nome das ações na barra de título"
+
+#~ msgid "Alert sound"
+#~ msgstr "Aviso sonoro"
+
+#~ msgid "Append to copy"
+#~ msgstr "Adicionar à cópia"
+
+#~ msgid "Application"
+#~ msgstr "Aplicação"
+
+#~ msgid "Auto-Reconnect"
+#~ msgstr "Reconectar automaticamente"
+
+#~ msgid "Blank Fill"
+#~ msgstr "Completar com espaços"
+
+#~ msgid "Blinking Cursor"
+#~ msgstr "Cursor piscante"
+
+#~ msgid "Bold"
+#~ msgstr "Negrito"
+
+#~ msgid "Clear"
+#~ msgstr "Limpar"
+
+#~ msgid "Clipboard"
+#~ msgstr "Área de transferência"
+
+#~ msgid "Clipboard contents"
+#~ msgstr "Conteúdo da área de transferência"
+
+#~ msgid "Connect on startup"
+#~ msgstr "Conectar ao iniciar"
+
+#~ msgid "Copy"
+#~ msgstr "Copiar"
+
+#~ msgid "Copy as HTML"
+#~ msgstr "Copiar como HTML"
+
+#~ msgid "Copy as image"
+#~ msgstr "Copiar como imagem"
+
+#~ msgid "Copy as table"
+#~ msgstr "Copiar como tabela"
+
+#~ msgid "Copy as text"
+#~ msgstr "Copiar como texto"
+
+#~ msgid "Cross hair cursor"
+#~ msgstr "Cursor mira"
+
+#~ msgid "Current Screen"
+#~ msgstr "Tela atual"
+
+#~ msgid "Current screen"
+#~ msgstr "Tela atual"
+
+#~ msgid "Current session"
+#~ msgstr "Sessão atual"
+
+#~ msgid "Cut"
+#~ msgstr "Recortar"
+
+#~ msgid "Delete Field"
+#~ msgstr "Apagar campo"
+
+#~ msgid "Disconnect"
+#~ msgstr "Desconectar"
+
+#~ msgid "Dynamic font spacing"
+#~ msgstr "Espaçamento dinâmico"
+
+#~ msgid "Erase input"
+#~ msgstr "Apagar campos"
+
+#~ msgid "Erase to end of field"
+#~ msgstr "Apagar até o final do campo"
+
+#~ msgid "Erase to end of line"
+#~ msgstr "Apagar até o final da linha"
+
+#~ msgid "Field attributes"
+#~ msgstr "Atributos de campo"
+
+#~ msgid "Full Screen"
+#~ msgstr "Tela cheia"
+
+#~ msgid "Full screen"
+#~ msgstr "Tela cheia"
+
+#~ msgid "Help"
+#~ msgstr "Ajuda"
+
+#~ msgid "Host and Emulation settings"
+#~ msgstr "Configuração de servidor e emulação"
+
+#~ msgid "Insert"
+#~ msgstr "Inserção"
+
+#~ msgid "Keep selected"
+#~ msgstr "Manter selecionado"
+
+#~ msgid "Keyboard accelerators"
+#~ msgstr "Atalhos de teclado"
+
+#~ msgid "Keypads"
+#~ msgstr "Painéis"
+
+#~ msgid "Main Menu"
+#~ msgstr "Menu principal"
+
+#~ msgid "Main Toolbar"
+#~ msgstr "Barra de ferramentas"
+
+#~ msgid "Main menu"
+#~ msgstr "Menu principal"
+
+#~ msgid "Menu"
+#~ msgstr "Menu"
+
+#~ msgid "Model 2 - 80x24"
+#~ msgstr "Modelo 2 - 80x24"
+
+#~ msgid "Model 3 - 80x32"
+#~ msgstr "Modelo 3 - 80x32"
+
+#~ msgid "Model 4 - 80x43"
+#~ msgstr "Modelo 4 - 80x43"
+
+#~ msgid "Model 5 - 132x27"
+#~ msgstr "Modelo 5 - 132x27"
+
+#~ msgid "Monocase"
+#~ msgstr "Só Maiúsculas"
+
+#~ msgid "Network keep alive"
+#~ msgstr "Network keep alive"
+
+#~ msgid "Open in New Tab"
+#~ msgstr "Abrir em nova aba"
+
+#~ msgid "Open in New Window"
+#~ msgstr "Abrir em nova janela"
+
+#~ msgid "Options"
+#~ msgstr "Opções"
+
+#~ msgid "Paste from clipboard"
+#~ msgstr "Colar da área de transferência"
+
+#~ msgid "Paste from text file"
+#~ msgstr "Colar de um arquivo texto"
+
+#~ msgid "Paste next"
+#~ msgstr "Colar próximo"
+
+#~ msgid "Paste with left margin"
+#~ msgstr "Colar com margem esquerda"
+
+#~ msgid "Preferences"
+#~ msgstr "Preferências"
+
+#~ msgid "Print"
+#~ msgstr "Imprimir"
+
+#~ msgid "Print screen"
+#~ msgstr "Imrpimir o conteúdo da tela"
+
+#~ msgid "Print selected"
+#~ msgstr "Imprimir seleção"
+
+#~ msgid "Reselect"
+#~ msgstr "Reselecionar"
+
+#~ msgid "Resize on alternate screen"
+#~ msgstr "Mudar tamanho do terminal em tela alternativa"
+
+#~ msgid "Save"
+#~ msgstr "Salvar"
+
+#~ msgid "Save screen"
+#~ msgstr "Salvar tela"
+
+#~ msgid "Save selected"
+#~ msgstr "Salvar seleção"
+
+#~ msgid "Screen size"
+#~ msgstr "Tamanho da tela"
+
+#~ msgid "Select Field"
+#~ msgstr "Selecionar campo"
+
+#~ msgid "Select all"
+#~ msgstr "Selecionar tudo"
+
+#~ msgid "Select by rectangles"
+#~ msgstr "Seleção retangular"
+
+#~ msgid "Selected area"
+#~ msgstr "Área selecionada"
+
+#~ msgid "Session"
+#~ msgstr "Sessão"
+
+#~ msgid "Session Trace"
+#~ msgstr "Trace da sessão"
+
+#~ msgid "Session in New Tab"
+#~ msgstr "Sessão em nova aba"
+
+#~ msgid "Session in new window"
+#~ msgstr "Sessão em nova janela"
+
+#~ msgid "Settings"
+#~ msgstr "Configurações"
+
+#~ msgid "Shortcut for this session"
+#~ msgstr "Atalho para essa sessão"
+
+#~ msgid "Show Underline"
+#~ msgstr "Mostrar sublinhado"
+
+#~ msgid "Show menu"
+#~ msgstr "Mostrar menu"
+
+#~ msgid "Show toolbar"
+#~ msgstr "Mostrar barra de ferramentas"
+
+#~ msgid "Smart paste"
+#~ msgstr "Colar inteligente"
+
+#~ msgid "Tab with default session"
+#~ msgstr "Aba com a sessão padrão"
+
+#~ msgid "Terminal colors"
+#~ msgstr "Cores do terminal"
+
+#~ msgid "Terminal font"
+#~ msgstr "Fonte do terminal"
+
+#~ msgid "Top menu"
+#~ msgstr "Menu principal"
+
+#~ msgid "Trace"
+#~ msgstr "Trace"
+
+#~ msgid "Track Cursor"
+#~ msgstr "Mostrar posição do cursor"
+
+#~ msgid "Unselect"
+#~ msgstr "Remover seleção"
+
+#~ msgid "Use +/- for field navigation"
+#~ msgstr "Usar teclas +/- para navegar por campos"
+
+#~ msgid "Window with default session"
+#~ msgstr "Janela com sessão padrão"
+
+#~ msgid "_Connect"
+#~ msgstr "_Conectar"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Desconectar"
+
+#~ msgid "_Edit"
+#~ msgstr "_Editar"
+
+#~ msgid "_File"
+#~ msgstr "_Arquivo"
+
+#~ msgid "_Network"
+#~ msgstr "_Rede"
+
+#~ msgid "_New"
+#~ msgstr "_Nova"
+
+#~ msgid "_Open"
+#~ msgstr "_Abrir"
+
+#~ msgid "_View"
+#~ msgstr "_Exibir"
 
 #~ msgid " and <b>%s</b> for %s."
 #~ msgstr " e <b>%s</b> para %s."

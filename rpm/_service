@@ -9,6 +9,7 @@
 		<param name="changesauthor">perry.werneck@gmail.com</param>
       
 		<param name="versionformat">@PARENT_TAG@+git%cd</param>
+		<param name="revision">meson</param>
 		<param name="scm">git</param>
 	</service>
   
