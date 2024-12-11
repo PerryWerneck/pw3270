@@ -300,25 +300,37 @@ custom_target(
 	install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
 )
 
-install_data([
-	'icons/connect.svg',          
-	'icons/disconnect.svg',           
-	'icons/gtk-connect-symbolic.svg',     
-	'icons/gtk-ok.svg',
-	'icons/gtk-quit.svg',           
-	'icons/ok.svg',   
-	'icons/quit.svg',
-	'icons/connect-symbolic.svg',  
-	'icons/disconnect-symbolic.svg',  
-	'icons/gtk-disconnect-symbolic.svg',  
-	'icons/gtk-ok-symbolic.svg',  
-	'icons/gtk-quit-symbolic.svg',  
-	'icons/ok-symbolic.svg',  
-	'icons/quit-symbolic.svg',
-	],
-	install_tag: 'runtime',
-	install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
-)
+icons = [
+	'connect.svg',          
+	'disconnect.svg',           
+	'gtk-connect-symbolic.svg',     
+	'gtk-ok.svg',
+	'gtk-quit.svg',           
+	'ok.svg',   
+	'quit.svg',
+	'connect-symbolic.svg',  
+	'disconnect-symbolic.svg',  
+	'gtk-disconnect-symbolic.svg',  
+	'gtk-ok-symbolic.svg',  
+	'gtk-quit-symbolic.svg',  
+	'ok-symbolic.svg',  
+	'quit-symbolic.svg',
+]
+
+foreach icon : icons
+	custom_target(
+		icon,
+		command: [ 
+			scour,
+			'../icons/' + icon,
+			icon,
+		],
+		output: icon,
+		install: true,
+		install_tag: 'runtime',
+		install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+	)
+endforeach
 
 if host_machine.system() == 'linux'
 
@@ -331,7 +343,7 @@ if host_machine.system() == 'linux'
 	)
 
 	custom_target(
-		'icon-color',
+		'app-icon-color',
 		command: [ 
 			scour,
 			'../branding/' + meson.project_name() + '.svg',
@@ -345,7 +357,7 @@ if host_machine.system() == 'linux'
 
 	# TODO: How to save with same name??? Cant accept 'rename'
 	custom_target(
-		'icon-symbolic',
+		'app-icon-symbolic',
 		command: [ 
 			scour,
 			'../branding/' + meson.project_name() + '-symbolic.svg',
