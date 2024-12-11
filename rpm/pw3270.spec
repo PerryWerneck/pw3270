@@ -27,7 +27,7 @@
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
 Name:			pw3270
-Version:		5.5.0
+Version: 5.5.0
 Release:		0
 Summary:		IBM 3270 Terminal emulator for GTK
 License:		LGPL-3.0-only
@@ -56,7 +56,7 @@ Recommends:		libv3270-config
 
 BuildRequires:	glib2-devel
 BuildRequires:	gtk3-devel
-BuildRequires:	libv3270-devel >= 5.4
+BuildRequires:	libv3270-devel >= 5.5.0
 
 %endif
 
@@ -66,7 +66,7 @@ BuildRequires:	libv3270-devel >= 5.4
 
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(gtk+-3.0)
-BuildRequires:	pkgconfig(libv3270) >= 5.4
+BuildRequires:	pkgconfig(libv3270) >= 5.5.0
 
 %endif
 
@@ -78,7 +78,7 @@ BuildRequires:	appstream-glib
 BuildRequires:	update-desktop-files
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(gtk+-3.0)
-BuildRequires:	pkgconfig(libv3270) >= 5.4
+BuildRequires:	pkgconfig(libv3270) >= 5.5.0
 
 %glib2_gsettings_schema_requires
 
@@ -180,7 +180,6 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainf
 # Icons
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
 %{_datadir}/icons/hicolor/symbolic/apps/*.svg
-
 
 %files -n %{name}-lang -f langfiles
 

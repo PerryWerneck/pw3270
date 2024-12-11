@@ -2,7 +2,7 @@ Source: pw3270
 Section: unknown
 Priority: optional
 Maintainer: Perry Werneck <perry.werneck@gmail.com>
-Build-Depends: debhelper (>= 7), libv3270-dev, meson, desktop-file-utils
+Build-Depends: debhelper (>= 7), meson, libv3270-dev, desktop-file-utils, scour
 
 Package: pw3270
 Architecture: any

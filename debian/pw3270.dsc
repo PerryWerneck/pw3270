@@ -4,7 +4,7 @@ Version: 5.5.0
 Binary: pw3270
 Maintainer: Perry Werneck <perry.werneck@gmail.com>
 Architecture: any
-Build-Depends: debhelper (>= 7), libv3270-dev, meson, desktop-file-utils
+Build-Depends: debhelper (>= 7), meson, libv3270-dev, desktop-file-utils, scour
 Standards-Version: 3.9.1.0
 DEBTRANSFORM-RELEASE: 1
 Files: 
