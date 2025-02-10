@@ -1,4 +1,20 @@
 -------------------------------------------------------------------
+Thu Dec 12 19:22:03 UTC 2024 - perry.werneck@gmail.com
+
+- Update to version 5.5.0+git20241211:
+  * Publishing updated version 5.5.0
+  * Installing icons.
+  * Fixing configuration.
+  * Adding about dialog icon.
+  * Installing 'ui' files.
+  * Updating branding.
+  * Packaging branding.
+  * Updating translation name.
+  * Migrating to meson build system.
+  * Replacing Paul Mattes e-mail as requested.
+  * Updating package control files.
+
+-------------------------------------------------------------------
 Sun Aug 18 16:27:20 UTC 2024 - perry.werneck@gmail.com
 
 - Update to version 5.5+git20240817:
