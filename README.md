@@ -118,7 +118,7 @@ Alternative windows installers for stable and unstable versions are already avai
 5. Create app bundle
 
 	```shell
-	$ cd mac
+	./mac/bundle
 	````
 	
 ### Using jhbuild
