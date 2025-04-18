@@ -1,4 +1,4 @@
 <servicedata>
 <service name="tar_scm">
                 <param name="url">https://github.com/PerryWerneck/pw3270.git</param>
-              <param name="changesrevision">5cc5a3fd58e23e0d65fd0d82be4f39824bc16016</param></service></servicedata>
+              <param name="changesrevision">b43d0530c2482160fa7cf7358c0af2e5bf209c0d</param></service></servicedata>
