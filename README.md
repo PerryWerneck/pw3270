@@ -96,21 +96,29 @@ Alternative windows installers for stable and unstable versions are already avai
 2. Install additional dependencies
 
 	```shell
-	$ brew install adwaita-icon-theme imagemagick
+	$ brew install adwaita-icon-theme imagemagick scour
 	```
 
-3. Configure and build
+3. Get pw3270 sources from git
 
 	```shell
-	$ ./autogen.sh
-	$ make all
+	git clone https://github.com/PerryWerneck/pw3270.git ./pw3270
+	cd pw3270
+	```
+
+4. Configure and build
+
+	```shell
+	meson setup --prefix=$(brew --prefix)/Cellar/pw3270/$(grep 'version:' meson.build | cut -d: -f2 | cut -d\' -f2) --reconfigure --wipe .build
+	meson compile -C .build
+	meson install -C .build
+	brew link pw3270
 	````
 
-4. Create app bundle
+5. Create app bundle
 
 	```shell
 	$ cd mac
-	$ ./bundle
 	````
 	
 ### Using jhbuild
