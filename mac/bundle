@@ -40,7 +40,7 @@ mkdir -p ${APPDIR}/Contents/Resources
 install_libraries() {
 
     # First copy the required libraries
-    for path in $(otool -L ${1} | grep -v "/usr/lib/" | grep -v "^${1}" | grep -v "/System" | cut -d\( -f1)
+    for path in $(otool -L ${1} | tail -n +2 | grep -v "/usr/lib/" | grep -v "/System" | cut -d\( -f1)
     do
         dpath="${APPDIR}/Contents/MacOS/lib/$(basename ${path})"
         
@@ -66,28 +66,28 @@ install_libraries() {
         for libname in $(find ${APPDIR}/Contents/MacOS/lib -name "*.dylib")
         do
             echo "Checking ${libname}"
-            for path in $(otool -L ${libname} | grep -v "${libname}" | grep -v "@executable_path/" | grep -v "/System/" | grep -v "/usr/lib/" | cut -d\( -f1)
+            for path in $(otool -L ${libname} | tail -n +2 | grep -v "@executable_path/" | grep -v "/System/" | grep -v "/usr/lib/" | cut -d\( -f1)
             do
                 dpath="${APPDIR}/Contents/MacOS/lib/$(basename ${path})"
-                if [ -e "${dpath}" ]; then
-                    continue
-                fi
 
-                again=1
-                echo "Copying ${path} to ${dpath}"
-                cp "${path}" "${dpath}"
-                if [ "$?" != "0" ]; then
-                    echo "Error copying ${path}"
-                    exit -1
+                if [ ! -e "${dpath}" ]; then
+                    again=1
+                    echo "Copying ${path} to ${dpath}"
+                    cp "${path}" "${dpath}"
+                    if [ "$?" != "0" ]; then
+                        echo "Error copying ${path}"
+                        exit -1
+                    fi
                 fi
 
                 install_name_tool \
                     -change \
                         ${path} \
                         @executable_path/lib/$(basename ${path}) \
-                        ${1}
+                        ${libname}
 
             done
+
         done
     done
 
