@@ -133,7 +133,7 @@ install_schemas() {
     done
 
     glib-compile-schemas \
-        --targetdir="${APPDIR}/Contents/MacOS/share/glib-2.0/schemas" \
+        --targetdir="${APPDIR}/Contents/MacOS" \
         "${APPDIR}/Contents/MacOS/share/glib-2.0/schemas"
 
     if [ "$?" != "0" ]; then
