@@ -97,14 +97,28 @@ install_schemas() {
 
     mkdir -p ${APPDIR}/Contents/MacOS/share/glib-2.0/schemas
 
-    schemas="
-    org.gtk.Settings.FileChooser.gschema.xml
-    gschema.dtd
-    "
+    gtk_schemas="org.gtk.Settings.FileChooser.gschema.xml"
+    glib_schemas="gschema.dtd"
 
-    for schema in ${schemas}
+    for schema in ${gtk_schemas}
     do
-        cp -v "/usr/local/share/glib-2.0/schemas/${schema}" "${APPDIR}/Contents/MacOS/share/glib-2.0/schemas"
+        filepath=$(pkg-config --variable=prefix gtk+-3.0)/share/glib-2.0/schemas/${schema}
+        echo ${filepath}
+        cp -v \
+            ${filepath} \
+            ${APPDIR}/Contents/MacOS/share/glib-2.0/schemas
+        if [ "$?" != "0" ]; then
+            exit -1
+        fi
+    done
+
+    for schema in ${glib_schemas}
+    do
+        filepath=$(pkg-config --variable=prefix glib-2.0)/share/glib-2.0/schemas/${schema}
+        echo ${filepath}
+        cp -v \
+            ${filepath} \
+            ${APPDIR}/Contents/MacOS/share/glib-2.0/schemas
         if [ "$?" != "0" ]; then
             exit -1
         fi
