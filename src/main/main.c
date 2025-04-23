@@ -29,6 +29,10 @@
 #include <locale.h>
 #include <stdlib.h>
 
+#ifdef __APPLE__
+#include <libproc.h>
+#endif // __APPLE__
+
 #ifdef G_OS_UNIX
 #include <glib-unix.h>
 #endif // G_OS_UNIX
@@ -61,7 +65,7 @@ int main (int argc, char **argv) {
 	setlocale( LC_ALL, "" );
 #endif
 
-#ifdef _WIN32
+#if defined(_WIN32)
 	{
 		g_autofree gchar * pkgdir = g_win32_get_package_installation_directory_of_module(NULL);
 		{
@@ -77,7 +81,20 @@ int main (int argc, char **argv) {
 
 		}
 	}
-#endif // _WIN32
+#elif defined(__APPLE__)
+	{
+		char pathbuf[PROC_PIDPATHINFO_MAXSIZE];
+		proc_pidpath(getpid(), pathbuf, sizeof(pathbuf));
+		g_autofree gchar * pkgdir = g_path_get_dirname(pathbuf);
+
+#ifdef DEBUG
+		debug("Process %s running on pid %u\n",pathbuf,(unsigned int) getpid());
+#else
+		g_chdir(pkgdir);
+#endif
+
+	}
+#endif 
 
 	bind_textdomain_codeset(G_STRINGIFY(PRODUCT_NAME), "UTF-8");
 	textdomain(G_STRINGIFY(PRODUCT_NAME));
