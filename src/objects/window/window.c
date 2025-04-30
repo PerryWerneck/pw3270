@@ -133,41 +133,36 @@ static void constructed(GObject *object) {
 
 static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
-	static const char * icon_search_paths[] = {
-		"icons",
-#ifdef _WIN32
-		"share/icons",
-#endif // _WIN32
-		"share/" G_STRINGIFY(PRODUCT_NAME) "/icons"
-	};
-
-	size_t ix;
-	for(ix = 0; ix < G_N_ELEMENTS(icon_search_paths); ix++) {
-#if defined(DEBUG)
-		g_autofree gchar * path = g_build_filename(g_get_current_dir(),icon_search_paths[ix],NULL);
-#elif defined(_WIN32)
+#if defined(_WIN32)
+	{
+		// Set win32 icon path
 		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
-		g_autofree gchar * path = g_build_filename(appdir,icon_search_paths[ix],NULL);
-#else
-		lib3270_autoptr(char) path = lib3270_build_data_filename(icon_search_paths[ix],NULL);
+		g_autofree gchar * path = g_build_filename(appdir,"share/icons",NULL);
+		gtk_icon_theme_append_search_path(
+			gtk_icon_theme_get_default(),
+			path
+		);
+	}
+#elif defined(__APPLE__) || defined(G_OS_UNIX)
+	{
+		// Set apple/linux icon path
+		lib3270_autoptr(char) path = lib3270_build_data_filename("icons",NULL);
+		gtk_icon_theme_append_search_path(
+			gtk_icon_theme_get_default(),
+			path
+		);
+	}
 #endif
 
-		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
-			g_message("Adding '%s' on icon search path",path);
-			gtk_icon_theme_append_search_path(
-				gtk_icon_theme_get_default(),
-				path
-			);
-		} else {
 
-			g_message("Folder '%s' is not valid",path);
-
-		}
-
-	}
-
-#if defined(DEBUG) || defined(_WIN32)
+#if defined(DEBUG)
 	{
+		gtk_icon_theme_append_search_path(
+			gtk_icon_theme_get_default(),
+			"./icons"
+		);
+
+		// Print icon search path
 		gchar **paths = NULL;
 		gint n_paths = 0;
 
