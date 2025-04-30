@@ -26,7 +26,7 @@
 #
 APPNAME="pw3270"
 
-APPDIR=${APPNAME}.app
+APPDIR=${PWD}/${APPNAME}.app
 
 rm -fr ${APPDIR}
 mkdir -p ${APPDIR}
@@ -94,7 +94,7 @@ install_libraries() {
 
 install_schemas() {             
 
-    mkdir -p ${APPDIR}/Contents/MacOS/share/glib-2.0/schemas
+    mkdir -p ${APPDIR}/Resources/share/glib-2.0/schemas
 
     gtk_schemas="org.gtk.Settings.FileChooser.gschema.xml"
     glib_schemas="gschema.dtd"
@@ -105,7 +105,7 @@ install_schemas() {
         echo ${filepath}
         cp -v \
             ${filepath} \
-            ${APPDIR}/Contents/MacOS/share/glib-2.0/schemas
+            ${APPDIR}/Contents/Resources/glib-2.0/schemas
         if [ "$?" != "0" ]; then
             exit -1
         fi
@@ -117,41 +117,81 @@ install_schemas() {
         echo ${filepath}
         cp -v \
             ${filepath} \
-            ${APPDIR}/Contents/MacOS/share/glib-2.0/schemas
-        if [ "$?" != "0" ]; then
-            exit -1
-        fi
-    done
-
-    for schema in .build/*.gschema.xml
-    do
-        cp -v "${schema}" "${APPDIR}/Contents/MacOS/share/glib-2.0/schemas"
+            ${APPDIR}/Contents/Resources/glib-2.0/schemas
         if [ "$?" != "0" ]; then
             exit -1
         fi
     done
 
     glib-compile-schemas \
-        --targetdir="${APPDIR}/Contents/MacOS" \
-        "${APPDIR}/Contents/MacOS/share/glib-2.0/schemas"
+        --targetdir="${APPDIR}/Contents/Resources/glib-2.0/schemas" \
+        "${APPDIR}/Contents/Resources/glib-2.0/schemas"
 
     if [ "$?" != "0" ]; then
         exit -1
     fi
 
-    find ${APPDIR}/Contents/MacOS/share/glib-2.0/schemas -type f
-
 }
 
-cp .build/${APPNAME} ${APPDIR}/Contents/MacOS
+# Reconfigure & build
+rm -fr .build
+meson setup \
+    --prefix=/ \
+    --reconfigure \
+    --wipe \
+    --buildtype=debug \
+	-D debug=true \
+    .build
 if [ "$?" != "0" ]; then
-    echo "Error copying ${APPNAME}"
+    echo "Meson setup has failed"
     exit -1
 fi
 
-cp .build/${APPNAME}.ui.xml ${APPDIR}/Contents/Resources
+meson compile -C .build
 if [ "$?" != "0" ]; then
-    echo "Error copying ${APPNAME}.ui.xml"
+    echo "Meson compile has failed"
+    exit -1
+fi
+
+DESTDIR=${APPDIR}/Contents/MacOS meson install -C .build
+if [ "$?" != "0" ]; then
+    echo "Meson compile has failed"
+    exit -1
+fi
+
+mv ${APPDIR}/Contents/MacOS/bin/* ${APPDIR}/Contents/MacOS
+if [ "$?" != "0" ]; then
+    echo "Error moving bin/* to ${APPDIR}/Contents/MacOS"
+    exit -1
+fi
+
+mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/icons ${APPDIR}/Contents/Resources
+if [ "$?" != "0" ]; then
+    echo "Error moving icons to ${APPDIR}/Contents/Resources"
+    exit -1
+fi
+
+mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/*.svg ${APPDIR}/Contents/Resources/icons
+if [ "$?" != "0" ]; then
+    echo "Error moving icons to ${APPDIR}/Contents/Resources"
+    exit -1
+fi
+
+mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/* ${APPDIR}/Contents/Resources
+if [ "$?" != "0" ]; then
+    echo "Error moving icons to ${APPDIR}/Contents/Resources"
+    exit -1
+fi
+
+mv ${APPDIR}/Contents/MacOS/share/* ${APPDIR}/Contents/Resources
+if [ "$?" != "0" ]; then
+    echo "Error moving icons to ${APPDIR}/Contents/Resources"
+    exit -1
+fi
+
+rmdir ${APPDIR}/Contents/MacOS/bin ${APPDIR}/Contents/MacOS/share ${APPDIR}/Contents/Resources/plugins ${APPDIR}/Contents/Resources/${APPNAME}
+if [ "$?" != "0" ]; then
+    echo "Error remmoving unused paths"
     exit -1
 fi
 
@@ -161,8 +201,7 @@ if [ "$?" != "0" ]; then
     exit -1
 fi
 
-
-install_libraries ${APPDIR}/Contents/MacOS/${APPNAME}
 install_schemas
+install_libraries ${APPDIR}/Contents/MacOS/${APPNAME}
 
 find ${APPDIR}
