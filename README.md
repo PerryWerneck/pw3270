@@ -96,7 +96,7 @@ Alternative windows installers for stable and unstable versions are already avai
 2. Install additional dependencies
 
 	```shell
-	brew install adwaita-icon-theme imagemagick scour
+	brew install adwaita-icon-theme imagemagick scour librsvg
 	```
 
 3. Get pw3270 sources from git

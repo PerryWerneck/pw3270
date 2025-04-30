@@ -20,7 +20,7 @@ jobs:
       - name: Install Pre reqs
         run: |
           brew update
-          brew install xz meson ninja curl gettext openssl pkgconfig gtk+3 adwaita-icon-theme imagemagick scour
+          brew install xz meson ninja curl gettext openssl pkgconfig gtk+3 adwaita-icon-theme imagemagick scour librsvg
           brew upgrade
       - uses: robinraju/release-downloader@v1.7
         with:
