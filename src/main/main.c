@@ -71,11 +71,11 @@ int main (int argc, char **argv) {
 		{
 			g_autofree gchar * appdir = g_build_filename(pkgdir,"locale",NULL);
 			if(g_file_test(appdir,G_FILE_TEST_IS_DIR)) {
-				bindtextdomain( PACKAGE_NAME, appdir );
+				bindtextdomain( G_STRINGIFY(PRODUCT_NAME), appdir );
 			} else {
 				g_autofree gchar * sysdir = g_build_filename(pkgdir,"share","locale",NULL);
 				if(g_file_test(sysdir,G_FILE_TEST_IS_DIR)) {
-					bindtextdomain( PACKAGE_NAME, sysdir );
+					bindtextdomain( G_STRINGIFY(PRODUCT_NAME), sysdir );
 				}
 			}
 
@@ -85,15 +85,20 @@ int main (int argc, char **argv) {
 	{
 		char pathbuf[PROC_PIDPATHINFO_MAXSIZE];
 		proc_pidpath(getpid(), pathbuf, sizeof(pathbuf));
-		g_autofree gchar * pkgdir = g_path_get_dirname(pathbuf);
 
-#ifdef DEBUG
 		debug("Process %s running on pid %u\n",pathbuf,(unsigned int) getpid());
-#else
+		g_autofree gchar * pkgdir = g_path_get_dirname(pathbuf);
 		g_chdir(pkgdir);
-#endif
+
+		lib3270_autoptr(char) localedir = lib3270_build_data_filename("locale",NULL);
+		debug("LocaleDIR(%s)=%s",G_STRINGIFY(PRODUCT_NAME),localedir);
+		bindtextdomain(G_STRINGIFY(PRODUCT_NAME), localedir);
 
 	}
+#elif defined(LOCALEDIR)
+
+	bindtextdomain(G_STRINGIFY(PRODUCT_NAME), LIB3270_STRINGIZE_VALUE_OF(LOCALEDIR));
+
 #endif 
 
 	bind_textdomain_codeset(G_STRINGIFY(PRODUCT_NAME), "UTF-8");

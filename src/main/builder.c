@@ -24,29 +24,11 @@
 
  GtkBuilder * pw3270_application_builder_new(GApplication *application) {
 
-#if !defined(DEBUG)
+	lib3270_autoptr(char) filename = lib3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) ".ui.xml",NULL);
 
-	#if defined(G_OS_WIN32)
-		g_autofree gchar * filename = pw3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) ".ui.xml");
-	#else
-		lib3270_autoptr(char) filename = lib3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) ".ui.xml",NULL);
-	#endif // G_OS_WIN32
-
-#elif defined(G_OS_UNIX)
-
-	static const char * filename = "ui/linux.ui.xml";
-
-#elif defined(G_OS_WIN32)
-
-	static const char * filename = "ui/windows.ui.xml";
-
-
-#else
-
-	#error Cant determine platform based UI definition
-
-#endif // DEBUG
-
+	// TODO: Check if file exists
+	
+	debug("Building from file %s",filename);
 	GtkBuilder * builder = gtk_builder_new_from_file(filename);
 
 	//
