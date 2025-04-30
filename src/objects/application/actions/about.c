@@ -34,6 +34,19 @@
 
 static char * find_logo() {
 
+#ifdef __APPLE__
+
+	// On MacOS, the logo is in the application bundle
+	char * filename = lib3270_build_data_filename("icons",G_STRINGIFY(PRODUCT_NAME) ".svg",NULL);
+	if(filename) {
+		debug("Checking for logo on: %s",filename);
+		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
+			return filename;
+		free(filename);
+	}
+
+#endif
+
 	static const char * names[] = {
 #ifdef _WIN32
 
@@ -43,9 +56,7 @@ static char * find_logo() {
 			G_STRINGIFY(PACKAGE_NAME) "-about.png",
 			G_STRINGIFY(PACKAGE_NAME) "-logo.png",
 			G_STRINGIFY(PACKAGE_NAME) ".png",
-
 #else
-
 			G_STRINGIFY(PRODUCT_NAME) "-about.svg",
 			G_STRINGIFY(PRODUCT_NAME) "-logo.svg",
 			G_STRINGIFY(PRODUCT_NAME) ".svg",
@@ -70,6 +81,7 @@ static char * find_logo() {
 
 		if(filename) {
 
+			debug("Checking for logo on: %s",filename);
 			if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 				return filename;
 			free(filename);

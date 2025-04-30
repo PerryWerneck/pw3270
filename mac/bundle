@@ -133,67 +133,85 @@ install_schemas() {
 
 }
 
-# Reconfigure & build
-rm -fr .build
-meson setup \
-    --prefix=/ \
-    --reconfigure \
-    --wipe \
-    --buildtype=debug \
-	-D debug=true \
-    .build
-if [ "$?" != "0" ]; then
-    echo "Meson setup has failed"
-    exit -1
-fi
+install_locale() {
+    base_libraries="lib3270 libv3270 glib-2.0 gtk+-3.0"
+    for library in ${base_libraries}
+    do
+        cp -R -v \
+            $(pkg-config --variable=prefix ${library})/share/locale/* \
+            ${APPDIR}/Contents/Resources/locale
+        if [ "$?" != "0" ]; then
+            echo "Error copying locale for ${library}"
+            exit -1
+        fi
+    done
+}
 
-meson compile -C .build
-if [ "$?" != "0" ]; then
-    echo "Meson compile has failed"
-    exit -1
-fi
+build_package() {
 
-DESTDIR=${APPDIR}/Contents/MacOS meson install -C .build
-if [ "$?" != "0" ]; then
-    echo "Meson compile has failed"
-    exit -1
-fi
+    # Reconfigure & build
+    rm -fr .build
+    meson setup \
+        --prefix=/ \
+        --reconfigure \
+        --wipe \
+        --buildtype=debug \
+        -D debug=true \
+        .build
+    if [ "$?" != "0" ]; then
+        echo "Meson setup has failed"
+        exit -1
+    fi
 
-mv ${APPDIR}/Contents/MacOS/bin/* ${APPDIR}/Contents/MacOS
-if [ "$?" != "0" ]; then
-    echo "Error moving bin/* to ${APPDIR}/Contents/MacOS"
-    exit -1
-fi
+    meson compile -C .build
+    if [ "$?" != "0" ]; then
+        echo "Meson compile has failed"
+        exit -1
+    fi
 
-mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/icons ${APPDIR}/Contents/Resources
-if [ "$?" != "0" ]; then
-    echo "Error moving icons to ${APPDIR}/Contents/Resources"
-    exit -1
-fi
+    DESTDIR=${APPDIR}/Contents/MacOS meson install -C .build
+    if [ "$?" != "0" ]; then
+        echo "Meson compile has failed"
+        exit -1
+    fi
 
-mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/*.svg ${APPDIR}/Contents/Resources/icons
-if [ "$?" != "0" ]; then
-    echo "Error moving icons to ${APPDIR}/Contents/Resources"
-    exit -1
-fi
+    mv ${APPDIR}/Contents/MacOS/bin/* ${APPDIR}/Contents/MacOS
+    if [ "$?" != "0" ]; then
+        echo "Error moving bin/* to ${APPDIR}/Contents/MacOS"
+        exit -1
+    fi
 
-mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/* ${APPDIR}/Contents/Resources
-if [ "$?" != "0" ]; then
-    echo "Error moving icons to ${APPDIR}/Contents/Resources"
-    exit -1
-fi
+    mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/icons ${APPDIR}/Contents/Resources
+    if [ "$?" != "0" ]; then
+        echo "Error moving icons to ${APPDIR}/Contents/Resources"
+        exit -1
+    fi
 
-mv ${APPDIR}/Contents/MacOS/share/* ${APPDIR}/Contents/Resources
-if [ "$?" != "0" ]; then
-    echo "Error moving icons to ${APPDIR}/Contents/Resources"
-    exit -1
-fi
+    mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/*.svg ${APPDIR}/Contents/Resources/icons
+    if [ "$?" != "0" ]; then
+        echo "Error moving icons to ${APPDIR}/Contents/Resources"
+        exit -1
+    fi
 
-rmdir ${APPDIR}/Contents/MacOS/bin ${APPDIR}/Contents/MacOS/share ${APPDIR}/Contents/Resources/plugins ${APPDIR}/Contents/Resources/${APPNAME}
-if [ "$?" != "0" ]; then
-    echo "Error remmoving unused paths"
-    exit -1
-fi
+    mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/* ${APPDIR}/Contents/Resources
+    if [ "$?" != "0" ]; then
+        echo "Error moving icons to ${APPDIR}/Contents/Resources"
+        exit -1
+    fi
+
+    mv ${APPDIR}/Contents/MacOS/share/* ${APPDIR}/Contents/Resources
+    if [ "$?" != "0" ]; then
+        echo "Error moving icons to ${APPDIR}/Contents/Resources"
+        exit -1
+    fi
+
+    rmdir ${APPDIR}/Contents/MacOS/bin ${APPDIR}/Contents/MacOS/share ${APPDIR}/Contents/Resources/plugins ${APPDIR}/Contents/Resources/${APPNAME}
+    if [ "$?" != "0" ]; then
+        echo "Error remmoving unused paths"
+        exit -1
+    fi
+
+}
 
 cp -v mac/info.plist ${APPDIR}/Contents
 if [ "$?" != "0" ]; then
@@ -201,7 +219,9 @@ if [ "$?" != "0" ]; then
     exit -1
 fi
 
-install_schemas
+build_package
 install_libraries ${APPDIR}/Contents/MacOS/${APPNAME}
+install_locale
+install_schemas
 
 find ${APPDIR}
