@@ -194,31 +194,19 @@ build_package() {
         exit -1
     fi
 
-    mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/icons ${APPDIR}/Contents/Resources
-    if [ "$?" != "0" ]; then
-        echo "Error moving icons to ${APPDIR}/Contents/Resources"
-        exit -1
-    fi
-
-    mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/*.svg ${APPDIR}/Contents/Resources/icons
-    if [ "$?" != "0" ]; then
-        echo "Error moving icons to ${APPDIR}/Contents/Resources"
-        exit -1
-    fi
-
-    mv ${APPDIR}/Contents/MacOS/share/${APPNAME}/* ${APPDIR}/Contents/Resources
-    if [ "$?" != "0" ]; then
-        echo "Error moving icons to ${APPDIR}/Contents/Resources"
-        exit -1
-    fi
-
     mv ${APPDIR}/Contents/MacOS/share/* ${APPDIR}/Contents/Resources
     if [ "$?" != "0" ]; then
-        echo "Error moving icons to ${APPDIR}/Contents/Resources"
+        echo "Error moving shared folders to ${APPDIR}/Contents/Resources"
         exit -1
     fi
 
-    rmdir ${APPDIR}/Contents/MacOS/bin ${APPDIR}/Contents/MacOS/share ${APPDIR}/Contents/Resources/plugins ${APPDIR}/Contents/Resources/${APPNAME}
+    mv ${APPDIR}/Contents/Resources/${APPNAME}/*.xml ${APPDIR}/Contents/Resources
+    if [ "$?" != "0" ]; then
+        echo "Error moving xml files to ${APPDIR}/Contents/Resources"
+        exit -1
+    fi
+
+    rmdir ${APPDIR}/Contents/MacOS/bin ${APPDIR}/Contents/MacOS/share ${APPDIR}/Contents/Resources/plugins
     if [ "$?" != "0" ]; then
         echo "Error remmoving unused paths"
         exit -1
@@ -226,15 +214,47 @@ build_package() {
 
 }
 
+install_icon() {
+    echo ${1}
+ 
+    mkdir -p "${APPDIR}/Contents/Resources/icons"
+
+    icon_sizes=("16" "32" "64" "128" "256" "512" "1024")
+    iconname=$(basename ${1} | cut -d. -f1)
+    iconset="./iconsets/${iconname}.iconset"
+
+    for ((i=1; i < ${#icon_sizes[*]}; i++))
+    do
+        mkdir -p ${iconset}
+
+        size=${icon_sizes[$((i - 1))]}
+        magick -density "${size}" -background transparent "${1}" -resize ${size} "${iconset}/icon_${size}x${size}.png"
+        if [ "$?" != "0" ]; then
+            echo "Error converting ${1} to ${size}x${size}"
+            exit -1
+        fi
+    done
+    iconutil -c icns -o "${2}" "${iconset}"
+    if [ "$?" != "0" ]; then
+        echo "Error converting ${1} to icns"
+        exit -1
+    fi
+
+    rm -fr ${iconset}
+
+}
+
+build_package
+install_libraries ${APPDIR}/Contents/MacOS/${APPNAME}
+install_locale
+install_schemas
+
 cp -v mac/info.plist ${APPDIR}/Contents
 if [ "$?" != "0" ]; then
     echo "Error copying info.plist"
     exit -1
 fi
 
-build_package
-install_libraries ${APPDIR}/Contents/MacOS/${APPNAME}
-install_locale
-install_schemas
+install_icon "./branding/${APPNAME}.svg" "${APPDIR}/Contents/Resources/${APPNAME}.icns"
 
 find ${APPDIR}

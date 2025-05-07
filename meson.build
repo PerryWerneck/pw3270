@@ -190,6 +190,7 @@ app_src = [
 ]
 
 if host_machine.system() == 'windows'
+  app_conf.set('HAVE_SVG','1')
   app_src += [
 	'src/main/windows/tools.c',
 	'src/objects/os/windows/open.c',
@@ -198,6 +199,7 @@ if host_machine.system() == 'windows'
 endif
 
 if host_machine.system() == 'linux'
+  app_conf.set('HAVE_SVG','1')
   app_src += [
 	'src/main/linux/tools.c',
 	'src/objects/os/linux/open.c',
@@ -287,19 +289,6 @@ configure_file(
 	configuration : app_conf
 )
 
-custom_target(
-	'about-image',
-	command: [ 
-		scour,
-		'../branding/' + meson.project_name() + '.svg',
-		lib3270.get_variable('product_name') + '.svg',
-	],
-	output: lib3270.get_variable('product_name') + '.svg',
-	install: true,
-	install_tag: 'runtime',
-	install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
-)
-
 icons = [
 	'connect.svg',          
 	'disconnect.svg',           
@@ -317,20 +306,38 @@ icons = [
 	'quit-symbolic.svg',
 ]
 
-foreach icon : icons
+# The icon conversion for mac is done by the bundle script.
+if host_machine.system() != 'darwin'
+
 	custom_target(
-		icon,
+		'about-image',
 		command: [ 
 			scour,
-			'../icons/' + icon,
-			icon,
+			'../branding/' + meson.project_name() + '.svg',
+			lib3270.get_variable('product_name') + '.svg',
 		],
-		output: icon,
+		output: lib3270.get_variable('product_name') + '.svg',
 		install: true,
 		install_tag: 'runtime',
-		install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+		install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
 	)
-endforeach
+
+	foreach icon : icons
+		custom_target(
+			icon,
+			command: [ 
+				scour,
+				'../icons/' + icon,
+				icon,
+			],
+			output: icon,
+			install: true,
+			install_tag: 'runtime',
+			install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+		)
+	endforeach
+
+endif
 
 if host_machine.system() == 'linux'
 
