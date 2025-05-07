@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
-
-#!/bin/bash
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #
-# Copyright (C) 2023 Perry Werneck <perry.werneck@gmail.com>
+# Copyright (C) 2025 Perry Werneck <perry.werneck@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published
@@ -23,6 +21,7 @@
 # References:
 #
 #   https://stackoverflow.com/questions/1596945/building-osx-app-bundle
+#   http://hints.macworld.com/article.php?story=20020311215452999
 #
 APPNAME="pw3270"
 
@@ -263,3 +262,41 @@ fi
 install_icon "./branding/${APPNAME}.svg" "${APPDIR}/Contents/Resources/${APPNAME}.icns"
 
 find ${APPDIR}
+
+# create temporary disk image and format, ejecting when done
+SIZE=$(du -sk ${APPDIR} | cut -f1)
+SIZE=$((${SIZE}/1000+1))
+
+# create temporary disk image and format, ejecting when done
+DMG="${APPNAME}-temp.dmg"
+hdiutil create "${DMG}" -megabytes ${SIZE} -ov -type UDIF -fs HFS+ -volname "${APPNAME}"
+if [ ! "$?" == "0" ]; then
+        exit -1
+fi
+
+hdiutil attach "${DMG}"
+if [ ! "$?" == "0" ]; then
+        hdiutil detach "/Volumes/${APPNAME}"
+        exit -1
+fi
+
+cp -Rv "${APPDIR}" "/Volumes/${APPNAME}"
+if [ ! "$?" == "0" ]; then
+        hdiutil detach "/Volumes/${APPNAME}"
+        exit -1
+fi
+
+hdiutil detach "/Volumes/${APPNAME}"
+
+# convert to compressed image, delete temp image
+INSTALL_IMAGE="${APPNAME}-$(grep "^#define PACKAGE_VERSION " .build/config.h | cut -d\" -f2)-unstable.dmg"
+
+rm -f "${INSTALL_IMAGE}"
+hdiutil convert "${DMG}" -format UDZO -o "${INSTALL_IMAGE}"
+if [ ! "$?" == "0" ]; then
+        exit -1
+fi
+
+rm -f "$DMG"
+
+echo "Build of ${INSTALL_IMAGE} is complete"
