@@ -56,20 +56,6 @@ install_libraries() {
                 ${1}
     done
 
-    # Copy gdk pixbuf loaders
-    GDK_PIXBUF_SRC=$(pkg-config --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0)
-    GDK_PIXBUF_DIR=$(echo ${GDK_PIXBUF_SRC} | sed -e "s@$(pkg-config --variable=libdir gdk-pixbuf-2.0)@@g")
-
-    mkdir -p "${APPDIR}/Contents/MacOS/lib/${GDK_PIXBUF_DIR}/loaders"
-    for loader in $(find $(pkg-config --variable=gdk_pixbuf_binarydir gdk-pixbuf-2.0)/loaders -name "*.so")
-    do
-        cp -v "${loader}" "${APPDIR}/Contents/MacOS/lib/${GDK_PIXBUF_DIR}/loaders"
-        if [ "$?" != "0" ]; then
-            echo "Error copying ${loader}"
-            exit -1
-        fi
-    done
-
     # Resolve library dependencies
     again=1
     while [ "${again}" == "1" ]
@@ -214,6 +200,24 @@ build_package() {
 
 }
 
+install_loaders() {
+
+    gdk-pixbuf-query-loaders | sed -e "s@$(brew --cellar)@./lib@g" > ${APPDIR}/Contents/Resources/gdk-pixbuf.loaders
+
+    for from in $(gdk-pixbuf-query-loaders | grep $(brew --cellar) | grep -v "^#" | cut -d\" -f2)
+    do
+        to=$(echo ${from} | sed -e "s@$(brew --cellar)@${APPDIR}/Contents/MacOS/lib@g")
+        mkdir -p $(dirname ${to})
+        cp -v "${from}" "${to}"
+        if [ "$?" != "0" ]; then
+            echo "Error installing ${to}"
+            exit -1
+        fi
+            
+    done
+
+}
+
 install_icon() {
     echo ${1}
  
@@ -245,6 +249,7 @@ install_icon() {
 }
 
 build_package
+install_loaders ${APPDIR}/Contents/MacOS/lib
 install_libraries ${APPDIR}/Contents/MacOS/${APPNAME}
 install_locale
 install_schemas
