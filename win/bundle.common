@@ -74,17 +74,17 @@ if [ -z ${PKG_CONFIG} ]; then
 	PKG_CONFIG=${MINGW_PREFX}/bin/pkg-config
 fi
 
-PACKAGE_NAME=$(grep AC_INIT configure.ac | cut -d[ -f2 | cut -d] -f1)
-if [ -z ${PACKAGE_NAME} ]; then
-	echo "Cant determine package name"
-	exit -1
-fi
+#PACKAGE_NAME=$(meson introspect --projectinfo .build | jq -r '.descriptive_name')
+#if [ -z ${PACKAGE_NAME} ]; then
+#	echo "Cant determine package name"
+#	exit -1
+#fi
 
-PACKAGE_VERSION=$(grep AC_INIT configure.ac | cut -d[ -f3 | cut -d] -f1)
-if [ -z ${PACKAGE_VERSION} ]; then
-	echo "Cant determine package name"
-	exit -1
-fi
+#PACKAGE_VERSION=$(meson introspect --projectinfo .build | jq -r '.version')
+#if [ -z ${PACKAGE_VERSION} ]; then
+#	echo "Cant determine package name"
+#	exit -1
+#fi
 
 mkdir -p .bin/bundle
 if [ "$?" != "0" ]; then
@@ -373,18 +373,18 @@ install_runtime() {
 build_package() {
 
 	# Build
-	make -C "${srcdir}" all
+	meson compile -C .build
 	if [ "$?" != "0" ]; then
 		echo "Build failed"
 		exit -1
 	fi
 
-	make -C "${srcdir}" "DESTDIR=${buildroot}" install
+	DESTDIR="${buildroot}" meson install -C .build
 	if [ "$?" != "0" ]; then
 		echo "Install failed"
 		exit -1
 	fi
-
+	
 }
 
 make_packages() {

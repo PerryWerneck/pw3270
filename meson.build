@@ -257,7 +257,7 @@ if host_machine.system() == 'windows'
       input : 'src/main/windows/resources.rc.in',
       output : 'resources.rc',
       configuration : app_conf
-    )
+    ),
   )
 
   executable(
