@@ -231,7 +231,9 @@ install_icon() {
         mkdir -p ${iconset}
 
         size=${icon_sizes[$((i - 1))]}
-        magick -density "${size}" -background transparent "${1}" -resize ${size} "${iconset}/icon_${size}x${size}.png"
+        #magick -density "${size}" -background transparent "${1}" -resize ${size} "${iconset}/icon_${size}x${size}.png"
+        rsvg-convert ${1} --width ${size} --format png --output "${iconset}/icon_${size}x${size}.png"
+
         if [ "$?" != "0" ]; then
             echo "Error converting ${1} to ${size}x${size}"
             exit -1
@@ -247,21 +249,32 @@ install_icon() {
 
 }
 
+install_icons() {
+
+    for icon in icons/*.svg
+    do
+        install_icon ${icon} "${APPDIR}/Contents/Resources/icons/$(basename ${icon} .svg).icns"
+    done
+
+    install_icon "./branding/${APPNAME}.svg" "${APPDIR}/Contents/Resources/${APPNAME}.icns"
+    install_icon "./branding/${APPNAME}-symbolic.svg" "${APPDIR}/Contents/Resources/icons/${APPNAME}-symbolic.icns"
+
+}
+
+
 build_package
 install_loaders ${APPDIR}/Contents/MacOS/lib
 install_libraries ${APPDIR}/Contents/MacOS/${APPNAME}
 install_locale
 install_schemas
+install_icons
 
+# copy info.plist
 cp -v mac/info.plist ${APPDIR}/Contents
 if [ "$?" != "0" ]; then
     echo "Error copying info.plist"
     exit -1
 fi
-
-install_icon "./branding/${APPNAME}.svg" "${APPDIR}/Contents/Resources/${APPNAME}.icns"
-
-find ${APPDIR}
 
 # create temporary disk image and format, ejecting when done
 SIZE=$(du -sk ${APPDIR} | cut -f1)
