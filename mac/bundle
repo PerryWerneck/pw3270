@@ -157,8 +157,6 @@ build_package() {
         --prefix=/ \
         --reconfigure \
         --wipe \
-        --buildtype=debug \
-        -D debug=true \
         .build
     if [ "$?" != "0" ]; then
         echo "Meson setup has failed"
@@ -265,6 +263,24 @@ install_icons() {
 
 }
 
+#until [ -z "$1" ]
+#do
+#    if [ ${1:0:2} = '--' ]; then
+#        tmp=${1:2}
+#        parameter=${tmp%%=*}
+#        parameter=$(echo $parameter | tr "[:lower:]" "[:upper:]")
+#        value=${tmp##*=}
+#
+#        case "$parameter" in
+#        *)
+#            echo "Unexpect argument"
+#            exit -1        
+#        esac
+#    fi
+#
+#    shift
+#
+#done
 
 build_package
 install_loaders ${APPDIR}/Contents/MacOS/lib
