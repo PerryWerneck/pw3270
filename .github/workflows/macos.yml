@@ -20,7 +20,7 @@ jobs:
       - name: Install Pre reqs
         run: |
           brew update
-          brew install xz meson ninja curl gettext openssl pkgconfig gtk+3 adwaita-icon-theme imagemagick scour librsvg
+          brew install xz meson ninja curl gettext openssl pkgconfig gtk+3 adwaita-icon-theme scour librsvg
           brew upgrade
       - uses: robinraju/release-downloader@v1.7
         with:
@@ -42,7 +42,7 @@ jobs:
           export CFLAGS=-I${HOMEBREW_PREFIX}/include
           meson setup --prefix=$(brew --prefix)/pw3270/${{ steps.gettag.outputs.tag }} .build       
           meson compile -C .build
-      - name: package
+      - name: txz
         run: |
           DESTDIR=${PWD}/.bin/package meson install -C .build
           tar --create --verbose --xz --file=macos-pw3270.tar.xz --directory=${PWD}/.bin/package/$(brew --prefix) --verbose .

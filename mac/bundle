@@ -22,6 +22,10 @@
 #
 #   https://stackoverflow.com/questions/1596945/building-osx-app-bundle
 #   http://hints.macworld.com/article.php?story=20020311215452999
+#   https://stackoverflow.com/questions/8680132/creating-nice-dmg-installer-for-mac-os-x
+#   
+# Tools:
+#   https://github.com/create-dmg/create-dmg
 #
 APPNAME="pw3270"
 
