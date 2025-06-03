@@ -307,6 +307,13 @@ make_dmg() {
 
     # https://github.com/create-dmg/create-dmg
 
+    rm -f *.dmg
+    
+    rsvg-convert mac/installer_background.svg --format png --output "installer_background.png"
+    if [ ! "$?" == "0" ]; then
+        exit -1
+    fi
+
     echo create-dmg \
         --volname "${APPNAME}" \
         --eula LICENSE \
@@ -316,6 +323,7 @@ make_dmg() {
         --icon-size 100 \
         --icon "${APPNAME}.app" 200 190 \
         --hide-extension "${APPNAME}.app" \
+        --background installer_background.png \
         --app-drop-link 600 185 \
         "${APPNAME}-$(grep "^#define PACKAGE_VERSION " .build/config.h | head -n 1 | cut -d\" -f2)-unstable.dmg" \
         "${APPDIR}"
