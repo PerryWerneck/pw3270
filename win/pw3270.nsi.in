@@ -22,34 +22,34 @@
 !include "LogicLib.nsh"
 !include "winmessages.nsh"
 
-Name "@PRODUCT_NAME@"
-Caption "@PRODUCT_NAME@ - @PACKAGE_DESCRIPTION@"
-outfile "@PRODUCT_NAME@-@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@-@host_cpu@.exe"
+Name "pw3270"
+Caption "pw3270 - IBM 3270 Terminal emulator for GTK"
+outfile "pw3270-@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@-@host_cpu@.exe"
 
 XPStyle on
 
-installDir "$@PROGRAMFILES@\@PRODUCT_NAME@"
+installDir "$PROGRAMFILES64\pw3270"
 
 #define the installer icon
-!define MUI_ICON "bin\@PRODUCT_NAME@.ico"
-!define MUI_UNICON "bin\@PRODUCT_NAME@.ico"
-icon "bin\@PRODUCT_NAME@.ico"
+!define MUI_ICON "bin\pw3270.ico"
+!define MUI_UNICON "bin\pw3270.ico"
+icon "bin\pw3270.ico"
 
 # Get installation folder from registry if available
-InstallDirRegKey HKLM "Software\@PRODUCT_NAME@" "InstallLocation"
+InstallDirRegKey HKLM "Software\pw3270" "InstallLocation"
 
 RequestExecutionLevel admin
 
 # Properties
-VIProductVersion "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
-VIFileVersion "@WIN32_VERSION@"
+VIProductVersion "@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@"
+VIFileVersion "@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@"
 
 # Reference: https://nsis.sourceforge.io/Reference/VIAddVersionKey
-VIAddVersionKey "ProductVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
-VIAddVersionKey "FileVersion" "@WIN32_VERSION@"
+VIAddVersionKey "ProductVersion" "@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@"
+VIAddVersionKey "FileVersion" "@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@"
 
-VIAddVersionKey "ProductName" "@PRODUCT_NAME@"
-VIAddVersionKey "FileDescription" "@PACKAGE_DESCRIPTION@"
+VIAddVersionKey "ProductName" "pw3270"
+VIAddVersionKey "FileDescription" IBM 3270 Terminal emulator for GTK
 VIAddVersionKey "LegalCopyright" "(C) 2017 Banco do Brasil S/A. All Rights Reserved"
 # VIAddVersionKey "PrivateBuild" ""
 
@@ -57,7 +57,7 @@ VIAddVersionKey "LegalCopyright" "(C) 2017 Banco do Brasil S/A. All Rights Reser
 
 !define MUI_ABORTWARNING
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "share\@PRODUCT_NAME@\LICENSE"
+!insertmacro MUI_PAGE_LICENSE "share\pw3270\LICENSE"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
@@ -74,11 +74,11 @@ VIAddVersionKey "LegalCopyright" "(C) 2017 Banco do Brasil S/A. All Rights Reser
 !include Sections.nsh
 
 # default section
-SubSection "@PRODUCT_NAME@" SecMain
+SubSection "pw3270" SecMain
 
-	Section "@PRODUCT_NAME@" SecCore
+	Section "pw3270" SecCore
 
-		SetRegView @WINARCH@
+		SetRegView 64
 		${DisableX64FSRedirection}
 
 		# Set SMPROGRAMS and DESKTOP path
@@ -88,14 +88,14 @@ SubSection "@PRODUCT_NAME@" SecMain
 		setOutPath "$INSTDIR"
 		file /r "bin"
 		
-		setOutPath "$INSTDIR\share\@PRODUCT_NAME@"
-		file /r "share\@PRODUCT_NAME@\*.png"
-		file /r "share\@PRODUCT_NAME@\*.svg"
-		file /r "share\@PRODUCT_NAME@\*.ui.xml"
-		file /r "share\@PRODUCT_NAME@\*.conf"
+		setOutPath "$INSTDIR\share\pw3270"
+		file /r "share\pw3270\*.png"
+		file /r "share\pw3270\*.svg"
+		file /r "share\pw3270\*.ui.xml"
+		file /r "share\pw3270\*.conf"
 
-		setOutPath "$INSTDIR\share\@PRODUCT_NAME@\remap"
-		file /r "share\@PRODUCT_NAME@\remap\*"
+		setOutPath "$INSTDIR\share\pw3270\remap"
+		file /r "share\pw3270\remap\*"
 
 		setOutPath "$INSTDIR\lib\gdk-pixbuf-2.0"
 		file /r "lib\gdk-pixbuf-2.0\*"
@@ -115,75 +115,75 @@ SubSection "@PRODUCT_NAME@" SecMain
 		setOutPath "$INSTDIR\share\glib-2.0"
 		file /r "share\glib-2.0\*"
 
-		setOutPath "$INSTDIR\share\@PRODUCT_NAME@\icons"
-		file /r "share\@PRODUCT_NAME@\icons\*"
+		setOutPath "$INSTDIR\share\pw3270\icons"
+		file /r "share\pw3270\icons\*"
 		
 		# define uninstaller name
 		SetRegView 32
 
 		writeUninstaller $INSTDIR\uninstall.exe
 
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
-			         "DisplayName" "@PRODUCT_NAME@ - @PACKAGE_DESCRIPTION@"
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
-			         "DisplayIcon" "$INSTDIR\@PRODUCT_NAME@.ico"
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
-			         "DisplayVersion" "@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@"
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\pw3270" \
+			         "DisplayName" "pw3270 - IBM 3270 Terminal emulator for GTK"
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\pw3270" \
+			         "DisplayIcon" "$INSTDIR\pw3270.ico"
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\pw3270" \
+			         "DisplayVersion" "@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@"
 
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\pw3270" \
 			         "UninstallString" "$INSTDIR\uninstall.exe"
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\pw3270" \
 			         "InstallLocation" "$INSTDIR"
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\pw3270" \
 			         "NoModify" "1"
-		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@" \
+		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\pw3270" \
 			         "NoRepair" "1"
 
 		# Default settings
-		SetRegView @WINARCH@
+		SetRegView 64
 
 		# Setup log file
 		# https://docs.microsoft.com/en-us/windows/win32/eventlog/event-sources
-		WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\EventLog\@PRODUCT_NAME@" \
+		WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\EventLog\pw3270" \
 				 "PackageVersion"	"@PACKAGE_VERSION@"
 
 		# Required for IPC Library.
-		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"				"InstallLocation"	"$INSTDIR"
+		WriteRegStr 	HKLM	"Software\pw3270"				"InstallLocation"	"$INSTDIR"
 
 		# Customized options
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoconnect"			0x00000001
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"blankfill"             0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"bold"                  0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"keepselected"          0x00000001
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"marginedpaste"         0x00000001
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"rectselect"            0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"autoconnect"			0x00000001
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"blankfill"             0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"bold"                  0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"keepselected"          0x00000001
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"marginedpaste"         0x00000001
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"rectselect"            0x00000000
 
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"monocase"              0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"cursorblink"           0x00000001
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"showtiming"            0x00000001
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"cursorpos"             0x00000001
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"linewrap"              0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"crosshair"             0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"fullscreen"            0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"autoreconnect"         0x00000001
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"insert"                0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"smartpaste"            0x00000001
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"beep"                  0x00000001
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"fieldattr"             0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"altscreen"             0x00000001
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"keepalive"             0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"monocase"              0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"cursorblink"           0x00000001
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"showtiming"            0x00000001
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"cursorpos"             0x00000001
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"linewrap"              0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"crosshair"             0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"fullscreen"            0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"autoreconnect"         0x00000001
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"insert"                0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"smartpaste"            0x00000001
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"beep"                  0x00000001
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"fieldattr"             0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"altscreen"             0x00000001
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"keepalive"             0x00000000
 
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"dstrace"               0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"screentrace"           0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"eventtrace"            0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"nettrace"              0x00000000
-		WriteRegDWORD	HKLM	"Software\@PRODUCT_NAME@\toggles"		"ssltrace"              0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"dstrace"               0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"screentrace"           0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"eventtrace"            0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"nettrace"              0x00000000
+		WriteRegDWORD	HKLM	"Software\pw3270\toggles"		"ssltrace"              0x00000000
 
-		WriteRegStr 	HKLM	"Software\@PRODUCT_NAME@"				"font-family"			"Lucida Console"
-		WriteRegStr		HKLM	"Software\@PRODUCT_NAME@"				"colors"				"rgb(24,24,24);rgb(79,156,254);rgb(237,74,70);rgb(235,110,183);rgb(131,199,70);rgb(86,216,201);rgb(239,197,65);rgb(222,222,222);rgb(59,59,59);rgb(54,142,171);rgb(250,145,83);rgb(165,128,226);rgb(112,180,51);rgb(65,199,185);rgb(219,179,45);rgb(119,119,119);rgb(131,199,70);rgb(237,74,70);rgb(65,199,185);rgb(250,145,83);rgb(37,37,37);rgb(222,222,222);rgb(222,222,222);rgb(24,24,24);rgb(222,222,222);rgb(79,156,254);rgb(131,199,70);rgb(239,197,65);rgb(239,197,65)"
+		WriteRegStr 	HKLM	"Software\pw3270"				"font-family"			"Lucida Console"
+		WriteRegStr		HKLM	"Software\pw3270"				"colors"				"rgb(24,24,24);rgb(79,156,254);rgb(237,74,70);rgb(235,110,183);rgb(131,199,70);rgb(86,216,201);rgb(239,197,65);rgb(222,222,222);rgb(59,59,59);rgb(54,142,171);rgb(250,145,83);rgb(165,128,226);rgb(112,180,51);rgb(65,199,185);rgb(219,179,45);rgb(119,119,119);rgb(131,199,70);rgb(237,74,70);rgb(65,199,185);rgb(250,145,83);rgb(37,37,37);rgb(222,222,222);rgb(222,222,222);rgb(24,24,24);rgb(222,222,222);rgb(79,156,254);rgb(131,199,70);rgb(239,197,65);rgb(239,197,65)"
 
-		createShortCut "$SMPROGRAMS\@PRODUCT_NAME@.lnk" "$INSTDIR\bin\@PRODUCT_NAME@.exe" "" "$INSTDIR\bin\@PRODUCT_NAME@.ico"
-		createShortCut "$DESKTOP\@PRODUCT_NAME@.lnk" "$INSTDIR\bin\@PRODUCT_NAME@.exe" "" "$INSTDIR\bin\@PRODUCT_NAME@.ico"
+		createShortCut "$SMPROGRAMS\pw3270.lnk" "$INSTDIR\bin\pw3270.exe" "" "$INSTDIR\bin\pw3270.ico"
+		createShortCut "$DESKTOP\pw3270.lnk" "$INSTDIR\bin\pw3270.exe" "" "$INSTDIR\bin\pw3270.ico"
 
 	sectionEnd
 
@@ -200,10 +200,10 @@ SubSection "@PRODUCT_NAME@" SecMain
 		file /r "lib\pkgconfig\*.pc"
 
 		setOutPath $INSTDIR\sdk\msvc
-		file /r "share\@PRODUCT_NAME@\def\*.def"
-		file /r "share\@PRODUCT_NAME@\def\*.mak"
+		file /r "share\pw3270\def\*.def"
+		file /r "share\pw3270\def\*.mak"
 
-		SetRegView @WINARCH@
+		SetRegView 64
 		WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH" "$INSTDIR\sdk"
 		SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
@@ -223,8 +223,8 @@ SubSection "@PRODUCT_NAME@" SecMain
 
 			${DisableX64FSRedirection}
 
-			CreateDirectory "$INSTDIR\lib\@PRODUCT_NAME@-plugins"
-            file "/oname=$INSTDIR\lib\@PRODUCT_NAME@-plugins\ipcserver.dll" "lib\@PRODUCT_NAME@-plugins\ipcserver.dll"
+			CreateDirectory "$INSTDIR\lib\pw3270-plugins"
+            file "/oname=$INSTDIR\lib\pw3270-plugins\ipcserver.dll" "lib\pw3270-plugins\ipcserver.dll"
 	
 		sectionEnd
 
@@ -243,28 +243,28 @@ Section "Uninstall"
 	SetShellVarContext all
 
 	# now delete installed files
-	delete $INSTDIR\@PRODUCT_NAME@.exe
-	delete $SMPROGRAMS\@PRODUCT_NAME@.lnk
-	delete $DESKTOP\@PRODUCT_NAME@.lnk
+	delete $INSTDIR\pw3270.exe
+	delete $SMPROGRAMS\pw3270.lnk
+	delete $DESKTOP\pw3270.lnk
 
 	RMDir /r "$INSTDIR"
 
 	# Remove registry
 	SetRegView 32
-	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PRODUCT_NAME@"
-	DeleteRegKey HKLM "Software\@PRODUCT_NAME@"
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\pw3270"
+	DeleteRegKey HKLM "Software\pw3270"
 	
-	SetRegView @WINARCH@
-	DeleteRegKey HKLM "Software\@PRODUCT_NAME@"
+	SetRegView 64
+	DeleteRegKey HKLM "Software\pw3270"
 	DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PW3270_SDK_PATH"
-	DeleteRegKey HKLM "SYSTEM\CurrentControlSet\Services\EventLog\@PRODUCT_NAME@"
+	DeleteRegKey HKLM "SYSTEM\CurrentControlSet\Services\EventLog\pw3270"
 
 	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
-	DeleteRegKey HKLM "Software\GSettings\apps\@PACKAGE_NAME@\@PRODUCT_NAME@"
+	DeleteRegKey HKLM "Software\GSettings\apps\pw3270\pw3270"
 
 	# Delete System libraries
-	${@NSISREDIR@}
+	${DisableX64FSRedirection}
 
 	delete $SYSDIR\libipc3270.dll
 
@@ -285,8 +285,8 @@ Function .onInit
 
 	#---[ Check if already installed ]--------------------------------------------------------------------
 
-	${If} ${FileExists} "$INSTDIR\@PRODUCT_NAME@.exe"
-		MessageBox MB_OK|MB_ICONEXCLAMATION "@PRODUCT_NAME@ is already installed. Please uninstall it first" /SD IDOK
+	${If} ${FileExists} "$INSTDIR\pw3270.exe"
+		MessageBox MB_OK|MB_ICONEXCLAMATION "pw3270 is already installed. Please uninstall it first" /SD IDOK
 		Abort
 	${EndIf}
 

@@ -99,6 +99,7 @@ lib_deps = [
 # Configuration
 #
 app_conf = configuration_data()
+app_conf.set('host_cpu', host_machine.cpu_family())
 app_conf.set_quoted('PACKAGE_NAME', meson.project_name())
 app_conf.set('PRODUCT_NAME', lib3270.get_variable('product_name'))
 app_conf.set('PRODUCT_ID', lib3270.get_variable('product_id'))
@@ -258,6 +259,14 @@ if host_machine.system() == 'windows'
       output : 'resources.rc',
       configuration : app_conf
     ),
+  )
+
+  configure_file(
+	input : 'win/pw3270.nsi.in',
+	output : 'pw3270.nsi',
+	install: true,
+	install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
+	configuration : app_conf
   )
 
   executable(
