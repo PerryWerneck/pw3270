@@ -49,6 +49,9 @@ jobs:
       - name: dmz
         run: |
           rm -f *.dmg
+          export LDFLAGS=-Wl,-L${HOMEBREW_PREFIX}/lib
+          export CFLAGS=-I
+          find ${HOMEBREW_PREFIX}/include
           ./mac/bundle
       - name: upload
         uses: ncipollo/release-action@v1
