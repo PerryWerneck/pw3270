@@ -46,11 +46,17 @@ jobs:
         run: |
           DESTDIR=${PWD}/.bin/package meson install -C .build
           tar --create --verbose --xz --file=macos-pw3270.tar.xz --directory=${PWD}/.bin/package/$(brew --prefix) --verbose .
+      - name: dmz
+        run: |
+          rm -f *.dmg
+          ./mac/bundle
       - name: upload
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: "macos-pw3270.tar.xz"
+          artifacts: |
+            "macos-pw3270.tar.xz"
+            "*.dmg"
           allowUpdates: true
           draft: false
           makeLatest: true

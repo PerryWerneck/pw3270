@@ -314,7 +314,7 @@ make_dmg() {
         exit -1
     fi
 
-    echo create-dmg \
+    create-dmg \
         --volname "${APPNAME}" \
         --eula LICENSE \
         --volicon "${APPDIR}/Contents/Resources/${APPNAME}.icns" \
