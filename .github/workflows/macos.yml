@@ -32,12 +32,14 @@ jobs:
           repository: "PerryWerneck/libv3270"
           latest: true
           fileName: "macos-libv3270.tar.xz"      
-      - name: build
+      - name: install
         run: |
           tar --extract --verbose --xz --directory=$(brew --cellar) --file=macos-lib3270.tar.xz
           tar --extract --verbose --xz --directory=$(brew --cellar) --file=macos-libv3270.tar.xz
           brew link lib3270
           brew link libv3270
+      - name: build
+        run: |
           export LDFLAGS=-Wl,-L${HOMEBREW_PREFIX}/lib
           export CFLAGS=-I${HOMEBREW_PREFIX}/include
           meson setup --prefix=$(brew --prefix)/pw3270/${{ steps.gettag.outputs.tag }} .build       
@@ -50,7 +52,7 @@ jobs:
         run: |
           rm -f *.dmg
           export LDFLAGS=-Wl,-L${HOMEBREW_PREFIX}/lib
-          export CFLAGS=-I
+          export CFLAGS=-I${HOMEBREW_PREFIX}/include
           find ${HOMEBREW_PREFIX}/include
           ./mac/bundle
       - name: upload
