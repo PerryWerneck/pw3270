@@ -84,8 +84,8 @@ subdir('po')
 #
 # Dependencies
 #
-lib3270 = dependency('lib3270', fallback: [ 'modules/lib3270', 'dynamic' ])
-libv3270 = dependency('libv3270', fallback: [ 'modules/libv3270', 'dynamic' ])
+lib3270 = dependency('lib3270', fallback: [ 'lib3270', 'lib3270_dep' ])
+libv3270 = dependency('libv3270', fallback: [ 'libv3270', 'libv3270_dep' ])
 
 lib_deps = [
   lib3270,

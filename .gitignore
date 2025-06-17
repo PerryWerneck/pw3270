@@ -76,3 +76,4 @@ app-manifest.xml
 libtool
 *.pkg.tar.zst
 *.dmg
+subprojects

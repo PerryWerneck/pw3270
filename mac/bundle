@@ -45,6 +45,12 @@ install_libraries() {
     for path in $(otool -L ${1} | tail -n +2 | grep -v "/usr/lib/" | grep -v "/System" | cut -d\( -f1)
     do
         dpath="${APPDIR}/Contents/MacOS/lib/$(basename ${path})"
+
+        if [ ! -e ${path} ]; then
+            echo "Library ${path} not found, exiting"
+            exit -1
+        
+        fi
         
         cp -v "${path}" "${dpath}"
         if [ "$?" != "0" ]; then
