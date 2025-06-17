@@ -84,10 +84,12 @@ subdir('po')
 #
 # Dependencies
 #
-lib3270 = dependency('lib3270')
+lib3270 = dependency('lib3270', fallback: [ 'modules/lib3270', 'dynamic' ])
+libv3270 = dependency('libv3270', fallback: [ 'modules/libv3270', 'dynamic' ])
+
 lib_deps = [
   lib3270,
-  dependency('libv3270'),
+  libv3270,
   dependency('glib-2.0'),
   dependency('gtk+-3.0'),
   dependency('gmodule-2.0'),
