@@ -58,9 +58,11 @@ static GtkWidget * factory(PW3270Action * action, GtkApplication *application) {
 	    dialog
 	);
 
+#ifndef __APPLE__
 	if(pw3270_application_get_ui_style(G_APPLICATION(application)) != PW3270_UI_STYLE_CLASSICAL) {
 		gtk_container_add(GTK_CONTAINER(dialog),pw3270_header_settings_new());
 	}
+#endif // !__APPLE__
 
 	gtk_widget_show_all(dialog);
 

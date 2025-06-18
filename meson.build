@@ -182,8 +182,6 @@ app_src = [
 	'src/objects/window/actions/connect.c',
 	'src/objects/window/actions/filetransfer.c',
 	'src/objects/window/actions/sessionproperties.c',
-	'src/objects/window/header-settings.c',
-	'src/objects/window/header.c',
 	'src/objects/window/keyfile.c',
 	'src/objects/window/page.c',
 	'src/objects/window/terminal.c',
@@ -195,6 +193,8 @@ if host_machine.system() == 'windows'
   app_conf.set('HAVE_SVG','1')
   app_src += [
 	'src/main/windows/tools.c',
+	'src/objects/window/header-settings.c',
+	'src/objects/window/header.c',
 	'src/objects/os/windows/open.c',
 	'src/objects/os/windows/savedesktopicon.c',
   ]
@@ -204,6 +204,8 @@ if host_machine.system() == 'linux'
   app_conf.set('HAVE_SVG','1')
   app_src += [
 	'src/main/linux/tools.c',
+	'src/objects/window/header-settings.c',
+	'src/objects/window/header.c',
 	'src/objects/os/linux/open.c',
 	'src/objects/os/linux/savedesktopicon.c',
   ]
