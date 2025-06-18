@@ -34,11 +34,8 @@ jobs:
           repository: PerryWerneck/libv3270
           ref: macos
           path: subprojects/libv3270
-      - name: build
+      - name: Create bundle
         run: |
-          export LDFLAGS=-Wl,-L${HOMEBREW_PREFIX}/lib
-          export CFLAGS=-I${HOMEBREW_PREFIX}/include
-          meson setup --prefix=$(brew --prefix)/pw3270/${{ steps.gettag.outputs.tag }} .build       
-          meson compile -C .build
+          ./mac/bundle
               
 
