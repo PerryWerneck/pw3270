@@ -169,6 +169,7 @@ build_package() {
     rm -fr .build
     meson setup \
         --prefix=/ \
+        --buildtype=release \
         --reconfigure \
         --wipe \
         .build
