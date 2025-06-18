@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  macos-build:
+  macos-bundle:
     runs-on: macos-latest
     steps:
       - name: Checkout
