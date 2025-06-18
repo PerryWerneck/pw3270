@@ -112,16 +112,7 @@ Alternative windows installers for stable and unstable versions are already avai
 	brew install adwaita-icon-theme create-dmg scour librsvg
 	```
 
-4. Configure and build
-
-	```shell
-	meson setup --prefix=$(brew --prefix)/Cellar/pw3270/$(grep 'version:' meson.build | cut -d: -f2 | cut -d\' -f2) --reconfigure --wipe .build
-	meson compile -C .build
-	meson install -C .build
-	brew link pw3270
-	````
-
-5. Create app bundle
+3. Create app bundle
 
 	```shell
 	./mac/bundle

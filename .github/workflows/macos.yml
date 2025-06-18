@@ -22,51 +22,23 @@ jobs:
           brew update
           brew install xz meson ninja curl gettext openssl pkgconfig gtk+3 adwaita-icon-theme scour librsvg create-dmg
           brew upgrade
-      - uses: robinraju/release-downloader@v1.7
+      - name: Check out lib3270
+        uses: actions/checkout@v4
         with:
-          repository: "PerryWerneck/lib3270"
-          latest: true
-          fileName: "macos-lib3270.tar.xz"      
-      - uses: robinraju/release-downloader@v1.7
+          repository: PerryWerneck/lib3270
+          ref: macos
+          path: subprojects/lib3270
+      - name: Check out libv3270
+        uses: actions/checkout@v4
         with:
-          repository: "PerryWerneck/libv3270"
-          latest: true
-          fileName: "macos-libv3270.tar.xz"      
-      - name: install
-        run: |
-          tar --extract --verbose --xz --directory=$(brew --cellar) --file=macos-lib3270.tar.xz
-          tar --extract --verbose --xz --directory=$(brew --cellar) --file=macos-libv3270.tar.xz
-          brew link lib3270
-          brew link libv3270
+          repository: PerryWerneck/libv3270
+          ref: macos
+          path: subprojects/libv3270
       - name: build
         run: |
           export LDFLAGS=-Wl,-L${HOMEBREW_PREFIX}/lib
           export CFLAGS=-I${HOMEBREW_PREFIX}/include
           meson setup --prefix=$(brew --prefix)/pw3270/${{ steps.gettag.outputs.tag }} .build       
           meson compile -C .build
-      - name: txz
-        run: |
-          DESTDIR=${PWD}/.bin/package meson install -C .build
-          tar --create --verbose --xz --file=macos-pw3270.tar.xz --directory=${PWD}/.bin/package/$(brew --prefix) --verbose .
-      - name: dmz
-        run: |
-          rm -f *.dmg
-          export LDFLAGS=-Wl,-L${HOMEBREW_PREFIX}/lib
-          export CFLAGS=-I${HOMEBREW_PREFIX}/include
-          find ${HOMEBREW_PREFIX}/include
-          ./mac/bundle
-      - name: upload
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.gettag.outputs.tag }}
-          artifacts: |
-            "macos-pw3270.tar.xz"
-            "*.dmg"
-          allowUpdates: true
-          draft: false
-          makeLatest: true
-          omitBody: true
-          omitPrereleaseDuringUpdate: true
-          replacesArtifacts: true
               
 

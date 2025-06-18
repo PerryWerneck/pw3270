@@ -46,16 +46,24 @@ install_libraries() {
     do
         dpath="${APPDIR}/Contents/MacOS/lib/$(basename ${path})"
 
-        if [ ! -e ${path} ]; then
-            echo "Library ${path} not found, exiting"
-            exit -1
-        
-        fi
-        
-        cp -v "${path}" "${dpath}"
-        if [ "$?" != "0" ]; then
-            echo "Error copying ${path}"
-            exit -1
+        if [ ! -e ${dpath} ]; then
+
+            echo "Copying ${path} to ${dpath}"
+
+            mkdir -p $(dirname ${dpath})
+
+            if [ ! -e ${path} ]; then
+                echo "Library ${path} not found, exiting"
+                exit -1
+            
+            fi
+            
+            cp -v "${path}" "${dpath}"
+            if [ "$?" != "0" ]; then
+                echo "Error copying ${path}"
+                exit -1
+            fi
+ 
         fi
 
         install_name_tool \
@@ -142,7 +150,7 @@ install_schemas() {
 }
 
 install_locale() {
-    base_libraries="lib3270 libv3270 glib-2.0 gtk+-3.0"
+    base_libraries="glib-2.0 gtk+-3.0"
     for library in ${base_libraries}
     do
         cp -R -v \
