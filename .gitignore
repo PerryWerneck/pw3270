@@ -20,6 +20,7 @@
 *.zip
 *.ico
 *.pot
+*.app
 *.[0-9]
 versions
 ChangeLog*
@@ -74,3 +75,5 @@ po
 app-manifest.xml
 libtool
 *.pkg.tar.zst
+*.dmg
+subprojects

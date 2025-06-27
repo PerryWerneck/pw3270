@@ -29,6 +29,10 @@
 #include <locale.h>
 #include <stdlib.h>
 
+#ifdef __APPLE__
+#include <libproc.h>
+#endif // __APPLE__
+
 #ifdef G_OS_UNIX
 #include <glib-unix.h>
 #endif // G_OS_UNIX
@@ -61,23 +65,41 @@ int main (int argc, char **argv) {
 	setlocale( LC_ALL, "" );
 #endif
 
-#ifdef _WIN32
+#if defined(_WIN32)
 	{
 		g_autofree gchar * pkgdir = g_win32_get_package_installation_directory_of_module(NULL);
 		{
 			g_autofree gchar * appdir = g_build_filename(pkgdir,"locale",NULL);
 			if(g_file_test(appdir,G_FILE_TEST_IS_DIR)) {
-				bindtextdomain( PACKAGE_NAME, appdir );
+				bindtextdomain( G_STRINGIFY(PRODUCT_NAME), appdir );
 			} else {
 				g_autofree gchar * sysdir = g_build_filename(pkgdir,"share","locale",NULL);
 				if(g_file_test(sysdir,G_FILE_TEST_IS_DIR)) {
-					bindtextdomain( PACKAGE_NAME, sysdir );
+					bindtextdomain( G_STRINGIFY(PRODUCT_NAME), sysdir );
 				}
 			}
 
 		}
 	}
-#endif // _WIN32
+#elif defined(__APPLE__)
+	{
+		char pathbuf[PROC_PIDPATHINFO_MAXSIZE];
+		proc_pidpath(getpid(), pathbuf, sizeof(pathbuf));
+
+		debug("Process %s running on pid %u\n",pathbuf,(unsigned int) getpid());
+		g_autofree gchar * pkgdir = g_path_get_dirname(pathbuf);
+		g_chdir(pkgdir);
+
+		lib3270_autoptr(char) localedir = lib3270_build_data_filename("locale",NULL);
+		debug("LocaleDIR(%s)=%s",G_STRINGIFY(PRODUCT_NAME),localedir);
+		bindtextdomain(G_STRINGIFY(PRODUCT_NAME), localedir);
+
+	}
+#elif defined(LOCALEDIR)
+
+	bindtextdomain(G_STRINGIFY(PRODUCT_NAME), LIB3270_STRINGIZE_VALUE_OF(LOCALEDIR));
+
+#endif 
 
 	bind_textdomain_codeset(G_STRINGIFY(PRODUCT_NAME), "UTF-8");
 	textdomain(G_STRINGIFY(PRODUCT_NAME));

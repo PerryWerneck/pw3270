@@ -91,26 +91,31 @@ Alternative windows installers for stable and unstable versions are already avai
 
 ### Using homebrew
 
-1. Build and install [libv3270](../../../libv3270)
+1. Get pw3270 sources from git
+
+	```shell
+	git clone https://github.com/PerryWerneck/pw3270.git ./pw3270
+	cd pw3270
+	```
+
+2. Get extra libraries
+
+	```shell
+	mkdir subprojects
+	git clone -b macos https://github.com/PerryWerneck/lib3270.git ./subprojects/lib3270
+	git clone -b macos https://github.com/PerryWerneck/libv3270.git ./subprojects/libv3270
+	```
 
 2. Install additional dependencies
 
 	```shell
-	$ brew install adwaita-icon-theme imagemagick
+	brew install adwaita-icon-theme create-dmg scour librsvg
 	```
 
-3. Configure and build
+3. Create app bundle
 
 	```shell
-	$ ./autogen.sh
-	$ make all
-	````
-
-4. Create app bundle
-
-	```shell
-	$ cd mac
-	$ ./bundle
+	./mac/bundle
 	````
 	
 ### Using jhbuild

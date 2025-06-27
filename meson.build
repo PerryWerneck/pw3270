@@ -84,16 +84,16 @@ subdir('po')
 #
 # Dependencies
 #
-lib3270 = dependency('lib3270')
-lib_deps = [
-  lib3270,
-  dependency('libv3270'),
-  dependency('glib-2.0'),
-  dependency('gtk+-3.0'),
-  dependency('gmodule-2.0'),
-  dependency('gdk-3.0'),
-]
+lib3270 = dependency('lib3270', fallback: [ 'lib3270', 'dynamic_library' ])
 
+lib_deps = [
+	lib3270,
+	dependency('libv3270', fallback: [ 'libv3270', 'static_library' ]),
+	dependency('glib-2.0'),
+	dependency('gtk+-3.0'),
+	dependency('gmodule-2.0'),
+	dependency('gdk-3.0'),
+]
 
 #
 # Configuration
@@ -181,8 +181,6 @@ app_src = [
 	'src/objects/window/actions/connect.c',
 	'src/objects/window/actions/filetransfer.c',
 	'src/objects/window/actions/sessionproperties.c',
-	'src/objects/window/header-settings.c',
-	'src/objects/window/header.c',
 	'src/objects/window/keyfile.c',
 	'src/objects/window/page.c',
 	'src/objects/window/terminal.c',
@@ -191,16 +189,22 @@ app_src = [
 ]
 
 if host_machine.system() == 'windows'
+  app_conf.set('HAVE_SVG','1')
   app_src += [
 	'src/main/windows/tools.c',
+	'src/objects/window/header-settings.c',
+	'src/objects/window/header.c',
 	'src/objects/os/windows/open.c',
 	'src/objects/os/windows/savedesktopicon.c',
   ]
 endif
 
 if host_machine.system() == 'linux'
+  app_conf.set('HAVE_SVG','1')
   app_src += [
 	'src/main/linux/tools.c',
+	'src/objects/window/header-settings.c',
+	'src/objects/window/header.c',
 	'src/objects/os/linux/open.c',
 	'src/objects/os/linux/savedesktopicon.c',
   ]
@@ -296,19 +300,6 @@ configure_file(
 	configuration : app_conf
 )
 
-custom_target(
-	'about-image',
-	command: [ 
-		scour,
-		'../branding/' + meson.project_name() + '.svg',
-		lib3270.get_variable('product_name') + '.svg',
-	],
-	output: lib3270.get_variable('product_name') + '.svg',
-	install: true,
-	install_tag: 'runtime',
-	install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
-)
-
 icons = [
 	'connect.svg',          
 	'disconnect.svg',           
@@ -326,20 +317,38 @@ icons = [
 	'quit-symbolic.svg',
 ]
 
-foreach icon : icons
+# The icon conversion for mac is done by the bundle script.
+if host_machine.system() != 'darwin'
+
 	custom_target(
-		icon,
+		'about-image',
 		command: [ 
 			scour,
-			'../icons/' + icon,
-			icon,
+			'../branding/' + meson.project_name() + '.svg',
+			lib3270.get_variable('product_name') + '.svg',
 		],
-		output: icon,
+		output: lib3270.get_variable('product_name') + '.svg',
 		install: true,
 		install_tag: 'runtime',
-		install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+		install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
 	)
-endforeach
+
+	foreach icon : icons
+		custom_target(
+			icon,
+			command: [ 
+				scour,
+				'../icons/' + icon,
+				icon,
+			],
+			output: icon,
+			install: true,
+			install_tag: 'runtime',
+			install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+		)
+	endforeach
+
+endif
 
 if host_machine.system() == 'linux'
 

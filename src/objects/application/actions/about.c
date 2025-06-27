@@ -34,6 +34,17 @@
 
 static char * find_logo() {
 
+#ifdef __APPLE__
+	char * filename = lib3270_build_data_filename(G_STRINGIFY(PRODUCT_NAME) ".icns",NULL);
+	if(filename) {
+		debug("Checking for logo on: %s",filename);
+		if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
+			return filename;
+		free(filename);
+	}
+#endif
+
+
 	static const char * names[] = {
 #ifdef _WIN32
 
@@ -43,9 +54,7 @@ static char * find_logo() {
 			G_STRINGIFY(PACKAGE_NAME) "-about.png",
 			G_STRINGIFY(PACKAGE_NAME) "-logo.png",
 			G_STRINGIFY(PACKAGE_NAME) ".png",
-
 #else
-
 			G_STRINGIFY(PRODUCT_NAME) "-about.svg",
 			G_STRINGIFY(PRODUCT_NAME) "-logo.svg",
 			G_STRINGIFY(PRODUCT_NAME) ".svg",
@@ -53,12 +62,12 @@ static char * find_logo() {
 			G_STRINGIFY(PRODUCT_NAME) "-logo.png",
 			G_STRINGIFY(PRODUCT_NAME) ".png",
 
-			G_STRINGIFY(PACKAGE_NAME) "-about.svg",
-			G_STRINGIFY(PACKAGE_NAME) "-logo.svg",
-			G_STRINGIFY(PACKAGE_NAME) ".svg",
-			G_STRINGIFY(PACKAGE_NAME) "-about.png",
-			G_STRINGIFY(PACKAGE_NAME) "-logo.png",
-			G_STRINGIFY(PACKAGE_NAME) ".png",
+			PACKAGE_NAME "-about.svg",
+			PACKAGE_NAME "-logo.svg",
+			PACKAGE_NAME ".svg",
+			PACKAGE_NAME "-about.png",
+			PACKAGE_NAME "-logo.png",
+			PACKAGE_NAME ".png",
 #endif // _WIN32
 	};
 
@@ -66,10 +75,11 @@ static char * find_logo() {
 
 	for(ix = 0; ix < G_N_ELEMENTS(names); ix++) {
 
-		char * filename = lib3270_build_data_filename(names[ix],NULL);
+		char * filename = lib3270_build_data_filename("icons",names[ix],NULL);
 
 		if(filename) {
 
+			debug("Checking for logo on: %s",filename);
 			if(g_file_test(filename,G_FILE_TEST_IS_REGULAR))
 				return filename;
 			free(filename);

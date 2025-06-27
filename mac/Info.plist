@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleExecutable</key>
-	<string>launcher.sh</string>
+	<string>pw3270</string>
 	<key>CFBundleName</key>
 	<string>pw3270</string>
 	<key>CFBundleDisplayName</key>
