@@ -1,0 +1,5 @@
+[wrap-git]
+url = https://github.com/PerryWerneck/lib3270.git
+revision = HEAD
+depth = 1
+
