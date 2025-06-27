@@ -61,7 +61,7 @@ BEGIN
 		// Brazilian Portuguese (UTF-8)
 		BLOCK "041604B0"
 		BEGIN
-			VALUE "FileDescription",	"Terminal 3270 para gtk\0"
+			VALUE "FileDescription",	"Emulador de terminal 3270\0"
 			VALUE "FileVersion",		"@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@\0"
 			VALUE "LegalCopyright",		"GNU GPLv3\0"
 			VALUE "InternalName",		"@PRODUCT_NAME@\0"
@@ -73,7 +73,7 @@ BEGIN
 		// Brazilian Portuguese (Multilingual)
 		BLOCK "041604E4"
 		BEGIN
-			VALUE "FileDescription",	"Terminal 3270 para gtk\0"
+			VALUE "FileDescription",	"Emulador de terminal 3270\0"
 			VALUE "FileVersion",		"@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@\0"
 			VALUE "LegalCopyright",		"GNU GPLv3\0"
 			VALUE "InternalName",		"@PRODUCT_NAME@\0"

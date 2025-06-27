@@ -46,7 +46,7 @@ if [ "$?" == "0" ]; then
 	echo "	--help Help options (this screen)"
 	echo "	--zip Build zipfile"
 	
-	if [ -e "${srcdir}/win/${PACKAGE_NAME}.nsi" ]; then
+	if [ -e "${srcdir}/.build/${PACKAGE_NAME}.nsi.in" ]; then
 		echo "	--nsi Build nsi installer"
 	fi
 	echo "	--upload Upload bundle to github"
@@ -74,13 +74,13 @@ if [ -z ${PKG_CONFIG} ]; then
 	PKG_CONFIG=${MINGW_PREFX}/bin/pkg-config
 fi
 
-PACKAGE_NAME=$(grep AC_INIT configure.ac | cut -d[ -f2 | cut -d] -f1)
+PACKAGE_NAME=$(meson introspect --projectinfo .build | jq -r '.descriptive_name')
 if [ -z ${PACKAGE_NAME} ]; then
 	echo "Cant determine package name"
 	exit -1
 fi
 
-PACKAGE_VERSION=$(grep AC_INIT configure.ac | cut -d[ -f3 | cut -d] -f1)
+PACKAGE_VERSION=$(meson introspect --projectinfo .build | jq -r '.version')
 if [ -z ${PACKAGE_VERSION} ]; then
 	echo "Cant determine package name"
 	exit -1
@@ -327,6 +327,7 @@ make_zip() {
 }
 
 make_nsis() {
+
 	makensis \
 		-INPUTCHARSET UTF8 \
 		-DWITHIPC \
@@ -373,33 +374,25 @@ install_runtime() {
 build_package() {
 
 	# Build
-	make -C "${srcdir}" all
+	meson compile -C .build
 	if [ "$?" != "0" ]; then
 		echo "Build failed"
 		exit -1
 	fi
 
-	make -C "${srcdir}" "DESTDIR=${buildroot}" install
+	DESTDIR="${buildroot}" meson install -C .build
 	if [ "$?" != "0" ]; then
 		echo "Install failed"
 		exit -1
 	fi
-
+	
 }
 
 make_packages() {
 
-	echo "----------------------------------"
-	find . -iname *.nsi
-	echo "----------------------------------"
-	find ${srcdir} -iname *.nsi
-	echo "----------------------------------"
-	find ${buildroot} -iname *.nsi
-	echo "----------------------------------"
-	
-	if [ -e "${srcdir}/win/${PACKAGE_NAME}.nsi" ]; then
+	if [ -e "${srcdir}/.build/${PACKAGE_NAME}.nsi" ]; then
 		mkdir -p "${buildroot}${MINGW_PREFIX}/nsi"
-		cp "${srcdir}/win/${PACKAGE_NAME}.nsi" "${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi" 
+		cp "${srcdir}/.build/${PACKAGE_NAME}.nsi" "${buildroot}${MINGW_PREFIX}/${PACKAGE_NAME}.nsi" 
 		if [ "$?" == "0" ]; then
 			echo "Nsis script installed"
 		else 

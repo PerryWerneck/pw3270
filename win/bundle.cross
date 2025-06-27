@@ -80,17 +80,12 @@ fi
 argument "build" > /dev/null
 if [ "$?" == "0" ]; then
 
-	NOCONFIGURE=1 ./autogen.sh
-	if [ "$?" != "0" ]; then
-		echo "Configure failed"
-		exit -1
-	fi
-
-	${MINGW_PACKAGE_PREFIX}-configure
-	if [ "$?" != "0" ]; then
-		echo "Configure failed"
-		exit -1
-	fi
+	meson setup \
+		--reconfigure \
+		--wipe \
+		--cross-file /usr/lib/rpm/macros.d/meson-mingw64-cross-file.txt \
+		-D debug=false \
+		.build
 
 	build_package
 	
