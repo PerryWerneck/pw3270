@@ -98,14 +98,6 @@ Alternative windows installers for stable and unstable versions are already avai
 	cd pw3270
 	```
 
-2. Get extra libraries
-
-	```shell
-	mkdir subprojects
-	git clone -b macos https://github.com/PerryWerneck/lib3270.git ./subprojects/lib3270
-	git clone -b macos https://github.com/PerryWerneck/libv3270.git ./subprojects/libv3270
-	```
-
 2. Install additional dependencies
 
 	```shell
@@ -118,7 +110,7 @@ Alternative windows installers for stable and unstable versions are already avai
 	./mac/bundle
 	````
 	
-### Using jhbuild
+### Using jhbuild [DEPRECATED]
 
 1. Install jhbuild and GTK-OSX
 
