@@ -22,12 +22,12 @@ jobs:
         with:
           repository: "PerryWerneck/lib3270"
           latest: true
-          fileName: "mingw-w64-x86_64-lib3270-5.4-0-x86_64.pkg.tar.zst"      
+          fileName: "mingw-w64-x86_64-lib3270-5.5.0-0-x86_64.pkg.tar.zst"
       - uses: robinraju/release-downloader@v1.7
         with:
           repository: "PerryWerneck/libv3270"
           latest: true
-          fileName: "mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst"      
+          fileName: "mingw-w64-x86_64-libv3270-5.5.0-0-x86_64.pkg.tar.zst"      
       - name: CI-Build
         run: |
           pacman -U --noconfirm *.pkg.tar.zst
