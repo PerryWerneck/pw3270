@@ -88,7 +88,7 @@ lib3270 = dependency('lib3270', fallback: [ 'lib3270', 'dynamic_library' ])
 
 lib_deps = [
 	lib3270,
-	dependency('libv3270', fallback: [ 'libv3270', 'static_library' ]),
+	dependency('libv3270', fallback: [ 'libv3270', 'dynamic_library' ]),
 	dependency('glib-2.0'),
 	dependency('gtk+-3.0'),
 	dependency('gmodule-2.0'),
