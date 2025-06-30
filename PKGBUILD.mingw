@@ -23,7 +23,7 @@ _realname=$(grep AC_INIT "${startdir}/configure.ac" | cut -d[ -f2 | cut -d] -f1)
 pkgname=${MINGW_PACKAGE_PREFIX}-${_realname}
 source=()
 
-pkgver=$(grep AC_INIT "${startdir}/configure.ac" | cut -d[ -f3 | cut -d] -f1)
+pkgver=5.5.0
 pkgrel=0
 pkgdesc="IBM 3270 Terminal emulator for GTK"
 url="https://github.com/PerryWerneck/${_realname}"
@@ -39,25 +39,22 @@ conflicts=($pkgname)
 prepare() {
   rm -fr "$srcdir/$pkgname"
   mkdir -p "$srcdir/$pkgname"
+  cd ${startdir}
+  meson \
+    setup \
+      --prefix=/c/${MINGW_PREFIX} \
+      --reconfigure \
+      --wipe \
+      "$srcdir/$pkgname"
 }
 
 build() {
-  cd "$srcdir/$pkgname"
-  ${startdir}/autogen.sh \
-    --prefix=${MINGW_PREFIX} \
-    --build=${MINGW_CHOST} \
-    --host=${MINGW_CHOST} \
-    --target=${MINGW_CHOST}
- 
-  make all
+  cd ${startdir}  
+  meson compile -C "$srcdir/$pkgname"
 }
 
 package() {
-  cd "$srcdir/$pkgname"
-  make DESTDIR="${pkgdir}" install
-  install \
-    -Dm644 \
-    "${startdir}/LICENSE" \
-    "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE"
+  cd ${startdir} 
+  DESTDIR="${pkgdir}" meson install -C "$srcdir/$pkgname"
 }
 
