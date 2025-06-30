@@ -32,6 +32,7 @@ jobs:
         run: |
           pacman -U --noconfirm *.pkg.tar.zst
           dos2unix PKGBUILD.mingw
+          cat PKGBUILD.mingw
           makepkg BUILDDIR=/tmp/pkg -p PKGBUILD.mingw
 
 
