@@ -1,0 +1,55 @@
+#!/bin/bash
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+#
+# Copyright (C) 2025 Perry Werneck <perry.werneck@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+cd $(dirname $(dirname $0))	
+
+setup_cross() {
+
+	meson setup \
+        --prefix=/ \
+        --buildtype=release \
+        --reconfigure \
+        --wipe \
+		--cross-file /usr/lib/rpm/macros.d/meson-mingw64-cross-file.txt \
+		.build
+
+	if [ $? -ne 0 ]; then
+		echo "Meson setup failed"
+		exit 1
+	fi
+}
+
+export DESTDIR=$(pwd)/.bundle
+
+setup_cross
+
+meson compile -C .build
+if [ "$?" != "0" ]; then
+	echo "Meson compile has failed"
+	exit -1
+fi
+
+rm -fr ${DESTDIR}
+meson install -C .build
+if [ "$?" != "0" ]; then
+	echo "Meson install has failed"
+	exit -1
+fi
+
