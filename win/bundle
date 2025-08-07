@@ -20,10 +20,17 @@
 
 cd $(dirname $(dirname $0))	
 
+export MINGW_PREFIX="/usr/x86_64-w64-mingw32/sys-root/mingw"
+export PKG_CONFIG="/usr/bin/x86_64-w64-mingw32-pkg-config"
+export MINGW_PACKAGE_PREFIX="mingw64"
+export REPOSITORY_NAME="pw3270"
+
 setup_cross() {
 
 	meson setup \
         --prefix=/ \
+		--libdir=/bin \
+		--bindir=/bin \
         --buildtype=release \
         --reconfigure \
         --wipe \
@@ -36,7 +43,133 @@ setup_cross() {
 	fi
 }
 
+install_libraries() {
+
+	AGAIN=1
+	until [ $AGAIN = 0 ]; do
+
+		SOURCES=$(mktemp)
+		REQUIRES=$(mktemp)
+
+		find "${bindir}" -iname "*.dll" >	${SOURCES}
+		find "${bindir}" -iname "*.exe" >>	${SOURCES}
+	
+		while read FILENAME
+		do
+			echo ${FILENAME} aaa
+			LANG=C objdump -p ${FILENAME} | grep "DLL Name:" | cut -d: -f2 | tr "[:upper:]" "[:lower:]" >> ${REQUIRES}
+		done < ${SOURCES}
+
+		libs_to_exclude="
+			advapi32.dll
+			cfgmgr32.dll
+			comctl32.dll
+			comdlg32.dll
+			crypt32.dll
+			d3d8.dll
+			d3d9.dll
+			ddraw.dll
+			dnsapi.dll
+			dsound.dll
+			dwmapi.dll
+			gdi32.dll
+			gdiplus.dll
+			glu32.dll
+			glut32.dll
+			imm32.dll
+			iphlpapi.dll
+			kernel32.dll
+			ksuser.dll
+			mpr.dll
+			mscms.dll
+			mscoree.dll
+			msimg32.dll
+			msvcr71.dll
+			msvcr80.dll
+			msvcr90.dll
+			msvcrt.dll
+			mswsock.dll
+			netapi32.dll
+			odbc32.dll
+			ole32.dll
+			oleacc.dll
+			oleaut32.dll
+			opengl32.dll
+			psapi.dll
+			rpcrt4.dll
+			secur32.dll
+			setupapi.dll
+			shell32.dll
+			shlwapi.dll
+			user32.dll
+			usp10.dll
+			version.dll
+			wininet.dll
+			winmm.dll
+			wldap32.dll
+			ws2_32.dll
+			wsock32.dll
+			winspool.drv
+			ntdll.dll
+			winhttp.dll
+			hid.dll
+			bcrypt.dll
+		"
+
+		# Remove system DLLs from list
+		for i in $libs_to_exclude; do
+			sed -i -e "/${i}/d" ${REQUIRES}
+		done
+
+		AGAIN=0
+		while read FILENAME
+		do
+
+			echo ${FILENAME}
+			
+			if [ ! -e "${bindir}/${FILENAME}" ]; then
+
+				if [ -e ${MINGW_PREFIX}/bin/${FILENAME} ]; then
+
+					AGAIN=1
+					cp -v "${MINGW_PREFIX}/bin/${FILENAME}" "${bindir}/${FILENAME}"
+					if [ "$?" != "0" ]; then
+						exit -1
+					fi
+
+				elif [ -e ${MINGW_PREFIX}/lib/${FILENAME} ]; then
+
+					AGAIN=1
+					cp -v "${MINGW_PREFIX}/lib/${FILENAME}" "${bindir}/${FILENAME}"
+					if [ "$?" != "0" ]; then
+						exit -1
+					fi
+
+				elif [ -e  "${WIN_ROOT}/System32/${FILENAME}" ]; then
+
+					echo "Ignoring ${WIN_ROOT}/System32/${FILENAME}"
+
+				else 
+
+					echo "Can't find ${MINGW_PREFIX}/bin/${FILENAME} or ${WIN_ROOT}/System32/${FILENAME}"
+					find "${MINGW_PREFIX}" -iname "${FILENAME}"
+					exit -1
+
+				fi
+			
+			fi
+		
+		done < ${REQUIRES}
+
+		rm -f ${SOURCES}
+		rm -f ${REQUIRES}
+		
+	done
+	
+}
+
 export DESTDIR=$(pwd)/.bundle
+export bindir=${DESTDIR}/bin
 
 setup_cross
 
@@ -53,3 +186,6 @@ if [ "$?" != "0" ]; then
 	exit -1
 fi
 
+install_libraries
+
+find ${DESTDIR} -type f
