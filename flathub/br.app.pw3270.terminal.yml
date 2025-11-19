@@ -1,6 +1,6 @@
 app-id: br.app.pw3270.terminal
 runtime: org.gnome.Platform
-runtime-version: '43'
+runtime-version: '47'
 sdk: org.gnome.Sdk
 command: pw3270
 finish-args:
@@ -37,7 +37,7 @@ modules:
     buildsystem: autotools
     sources:
       - type: git
-        tag: "5.4"
+        tag: "5.5"
         url: https://github.com/PerryWerneck/pw3270
 
 
