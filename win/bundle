@@ -20,10 +20,28 @@
 
 cd $(dirname $(dirname $0))	
 
-export MINGW_PREFIX="/usr/x86_64-w64-mingw32/sys-root/mingw"
-export PKG_CONFIG="/usr/bin/x86_64-w64-mingw32-pkg-config"
-export MINGW_PACKAGE_PREFIX="mingw64"
-export REPOSITORY_NAME="pw3270"
+if [ -e /etc/os-release ]; then
+	. /etc/os-release
+else
+	echo "This script requires /etc/os-release to be present"
+	exit -1
+fi
+
+if [ "${ID}" != "msys2" ]; then
+	echo "Running on linux, not msys2"
+	if [ -z "${MINGW_PREFIX}" ]; then
+		export MINGW_PREFIX="/usr/x86_64-w64-mingw32/sys-root/mingw"
+		export PKG_CONFIG="/usr/bin/x86_64-w64-mingw32-pkg-config"
+		export MINGW_PACKAGE_PREFIX="mingw64"
+	fi
+else
+	echo "Running on msys2"
+fi
+
+if [ -z "${MINGW_PREFIX}" ]; then
+	echo "MINGW_PREFIX is not set, please set it to your mingw prefix"
+	exit -1
+fi
 
 setup_cross() {
 
@@ -41,6 +59,25 @@ setup_cross() {
 		echo "Meson setup failed"
 		exit 1
 	fi
+
+}
+
+setup_msys2() {
+
+	meson setup \
+        --prefix=/ \
+		--libdir=/bin \
+		--bindir=/bin \
+        --buildtype=release \
+        --reconfigure \
+        --wipe \
+		.build
+
+	if [ $? -ne 0 ]; then
+		echo "Meson setup failed"
+		exit 1
+	fi
+
 }
 
 install_libraries() {
@@ -171,7 +208,11 @@ install_libraries() {
 export DESTDIR=$(pwd)/.bundle
 export bindir=${DESTDIR}/bin
 
-setup_cross
+if [ "${ID}" == "msys2" ]; then
+	setup_msys2
+else 
+	setup_cross
+fi
 
 meson compile -C .build
 if [ "$?" != "0" ]; then
