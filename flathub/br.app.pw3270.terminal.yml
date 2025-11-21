@@ -1,6 +1,6 @@
 app-id: br.app.pw3270.terminal
 runtime: org.gnome.Platform
-runtime-version: '43'
+runtime-version: '47'
 sdk: org.gnome.Sdk
 command: pw3270
 finish-args:
@@ -27,17 +27,28 @@ modules:
       - type: git
         tag: "5.4"
         url: https://github.com/PerryWerneck/lib3270
+        x-checker-data:
+          - type: git
+          - tag-pattern: ([\\d.]+)$
+          - is-important: true
   - name: libv3270
     buildsystem: autotools
     sources:
       - type: git
         tag: "5.4"
         url: https://github.com/PerryWerneck/libv3270
+        x-checker-data:
+          - type: git
+          - tag-pattern: ([\\d.]+)$
+          - is-important: true
   - name: pw3270
     buildsystem: autotools
     sources:
       - type: git
-        tag: "5.4"
+        tag: "5.5"
         url: https://github.com/PerryWerneck/pw3270
-
-
+        x-checker-data:
+          - type: git
+          - tag-pattern: ([\\d.]+)$
+          - is-important: true
+          
