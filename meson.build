@@ -308,6 +308,7 @@ icons = [
 if host_machine.system() != 'darwin'
 
 	if scour.found()
+		
 		custom_target(
 			'about-image',
 			command: [ 
@@ -335,6 +336,23 @@ if host_machine.system() != 'darwin'
 				install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
 			)
 		endforeach
+
+	else
+
+		install_data(
+			'branding/' + meson.project_name() + '.svg',
+			install_tag: 'runtime',
+			install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+		)
+
+		foreach icon : icons
+			install_data(
+				'icons/' + icon,
+				install_tag: 'runtime',
+				install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+			)
+		endforeach
+
 	endif
 	
 endif
@@ -377,6 +395,7 @@ if host_machine.system() == 'linux'
 			install_tag: 'runtime',
 			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
 		)
+
 
 	else
 		install_data(
