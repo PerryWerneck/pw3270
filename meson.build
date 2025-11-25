@@ -416,7 +416,7 @@ if host_machine.system() == 'linux'
 
 	configure_file(
 		input : 'branding/metainfo.xml.in',
-		output : lib3270.get_variable('product_id') + '.metainfo.xml',
+		output : lib3270.get_variable('product_id') + '.terminal.metainfo.xml',
 		install_dir: get_option('datadir') / 'metainfo',
 		configuration : app_conf
 	)

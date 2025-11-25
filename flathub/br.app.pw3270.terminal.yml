@@ -21,10 +21,6 @@ cleanup:
 modules:
   - name: lib3270
     buildsystem: meson
-    meson-args: 
-      - '--buildtype=release'
-      - '-Dbuildtype=release'
-      - '-Ddebug=false' 
     sources:
       - type: git
         tag: "master"
@@ -35,10 +31,6 @@ modules:
           - is-important: true
   - name: libv3270
     buildsystem: meson
-    meson-args: 
-      - '--buildtype=release'
-      - '-Dbuildtype=release'
-      - '-Ddebug=false' 
     sources:
       - type: git
         tag: "master"
@@ -49,10 +41,6 @@ modules:
           - is-important: true
   - name: pw3270
     buildsystem: meson
-    meson-args: 
-      - '--buildtype=release'
-      - '-Dbuildtype=release'
-      - '-Ddebug=false' 
     sources:
       - type: git
         tag: "develop"
