@@ -26,7 +26,7 @@ project(
 
 project_description = 'IBM 3270 Terminal emulator for GTK'
 
-scour = find_program('scour', required: true)
+scour = find_program('scour', required: false)
 
 #
 # Compiler flags
@@ -360,32 +360,51 @@ if host_machine.system() == 'linux'
 		configuration : app_conf
 	)
 
-	custom_target(
-		'app-icon-color',
-		command: [ 
-			scour,
-			'../branding/' + meson.project_name() + '.svg',
-			lib3270.get_variable('product_id') + '.svg',
-		],
-		output: lib3270.get_variable('product_id') + '.svg',
-		install: true,
-		install_tag: 'runtime',
-		install_dir: get_option('datadir') + '/icons/hicolor/scalable/apps',
-	)
+	if scour.found()
 
-	# TODO: How to save with same name??? Cant accept 'rename'
-	custom_target(
-		'app-icon-symbolic',
-		command: [ 
-			scour,
-			'../branding/' + meson.project_name() + '-symbolic.svg',
-			lib3270.get_variable('product_id') + '-symbolic.svg',
-		],
-		output: lib3270.get_variable('product_id') + '-symbolic.svg',
-		install: true,
-		install_tag: 'runtime',
-		install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
-	)
+		custom_target(
+			'app-icon-color',
+			command: [ 
+				scour,
+				'../branding/' + meson.project_name() + '.svg',
+				lib3270.get_variable('product_id') + '.svg',
+			],
+			output: lib3270.get_variable('product_id') + '.svg',
+			install: true,
+			install_tag: 'runtime',
+			install_dir: get_option('datadir') + '/icons/hicolor/scalable/apps',
+		)
+
+		# TODO: How to save with same name??? Cant accept 'rename'
+		custom_target(
+			'app-icon-symbolic',
+			command: [ 
+				scour,
+				'../branding/' + meson.project_name() + '-symbolic.svg',
+				lib3270.get_variable('product_id') + '-symbolic.svg',
+			],
+			output: lib3270.get_variable('product_id') + '-symbolic.svg',
+			install: true,
+			install_tag: 'runtime',
+			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
+		)
+		
+	else
+		install_data(
+			'branding/' + meson.project_name() + '.svg',
+			install_dir: get_option('datadir') + '/icons/hicolor/scalable/apps',
+			install_tag: 'runtime',
+			rename: lib3270.get_variable('product_id') + '.svg'
+		)
+
+		install_data(
+			'branding/' + meson.project_name() + '-symbolic.svg',
+			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps',
+			install_tag: 'runtime',
+			rename: lib3270.get_variable('product_id') + '.svg'
+		)
+
+	endif
 
 	configure_file(
 		input : 'branding/metainfo.xml.in',
