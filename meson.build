@@ -361,7 +361,7 @@ if host_machine.system() == 'linux'
 
 	configure_file(
 		input : 'branding/launcher.desktop.in',
-		output : lib3270.get_variable('product_id') + '.desktop',
+		output : lib3270.get_variable('product_id') + '.terminal.desktop',
 		install_dir: get_option('datadir') / 'applications',
 		install_tag: 'runtime',
 		configuration : app_conf
@@ -374,7 +374,7 @@ if host_machine.system() == 'linux'
 			command: [ 
 				scour,
 				'../branding/' + meson.project_name() + '.svg',
-				lib3270.get_variable('product_id') + '.svg',
+				lib3270.get_variable('product_id') + '.terminal.svg',
 			],
 			output: lib3270.get_variable('product_id') + '.svg',
 			install: true,
@@ -390,7 +390,7 @@ if host_machine.system() == 'linux'
 				'../branding/' + meson.project_name() + '-symbolic.svg',
 				lib3270.get_variable('product_id') + '-symbolic.svg',
 			],
-			output: lib3270.get_variable('product_id') + '-symbolic.svg',
+			output: lib3270.get_variable('product_id') + '.terminal.svg',
 			install: true,
 			install_tag: 'runtime',
 			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
@@ -402,14 +402,14 @@ if host_machine.system() == 'linux'
 			'branding/' + meson.project_name() + '.svg',
 			install_dir: get_option('datadir') + '/icons/hicolor/scalable/apps',
 			install_tag: 'runtime',
-			rename: lib3270.get_variable('product_id') + '.svg'
+			rename: lib3270.get_variable('product_id') + '.terminal.svg'
 		)
 
 		install_data(
 			'branding/' + meson.project_name() + '-symbolic.svg',
 			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps',
 			install_tag: 'runtime',
-			rename: lib3270.get_variable('product_id') + '.svg'
+			rename: lib3270.get_variable('product_id') + '.terminal.svg'
 		)
 
 	endif
