@@ -320,34 +320,36 @@ icons = [
 # The icon conversion for mac is done by the bundle script.
 if host_machine.system() != 'darwin'
 
-	custom_target(
-		'about-image',
-		command: [ 
-			scour,
-			'../branding/' + meson.project_name() + '.svg',
-			lib3270.get_variable('product_name') + '.svg',
-		],
-		output: lib3270.get_variable('product_name') + '.svg',
-		install: true,
-		install_tag: 'runtime',
-		install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
-	)
-
-	foreach icon : icons
+	if scour.found()
 		custom_target(
-			icon,
+			'about-image',
 			command: [ 
 				scour,
-				'../icons/' + icon,
-				icon,
+				'../branding/' + meson.project_name() + '.svg',
+				lib3270.get_variable('product_name') + '.svg',
 			],
-			output: icon,
+			output: lib3270.get_variable('product_name') + '.svg',
 			install: true,
 			install_tag: 'runtime',
-			install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+			install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
 		)
-	endforeach
 
+		foreach icon : icons
+			custom_target(
+				icon,
+				command: [ 
+					scour,
+					'../icons/' + icon,
+					icon,
+				],
+				output: icon,
+				install: true,
+				install_tag: 'runtime',
+				install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+			)
+		endforeach
+	endif
+	
 endif
 
 if host_machine.system() == 'linux'
@@ -388,7 +390,7 @@ if host_machine.system() == 'linux'
 			install_tag: 'runtime',
 			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
 		)
-		
+
 	else
 		install_data(
 			'branding/' + meson.project_name() + '.svg',
