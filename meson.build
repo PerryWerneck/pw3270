@@ -240,20 +240,6 @@ config_src = [
   )
 ]
 
-configure_file(
-  input : 'schemas/application.gschema.xml.in',
-  output : meson.project_name() + '-application.gschema.xml',
-  install_dir: get_option('datadir') / 'glib-2.0/schemas',
-  configuration : app_conf
-)
-
-configure_file(
-  input : 'schemas/window.gschema.xml.in',
-  output : meson.project_name() + '-window.gschema.xml',
-  install_dir: get_option('datadir') / 'glib-2.0/schemas',
-  configuration : app_conf
-)
-
 if host_machine.system() == 'windows'
 
   # https://mesonbuild.com/Windows-module.html
@@ -421,6 +407,33 @@ if host_machine.system() == 'linux'
 		output : meson.project_name() + '.xml',
 		install_dir: get_option('datadir') / 'mime/packages',
 		configuration : app_conf
+	)
+
+	# GSettings schemas
+	schemas = [
+		configure_file(
+			input : 'schemas/application.gschema.xml.in',
+			output : meson.project_name() + '-application.gschema.xml',
+			configuration : app_conf
+		),
+		configure_file(
+			input : 'schemas/window.gschema.xml.in',
+			output : meson.project_name() + '-window.gschema.xml',
+			configuration : app_conf
+		),
+	]
+
+	gnome = import('gnome')
+	gnome.post_install(glib_compile_schemas: true)
+
+	gnome.compile_schemas(
+		depend_files: schemas,
+		build_by_default: true # Optional, ensures compilation during a standard 'ninja' build
+	)
+
+	install_data(
+		schemas,
+		install_dir: join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
 	)
 
 endif
