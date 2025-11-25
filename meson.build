@@ -22,6 +22,7 @@ project(
 	['c'],
 	version: '5.5.0',
 	license: 'GPL-3.0-or-later',
+	default_options : [ 'buildtype=release' ]
 )
 
 project_description = 'IBM 3270 Terminal emulator for GTK'

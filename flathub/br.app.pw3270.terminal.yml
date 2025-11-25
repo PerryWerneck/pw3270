@@ -21,9 +21,13 @@ cleanup:
 modules:
   - name: lib3270
     buildsystem: meson
+    meson-args: 
+      - '--buildtype=release'
+      - '-Dbuildtype=release'
+      - '-Ddebug=false' 
     sources:
       - type: git
-        tag: "5.5.1"
+        tag: "master"
         url: https://github.com/PerryWerneck/lib3270
         x-checker-data:
           - type: git
@@ -31,9 +35,13 @@ modules:
           - is-important: true
   - name: libv3270
     buildsystem: meson
+    meson-args: 
+      - '--buildtype=release'
+      - '-Dbuildtype=release'
+      - '-Ddebug=false' 
     sources:
       - type: git
-        tag: "5.5.0"
+        tag: "master"
         url: https://github.com/PerryWerneck/libv3270
         x-checker-data:
           - type: git
@@ -41,6 +49,10 @@ modules:
           - is-important: true
   - name: pw3270
     buildsystem: meson
+    meson-args: 
+      - '--buildtype=release'
+      - '-Dbuildtype=release'
+      - '-Ddebug=false' 
     sources:
       - type: git
         tag: "develop"
