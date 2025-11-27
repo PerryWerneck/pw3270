@@ -110,7 +110,8 @@ install_libraries() {
 
 install_schemas() {             
 
-    mkdir -p ${APPDIR}/Resources/share/glib-2.0/schemas
+    SCHEMASDIR="${APPDIR}/Resources/share/glib-2.0/schemas"
+    mkdir -p "${SCHEMASDIR}"
 
     gtk_schemas="org.gtk.Settings.FileChooser.gschema.xml"
     glib_schemas="gschema.dtd"
@@ -121,7 +122,7 @@ install_schemas() {
         echo ${filepath}
         cp -v \
             ${filepath} \
-            ${APPDIR}/Contents/Resources/glib-2.0/schemas
+            "${SCHEMASDIR}"
         if [ "$?" != "0" ]; then
             exit -1
         fi
@@ -133,16 +134,13 @@ install_schemas() {
         echo ${filepath}
         cp -v \
             ${filepath} \
-            ${APPDIR}/Contents/Resources/glib-2.0/schemas
+            "${SCHEMASDIR}"
         if [ "$?" != "0" ]; then
             exit -1
         fi
     done
 
-    glib-compile-schemas \
-        --targetdir="${APPDIR}/Contents/Resources/glib-2.0/schemas" \
-        "${APPDIR}/Contents/Resources/glib-2.0/schemas"
-
+    glib-compile-schemas --targetdir="${SCHEMASDIR}" "${SCHEMASDIR}"
     if [ "$?" != "0" ]; then
         exit -1
     fi
