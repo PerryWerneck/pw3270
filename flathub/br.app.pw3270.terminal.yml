@@ -43,12 +43,13 @@ modules:
     buildsystem: meson
     sources:
       - type: git
-        tag: "develop"
+        tag: "master"
         url: https://github.com/PerryWerneck/pw3270
         x-checker-data:
           - type: git
           - tag-pattern: ([\\d.]+)$
           - is-important: true
     post-install:
+      - echo "Compiling schemas"
       - /usr/bin/glib-compile-schemas /app/share/glib-2.0/schemas/ 
           
