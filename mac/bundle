@@ -110,7 +110,7 @@ install_libraries() {
 
 install_schemas() {             
 
-    SCHEMASDIR="${APPDIR}/Resources/share/glib-2.0/schemas"
+    SCHEMASDIR="${APPDIR}/Contents/Resources/glib-2.0/schemas"
     mkdir -p "${SCHEMASDIR}"
 
     gtk_schemas="org.gtk.Settings.FileChooser.gschema.xml"
@@ -275,46 +275,6 @@ install_icons() {
     install_icon "./branding/${APPNAME}-symbolic.svg" "${APPDIR}/Contents/Resources/icons/${APPNAME}-symbolic.icns"
 
 }
-
-#make_dmg() {
-
-# create temporary disk image and format, ejecting when done
-#SIZE=$(du -sk ${APPDIR} | cut -f1)
-#SIZE=$((${SIZE}/1000+1))
-
-# create temporary disk image and format, ejecting when done
-#DMG="${APPNAME}-temp.dmg"
-#hdiutil create "${DMG}" -megabytes ${SIZE} -ov -type UDIF -fs HFS+ -volname "${APPNAME}"
-#if [ ! "$?" == "0" ]; then
-#        exit -1
-#fi
-
-#hdiutil attach "${DMG}"
-#if [ ! "$?" == "0" ]; then
-#        hdiutil detach "/Volumes/${APPNAME}"
-#        exit -1
-#fi
-
-#cp -Rv "${APPDIR}" "/Volumes/${APPNAME}"
-#if [ ! "$?" == "0" ]; then
-#        hdiutil detach "/Volumes/${APPNAME}"
-#        exit -1
-#fi
-
-#hdiutil detach "/Volumes/${APPNAME}"
-
-# convert to compressed image, delete temp image
-#INSTALL_IMAGE="${APPNAME}-$(grep "^#define PACKAGE_VERSION " .build/config.h | cut -d\" -f2)-unstable.dmg"
-
-#rm -f "${INSTALL_IMAGE}"
-#hdiutil convert "${DMG}" -format UDZO -o "${INSTALL_IMAGE}"
-#if [ ! "$?" == "0" ]; then
-#        exit -1
-#fi
-
-#rm -f "$DMG"
-
-#}
 
 make_dmg() {
 

@@ -354,7 +354,25 @@ if host_machine.system() != 'darwin'
 		endforeach
 
 	endif
-	
+
+endif
+
+if host_machine.system() == 'windows' or host_machine.system() == 'darwin'
+
+	configure_file(
+		input : 'schemas/application.gschema.xml.in',
+		output : meson.project_name() + '-application.gschema.xml',
+		install_dir: get_option('datadir') / 'glib-2.0/schemas',
+		configuration : app_conf
+	)
+
+	configure_file(
+		input : 'schemas/window.gschema.xml.in',
+		output : meson.project_name() + '-window.gschema.xml',
+		install_dir: get_option('datadir') / 'glib-2.0/schemas',
+		configuration : app_conf
+	)
+
 endif
 
 if host_machine.system() == 'linux'
