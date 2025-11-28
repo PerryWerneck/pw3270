@@ -2,7 +2,7 @@
 
 pkgname=pw3270
 
-pkgver=5.5.0+git20241211
+pkgver=5.5.0+git20251128
 pkgrel=0
 pkgdesc="IBM 3270 Terminal emulator for GTK"
 url="https://github.com/PerryWerneck/pw3270"

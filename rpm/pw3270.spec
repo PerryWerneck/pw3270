@@ -26,22 +26,24 @@
 
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
-Name:			pw3270
-Version: 5.5.0
-Release:		0
-Summary:		IBM 3270 Terminal emulator for GTK
-License:		LGPL-3.0-only
-Group:			System/X11/Terminals
-URL:			https://github.com/PerryWerneck/pw3270
+Name:				pw3270
+Version:			5.5.0+git20251128
+Release:			0
+Summary:			IBM 3270 Terminal emulator for GTK
+License:			LGPL-3.0-only
+Group:				System/X11/Terminals
+URL:				https://github.com/PerryWerneck/pw3270
 
-Source:			%{name}-%{version}.tar.xz
+Source:				%{name}-%{version}.tar.xz
 
-BuildRoot:		%{_tmppath}/%{name}-%{version}-build
+BuildRoot:			%{_tmppath}/%{name}-%{version}-build
 
-Requires:		%{name}-branding
-Requires:		shared-mime-info
+Requires:			%{name}-branding
+Requires:			shared-mime-info
+Requires(post):		desktop-file-utils
+Requires(postun):	desktop-file-utils
 
-Recommends:		libv3270-config
+Recommends:			libv3270-config
 
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
 #
@@ -75,7 +77,6 @@ BuildRequires:	pkgconfig(libv3270) >= 5.5.0
 %if 0%{?suse_version}
 
 BuildRequires:	appstream-glib
-BuildRequires:	update-desktop-files
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(libv3270) >= 5.5.0
@@ -93,13 +94,10 @@ BuildRequires:	gettext-devel
 BuildRequires:	libtool
 BuildRequires:	m4
 BuildRequires:	pkgconfig
-BuildRequires:	scour
 
-%if 0%{?suse_version} == 01500
-BuildRequires:	meson >= 0.61.4
-%else
+# Scour
+BuildRequires:	scour
 BuildRequires:	meson
-%endif
 
 %description
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -108,19 +106,24 @@ Based on the original x3270 code, pw3270 was originally created for Banco do Bra
 
 
 #--[ Configuration & Branding ]---------------------------------------------------------------------------------------
+# Reference: https://en.opensuse.org/openSUSE:Packaging_Branding
 
 %package branding-upstream
+Supplements:	packageand(%{name}:branding-upstream)
+Provides:		%{name}-branding = %{version}
+Conflicts:		otherproviders(%{name}-branding)
+Conflicts:		%{name} < 5.5
+
+#BRAND: br.app.pw3270.terminal.svg: svg file. The application icon for the desktop environment.
+#BRAND: br.app.pw3270.terminal-symbolic.svg: svg file. The simbolic icon for the application.
+#BRAND: pw3270.svg: svg file. Logo for about window, usually the same as the application icon.
+#BRAND: pw3270.ui.xml: xml file. The application menus.
+
 Summary:		Upstream branding for %{name}
 Group:			System/X11/Terminals
 
 Requires:		%{name} = %{version}
 BuildArch:		noarch
-
-Provides:		%{name}-branding
-Conflicts:		otherproviders(%{name}-branding)
-
-Requires(post):		desktop-file-utils
-Requires(postun):	desktop-file-utils
 
 %description branding-upstream
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -175,7 +178,6 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainf
 %dir %{_datadir}/%{_product}
 %{_datadir}/%{_product}/*.ui.xml
 %{_datadir}/%{_product}/*.svg
-
 
 # Icons
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
