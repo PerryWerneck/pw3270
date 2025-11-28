@@ -33,7 +33,12 @@ G_DEFINE_TYPE(pw3270ApplicationWindow, pw3270ApplicationWindow, GTK_TYPE_APPLICA
 
 enum {
 	PROP_NONE,
+
+#ifndef __APPLE__
 	PROP_ACTION_NAMES,
+#endif // !__APPLE__
+
+	PROP_LAST
 };
 
 static void destroy(GtkWidget *widget) {
@@ -133,41 +138,36 @@ static void constructed(GObject *object) {
 
 static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *klass) {
 
-	static const char * icon_search_paths[] = {
-		"icons",
-#ifdef _WIN32
-		"share/icons",
-#endif // _WIN32
-		"share/" G_STRINGIFY(PRODUCT_NAME) "/icons"
-	};
-
-	size_t ix;
-	for(ix = 0; ix < G_N_ELEMENTS(icon_search_paths); ix++) {
-#if defined(DEBUG)
-		g_autofree gchar * path = g_build_filename(g_get_current_dir(),icon_search_paths[ix],NULL);
-#elif defined(_WIN32)
+#if defined(_WIN32)
+	{
+		// Set win32 icon path
 		g_autofree gchar * appdir = g_win32_get_package_installation_directory_of_module(NULL);
-		g_autofree gchar * path = g_build_filename(appdir,icon_search_paths[ix],NULL);
-#else
-		lib3270_autoptr(char) path = lib3270_build_data_filename(icon_search_paths[ix],NULL);
+		g_autofree gchar * path = g_build_filename(appdir,"share/icons",NULL);
+		gtk_icon_theme_append_search_path(
+			gtk_icon_theme_get_default(),
+			path
+		);
+	}
+#elif defined(__APPLE__) || defined(G_OS_UNIX)
+	{
+		// Set apple/linux icon path
+		lib3270_autoptr(char) path = lib3270_build_data_filename("icons",NULL);
+		gtk_icon_theme_append_search_path(
+			gtk_icon_theme_get_default(),
+			path
+		);
+	}
 #endif
 
-		if(g_file_test(path,G_FILE_TEST_IS_DIR)) {
-			g_message("Adding '%s' on icon search path",path);
-			gtk_icon_theme_append_search_path(
-				gtk_icon_theme_get_default(),
-				path
-			);
-		} else {
 
-			g_message("Folder '%s' is not valid",path);
-
-		}
-
-	}
-
-#if defined(DEBUG) || defined(_WIN32)
+#if defined(DEBUG)
 	{
+		gtk_icon_theme_append_search_path(
+			gtk_icon_theme_get_default(),
+			"./icons"
+		);
+
+		// Print icon search path
 		gchar **paths = NULL;
 		gint n_paths = 0;
 
@@ -192,6 +192,7 @@ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *kla
 		widget->size_allocate = size_allocate;
 	}
 
+#ifndef __APPLE__
 	{
 		GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
@@ -209,22 +210,35 @@ static void pw3270ApplicationWindow_class_init(pw3270ApplicationWindowClass *kla
 		                         G_PARAM_WRITABLE|G_PARAM_READABLE)
 		);
 	}
+#endif // !__APPLE__
 
 }
 
 void set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
+#ifndef __APPLE__
 	if(prop_id == PROP_ACTION_NAMES) {
 		pw3270_window_set_header_action_names(GTK_WIDGET(object), g_value_get_string(value));
 	}
+#endif // !__APPLE__
 
 }
 
 void get_property(GObject *object, guint prop_id, GValue *value, GParamSpec G_GNUC_UNUSED(*pspec)) {
 
+#ifndef __APPLE__
 	if(prop_id == PROP_ACTION_NAMES) {
 		g_value_take_string(value,pw3270_window_get_action_names(GTK_WIDGET(object)));
 	}
+	// Default
+	else {
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+		g_value_set_string(value,NULL);
+	}
+#else
+	G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	g_value_set_string(value,NULL);
+#endif // !__APPLE__
 
 }
 
@@ -602,6 +616,11 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 	}
 
 	// Setup and show main window
+#ifdef __APPLE__
+	{
+		gtk_window_set_title(GTK_WINDOW(window), title);
+	}
+#else
 	{
 		g_autoptr(GSettings) settings = pw3270_application_window_settings_new();
 
@@ -612,10 +631,7 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 #endif // DEBUG
 
 		if(style == PW3270_UI_STYLE_AUTOMATIC) {
-#if defined(__APPLE__)
-			style = PW3270_UI_STYLE_GNOME;
-			g_settings_set_int(settings,"header-icon-type",1);
-#elif defined( G_OS_UNIX )
+#if defined( G_OS_UNIX )
 			style = PW3270_UI_STYLE_GNOME;
 			g_settings_set_boolean(settings,"menubar-visible",FALSE);
 			g_settings_set_int(settings,"header-icon-type",1);
@@ -632,7 +648,6 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 			pw3270_application_set_ui_style(G_APPLICATION(application),style);
 
 		}
-
 
 		if(style == PW3270_UI_STYLE_GNOME) {
 
@@ -668,7 +683,6 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 
 		}
 
-#ifndef __APPLE__
 		g_settings_bind(
 		    settings,
 		    "menubar-visible",
@@ -676,9 +690,9 @@ GtkWidget * pw3270_application_window_new(GtkApplication * application, const gc
 		    "show-menubar",
 		    G_SETTINGS_BIND_DEFAULT
 		);
-#endif // !__APPLE__
 
 	}
+#endif // !__APPLE__
 
 	// Setup default position and size
 	gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);

@@ -1,7 +1,7 @@
 #
 # spec file for package pw3270
 #
-# Copyright (c) 2022 SUSE LLC
+# Copyright (c) 2024 SUSE LLC
 # Copyright (c) <2008> <Banco do Brasil S.A.>
 #
 # All modifications and additions to the file contributed by third parties
@@ -16,31 +16,32 @@
 # Please submit bugfixes or comments via https://github.com/PerryWerneck/pw3270/issues
 #
 
+
 %define _product %(pkg-config --variable=product_name lib3270)
 
 %define plugindir %(pkg-config --variable=plugin_path lib3270)
 %if "%{plugindir}" == ""
-	%define plugindir /usr/lib64/pw3270-plugins
+	%define plugindir %{_libdir}/pw3270-plugins
 %endif
 
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
-Name:           pw3270
-Version:        5.5+git20230204
-Release:        0
-Summary:        IBM 3270 Terminal emulator for GTK
-License:        GPL-2.0-only
-Group:          System/X11/Terminals
-URL:            https://github.com/PerryWerneck/pw3270
+Name:			pw3270
+Version: 5.5.0
+Release:		0
+Summary:		IBM 3270 Terminal emulator for GTK
+License:		LGPL-3.0-only
+Group:			System/X11/Terminals
+URL:			https://github.com/PerryWerneck/pw3270
 
-Source:         pw3270-%{version}.tar.xz
+Source:			%{name}-%{version}.tar.xz
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRoot:		%{_tmppath}/%{name}-%{version}-build
 
-Requires:       %{name}-branding = %{version}
-Requires:       shared-mime-info
+Requires:		%{name}-branding
+Requires:		shared-mime-info
 
-Recommends:     libv3270-config
+Recommends:		libv3270-config
 
 #--[ Setup by distribution ]------------------------------------------------------------------------------------------
 #
@@ -53,9 +54,9 @@ Recommends:     libv3270-config
 
 %if 0%{?centos_version}
 
-BuildRequires:  glib2-devel
-BuildRequires:  gtk3-devel
-BuildRequires:  libv3270-devel >= 5.4
+BuildRequires:	glib2-devel
+BuildRequires:	gtk3-devel
+BuildRequires:	libv3270-devel >= 5.5.0
 
 %endif
 
@@ -63,9 +64,9 @@ BuildRequires:  libv3270-devel >= 5.4
 
 %if 0%{?fedora}
 
-BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  pkgconfig(libv3270) >= 5.4
+BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(gtk+-3.0)
+BuildRequires:	pkgconfig(libv3270) >= 5.5.0
 
 %endif
 
@@ -73,11 +74,11 @@ BuildRequires:  pkgconfig(libv3270) >= 5.4
 
 %if 0%{?suse_version}
 
-BuildRequires:  appstream-glib
-BuildRequires:  update-desktop-files
-BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  pkgconfig(libv3270) >= 5.4
+BuildRequires:	appstream-glib
+BuildRequires:	update-desktop-files
+BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(gtk+-3.0)
+BuildRequires:	pkgconfig(libv3270) >= 5.5.0
 
 %glib2_gsettings_schema_requires
 
@@ -85,20 +86,20 @@ BuildRequires:  pkgconfig(libv3270) >= 5.4
 
 #---------------------------------------------------------------------------------------------------------------------
 
-BuildRequires:  autoconf >= 2.61
-BuildRequires:  autoconf-archive
-BuildRequires:  automake
-BuildRequires:  binutils
-BuildRequires:  coreutils
-BuildRequires:  desktop-file-utils
-BuildRequires:  fdupes
-BuildRequires:  findutils
-BuildRequires:  gcc-c++
-BuildRequires:  gettext-devel
-BuildRequires:  libtool
-BuildRequires:  m4
-BuildRequires:  pkgconfig
-BuildRequires:  sed
+BuildRequires:	desktop-file-utils
+BuildRequires:	fdupes
+BuildRequires:	gcc-c++
+BuildRequires:	gettext-devel
+BuildRequires:	libtool
+BuildRequires:	m4
+BuildRequires:	pkgconfig
+BuildRequires:	scour
+
+%if 0%{?suse_version} == 01500
+BuildRequires:	meson >= 0.61.4
+%else
+BuildRequires:	meson
+%endif
 
 %description
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
@@ -107,39 +108,38 @@ Based on the original x3270 code, pw3270 was originally created for Banco do Bra
 
 
 #--[ Configuration & Branding ]---------------------------------------------------------------------------------------
-%package branding
-Summary:			Default branding for %{name}
-Group:				System/X11/Terminals
 
-Requires:			%{name} = %{version}
-BuildArch:			noarch
+%package branding-upstream
+Summary:		Upstream branding for %{name}
+Group:			System/X11/Terminals
+
+Requires:		%{name} = %{version}
+BuildArch:		noarch
+
+Provides:		%{name}-branding
+Conflicts:		otherproviders(%{name}-branding)
 
 Requires(post):		desktop-file-utils
 Requires(postun):	desktop-file-utils
 
-%description branding
+%description branding-upstream
 GTK-based IBM 3270 terminal emulator with many advanced features. It can be used to communicate with any IBM host that supports 3270-style connections over TELNET.
 
-This package contains the default branding for %{name}.
+This package contains the upstream branding for %{name}.
 
+%lang_package -n %{name}
 
 #---[ Build & Install ]-----------------------------------------------------------------------------------------------
+
 %prep
-%setup
-
-%global _lto_cflags %{_lto_cflags} -ffat-lto-objects
-NOCONFIGURE=1 ./autogen.sh
-
-%configure --with-release=%{release} CFLAGS="${CFLAGS} -fpie" LDFLAGS="${LDFLAGS} -pie"
+%autosetup
+%meson
 
 %build
-make %{?_smp_mflags} clean
-
-# parallel build is broken
-make all -j1
+%meson_build
 
 %install
-%make_install
+%meson_install
 
 %find_lang pw3270 langfiles
 
@@ -149,16 +149,12 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainf
 
 %fdupes %{buildroot}/%{_prefix}
 
-%files -f langfiles
+%files
 %defattr(-,root,root)
 %license LICENSE
 %doc AUTHORS README.md
 
 # Main application
-%dir %{_datadir}/%{_product}
-%dir %{_datadir}/%{_product}/keypad
-%dir %{plugindir}
-%dir %{_datadir}/%{_product}/icons
 
 %{_bindir}/%{_product}
 
@@ -166,21 +162,26 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainf
 %{_datadir}/applications/*.desktop
 %{_datadir}/metainfo/*.metainfo.xml
 
-# Icons
-%{_datadir}/%{_product}/icons/*.svg
-%{_datadir}/icons/*.svg
-%{_datadir}/icons/hicolor/scalable/apps/*.svg
-%{_datadir}/icons/hicolor/symbolic/apps/*.svg
-
 # Configuration & Themes
 %{_datadir}/glib-2.0/schemas/*.xml
 %{_datadir}/mime/packages/*.xml
-%exclude %{_datadir}/glib-2.0/schemas/*.compiled
 
-%files branding
+# Customized icons
+%dir %{_datadir}/%{_product}/icons
+%{_datadir}/%{_product}/icons/*.svg
+
+%files branding-upstream
 %defattr(-,root,root)
+%dir %{_datadir}/%{_product}
 %{_datadir}/%{_product}/*.ui.xml
 %{_datadir}/%{_product}/*.svg
+
+
+# Icons
+%{_datadir}/icons/hicolor/scalable/apps/*.svg
+%{_datadir}/icons/hicolor/symbolic/apps/*.svg
+
+%files -n %{name}-lang -f langfiles
 
 %posttrans
 /usr/bin/update-desktop-database

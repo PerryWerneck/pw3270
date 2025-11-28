@@ -1,36 +1,93 @@
-#include <windows.h>
+/* SPDX-License-Identifier: LGPL-3.0-or-later */
 
-#pragma code_page( 65001 )  // UTF-8
+/*
+ * Copyright (C) 2021 Perry Werneck <perry.werneck@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ *
+ *	Referências:
+ *
+ *	<https://msdn.microsoft.com/en-us/library/windows/desktop/aa381058(v=vs.85).aspx>
+ *	<https://stackoverflow.com/questions/1022449/how-to-change-an-executables-properties-windows>
+ *	<https://stackoverflow.com/questions/708238/how-do-i-add-an-icon-to-a-mingw-gcc-compiled-executable>
+ *
+ */
+
+#include	<windows.h>
+
+#pragma	code_page(65001)		// UTF-8
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
-1 ICON @PRODUCT_NAME@.ico
+1 ICON "../branding/@PRODUCT_NAME@.ico"
 
-CREATEPROCESS_MANIFEST_RESOURCE_ID      RT_MANIFEST "app-manifest.xml"
-
-VS_VERSION_INFO VERSIONINFO
-FILEVERSION     @WIN32_FILE_VERSION@
-PRODUCTVERSION  @PACKAGE_MAJOR_VERSION@,@PACKAGE_MINOR_VERSION@,@PACKAGE_MAJOR_RELEASE@,@PACKAGE_MINOR_RELEASE@
+VS_VERSION_INFO	VERSIONINFO
+FILEVERSION     @PACKAGE_VERSION_MAJOR@,@PACKAGE_VERSION_MINOR@
+PRODUCTVERSION  @PACKAGE_VERSION_MAJOR@,@PACKAGE_VERSION_MINOR@
 
 BEGIN
 
+	// https://learn.microsoft.com/en-us/windows/win32/menurc/stringfileinfo-block
+	// https://stackoverflow.com/questions/14221918/win32-resource-file-multiple-translations
 	BLOCK "StringFileInfo"
 	BEGIN
-        	BLOCK "080904E4"
+	
+		// English
+		BLOCK "080904B0"
 		BEGIN
-			VALUE "FileDescription",	"@PACKAGE_DESCRIPTION@\0"
-			VALUE "CompanyName",		"Banco do Brasil S/A.\0"
-			VALUE "FileVersion",		"@WIN32_VERSION@\0"
-            VALUE "LegalCopyright",		"(C) 2017 Banco do Brasil S/A. All Rights Reserved\0"
+			VALUE "FileDescription",	"IBM 3270 Terminal emulator for GTK\0"
+			VALUE "FileVersion",		"@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@\0"
+			VALUE "LegalCopyright",		"GNU GPLv3\0"
+			VALUE "InternalName",		"@PRODUCT_NAME@\0"
 			VALUE "OriginalFilename",	"@PRODUCT_NAME@.exe\0"
 			VALUE "ProductName",		"@PRODUCT_NAME@\0"
-			VALUE "ProductVersion",		"@PACKAGE_MAJOR_VERSION@.@PACKAGE_MINOR_VERSION@.@PACKAGE_MAJOR_RELEASE@.@PACKAGE_MINOR_RELEASE@\0"
+			VALUE "ProductVersion",		"@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@\0"
 		END
+		
+		// Brazilian Portuguese (UTF-8)
+		BLOCK "041604B0"
+		BEGIN
+			VALUE "FileDescription",	"Emulador de terminal 3270\0"
+			VALUE "FileVersion",		"@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@\0"
+			VALUE "LegalCopyright",		"GNU GPLv3\0"
+			VALUE "InternalName",		"@PRODUCT_NAME@\0"
+			VALUE "OriginalFilename",	"@PRODUCT_NAME@.exe\0"
+			VALUE "ProductName",		"@PRODUCT_NAME@\0"
+			VALUE "ProductVersion",		"@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@\0"
+		END
+
+		// Brazilian Portuguese (Multilingual)
+		BLOCK "041604E4"
+		BEGIN
+			VALUE "FileDescription",	"Emulador de terminal 3270\0"
+			VALUE "FileVersion",		"@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@\0"
+			VALUE "LegalCopyright",		"GNU GPLv3\0"
+			VALUE "InternalName",		"@PRODUCT_NAME@\0"
+			VALUE "OriginalFilename",	"@PRODUCT_NAME@.exe\0"
+			VALUE "ProductName",		"@PRODUCT_NAME@\0"
+			VALUE "ProductVersion",		"@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@\0"
+		END
+
 	END
 
+	// https://learn.microsoft.com/en-us/windows/win32/menurc/varfileinfo-block
 	BLOCK "VarFileInfo"
 	BEGIN
-		VALUE "Translation", 0x809, 0x04E4
+		VALUE "Translation", 0x0809, 0x04B0, 0x0416, 0x04B0, 0x0416, 0x04E4
 	END
 
 END

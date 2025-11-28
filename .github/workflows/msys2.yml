@@ -1,12 +1,12 @@
 name: check-msys2
 on:
   push:
-    branches: [ "win" ]
+    branches: [ "windows" ]
   pull_request:
     branches: [ "master" ]
 
 jobs:
-  msys2-build:
+  msys2-check:
     runs-on: windows-latest
     defaults:
       run:
@@ -17,21 +17,21 @@ jobs:
         with:
           msystem: mingw64
           update: true
-          install: dos2unix mingw-w64-x86_64-gcc automake autoconf make git pkgconf mingw-w64-x86_64-gettext gettext-devel mingw-w64-x86_64-openssl libtool mingw-w64-x86_64-gtk3 mingw-w64-x86_64-imagemagick mingw-w64-x86_64-optipng mingw-w64-x86_64-inkscape
-      - uses: robinraju/release-downloader@v1.7
+          install: dos2unix mingw-w64-x86_64-gcc automake autoconf make git pkgconf mingw-w64-x86_64-gettext gettext-devel mingw-w64-x86_64-openssl libtool mingw-w64-x86_64-gtk3 mingw-w64-x86_64-imagemagick mingw-w64-x86_64-optipng mingw-w64-x86_64-meson
+      - name: Check out lib3270
+        uses: actions/checkout@v4
         with:
-          repository: "PerryWerneck/lib3270"
-          latest: true
-          fileName: "mingw-w64-x86_64-lib3270-5.4-0-x86_64.pkg.tar.zst"      
-      - uses: robinraju/release-downloader@v1.7
+          repository: PerryWerneck/lib3270
+          ref: master
+          path: subprojects/lib3270
+      - name: Check out libv3270
+        uses: actions/checkout@v4
         with:
-          repository: "PerryWerneck/libv3270"
-          latest: true
-          fileName: "mingw-w64-x86_64-libv3270-5.4-0-x86_64.pkg.tar.zst"      
-      - name: CI-Build
+          repository: PerryWerneck/libv3270
+          ref: master
+          path: subprojects/libv3270
+      - name: Build
         run: |
-          pacman -U --noconfirm *.pkg.tar.zst
-          dos2unix PKGBUILD.mingw
-          makepkg BUILDDIR=/tmp/pkg -p PKGBUILD.mingw
-
+          meson setup --prefix=/ --libdir=/bin --bindir=/bin .build
+          meson compile -C .build
 

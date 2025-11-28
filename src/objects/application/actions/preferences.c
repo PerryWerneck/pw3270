@@ -1,6 +1,6 @@
 /*
  * "Software pw3270, desenvolvido com base nos códigos fontes do WC3270  e X3270
- * (Paul Mattes Paul.Mattes@usa.net), de emulação de terminal 3270 para acesso a
+ * (Paul Mattes paul.mattes@case.edu), de emulação de terminal 3270 para acesso a
  * aplicativos mainframe. Registro no INPI sob o nome G3270.
  *
  * Copyright (C) <2008> <Banco do Brasil S.A.>
@@ -58,9 +58,11 @@ static GtkWidget * factory(PW3270Action * action, GtkApplication *application) {
 	    dialog
 	);
 
+#ifndef __APPLE__
 	if(pw3270_application_get_ui_style(G_APPLICATION(application)) != PW3270_UI_STYLE_CLASSICAL) {
 		gtk_container_add(GTK_CONTAINER(dialog),pw3270_header_settings_new());
 	}
+#endif // !__APPLE__
 
 	gtk_widget_show_all(dialog);
 

@@ -116,6 +116,38 @@
 
 	}
 
+#elif defined(__APPLE__)
+	{
+		lib3270_autoptr(char) schemadir = lib3270_build_data_filename("glib-2.0","schemas",NULL);
+
+		GError * error = NULL;
+		GSettingsSchemaSource * source =
+			g_settings_schema_source_new_from_directory(
+				schemadir,
+				NULL,
+				TRUE,
+				&error
+			);
+
+		if(error) {
+			g_warning("Error loading '%s': %s","gschemas.compiled",error->message);
+			g_error_free(error);
+			return NULL;
+		}
+
+		GSettingsSchema * schema =
+			g_settings_schema_source_lookup(
+				source,
+				schema_id,
+				TRUE
+			);
+
+		settings = g_settings_new_full(schema, NULL, NULL);
+
+		g_settings_schema_source_unref(source);
+
+	}
+
 #elif defined(DEBUG)
 
 	{

@@ -1,0 +1,232 @@
+#!/bin/bash
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+#
+# Copyright (C) 2025 Perry Werneck <perry.werneck@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+cd $(dirname $(dirname $0))	
+
+if [ -e /etc/os-release ]; then
+	. /etc/os-release
+else
+	echo "This script requires /etc/os-release to be present"
+	exit -1
+fi
+
+if [ "${ID}" != "msys2" ]; then
+	echo "Running on linux, not msys2"
+	if [ -z "${MINGW_PREFIX}" ]; then
+		export MINGW_PREFIX="/usr/x86_64-w64-mingw32/sys-root/mingw"
+		export PKG_CONFIG="/usr/bin/x86_64-w64-mingw32-pkg-config"
+		export MINGW_PACKAGE_PREFIX="mingw64"
+	fi
+else
+	echo "Running on msys2"
+fi
+
+if [ -z "${MINGW_PREFIX}" ]; then
+	echo "MINGW_PREFIX is not set, please set it to your mingw prefix"
+	exit -1
+fi
+
+setup_cross() {
+
+	meson setup \
+        --prefix=/ \
+		--libdir=/bin \
+		--bindir=/bin \
+        --buildtype=release \
+        --reconfigure \
+        --wipe \
+		--cross-file /usr/lib/rpm/macros.d/meson-mingw64-cross-file.txt \
+		.build
+
+	if [ $? -ne 0 ]; then
+		echo "Meson setup failed"
+		exit 1
+	fi
+
+}
+
+setup_msys2() {
+
+	meson setup \
+        --prefix=/ \
+		--libdir=/bin \
+		--bindir=/bin \
+        --buildtype=release \
+        --reconfigure \
+        --wipe \
+		.build
+
+	if [ $? -ne 0 ]; then
+		echo "Meson setup failed"
+		exit 1
+	fi
+
+}
+
+install_libraries() {
+
+	AGAIN=1
+	until [ $AGAIN = 0 ]; do
+
+		SOURCES=$(mktemp)
+		REQUIRES=$(mktemp)
+
+		find "${bindir}" -iname "*.dll" >	${SOURCES}
+		find "${bindir}" -iname "*.exe" >>	${SOURCES}
+	
+		while read FILENAME
+		do
+			echo ${FILENAME} aaa
+			LANG=C objdump -p ${FILENAME} | grep "DLL Name:" | cut -d: -f2 | tr "[:upper:]" "[:lower:]" >> ${REQUIRES}
+		done < ${SOURCES}
+
+		libs_to_exclude="
+			advapi32.dll
+			cfgmgr32.dll
+			comctl32.dll
+			comdlg32.dll
+			crypt32.dll
+			d3d8.dll
+			d3d9.dll
+			ddraw.dll
+			dnsapi.dll
+			dsound.dll
+			dwmapi.dll
+			gdi32.dll
+			gdiplus.dll
+			glu32.dll
+			glut32.dll
+			imm32.dll
+			iphlpapi.dll
+			kernel32.dll
+			ksuser.dll
+			mpr.dll
+			mscms.dll
+			mscoree.dll
+			msimg32.dll
+			msvcr71.dll
+			msvcr80.dll
+			msvcr90.dll
+			msvcrt.dll
+			mswsock.dll
+			netapi32.dll
+			odbc32.dll
+			ole32.dll
+			oleacc.dll
+			oleaut32.dll
+			opengl32.dll
+			psapi.dll
+			rpcrt4.dll
+			secur32.dll
+			setupapi.dll
+			shell32.dll
+			shlwapi.dll
+			user32.dll
+			usp10.dll
+			version.dll
+			wininet.dll
+			winmm.dll
+			wldap32.dll
+			ws2_32.dll
+			wsock32.dll
+			winspool.drv
+			ntdll.dll
+			winhttp.dll
+			hid.dll
+			bcrypt.dll
+		"
+
+		# Remove system DLLs from list
+		for i in $libs_to_exclude; do
+			sed -i -e "/${i}/d" ${REQUIRES}
+		done
+
+		AGAIN=0
+		while read FILENAME
+		do
+
+			echo ${FILENAME}
+			
+			if [ ! -e "${bindir}/${FILENAME}" ]; then
+
+				if [ -e ${MINGW_PREFIX}/bin/${FILENAME} ]; then
+
+					AGAIN=1
+					cp -v "${MINGW_PREFIX}/bin/${FILENAME}" "${bindir}/${FILENAME}"
+					if [ "$?" != "0" ]; then
+						exit -1
+					fi
+
+				elif [ -e ${MINGW_PREFIX}/lib/${FILENAME} ]; then
+
+					AGAIN=1
+					cp -v "${MINGW_PREFIX}/lib/${FILENAME}" "${bindir}/${FILENAME}"
+					if [ "$?" != "0" ]; then
+						exit -1
+					fi
+
+				elif [ -e  "${WIN_ROOT}/System32/${FILENAME}" ]; then
+
+					echo "Ignoring ${WIN_ROOT}/System32/${FILENAME}"
+
+				else 
+
+					echo "Can't find ${MINGW_PREFIX}/bin/${FILENAME} or ${WIN_ROOT}/System32/${FILENAME}"
+					find "${MINGW_PREFIX}" -iname "${FILENAME}"
+					exit -1
+
+				fi
+			
+			fi
+		
+		done < ${REQUIRES}
+
+		rm -f ${SOURCES}
+		rm -f ${REQUIRES}
+		
+	done
+	
+}
+
+export DESTDIR=$(pwd)/.bundle
+export bindir=${DESTDIR}/bin
+
+if [ "${ID}" == "msys2" ]; then
+	setup_msys2
+else 
+	setup_cross
+fi
+
+meson compile -C .build
+if [ "$?" != "0" ]; then
+	echo "Meson compile has failed"
+	exit -1
+fi
+
+rm -fr ${DESTDIR}
+meson install -C .build
+if [ "$?" != "0" ]; then
+	echo "Meson install has failed"
+	exit -1
+fi
+
+install_libraries
+
+find ${DESTDIR} -type f

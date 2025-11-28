@@ -1,6 +1,6 @@
 app-id: br.app.pw3270.terminal
 runtime: org.gnome.Platform
-runtime-version: '47'
+runtime-version: '49'
 sdk: org.gnome.Sdk
 command: pw3270
 finish-args:
@@ -20,35 +20,36 @@ cleanup:
   - "*.a"
 modules:
   - name: lib3270
-    buildsystem: autotools
-    config-opts: 
-      - --with-product-id="br.app.pw3270"
+    buildsystem: meson
     sources:
       - type: git
-        tag: "5.4"
+        tag: "master"
         url: https://github.com/PerryWerneck/lib3270
         x-checker-data:
           - type: git
           - tag-pattern: ([\\d.]+)$
           - is-important: true
   - name: libv3270
-    buildsystem: autotools
+    buildsystem: meson
     sources:
       - type: git
-        tag: "5.4"
+        tag: "master"
         url: https://github.com/PerryWerneck/libv3270
         x-checker-data:
           - type: git
           - tag-pattern: ([\\d.]+)$
           - is-important: true
   - name: pw3270
-    buildsystem: autotools
+    buildsystem: meson
     sources:
       - type: git
-        tag: "5.5"
+        tag: "master"
         url: https://github.com/PerryWerneck/pw3270
         x-checker-data:
           - type: git
           - tag-pattern: ([\\d.]+)$
           - is-important: true
+    post-install:
+      - echo "Compiling schemas"
+      - /usr/bin/glib-compile-schemas /app/share/glib-2.0/schemas/ 
           

@@ -1,226 +1,342 @@
 #!/usr/bin/env bash
-#@author  André Breves <andre.breves@gmail.com>
-set -Eeuo pipefail
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+#
+# Copyright (C) 2025 Perry Werneck <perry.werneck@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
 
-check_dependencies() {
-    local unavailable=()
-    for dependency in "${@:-$(</dev/stdin)}"; do
-        if [[ ! -x "$(command -v "${dependency}")" ]]; then unavailable+=("${dependency}"); fi
+# References:
+#
+#   https://stackoverflow.com/questions/1596945/building-osx-app-bundle
+#   http://hints.macworld.com/article.php?story=20020311215452999
+#   https://stackoverflow.com/questions/8680132/creating-nice-dmg-installer-for-mac-os-x
+#   
+# Tools:
+#   https://github.com/create-dmg/create-dmg
+#
+APPNAME="pw3270"
+
+APPDIR=${PWD}/${APPNAME}.app
+
+rm -fr ${APPDIR}
+mkdir -p ${APPDIR}
+mkdir -p ${APPDIR}/Contents
+mkdir -p ${APPDIR}/Contents/MacOS
+mkdir -p ${APPDIR}/Contents/MacOS/lib
+mkdir -p ${APPDIR}/Contents/Resources
+mkdir -p ${APPDIR}/Contents/Resources/plugins
+
+install_libraries() {
+
+    # Copy the required libraries
+    for path in $(otool -L ${1} | tail -n +2 | grep -v "/usr/lib/" | grep -v "/System" | cut -d\( -f1)
+    do
+        dpath="${APPDIR}/Contents/MacOS/lib/$(basename ${path})"
+
+        if [ ! -e ${dpath} ]; then
+
+            echo "Copying ${path} to ${dpath}"
+
+            mkdir -p $(dirname ${dpath})
+
+            if [ ! -e ${path} ]; then
+                echo "Library ${path} not found, exiting"
+                exit -1
+            
+            fi
+            
+            cp -v "${path}" "${dpath}"
+            if [ "$?" != "0" ]; then
+                echo "Error copying ${path}"
+                exit -1
+            fi
+ 
+        fi
+
+        install_name_tool \
+            -change \
+                ${path} \
+                @executable_path/lib/$(basename ${path}) \
+                ${1}
     done
-    if [[ ${#unavailable[@]} == 1 ]]; then
-        echo "Dependency '${unavailable[*]}' not found."
-        exit 1
-    elif [[ ${#unavailable[@]} -gt 1 ]]; then 
-        error "Dependencies '${unavailable[*]}' not found."
-        exit 1
-    fi
-}
 
-find_lib() {
-    # https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/UsingDynamicLibraries.html
-    local libs_path="${HOME}/lib $(brew --prefix)/lib /usr/lib"
-    for lib in "${@:-$(</dev/stdin)}"; do
-        local found=""
-        if [[ -f "${lib}" ]]; then
-            found="$(greadlink -m "${lib}")"
-        else
-            for path in ${libs_path}; do
-                if [[ -f "${path}/${lib}" ]]; then
-                    found="$(greadlink -m "${path}/${lib}")"
-                    break
+    # Resolve library dependencies
+    again=1
+    while [ "${again}" == "1" ]
+    do
+        again=0
+        for libname in $(find ${APPDIR}/Contents/MacOS/lib -name "*.dylib") $(find ${APPDIR}/Contents/MacOS/lib -name "*.so")
+        do
+            echo "Checking ${libname}"
+            for path in $(otool -L ${libname} | tail -n +2 | grep -v "@executable_path/" | grep -v "/System/" | grep -v "/usr/lib/" | cut -d\( -f1)
+            do
+                dpath="${APPDIR}/Contents/MacOS/lib/$(basename ${path})"
+
+                if [ ! -e "${dpath}" ]; then
+                    again=1
+                    cp -v "${path}" "${dpath}"
+                    if [ "$?" != "0" ]; then
+                        echo "Error copying ${path}"
+                        exit -1
+                    fi
                 fi
+
+                install_name_tool \
+                    -change \
+                        ${path} \
+                        @executable_path/lib/$(basename ${path}) \
+                        ${libname}
+
             done
-        fi
-        if [[ "${found}" != "" ]]; then
-            echo "${found}"
-        else
-            echo >&2 "Lib ${lib} not found"
-            exit 1
-        fi
-    done
-}
 
-bundle_cp() {
-    local system_libs='^(/System/.*|/usr/lib/.*)$'
-    
-    for source in "${@:-$(</dev/stdin)}"; do
-        source="$(greadlink -m "${source}")"
-
-        if [[ "${source}" =~ ${system_libs} ]]; then continue; fi
-        
-        if [[ ! -f "${source}" ]]; then
-            echo >&2 "File \"${source}\" not found"
-            exit 1
-        fi
-
-        local id=""
-        local target=""
-        local file_type
-        file_type="$(file -b "${source}")"
-        case "${file_type}" in
-            *executable*)
-                target="$(greadlink -m "${exe_path}/$(basename "${source}")")";;
-            *)
-                id="@rpath/$(basename "${source}")"
-                target="$(greadlink -m "${lib_path}/$(basename "${source}")")";;
-        esac
-
-        if [[ "${id}" != "" ]]; then echo "${id}"; fi
-        
-        if [[ -f "${target}" ]]; then continue; fi
-        
-        mkdir -p "$(dirname "${target}")"
-        cp "${source}" "${target}"
-        chmod u+w "${target}"
-        
-        if [[ "${id}" != "" ]]; then install_name_tool -id "${id}" "${target}" 2> /dev/null; fi
-        install_name_tool -add_rpath "@executable_path/../Frameworks" "${target}" 2> /dev/null
-        
-        for old_install_name in $(otool -L "${target}" | grep '^\t' | cut -c 2- | sed -n "s/\(.*\) (.*)/\1/p"); do
-            if [[ "${old_install_name}" == "${id}" ]]; then continue; fi
-            if [[ "${old_install_name}" =~ ${system_libs} ]]; then continue; fi
-            local lib
-            if [[ "${old_install_name}" =~ ^@loader_path.* ]]; then
-                lib="$(find_lib "$(dirname "${source}")/${old_install_name//@loader_path/}")"
-            else
-                lib="$(find_lib "${old_install_name}")"
-            fi
-            local new_install_name="$(bundle_cp "${lib}")"
-            if [[ "${new_install_name}" != "" ]]; then 
-                install_name_tool -change "${old_install_name}" "${new_install_name}" "${target}" 2> /dev/null
-            fi
         done
-        # https://stackoverflow.com/a/71753248/6910609
-        codesign --force -s - "${target}" 2> /dev/null
-        echo >&2 "${target}"
+
     done
+
 }
 
-bundle_cache() {
-    local awaiting_file=1;
-    while IFS= read -r line; do
-        if (( awaiting_file )); then
-            if [[ ! "${line}" =~ ^"#" && "${line}" != "" ]]; then
-                line="${line##\ }"
-                line="${line#\"}"
-                line="${line%%\ }"
-                line="${line%\"}"
-                line="\"$(bundle_cp "${line}")\""
-                awaiting_file=0
-            fi
-        else
-            if [[ "${line}" == "" ]]; then
-                awaiting_file=1
-            fi
+install_schemas() {             
+
+    SCHEMASDIR="${APPDIR}/Contents/Resources/glib-2.0/schemas"
+    mkdir -p "${SCHEMASDIR}"
+
+    gtk_schemas="org.gtk.Settings.FileChooser.gschema.xml"
+    glib_schemas="gschema.dtd"
+
+    for schema in ${gtk_schemas}
+    do
+        filepath=$(pkg-config --variable=prefix gtk+-3.0)/share/glib-2.0/schemas/${schema}
+        echo ${filepath}
+        cp -v \
+            ${filepath} \
+            "${SCHEMASDIR}"
+        if [ "$?" != "0" ]; then
+            exit -1
         fi
-        printf '%s\n' "${line}"
+    done
+
+    for schema in ${glib_schemas}
+    do
+        filepath=$(pkg-config --variable=prefix glib-2.0)/share/glib-2.0/schemas/${schema}
+        echo ${filepath}
+        cp -v \
+            ${filepath} \
+            "${SCHEMASDIR}"
+        if [ "$?" != "0" ]; then
+            exit -1
+        fi
+    done
+
+    glib-compile-schemas --targetdir="${SCHEMASDIR}" "${SCHEMASDIR}"
+    if [ "$?" != "0" ]; then
+        exit -1
+    fi
+
+}
+
+install_locale() {
+    base_libraries="glib-2.0 gtk+-3.0"
+    for library in ${base_libraries}
+    do
+        cp -R -v \
+            $(pkg-config --variable=prefix ${library})/share/locale/* \
+            ${APPDIR}/Contents/Resources/locale
+        if [ "$?" != "0" ]; then
+            echo "Error copying locale for ${library}"
+            exit -1
+        fi
     done
 }
 
-# Check dependencies
-check_dependencies otool grep cut sed greadlink qlmanage sips iconutil
+build_package() {
 
-# Creates temporary directory
-echo "* Creating temporary directory"
-tmp="$(mktemp -d)"
-trap 'echo "* Removing temporary directory \"${tmp}\""; rm -rf "${tmp}"' EXIT
+    # Reconfigure & build
+    rm -fr .build
+    meson setup \
+        --prefix=/ \
+        --buildtype=release \
+        --reconfigure \
+        --wipe \
+        .build
+    if [ "$?" != "0" ]; then
+        echo "Meson setup has failed"
+        exit -1
+    fi
 
-bundle="pw3270.app"
-bundle_path="${bundle}/Contents"
-exe_path="${bundle_path}/MacOS"
-lib_path="${bundle_path}/Frameworks"
-res_path="${bundle_path}/Resources"
+    meson compile -C .build
+    if [ "$?" != "0" ]; then
+        echo "Meson compile has failed"
+        exit -1
+    fi
 
-rm -fr "${bundle}"
+    DESTDIR=${APPDIR}/Contents/MacOS meson install -C .build
+    if [ "$?" != "0" ]; then
+        echo "Meson compile has failed"
+        exit -1
+    fi
 
-mkdir -p "${bundle_path}"
-cp "Info.plist" "${bundle_path}"
+    mv ${APPDIR}/Contents/MacOS/bin/* ${APPDIR}/Contents/MacOS
+    if [ "$?" != "0" ]; then
+        echo "Error moving bin/* to ${APPDIR}/Contents/MacOS"
+        exit -1
+    fi
 
-mkdir -p "${res_path}"
-cp -r "../ui/macos.ui.xml" "${res_path}/pw3270.ui.xml"
-cp -r "$(brew --prefix)/share/pw3270/remap" "${res_path}"
-cp "$(brew --prefix)/share/pw3270/colors.conf" "${res_path}"
+    mv ${APPDIR}/Contents/MacOS/share/* ${APPDIR}/Contents/Resources
+    if [ "$?" != "0" ]; then
+        echo "Error moving shared folders to ${APPDIR}/Contents/Resources"
+        exit -1
+    fi
 
-# Bundle GLib schemas
-echo "* Bundling GLib schemas"
-mkdir -p "${tmp}/schemas"
-cp "../schemas/"*".gschema.xml" "${tmp}/schemas"
-cp "$(pkg-config gtk+-3.0 --variable=prefix)/share/glib-2.0/schemas/org.gtk.Settings."*".gschema.xml" "${tmp}/schemas"
-glib-compile-schemas --targetdir="${res_path}" "${tmp}/schemas"
+    mv ${APPDIR}/Contents/Resources/${APPNAME}/*.xml ${APPDIR}/Contents/Resources
+    if [ "$?" != "0" ]; then
+        echo "Error moving xml files to ${APPDIR}/Contents/Resources"
+        exit -1
+    fi
 
-# Create the GTK settings file
-# https://developer.gnome.org/gtk3/stable/GtkSettings.html
-mkdir -p "${res_path}/gtk-3.0"
-cat > "${res_path}/gtk-3.0/settings.ini" << EOF
-[Settings]
-gtk-theme-name=Adwaita
-gtk-print-preview-command="open -b com.apple.Preview %f"
-EOF
+    rmdir ${APPDIR}/Contents/MacOS/bin ${APPDIR}/Contents/MacOS/share ${APPDIR}/Contents/Resources/plugins
+    if [ "$?" != "0" ]; then
+        echo "Error remmoving unused paths"
+        exit -1
+    fi
 
-# Make icon bundle
-echo "* Creating app icon bundle"
-iconset="${tmp}/pw3270.iconset"
-rm -fr "${iconset}"
-mkdir -p "${iconset}"
-icon_sizes=("16" "32" "64" "128" "256" "512" "1024")
-for ((i=1; i < ${#icon_sizes[*]}; i++)); do
-    size=${icon_sizes[$((i - 1))]}
-    convert -density "${size}"   -resize "${size}x"   -background transparent "../branding/pw3270.svg" "${iconset}/icon_${size}x${size}.png"
+}
+
+install_loaders() {
+
+    gdk-pixbuf-query-loaders | sed -e "s@$(brew --cellar)@./lib@g" > ${APPDIR}/Contents/Resources/gdk-pixbuf.loaders
+
+    for from in $(gdk-pixbuf-query-loaders | grep $(brew --cellar) | grep -v "^#" | cut -d\" -f2)
+    do
+        to=$(echo ${from} | sed -e "s@$(brew --cellar)@${APPDIR}/Contents/MacOS/lib@g")
+        mkdir -p $(dirname ${to})
+        cp -v "${from}" "${to}"
+        if [ "$?" != "0" ]; then
+            echo "Error installing ${to}"
+            exit -1
+        fi
+            
+    done
+
+}
+
+install_icon() {
+    echo ${1}
+ 
+    mkdir -p "${APPDIR}/Contents/Resources/icons"
+
+    icon_sizes=("16" "32" "64" "128" "256" "512" "1024")
+    iconname=$(basename ${1} | cut -d. -f1)
+    iconset="./iconsets/${iconname}.iconset"
+
+    for ((i=1; i < ${#icon_sizes[*]}; i++))
+    do
+        mkdir -p ${iconset}
+
+        size=${icon_sizes[$((i - 1))]}
+        #magick -density "${size}" -background transparent "${1}" -resize ${size} "${iconset}/icon_${size}x${size}.png"
+        rsvg-convert ${1} --width ${size} --format png --output "${iconset}/icon_${size}x${size}.png"
+
+        if [ "$?" != "0" ]; then
+            echo "Error converting ${1} to ${size}x${size}"
+            exit -1
+        fi
+    done
+    iconutil -c icns -o "${2}" "${iconset}"
+    if [ "$?" != "0" ]; then
+        echo "Error converting ${1} to icns"
+        exit -1
+    fi
+
+    rm -fr ${iconset}
+
+}
+
+install_icons() {
+
+    for icon in icons/*.svg
+    do
+        install_icon ${icon} "${APPDIR}/Contents/Resources/icons/$(basename ${icon} .svg).icns"
+    done
+
+    install_icon "./branding/${APPNAME}.svg" "${APPDIR}/Contents/Resources/${APPNAME}.icns"
+    install_icon "./branding/${APPNAME}-symbolic.svg" "${APPDIR}/Contents/Resources/icons/${APPNAME}-symbolic.icns"
+
+}
+
+make_dmg() {
+
+    # https://github.com/create-dmg/create-dmg
+
+    rm -f *.dmg
     
-    size2x=${icon_sizes[${i}]}
-    convert -density "${size2x}" -resize "${size2x}x" -background transparent "../branding/pw3270.svg" "${iconset}/icon_${size}x${size}@2x.png"
-done
-iconutil -c icns -o "${res_path}/pw3270.icns" "${iconset}"
+    rsvg-convert mac/installer_background.svg --format png --output "installer_background.png"
+    if [ ! "$?" == "0" ]; then
+        exit -1
+    fi
+
+    create-dmg \
+        --volname "${APPNAME}" \
+        --eula LICENSE \
+        --volicon "${APPDIR}/Contents/Resources/${APPNAME}.icns" \
+        --window-pos 200 120 \
+        --window-size 800 400 \
+        --icon-size 100 \
+        --icon "${APPNAME}.app" 200 190 \
+        --hide-extension "${APPNAME}.app" \
+        --background installer_background.png \
+        --app-drop-link 600 185 \
+        "${APPNAME}-$(grep "^#define PACKAGE_VERSION " .build/config.h | head -n 1 | cut -d\" -f2)-unstable.dmg" \
+        "${APPDIR}"
+
+}
+
+#until [ -z "$1" ]
+#do
+#    if [ ${1:0:2} = '--' ]; then
+#        tmp=${1:2}
+#        parameter=${tmp%%=*}
+#        parameter=$(echo $parameter | tr "[:lower:]" "[:upper:]")
+#        value=${tmp##*=}
+#
+#        case "$parameter" in
+#        *)
+#            echo "Unexpect argument"
+#            exit -1        
+#        esac
+#    fi
+#
+#    shift
+#
+#done
+
+build_package
+install_loaders ${APPDIR}/Contents/MacOS/lib
+install_libraries ${APPDIR}/Contents/MacOS/${APPNAME}
+install_locale
+install_schemas
+install_icons
+
+# copy info.plist
+cp -v mac/info.plist ${APPDIR}/Contents
+if [ "$?" != "0" ]; then
+    echo "Error copying info.plist"
+    exit -1
+fi
+
+make_dmg
 
 
-# Copy icons
-echo "* Copying icons"
-mkdir -p "${res_path}/icons"
-cp -r "$(brew --prefix adwaita-icon-theme)/share/icons/" "${res_path}/icons"
-cp -r "$(brew --prefix hicolor-icon-theme)/share/icons/" "${res_path}/icons"
-mogrify -format png -path "${res_path}" -background transparent "../branding/*.svg"
-
-# Copy themes
-echo "* Copying themes"
-mkdir -p "${res_path}/themes"
-cp -a "$(brew --prefix gtk+3)/share/themes/Mac" "${res_path}/themes"
-
-# Copy mime database
-echo "* Copying mime database"
-mkdir -p "${res_path}/mime"
-cp "$(pkg-config shared-mime-info --variable=prefix)/share/mime/mime.cache" "${res_path}/mime"
-
-# Copy executables
-echo "* Copying executables"
-mkdir -p "${exe_path}"
-bundle_cp "../.bin/Release/pw3270"
-cp "launcher.sh" "${exe_path}"
-
-# Bundle GdkPixbuf Image Loader Modules
-echo "* Bundling GdkPixbuf Image Loader Modules"
-gdk-pixbuf-query-loaders | bundle_cache > "${res_path}/gdk-loaders.cache"
-
-# Bundle GTK+ Input Method Modules
-echo "* Bundling GTK+ Input Method Modules"
-gtk_prefix="$(pkg-config gtk+-3.0 --variable prefix)"
-gtk-query-immodules-3.0 | bundle_cache \
-    | sed "s|${gtk_prefix}/share/locale|@executable_path/../Resources/locale|g" \
-    > "${res_path}/gtk.immodules"
-
-# Bundle print backends
-echo "* Bundling print backends"
-mkdir -p "${lib_path}/printbackends"
-for backend in "$(pkg-config gtk+-3.0 --variable=prefix)/lib/gtk-3.0/$(pkg-config gtk+-3.0 --variable=gtk_binary_version)/printbackends/"*.so; do
-    bundle_cp "${backend}"
-    # TODO: update bundle_cp to inform destiny dir
-    mv "${lib_path}/$(basename "${backend}")" "${lib_path}/printbackends"
-done
-
-# TODO: gerar o Info.plist com a versão do macOS $(sw_vers -productVersion)
-
-# Bundle locale
-echo "* Bundling locale"
-mkdir -p "${res_path}/locale"
-cp -r "../.bin/locale/" "${res_path}/locale"
-cp "$(brew --prefix)/share/locale/pt_BR/LC_MESSAGES/lib3270"*".mo" "${res_path}/locale/pt_BR/LC_MESSAGES"
-cp "$(brew --prefix)/share/locale/pt_BR/LC_MESSAGES/libv3270"*".mo" "${res_path}/locale/pt_BR/LC_MESSAGES"
+#echo "Build of ${INSTALL_IMAGE} is complete"

@@ -2,15 +2,15 @@
 
 pkgname=pw3270
 
-pkgver=5.5+git20230204
+pkgver=5.5.0+git20241211
 pkgrel=0
 pkgdesc="IBM 3270 Terminal emulator for GTK"
-url="https://portal.softwarepublico.gov.br/social/pw3270/"
+url="https://github.com/PerryWerneck/pw3270"
 arch=(i686 x86_64)
 license=(GPL)
 depends=(libv3270)
 optdepends=('pw3270-plugin-ipc: D-Bus remote control' 'pw3270-keypads: Aditional screen keypads')
-makedepends=(autoconf automake make openssl lib3270 gtk3 libv3270 python3 dbus dbus-glib imagemagick optipng gzip)
+makedepends=(meson gtk3 libv3270 python3)
 checkdepends=()
 
 groups=(gnome)
@@ -23,21 +23,20 @@ conflicts=($pkgname)
 
 prepare() {
   cd $pkgname-$pkgver
-  NOCONFIGURE=1 ./autogen.sh
-  ./configure --prefix=/usr
+  meson \
+    setup \
+      --reconfigure \
+      --wipe \
+      ".build"
 }
 
 build() {
   cd $pkgname-$pkgver
-  make all
+  meson compile -C ".build"
 }
 
 package() {
   cd $pkgname-$pkgver
-  DESTDIR="$pkgdir" make install
-  
-  # Remove compiled schema.
-  rm -f $pkgdir/usr/share/glib-2.0/schemas/gschemas.compiled
-  
+  DESTDIR="${pkgdir}" meson install -C ".build"
 }
 
