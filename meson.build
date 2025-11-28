@@ -313,7 +313,7 @@ if host_machine.system() != 'darwin'
 			'about-image',
 			command: [ 
 				scour,
-				'../branding/' + meson.project_name() + '.svg',
+				meson.project_source_root() + '/branding/' + meson.project_name() + '.svg',
 				lib3270.get_variable('product_name') + '.svg',
 			],
 			output: lib3270.get_variable('product_name') + '.svg',
@@ -391,7 +391,7 @@ if host_machine.system() == 'linux'
 			'app-icon-color',
 			command: [ 
 				scour,
-				'../branding/' + meson.project_name() + '.svg',
+				meson.project_source_root() + '/branding/' + meson.project_name() + '.svg',
 				lib3270.get_variable('product_id') + '.terminal.svg',
 			],
 			output: lib3270.get_variable('product_id') + '.svg',
@@ -405,7 +405,7 @@ if host_machine.system() == 'linux'
 			'app-icon-symbolic',
 			command: [ 
 				scour,
-				'../branding/' + meson.project_name() + '-symbolic.svg',
+				meson.project_source_root() + '/branding/' + meson.project_name() + '-symbolic.svg',
 				lib3270.get_variable('product_id') + '-symbolic.svg',
 			],
 			output: lib3270.get_variable('product_id') + '.terminal.svg',
