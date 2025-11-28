@@ -26,13 +26,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: PerryWerneck/lib3270
-          ref: macos
+          ref: master
           path: subprojects/lib3270
       - name: Check out libv3270
         uses: actions/checkout@v4
         with:
           repository: PerryWerneck/libv3270
-          ref: macos
+          ref: master
           path: subprojects/libv3270
       - name: Create bundle
         run: |
