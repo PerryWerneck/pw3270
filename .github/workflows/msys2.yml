@@ -18,21 +18,19 @@ jobs:
           msystem: mingw64
           update: true
           install: dos2unix mingw-w64-x86_64-gcc automake autoconf make git pkgconf mingw-w64-x86_64-gettext gettext-devel mingw-w64-x86_64-openssl libtool mingw-w64-x86_64-gtk3 mingw-w64-x86_64-imagemagick mingw-w64-x86_64-optipng mingw-w64-x86_64-inkscape
-      - uses: robinraju/release-downloader@v1.7
+      - name: Check out lib3270
+        uses: actions/checkout@v4
         with:
-          repository: "PerryWerneck/lib3270"
-          latest: true
-          fileName: "mingw-w64-x86_64-lib3270-5.5.0-0-x86_64.pkg.tar.zst"
-      - uses: robinraju/release-downloader@v1.7
+          repository: PerryWerneck/lib3270
+          ref: master
+          path: subprojects/lib3270
+      - name: Check out libv3270
+        uses: actions/checkout@v4
         with:
-          repository: "PerryWerneck/libv3270"
-          latest: true
-          fileName: "mingw-w64-x86_64-libv3270-5.5.0-0-x86_64.pkg.tar.zst"      
-      - name: CI-Build
-        run: |
-          pacman -U --noconfirm *.pkg.tar.zst
-          dos2unix PKGBUILD.mingw
-          cat PKGBUILD.mingw
-          makepkg BUILDDIR=/tmp/pkg -p PKGBUILD.mingw
+          repository: PerryWerneck/libv3270
+          ref: master
+          path: subprojects/libv3270
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
 
 
