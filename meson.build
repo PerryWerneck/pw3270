@@ -394,7 +394,7 @@ if host_machine.system() == 'linux'
 				meson.project_source_root() + '/branding/' + meson.project_name() + '.svg',
 				lib3270.get_variable('product_id') + '.terminal.svg',
 			],
-			output: lib3270.get_variable('product_id') + '.svg',
+			output: lib3270.get_variable('product_id') + '.terminal.svg',
 			install: true,
 			install_tag: 'runtime',
 			install_dir: get_option('datadir') + '/icons/hicolor/scalable/apps',
@@ -406,9 +406,9 @@ if host_machine.system() == 'linux'
 			command: [ 
 				scour,
 				meson.project_source_root() + '/branding/' + meson.project_name() + '-symbolic.svg',
-				lib3270.get_variable('product_id') + '-symbolic.svg',
+				lib3270.get_variable('product_id') + '.terminal-symbolic.svg',
 			],
-			output: lib3270.get_variable('product_id') + '.terminal.svg',
+			output: lib3270.get_variable('product_id') + '.terminal-symbolic.svg',
 			install: true,
 			install_tag: 'runtime',
 			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
@@ -427,7 +427,7 @@ if host_machine.system() == 'linux'
 			'branding/' + meson.project_name() + '-symbolic.svg',
 			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps',
 			install_tag: 'runtime',
-			rename: lib3270.get_variable('product_id') + '.terminal.svg'
+			rename: lib3270.get_variable('product_id') + '.terminal-symbolic.svg'
 		)
 
 	endif
