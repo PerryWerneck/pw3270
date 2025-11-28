@@ -27,7 +27,7 @@
 #---[ Packaging ]-----------------------------------------------------------------------------------------------------
 
 Name:				pw3270
-Version:			5.5.0+git20251128
+Version: 5.5.0
 Release:			0
 Summary:			IBM 3270 Terminal emulator for GTK
 License:			LGPL-3.0-only
