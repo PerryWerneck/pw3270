@@ -6,7 +6,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  msys2-build:
+  msys2-check:
     runs-on: windows-latest
     defaults:
       run:
@@ -30,7 +30,8 @@ jobs:
           repository: PerryWerneck/libv3270
           ref: master
           path: subprojects/libv3270
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v2
-
+      - name: Build
+        run: |
+          meson setup --prefix=/ --libdir=/bin --bindir=/bin .build
+          meson compile -C .build
 
