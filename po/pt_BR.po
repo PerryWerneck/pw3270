@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-11 06:01-0300\n"
+"POT-Creation-Date: 2025-11-27 18:53-0300\n"
 "PO-Revision-Date: 2023-04-26 07:50-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
@@ -26,6 +26,10 @@ msgstr "Arquivos de sessão TN3270"
 #: src/main/tools.c:68
 msgid "All files"
 msgstr "Todos os arquivos"
+
+#: src/main/builder.c:99
+msgid "Keypads"
+msgstr "Painéis"
 
 #: src/objects/actions/abstract.c:93
 msgid "Action Name"
@@ -144,6 +148,83 @@ msgstr "Ícone"
 msgid "Label"
 msgstr "Etiqueta"
 
+#: src/objects/application/actions/about.c:126
+#, c-format
+msgid "Unstable version %s-%s"
+msgstr "Versão instável %s-%s"
+
+#: src/objects/application/actions/about.c:128
+#, c-format
+msgid "Version %s-%s"
+msgstr "Versão %s-%s"
+
+#: src/objects/application/actions/about.c:146
+#, c-format
+msgid "%s for %s."
+msgstr "%s para %s"
+
+#: src/objects/application/actions/about.c:147
+#: src/objects/os/linux/savedesktopicon.c:102
+#: src/objects/os/windows/savedesktopicon.c:261 src/objects/window/window.c:579
+msgid "IBM 3270 Terminal emulator"
+msgstr "Emulador de terminal IBM 3270"
+
+#: src/objects/application/actions/about.c:149
+msgid "64 bits Windows"
+msgstr "Windows 64 bits"
+
+#: src/objects/application/actions/about.c:151
+msgid "32 bits Windows"
+msgstr "Windows 32 bits"
+
+#: src/objects/application/actions/about.c:153
+msgid "32 bits Linux"
+msgstr "Linux 32 bits"
+
+#: src/objects/application/actions/about.c:155
+msgid "64 bits Linux"
+msgstr "Linux 64 bits"
+
+#: src/objects/application/actions/about.c:187
+msgid "Maintainers"
+msgstr "Mantenedores"
+
+#: src/objects/application/actions/about.c:188
+msgid "Apple version"
+msgstr "Versão Apple"
+
+#: src/objects/application/actions/about.c:189
+msgid "Contributors"
+msgstr "Contribuidores"
+
+#: src/objects/application/actions/about.c:191
+msgid "Based on X3270 from"
+msgstr "Baseado no X3270 por"
+
+#: src/objects/application/actions/about.c:195
+msgid "Copyright © 2008 Banco do Brasil S.A."
+msgstr "Copyright © 2008 Banco do Brasil S.A."
+
+#: src/objects/application/actions/about.c:199
+msgid "LICENSE"
+msgstr "LICENCA"
+
+#: src/objects/application/actions/about.c:218
+msgid "https://github.com/PerryWerneck/pw3270"
+msgstr "https://github.com/PerryWerneck/pw3270"
+
+#: src/objects/application/actions/about.c:219
+msgid "View this project on github"
+msgstr "Visite-nos no github"
+
+#: src/objects/application/actions/about.c:221
+msgid "translator-credits"
+msgstr "translator-credits"
+
+#: src/objects/application/actions/about.c:245
+msgid "About PW3270"
+msgstr "Sobre o PW3270"
+
 #: src/objects/application/actions/open.c:49
 msgid "Open Session"
 msgstr "Abrir sessão"
@@ -186,11 +267,11 @@ msgstr "Abrir em nova aba"
 msgid "Open session in New Tab"
 msgstr "Abrir sessão em nova aba"
 
-#: src/objects/application/actions/preferences.c:76
+#: src/objects/application/actions/preferences.c:78
 msgid "Application preferences"
 msgstr "Preferências da aplicação"
 
-#: src/objects/application/actions/preferences.c:78
+#: src/objects/application/actions/preferences.c:80
 msgid "Change the application preferences"
 msgstr "Modificar preferências da aplicação"
 
@@ -217,83 +298,6 @@ msgstr "Nova janela"
 #: src/objects/application/actions/window.c:105
 msgid "New window with default session"
 msgstr "Nova janela com sessão padrão"
-
-#: src/objects/application/actions/about.c:116
-#, c-format
-msgid "Unstable version %s-%s"
-msgstr "Versão instável %s-%s"
-
-#: src/objects/application/actions/about.c:118
-#, c-format
-msgid "Version %s-%s"
-msgstr "Versão %s-%s"
-
-#: src/objects/application/actions/about.c:136
-#, c-format
-msgid "%s for %s."
-msgstr "%s para %s"
-
-#: src/objects/application/actions/about.c:137
-#: src/objects/os/linux/savedesktopicon.c:102
-#: src/objects/os/windows/savedesktopicon.c:261 src/objects/window/window.c:565
-msgid "IBM 3270 Terminal emulator"
-msgstr "Emulador de terminal IBM 3270"
-
-#: src/objects/application/actions/about.c:139
-msgid "64 bits Windows"
-msgstr "Windows 64 bits"
-
-#: src/objects/application/actions/about.c:141
-msgid "32 bits Windows"
-msgstr "Windows 32 bits"
-
-#: src/objects/application/actions/about.c:143
-msgid "32 bits Linux"
-msgstr "Linux 32 bits"
-
-#: src/objects/application/actions/about.c:145
-msgid "64 bits Linux"
-msgstr "Linux 64 bits"
-
-#: src/objects/application/actions/about.c:177
-msgid "Maintainers"
-msgstr "Mantenedores"
-
-#: src/objects/application/actions/about.c:178
-msgid "Apple version"
-msgstr "Versão Apple"
-
-#: src/objects/application/actions/about.c:179
-msgid "Contributors"
-msgstr "Contribuidores"
-
-#: src/objects/application/actions/about.c:181
-msgid "Based on X3270 from"
-msgstr "Baseado no X3270 por"
-
-#: src/objects/application/actions/about.c:185
-msgid "Copyright © 2008 Banco do Brasil S.A."
-msgstr "Copyright © 2008 Banco do Brasil S.A."
-
-#: src/objects/application/actions/about.c:189
-msgid "LICENSE"
-msgstr "LICENCA"
-
-#: src/objects/application/actions/about.c:208
-msgid "https://github.com/PerryWerneck/pw3270"
-msgstr "https://github.com/PerryWerneck/pw3270"
-
-#: src/objects/application/actions/about.c:209
-msgid "View this project on github"
-msgstr "Visite-nos no github"
-
-#: src/objects/application/actions/about.c:211
-msgid "translator-credits"
-msgstr "translator-credits"
-
-#: src/objects/application/actions/about.c:235
-msgid "About PW3270"
-msgstr "Sobre o PW3270"
 
 #: src/objects/application/application.c:152
 msgid "UI Type"
@@ -454,19 +458,6 @@ msgstr "Salvar para arquivo de sessão"
 msgid "This action is not available in this platform"
 msgstr "Ação não está disponível nessa plataforma"
 
-#: src/objects/os/windows/open.c:133
-msgid "Can't load session preferences"
-msgstr "Não foi possível carregar preferências da sessão"
-
-#: src/objects/os/windows/open.c:137
-#, c-format
-msgid "Unable to load session preferences from '%s'"
-msgstr "Incapaz de ler preferências de sessa de '%s'"
-
-#: src/objects/os/windows/open.c:140
-msgid "Error starting session"
-msgstr "Erro iniciando sessão"
-
 #: src/objects/os/windows/savedesktopicon.c:72
 msgid "Description"
 msgstr "Descrição"
@@ -482,6 +473,19 @@ msgstr "Atalhos windows"
 #: src/objects/os/windows/savedesktopicon.c:211
 msgid "File for session preferences"
 msgstr "Arquivo para preferências da sessão"
+
+#: src/objects/os/windows/open.c:133
+msgid "Can't load session preferences"
+msgstr "Não foi possível carregar preferências da sessão"
+
+#: src/objects/os/windows/open.c:137
+#, c-format
+msgid "Unable to load session preferences from '%s'"
+msgstr "Incapaz de ler preferências de sessa de '%s'"
+
+#: src/objects/os/windows/open.c:140
+msgid "Error starting session"
+msgstr "Erro iniciando sessão"
 
 #: src/objects/settings/actionview.c:68
 msgid "Start"
@@ -648,6 +652,14 @@ msgstr "Tipo dos ícones na barra de ferramentas"
 msgid "_Preferences"
 msgstr "_Preferências"
 
+#: src/objects/window/actions/sessionproperties.c:36
+msgid "Session preferences"
+msgstr "Preferências da sessão"
+
+#: src/objects/window/actions/sessionproperties.c:37
+msgid "Change the preferences for the active session"
+msgstr "Modificar preferências da sessão ativa"
+
 #: src/objects/window/actions/close.c:51
 msgid "Close window"
 msgstr "Fechar janela"
@@ -671,14 +683,6 @@ msgstr "Enviar/Receber"
 #: src/objects/window/actions/filetransfer.c:46
 msgid "Send/Receive files"
 msgstr "Enviar/Receber arquivos"
-
-#: src/objects/window/actions/sessionproperties.c:36
-msgid "Session preferences"
-msgstr "Preferências da sessão"
-
-#: src/objects/window/actions/sessionproperties.c:37
-msgid "Change the preferences for the active session"
-msgstr "Modificar preferências da sessão ativa"
 
 #: src/objects/window/header-settings.c:52
 msgid "Title bar"
@@ -708,12 +712,12 @@ msgstr "Exibir"
 msgid "TN3270 Session description"
 msgstr "Descrição de sessão TN3270"
 
-#: src/objects/window/page.c:207 src/objects/window/window.c:779
-#: src/objects/window/window.c:806
+#: src/objects/window/page.c:207 src/objects/window/window.c:793
+#: src/objects/window/window.c:820
 msgid "Disconnected from host"
 msgstr "Desconectado do servidor"
 
-#: src/objects/window/page.c:218 src/objects/window/window.c:779
+#: src/objects/window/page.c:218 src/objects/window/window.c:793
 msgid "Connected to host"
 msgstr "Conectado no servidor"
 
@@ -742,11 +746,11 @@ msgstr "_Fechar sessão"
 msgid "Can't use default session file"
 msgstr "Não posso usar arquivo de sessão default"
 
-#: src/objects/window/window.c:206
+#: src/objects/window/window.c:207
 msgid "Action Names"
 msgstr "Nome das ações"
 
-#: src/objects/window/window.c:207
+#: src/objects/window/window.c:208
 msgid "The name of the actions in the header bar"
 msgstr "O nome das ações na barra de título"
 
@@ -854,9 +858,6 @@ msgstr "O nome das ações na barra de título"
 
 #~ msgid "Keyboard accelerators"
 #~ msgstr "Atalhos de teclado"
-
-#~ msgid "Keypads"
-#~ msgstr "Painéis"
 
 #~ msgid "Main Menu"
 #~ msgstr "Menu principal"
@@ -3404,13 +3405,13 @@ msgstr "O nome das ações na barra de título"
 #~ msgid ""
 #~ "The current candidate issuer certificate was rejected because its issuer "
 #~ "name and serial number was present and did not match the authority key "
-#~ "identifier of the current certificate. Only displayed when the -"
-#~ "issuer_checks option is set."
+#~ "identifier of the current certificate. Only displayed when the "
+#~ "-issuer_checks option is set."
 #~ msgstr ""
 #~ "The current candidate issuer certificate was rejected because its issuer "
 #~ "name and serial number was present and did not match the authority key "
-#~ "identifier of the current certificate. Only displayed when the -"
-#~ "issuer_checks option is set."
+#~ "identifier of the current certificate. Only displayed when the "
+#~ "-issuer_checks option is set."
 
 #~ msgid ""
 #~ "The current candidate issuer certificate was rejected because its "

@@ -22,11 +22,12 @@ project(
 	['c'],
 	version: '5.5.0',
 	license: 'GPL-3.0-or-later',
+	default_options : [ 'buildtype=release' ]
 )
 
 project_description = 'IBM 3270 Terminal emulator for GTK'
 
-scour = find_program('scour', required: true)
+scour = find_program('scour', required: false)
 
 #
 # Compiler flags
@@ -239,20 +240,6 @@ config_src = [
   )
 ]
 
-configure_file(
-  input : 'schemas/application.gschema.xml.in',
-  output : meson.project_name() + '-application.gschema.xml',
-  install_dir: get_option('datadir') / 'glib-2.0/schemas',
-  configuration : app_conf
-)
-
-configure_file(
-  input : 'schemas/window.gschema.xml.in',
-  output : meson.project_name() + '-window.gschema.xml',
-  install_dir: get_option('datadir') / 'glib-2.0/schemas',
-  configuration : app_conf
-)
-
 if host_machine.system() == 'windows'
 
   # https://mesonbuild.com/Windows-module.html
@@ -320,33 +307,71 @@ icons = [
 # The icon conversion for mac is done by the bundle script.
 if host_machine.system() != 'darwin'
 
-	custom_target(
-		'about-image',
-		command: [ 
-			scour,
-			'../branding/' + meson.project_name() + '.svg',
-			lib3270.get_variable('product_name') + '.svg',
-		],
-		output: lib3270.get_variable('product_name') + '.svg',
-		install: true,
-		install_tag: 'runtime',
-		install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
-	)
-
-	foreach icon : icons
+	if scour.found()
+		
 		custom_target(
-			icon,
+			'about-image',
 			command: [ 
 				scour,
-				'../icons/' + icon,
-				icon,
+				'../branding/' + meson.project_name() + '.svg',
+				lib3270.get_variable('product_name') + '.svg',
 			],
-			output: icon,
+			output: lib3270.get_variable('product_name') + '.svg',
 			install: true,
+			install_tag: 'runtime',
+			install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name'),
+		)
+
+		foreach icon : icons
+			custom_target(
+				icon,
+				command: [ 
+					scour,
+					'../icons/' + icon,
+					icon,
+				],
+				output: icon,
+				install: true,
+				install_tag: 'runtime',
+				install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+			)
+		endforeach
+
+	else
+
+		install_data(
+			'branding/' + meson.project_name() + '.svg',
 			install_tag: 'runtime',
 			install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
 		)
-	endforeach
+
+		foreach icon : icons
+			install_data(
+				'icons/' + icon,
+				install_tag: 'runtime',
+				install_dir: get_option('datadir') + '/' + lib3270.get_variable('product_name') + '/icons',
+			)
+		endforeach
+
+	endif
+
+endif
+
+if host_machine.system() == 'windows' or host_machine.system() == 'darwin'
+
+	configure_file(
+		input : 'schemas/application.gschema.xml.in',
+		output : meson.project_name() + '-application.gschema.xml',
+		install_dir: get_option('datadir') / 'glib-2.0/schemas',
+		configuration : app_conf
+	)
+
+	configure_file(
+		input : 'schemas/window.gschema.xml.in',
+		output : meson.project_name() + '-window.gschema.xml',
+		install_dir: get_option('datadir') / 'glib-2.0/schemas',
+		configuration : app_conf
+	)
 
 endif
 
@@ -354,42 +379,62 @@ if host_machine.system() == 'linux'
 
 	configure_file(
 		input : 'branding/launcher.desktop.in',
-		output : lib3270.get_variable('product_id') + '.desktop',
+		output : lib3270.get_variable('product_id') + '.terminal.desktop',
 		install_dir: get_option('datadir') / 'applications',
 		install_tag: 'runtime',
 		configuration : app_conf
 	)
 
-	custom_target(
-		'app-icon-color',
-		command: [ 
-			scour,
-			'../branding/' + meson.project_name() + '.svg',
-			lib3270.get_variable('product_id') + '.svg',
-		],
-		output: lib3270.get_variable('product_id') + '.svg',
-		install: true,
-		install_tag: 'runtime',
-		install_dir: get_option('datadir') + '/icons/hicolor/scalable/apps',
-	)
+	if scour.found()
 
-	# TODO: How to save with same name??? Cant accept 'rename'
-	custom_target(
-		'app-icon-symbolic',
-		command: [ 
-			scour,
-			'../branding/' + meson.project_name() + '-symbolic.svg',
-			lib3270.get_variable('product_id') + '-symbolic.svg',
-		],
-		output: lib3270.get_variable('product_id') + '-symbolic.svg',
-		install: true,
-		install_tag: 'runtime',
-		install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
-	)
+		custom_target(
+			'app-icon-color',
+			command: [ 
+				scour,
+				'../branding/' + meson.project_name() + '.svg',
+				lib3270.get_variable('product_id') + '.terminal.svg',
+			],
+			output: lib3270.get_variable('product_id') + '.svg',
+			install: true,
+			install_tag: 'runtime',
+			install_dir: get_option('datadir') + '/icons/hicolor/scalable/apps',
+		)
+
+		# TODO: How to save with same name??? Cant accept 'rename'
+		custom_target(
+			'app-icon-symbolic',
+			command: [ 
+				scour,
+				'../branding/' + meson.project_name() + '-symbolic.svg',
+				lib3270.get_variable('product_id') + '-symbolic.svg',
+			],
+			output: lib3270.get_variable('product_id') + '.terminal.svg',
+			install: true,
+			install_tag: 'runtime',
+			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
+		)
+
+
+	else
+		install_data(
+			'branding/' + meson.project_name() + '.svg',
+			install_dir: get_option('datadir') + '/icons/hicolor/scalable/apps',
+			install_tag: 'runtime',
+			rename: lib3270.get_variable('product_id') + '.terminal.svg'
+		)
+
+		install_data(
+			'branding/' + meson.project_name() + '-symbolic.svg',
+			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps',
+			install_tag: 'runtime',
+			rename: lib3270.get_variable('product_id') + '.terminal.svg'
+		)
+
+	endif
 
 	configure_file(
 		input : 'branding/metainfo.xml.in',
-		output : lib3270.get_variable('product_id') + '.metainfo.xml',
+		output : lib3270.get_variable('product_id') + '.terminal.metainfo.xml',
 		install_dir: get_option('datadir') / 'metainfo',
 		configuration : app_conf
 	)
@@ -399,6 +444,33 @@ if host_machine.system() == 'linux'
 		output : meson.project_name() + '.xml',
 		install_dir: get_option('datadir') / 'mime/packages',
 		configuration : app_conf
+	)
+
+	# GSettings schemas
+	schemas = [
+		configure_file(
+			input : 'schemas/application.gschema.xml.in',
+			output : meson.project_name() + '-application.gschema.xml',
+			configuration : app_conf
+		),
+		configure_file(
+			input : 'schemas/window.gschema.xml.in',
+			output : meson.project_name() + '-window.gschema.xml',
+			configuration : app_conf
+		),
+	]
+
+	gnome = import('gnome')
+	gnome.post_install(glib_compile_schemas: true)
+
+	gnome.compile_schemas(
+		depend_files: schemas,
+		build_by_default: true # Optional, ensures compilation during a standard 'ninja' build
+	)
+
+	install_data(
+		schemas,
+		install_dir: join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
 	)
 
 endif
