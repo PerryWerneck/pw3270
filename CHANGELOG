@@ -1,14 +1,40 @@
 -------------------------------------------------------------------
+Fri Nov 28 11:11:25 UTC 2025 - perry.werneck@gmail.com
+
+- Update to version 5.5.0+git20251128:
+  * Debugging flatpak build.
+  * Allowing build without scour (for flatpak)
+  * Add x-checker-data for multiple sources - https://github.com/flathub/br.app.pw3270.terminal/pull/6
+  * Using dynamic version of libv3270.
+  * Updating mac os build instructions
+  * Adding wrap files.
+  * Debugging windows package.
+  * Using subprojects for lib3270 & libv3270
+  * Fixing toplevel window style for macos.
+  * Working on macos bundler.
+  * Adding DMG build as github action.
+  * Fixing macos dependencies
+  * Debugging macos actions & bundle.
+
+-------------------------------------------------------------------
+Sat Nov 22 21:23:40 CET 2025 - Stanislav Brabec <sbrabec@suse.com>
+
+- Remove unused BuildRequires: update-desktop-files.
+
+-------------------------------------------------------------------
+Thu Feb 27 16:33:42 UTC 2025 - Perry Werneck <perry.werneck@gmail.com>
+
+- Removing fixed meson version requirement. 
+
+-------------------------------------------------------------------
 Thu Dec 12 19:22:03 UTC 2024 - perry.werneck@gmail.com
 
 - Update to version 5.5.0+git20241211:
-  * Publishing updated version 5.5.0
   * Installing icons.
   * Fixing configuration.
   * Adding about dialog icon.
   * Installing 'ui' files.
   * Updating branding.
-  * Packaging branding.
   * Updating translation name.
   * Migrating to meson build system.
   * Replacing Paul Mattes e-mail as requested.

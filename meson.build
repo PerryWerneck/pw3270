@@ -394,26 +394,30 @@ if host_machine.system() == 'linux'
 				meson.project_source_root() + '/branding/' + meson.project_name() + '.svg',
 				lib3270.get_variable('product_id') + '.terminal.svg',
 			],
-			output: lib3270.get_variable('product_id') + '.svg',
+			output: lib3270.get_variable('product_id') + '.terminal.svg',
 			install: true,
 			install_tag: 'runtime',
 			install_dir: get_option('datadir') + '/icons/hicolor/scalable/apps',
 		)
 
-		# TODO: How to save with same name??? Cant accept 'rename'
-		custom_target(
-			'app-icon-symbolic',
-			command: [ 
-				scour,
-				meson.project_source_root() + '/branding/' + meson.project_name() + '-symbolic.svg',
-				lib3270.get_variable('product_id') + '-symbolic.svg',
-			],
-			output: lib3270.get_variable('product_id') + '.terminal.svg',
-			install: true,
-			install_tag: 'runtime',
-			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
-		)
-
+		if get_option('prefix') != '/app'
+			message('Installing symbolic icon...')
+			# TODO: How to save with same name??? Cant accept 'rename'
+			custom_target(
+				'app-icon-symbolic',
+				command: [ 
+					scour,
+					meson.project_source_root() + '/branding/' + meson.project_name() + '-symbolic.svg',
+					lib3270.get_variable('product_id') + '.terminal-symbolic.svg',
+				],
+				output: lib3270.get_variable('product_id') + '.terminal-symbolic.svg',
+				install: true,
+				install_tag: 'runtime',
+				install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps'
+			)
+		else
+			message('Skipping symbolic icon installation for /app prefix...')
+		endif
 
 	else
 		install_data(
@@ -423,12 +427,18 @@ if host_machine.system() == 'linux'
 			rename: lib3270.get_variable('product_id') + '.terminal.svg'
 		)
 
-		install_data(
-			'branding/' + meson.project_name() + '-symbolic.svg',
-			install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps',
-			install_tag: 'runtime',
-			rename: lib3270.get_variable('product_id') + '.terminal.svg'
-		)
+		if get_option('prefix') != '/app'
+			message('Installing symbolic icon...')
+			# TODO: How to save with same name??? Cant accept 'rename'
+			install_data(
+				'branding/' + meson.project_name() + '-symbolic.svg',
+				install_dir: get_option('datadir') + '/icons/hicolor/symbolic/apps',
+				install_tag: 'runtime',
+				rename: lib3270.get_variable('product_id') + '.terminal-symbolic.svg'
+			)
+		else
+			message('Skipping symbolic icon installation for /app prefix...')
+		endif
 
 	endif
 

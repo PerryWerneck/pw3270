@@ -43,7 +43,7 @@ modules:
     buildsystem: meson
     sources:
       - type: git
-        tag: "master"
+        tag: "develop"
         url: https://github.com/PerryWerneck/pw3270
         x-checker-data:
           - type: git

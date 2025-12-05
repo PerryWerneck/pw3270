@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pw3270 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-27 18:53-0300\n"
+"POT-Creation-Date: 2025-11-28 08:09-0300\n"
 "PO-Revision-Date: 2023-04-26 07:50-0300\n"
 "Last-Translator: Perry Werneck <perry.werneck@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <perry.werneck@gmail.com>\n"
@@ -684,6 +684,27 @@ msgstr "Enviar/Receber"
 msgid "Send/Receive files"
 msgstr "Enviar/Receber arquivos"
 
+#: src/objects/window/terminal.c:138
+msgid "Can't use default session file"
+msgstr "Não posso usar arquivo de sessão default"
+
+#: src/objects/window/window.c:207
+msgid "Action Names"
+msgstr "Nome das ações"
+
+#: src/objects/window/window.c:208
+msgid "The name of the actions in the header bar"
+msgstr "O nome das ações na barra de título"
+
+#: src/objects/window/window.c:793 src/objects/window/page.c:218
+msgid "Connected to host"
+msgstr "Conectado no servidor"
+
+#: src/objects/window/window.c:793 src/objects/window/window.c:820
+#: src/objects/window/page.c:207
+msgid "Disconnected from host"
+msgstr "Desconectado do servidor"
+
 #: src/objects/window/header-settings.c:52
 msgid "Title bar"
 msgstr "Barra de título"
@@ -712,15 +733,6 @@ msgstr "Exibir"
 msgid "TN3270 Session description"
 msgstr "Descrição de sessão TN3270"
 
-#: src/objects/window/page.c:207 src/objects/window/window.c:793
-#: src/objects/window/window.c:820
-msgid "Disconnected from host"
-msgstr "Desconectado do servidor"
-
-#: src/objects/window/page.c:218 src/objects/window/window.c:793
-msgid "Connected to host"
-msgstr "Conectado no servidor"
-
 #: src/objects/window/page.c:262
 msgid "Rename Session"
 msgstr "Renomear sessão"
@@ -741,18 +753,6 @@ msgstr "Renomear sessão"
 #: src/objects/window/page.c:371
 msgid "_Close session"
 msgstr "_Fechar sessão"
-
-#: src/objects/window/terminal.c:138
-msgid "Can't use default session file"
-msgstr "Não posso usar arquivo de sessão default"
-
-#: src/objects/window/window.c:207
-msgid "Action Names"
-msgstr "Nome das ações"
-
-#: src/objects/window/window.c:208
-msgid "The name of the actions in the header bar"
-msgstr "O nome das ações na barra de título"
 
 #~ msgid "Alert sound"
 #~ msgstr "Aviso sonoro"
