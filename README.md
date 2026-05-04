@@ -30,6 +30,10 @@ Alternative windows installers for stable and unstable versions are already avai
 	```shell
 	git clone https://github.com/PerryWerneck/pw3270.git
 	cd pw3270
+	meson setup build
+	cd build
+	meson compile
+	meson install
 	```
 
 ## Building for Windows
