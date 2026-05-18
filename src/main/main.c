@@ -29,6 +29,15 @@
 #include <locale.h>
 #include <stdlib.h>
 
+#ifndef PRODUCT_NAME
+	#error Product name is undefined
+#endif
+
+#ifndef APPLICATION_ID
+	#error Application ID is undefined
+#endif
+
+
 #ifdef __APPLE__
 #include <libproc.h>
 #endif // __APPLE__
